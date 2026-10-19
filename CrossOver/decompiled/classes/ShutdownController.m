@@ -426,3 +426,27 @@
     return;
 
 
+// === Block Invocations for ShutdownController ===
+
+// 0x10001ae94
+// ___50-[ShutdownController shutdownAllBottlesBackground]_block_invoke
+    r0 = arg0[0x4];
+    r0 = [r0 quitBottleSemaphore];
+    r0 = [r0 retain];
+    r19 = r0;
+    dispatch_semaphore_signal(r0);
+    r0 = [r19 release];
+    return r0;
+
+
+// 0x10001b108
+// ___36-[ShutdownController killAllBottles]_block_invoke
+    r0 = arg0[0x4];
+    r0 = [r0 quitBottleSemaphore];
+    r0 = [r0 retain];
+    r19 = r0;
+    dispatch_semaphore_signal(r0);
+    r0 = [r19 release];
+    return r0;
+
+

@@ -1149,3 +1149,78 @@
     return;
 
 
+// === Block Invocations for SubmitRatingController ===
+
+// 0x10002a0b8
+// ___33-[SubmitRatingController submit:]_block_invoke
+    r20 = [CXSetupLib webUtilsClass];
+    r21 = [[arg0[0x4] email] retain];
+    r22 = [[arg0[0x4] password] retain];
+    r0 = [r20 createToken:r21 password:r22];
+    r0 = [r0 retain];
+    r20 = r0;
+    [r0 boolValue];
+    [r20 release];
+    [r22 release];
+    [r21 release];
+    var_60 = *__NSConcreteStackBlock;
+    r0 = *__dispatch_main_q;
+    r0 = dispatch_async(r0, &var_60);
+    return r0;
+
+
+// 0x10002a1a8
+// ___33-[SubmitRatingController submit:]_block_invoke_2
+    r0 = [arg0[0x4] handleLogin:arg0[0x28]];
+    return r0;
+
+
+// 0x10002a3cc
+// ___34-[SubmitRatingController doSubmit]_block_invoke
+    r8 = arg0[0x4];
+    r20 = r8->_ratingUtils;
+    r21 = [[NSNumber numberWithInteger:r8->_rating] retain];
+    r0 = [r20 setRating:r21 Notes:*(arg0[0x4] + sign_extend_64(*(int32_t *)ivar_offset(_notes)))];
+    r0 = [r0 retain];
+    r20 = r0;
+    [r0 boolValue];
+    [r20 release];
+    [r21 release];
+    var_50 = *__NSConcreteStackBlock;
+    r0 = *__dispatch_main_q;
+    r0 = dispatch_async(r0, &var_50);
+    return r0;
+
+
+// 0x10002a4b4
+// ___34-[SubmitRatingController doSubmit]_block_invoke_2
+    var_20 = r22;
+    decomp_var_18 = r21;
+    r31 = r31 + 0xffffffffffffffd0;
+    var_10 = r20;
+    decomp_var_8 = r19;
+    saved_fp = r29;
+    decomp_var_m8 = r30;
+    r19 = arg0;
+    [arg0[0x4] setLoggingIn:0x0];
+    if (r19[0x28] != 0x0) {
+            r0 = r19[0x4];
+            r0 = [r0 close];
+    }
+    else {
+            r0 = [NSBundle mainBundle];
+            r0 = [r0 retain];
+            r20 = r0;
+            r21 = [[r0 localizedStringForKey:@"Submit Rating" value:@"" table:0x0] retain];
+            r0 = objc_loadWeakRetained(r19[0x4] + sign_extend_64(*(int32_t *)ivar_offset(_submitButton)));
+            r22 = r0;
+            [r0 setTitle:r21];
+            [r22 release];
+            [r21 release];
+            [r20 release];
+            [r19[0x4] setFailed:0x1];
+            r0 = NSBeep();
+    }
+    return r0;
+
+

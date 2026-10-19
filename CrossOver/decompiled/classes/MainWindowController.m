@@ -3707,3 +3707,113 @@ loc_100063b80:
     return;
 
 
+// === Block Invocations for MainWindowController ===
+
+// 0x10005fd30
+// ___34-[MainWindowController updateC4Ps]_block_invoke
+    [[CXSetupLib webUtilsClass] updateCompatDB];
+    r20 = [CXSetupLib c4ProfilesClass];
+    r0 = [NSUserDefaults standardUserDefaults];
+    r0 = [r0 retain];
+    r21 = r0;
+    r22 = [[r0 objectForKey:@"TieURL"] retain];
+    objc_unsafeClaimAutoreleasedReturnValue([r20 updateOnlineProfilesFromURL:r22]);
+    [r22 release];
+    [r21 release];
+    var_48 = *__NSConcreteStackBlock;
+    r0 = *__dispatch_main_q;
+    r0 = dispatch_async(r0, &var_48);
+    return r0;
+
+
+// 0x10005fe10
+// ___34-[MainWindowController updateC4Ps]_block_invoke_2
+    r0 = arg0[0x4];
+    r0 = [r0 packageViewController];
+    r0 = [r0 retain];
+    r20 = r0;
+    [r0 populatePackages];
+    [r20 release];
+    [arg0[0x4] setUpdating:0x0];
+    r0 = dispatch_time(0x0, 0x4e94914f0000);
+    var_38 = *__NSConcreteStackBlock;
+    r0 = dispatch_after(r0, *__dispatch_main_q, &var_38);
+    return r0;
+
+
+// 0x10005feb4
+// ___34-[MainWindowController updateC4Ps]_block_invoke_3
+    r0 = arg0[0x4];
+    r0 = [r0 updateC4Ps];
+    return r0;
+
+
+// 0x100061024
+// ___71-[MainWindowController observeValueForKeyPath:ofObject:change:context:]_block_invoke
+    r19 = arg0[0x4];
+    r20 = [[arg1 bottle] retain];
+    r19 = [r19 containsObject:r20];
+    [r20 release];
+    r0 = r19;
+    return r0;
+
+
+// 0x100061070
+// ___71-[MainWindowController observeValueForKeyPath:ofObject:change:context:]_block_invoke.55
+    r19 = arg0[0x4];
+    r20 = [[arg1 bottle] retain];
+    r19 = [r19 containsObject:r20];
+    [r20 release];
+    r0 = r19;
+    return r0;
+
+
+// 0x100062d28
+// ___34-[MainWindowController newBottle:]_block_invoke
+    r0 = arg0;
+    if (r1 != 0x0) {
+            r19 = r0[0x4];
+            r20 = [[r0[0x5] bottle] retain];
+            [r19 revealNewBottle:r20];
+            [r20 release];
+    }
+    return;
+
+
+// 0x100063230
+// ___51-[MainWindowController importBottleArchiveFromURL:]_block_invoke
+    r0 = arg0;
+    if (r1 != 0x0) {
+            r19 = r0[0x4];
+            r20 = [[r0[0x5] bottle] retain];
+            [r19 revealNewBottle:r20];
+            [r20 release];
+    }
+    return;
+
+
+// 0x100063460
+// ___44-[MainWindowController importBottleArchive:]_block_invoke
+    var_20 = r22;
+    decomp_var_18 = r21;
+    r31 = r31 + 0xffffffffffffffd0;
+    var_10 = r20;
+    decomp_var_8 = r19;
+    saved_fp = r29;
+    decomp_var_m8 = r30;
+    r19 = arg0;
+    r0 = arg0[0x4];
+    r0 = [r0 close];
+    if (arg1 == 0x1) {
+            r0 = r19[0x4];
+            r0 = [r0 URLs];
+            r0 = [r0 retain];
+            r20 = r0;
+            r21 = [[r0 objectAtIndex:0x0] retain];
+            [r20 release];
+            [r19[0x5] importBottleArchiveFromURL:r21];
+            r0 = [r21 release];
+    }
+    return r0;
+
+

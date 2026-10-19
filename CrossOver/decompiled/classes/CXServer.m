@@ -2217,3 +2217,187 @@ loc_1000133f4:
     return;
 
 
+// === Block Invocations for CXServer ===
+
+// 0x100012c4c
+// ___49-[CXServer doPeriodicDemoNagForCommand:withArgs:]_block_invoke
+    [arg0[0x4] setMenusEnabled:0x1];
+    r0 = arg0[0x4];
+    r0 = [r0 forkExecCommand:arg0[0x5] withArgs:arg0[0x6]];
+    return r0;
+
+
+// 0x100012d18
+// ___21-[CXServer demoCheck]_block_invoke
+    r0 = arg0[0x4];
+    r0 = [r0 continueFromDemoCheck];
+    return r0;
+
+
+// 0x100012e08
+// ___33-[CXServer continueFromDemoCheck]_block_invoke
+    r0 = [helperServer defaultHelperServer];
+    r0 = [r0 retain];
+    r20 = r0;
+    [r0 setIsReady];
+    [r20 release];
+    r0 = arg0[0x4];
+    r0 = [r0 startAppOp];
+    r0 = [r0 retain];
+    r19 = r0;
+    [r0 start];
+    r0 = [r19 release];
+    return r0;
+
+
+// 0x100015958
+// ___33-[CXServer application:openFile:]_block_invoke
+    r0 = [arg0[0x4] performSelector:@selector(runClient:inBottle:) withObject:arg0[0x5] withObject:arg0[0x6]];
+    return r0;
+
+
+// 0x100015c78
+// ___25-[CXServer openDocument:]_block_invoke
+    r0 = arg0;
+    r31 = r31 - 0x130;
+    var_50 = r28;
+    decomp_var_48 = r27;
+    var_40 = r26;
+    decomp_var_38 = r25;
+    var_30 = r24;
+    decomp_var_28 = r23;
+    var_20 = r22;
+    decomp_var_18 = r21;
+    var_10 = r20;
+    decomp_var_8 = r19;
+    saved_fp = r29;
+    decomp_var_m8 = r30;
+    var_58 = **___stack_chk_guard;
+    if (r1 == 0x1) {
+            r19 = r0;
+            r0 = r0[0x4];
+            r0 = [r0 selectedBottle];
+            r0 = [r0 retain];
+            r21 = r0;
+            r20 = [[r0 name] retain];
+            [r21 release];
+            var_120 = q0;
+            var_110 = q0;
+            r0 = r19[0x5];
+            r0 = [r0 URLs];
+            r0 = [r0 retain];
+            r21 = r0;
+            r0 = [r0 countByEnumeratingWithState:&var_120 objects:&decomp_var_d8 count:0x10];
+            if (r0 != 0x0) {
+                    r22 = r0;
+                    r26 = *var_110;
+                    do {
+                            r27 = 0x0;
+                            do {
+                                    if (*var_110 != r26) {
+                                            objc_enumerationMutation(r21);
+                                    }
+                                    r0 = *(var_118 + r27 * 0x8);
+                                    r23 = r19[0x6];
+                                    r0 = [r0 path];
+                                    r0 = [r0 retain];
+                                    r24 = r0;
+                                    r25 = [[r0 stringInFileSystemRepresentationForm] retain];
+                                    [r23 runClient:r25 inBottle:r20];
+                                    [r25 release];
+                                    [r24 release];
+                                    r27 = r27 + 0x1;
+                            } while (r22 != r27);
+                            r0 = [r21 countByEnumeratingWithState:&var_120 objects:&decomp_var_d8 count:0x10];
+                            r22 = r0;
+                    } while (r0 != 0x0);
+            }
+            [r21 release];
+            [r20 release];
+    }
+    if (**___stack_chk_guard != var_58) {
+            __stack_chk_fail();
+    }
+    return;
+
+
+// 0x10001605c
+// ___36-[CXServer addToRecentItems:bottle:]_block_invoke
+    var_30 = r24;
+    decomp_var_28 = r23;
+    r31 = r31 + 0xffffffffffffffc0;
+    var_20 = r22;
+    decomp_var_18 = r21;
+    var_10 = r20;
+    decomp_var_8 = r19;
+    saved_fp = r29;
+    decomp_var_m8 = r30;
+    r21 = arg0;
+    r0 = [arg1 retain];
+    r19 = r0;
+    r0 = [r0 objectForKey:@"bottle"];
+    r0 = [r0 retain];
+    r20 = r0;
+    r2 = r21[0x4];
+    if (r0 != 0x0) {
+            if (r2 != 0x0) {
+                    if ([r20 isEqualToString:r2] == 0x0) {
+                            [r20 release];
+                            [r19 release];
+                            r0 = 0x0;
+                    }
+                    else {
+                            r22 = [[r19 objectForKey:@"bookmark"] retain];
+                            r23 = [[r21[0x5] pathFromBookmarkData:r22 stale:0x0] retain];
+                            r21 = [r21[0x5] isSameFile:r23 asFile:r21[0x6]];
+                            [r23 release];
+                            [r22 release];
+                            if ((r21 & 0x1) != 0x0) {
+                                    r21 = 0x1;
+                            }
+                            else {
+                                    r21 = 0x0;
+                            }
+                            [r20 release];
+                            [r19 release];
+                            r0 = r21;
+                    }
+            }
+            else {
+                    [r20 release];
+                    [r19 release];
+                    r0 = 0x0;
+            }
+    }
+    else {
+            if (r2 == 0x0) {
+                    r22 = [[r19 objectForKey:@"bookmark"] retain];
+                    r23 = [[r21[0x5] pathFromBookmarkData:r22 stale:0x0] retain];
+                    r21 = [r21[0x5] isSameFile:r23 asFile:r21[0x6]];
+                    [r23 release];
+                    [r22 release];
+                    if ((r21 & 0x1) != 0x0) {
+                            r21 = 0x1;
+                    }
+                    else {
+                            r21 = 0x0;
+                    }
+                    [r20 release];
+                    [r19 release];
+                    r0 = r21;
+            }
+            else {
+                    [r20 release];
+                    [r19 release];
+                    r0 = 0x0;
+            }
+    }
+    return r0;
+
+
+// 0x100016c6c
+// ___45-[CXServer handleGetURLEvent:withReplyEvent:]_block_invoke
+    r0 = [arg0[0x4] performSelector:@selector(forkExecCommand:) withObject:arg0[0x5]];
+    return r0;
+
+

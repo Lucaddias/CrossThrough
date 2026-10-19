@@ -2701,3 +2701,511 @@
     return;
 
 
+// === Block Invocations for PackageViewController ===
+
+// 0x10003b27c
+// ___41-[PackageViewController populatePackages]_block_invoke
+    r31 = r31 - 0x130;
+    var_60 = d9;
+    decomp_var_58 = d8;
+    var_50 = r28;
+    decomp_var_48 = r27;
+    var_40 = r26;
+    decomp_var_38 = r25;
+    var_30 = r24;
+    decomp_var_28 = r23;
+    var_20 = r22;
+    decomp_var_18 = r21;
+    var_10 = r20;
+    decomp_var_8 = r19;
+    saved_fp = r29;
+    decomp_var_m8 = r30;
+    r19 = arg0;
+    r21 = [[NSFont labelFontOfSize:r2] retain];
+    r22 = [[NSMutableArray array] retain];
+    r25 = [[PackageTreeNode alloc] initRootWithChildren:0x0];
+    r24 = [[NSMutableDictionary dictionary] retain];
+    var_98 = 0x0;
+    var_70 = 0x0;
+    r20 = [[[CXSetupLib c4ProfilesClass] profilesSet] retain];
+    if ((objc_opt_respondsToSelector() & 0x1) != 0x0) {
+            r0 = [r20 contentsDict];
+            r0 = [r0 retain];
+    }
+    else {
+            r0 = [r20 retain];
+    }
+    r23 = r0;
+    r27 = *__NSConcreteStackBlock;
+    var_E8 = r27;
+    r0 = [r21 retain];
+    r21 = r0;
+    var_C8 = r0;
+    r0 = [r22 retain];
+    r26 = r0;
+    var_C0 = r0;
+    r0 = [r25 retain];
+    r22 = r0;
+    var_B8 = r0;
+    r0 = [r24 retain];
+    r24 = r0;
+    var_A8 = r0;
+    [r23 enumerateKeysAndObjectsUsingBlock:&var_E8];
+    var_120 = r27;
+    r19 = [r26 retain];
+    dispatch_async(*__dispatch_main_q, &var_120);
+    [r26 release];
+    [var_A8 release];
+    [var_B8 release];
+    [var_C0 release];
+    [var_C8 release];
+    [r23 release];
+    [r20 release];
+    _Block_object_dispose(&var_98, 0x8);
+    [var_70 release];
+    [r19 release];
+    [r24 release];
+    [r22 release];
+    r0 = [r21 release];
+    return r0;
+
+
+// 0x10003b50c
+// ___41-[PackageViewController populatePackages]_block_invoke.43
+    var_40 = r26;
+    decomp_var_38 = r25;
+    r31 = r31 + 0xffffffffffffffb0;
+    var_30 = r24;
+    decomp_var_28 = r23;
+    var_20 = r22;
+    decomp_var_18 = r21;
+    var_10 = r20;
+    decomp_var_8 = r19;
+    saved_fp = r29;
+    decomp_var_m8 = r30;
+    r22 = arg0;
+    r0 = [arg2 retain];
+    r19 = r0;
+    r0 = [r0 valueForKey:@"is_for_current_product"];
+    r0 = [r0 retain];
+    r20 = r0;
+    r21 = [r0 boolValue];
+    [r20 release];
+    if (r21 != 0x0) {
+            r0 = [r19 valueForKey:@"name"];
+            r0 = [r0 retain];
+            r20 = r0;
+            r21 = [r0 length];
+            [r20 release];
+            if (r21 != 0x0) {
+                    r0 = [r19 valueForKey:@"app_profile"];
+                    r0 = [r0 retain];
+                    r20 = r0;
+                    r21 = [[r0 valueForKey:@"raw_category"] retain];
+                    r0 = [r20 valueForKey:@"is_supported"];
+                    r0 = [r0 retain];
+                    r23 = r0;
+                    if ([r0 boolValue] != 0x0) {
+                            if ([r21 compare:@"Component/Service Pack"] != 0x0) {
+                                    if ([r21 compare:@"Non-Applications/Components/Service Packs"] != 0x0) {
+                                            r0 = [r19 valueForKey:@"is_application"];
+                                            r0 = [r0 retain];
+                                            r24 = r0;
+                                            if ([r0 boolValue] != 0x0) {
+                                                    [r24 release];
+                                                    [r23 release];
+                                                    r0 = [PackageTreeNode alloc];
+                                                    r0 = [r0 initWithProfile:r19];
+                                                    r23 = r0;
+                                                    [r0 setDescriptionFont:r22[0x4]];
+                                                    if ([r23 isUnknown] != 0x0) {
+                                                            r24 = *(r22[0x9] + 0x8);
+                                                            r0 = [r23 retain];
+                                                            r22 = r24[0x5];
+                                                            r24[0x5] = r0;
+                                                    }
+                                                    else {
+                                                            [r22[0x5] addObject:r23];
+                                                            if ([r23 isUnknown] != 0x0) {
+                                                                    r22 = [r22[0x6] retain];
+                                                            }
+                                                            else {
+                                                                    r0 = [r20 valueForKey:@"category"];
+                                                                    r0 = [r0 retain];
+                                                                    r24 = r0;
+                                                                    r25 = r22[0x7];
+                                                                    r26 = [[r0 componentsSeparatedByString:@"/"] retain];
+                                                                    r22 = [[r25 packageForCategory:r26 root:r22[0x6] cache:r22[0x8]] retain];
+                                                                    [r26 release];
+                                                                    [r24 release];
+                                                            }
+                                                            r0 = [r22 unfilteredChildren];
+                                                            r0 = [r0 retain];
+                                                            r24 = r0;
+                                                            [r22 insertObject:r23 inUnfilteredChildrenAtIndex:[r0 count]];
+                                                            [r24 release];
+                                                    }
+                                                    [r22 release];
+                                                    [r23 release];
+                                                    [r21 release];
+                                                    [r20 release];
+                                                    r0 = [r19 release];
+                                            }
+                                            else {
+                                                    r0 = [r19 valueForKey:@"is_component"];
+                                                    r0 = [r0 retain];
+                                                    r25 = r0;
+                                                    r26 = [r0 boolValue];
+                                                    [r25 release];
+                                                    [r24 release];
+                                                    [r23 release];
+                                                    if ((r26 & 0x1) == 0x0) {
+                                                            [r21 release];
+                                                            [r20 release];
+                                                            r0 = [r19 release];
+                                                    }
+                                                    else {
+                                                            r0 = [PackageTreeNode alloc];
+                                                            r0 = [r0 initWithProfile:r19];
+                                                            r23 = r0;
+                                                            [r0 setDescriptionFont:r22[0x4]];
+                                                            if ([r23 isUnknown] != 0x0) {
+                                                                    r24 = *(r22[0x9] + 0x8);
+                                                                    r0 = [r23 retain];
+                                                                    r22 = r24[0x5];
+                                                                    r24[0x5] = r0;
+                                                            }
+                                                            else {
+                                                                    [r22[0x5] addObject:r23];
+                                                                    if ([r23 isUnknown] != 0x0) {
+                                                                            r22 = [r22[0x6] retain];
+                                                                    }
+                                                                    else {
+                                                                            r0 = [r20 valueForKey:@"category"];
+                                                                            r0 = [r0 retain];
+                                                                            r24 = r0;
+                                                                            r25 = r22[0x7];
+                                                                            r26 = [[r0 componentsSeparatedByString:@"/"] retain];
+                                                                            r22 = [[r25 packageForCategory:r26 root:r22[0x6] cache:r22[0x8]] retain];
+                                                                            [r26 release];
+                                                                            [r24 release];
+                                                                    }
+                                                                    r0 = [r22 unfilteredChildren];
+                                                                    r0 = [r0 retain];
+                                                                    r24 = r0;
+                                                                    [r22 insertObject:r23 inUnfilteredChildrenAtIndex:[r0 count]];
+                                                                    [r24 release];
+                                                            }
+                                                            [r22 release];
+                                                            [r23 release];
+                                                            [r21 release];
+                                                            [r20 release];
+                                                            r0 = [r19 release];
+                                                    }
+                                            }
+                                    }
+                                    else {
+                                            [r23 release];
+                                            r0 = [PackageTreeNode alloc];
+                                            r0 = [r0 initWithProfile:r19];
+                                            r23 = r0;
+                                            [r0 setDescriptionFont:r22[0x4]];
+                                            if ([r23 isUnknown] != 0x0) {
+                                                    r24 = *(r22[0x9] + 0x8);
+                                                    r0 = [r23 retain];
+                                                    r22 = r24[0x5];
+                                                    r24[0x5] = r0;
+                                            }
+                                            else {
+                                                    [r22[0x5] addObject:r23];
+                                                    if ([r23 isUnknown] != 0x0) {
+                                                            r22 = [r22[0x6] retain];
+                                                    }
+                                                    else {
+                                                            r0 = [r20 valueForKey:@"category"];
+                                                            r0 = [r0 retain];
+                                                            r24 = r0;
+                                                            r25 = r22[0x7];
+                                                            r26 = [[r0 componentsSeparatedByString:@"/"] retain];
+                                                            r22 = [[r25 packageForCategory:r26 root:r22[0x6] cache:r22[0x8]] retain];
+                                                            [r26 release];
+                                                            [r24 release];
+                                                    }
+                                                    r0 = [r22 unfilteredChildren];
+                                                    r0 = [r0 retain];
+                                                    r24 = r0;
+                                                    [r22 insertObject:r23 inUnfilteredChildrenAtIndex:[r0 count]];
+                                                    [r24 release];
+                                            }
+                                            [r22 release];
+                                            [r23 release];
+                                            [r21 release];
+                                            [r20 release];
+                                            r0 = [r19 release];
+                                    }
+                            }
+                            else {
+                                    [r23 release];
+                                    r0 = [PackageTreeNode alloc];
+                                    r0 = [r0 initWithProfile:r19];
+                                    r23 = r0;
+                                    [r0 setDescriptionFont:r22[0x4]];
+                                    if ([r23 isUnknown] != 0x0) {
+                                            r24 = *(r22[0x9] + 0x8);
+                                            r0 = [r23 retain];
+                                            r22 = r24[0x5];
+                                            r24[0x5] = r0;
+                                    }
+                                    else {
+                                            [r22[0x5] addObject:r23];
+                                            if ([r23 isUnknown] != 0x0) {
+                                                    r22 = [r22[0x6] retain];
+                                            }
+                                            else {
+                                                    r0 = [r20 valueForKey:@"category"];
+                                                    r0 = [r0 retain];
+                                                    r24 = r0;
+                                                    r25 = r22[0x7];
+                                                    r26 = [[r0 componentsSeparatedByString:@"/"] retain];
+                                                    r22 = [[r25 packageForCategory:r26 root:r22[0x6] cache:r22[0x8]] retain];
+                                                    [r26 release];
+                                                    [r24 release];
+                                            }
+                                            r0 = [r22 unfilteredChildren];
+                                            r0 = [r0 retain];
+                                            r24 = r0;
+                                            [r22 insertObject:r23 inUnfilteredChildrenAtIndex:[r0 count]];
+                                            [r24 release];
+                                    }
+                                    [r22 release];
+                                    [r23 release];
+                                    [r21 release];
+                                    [r20 release];
+                                    r0 = [r19 release];
+                            }
+                    }
+                    else {
+                            [r23 release];
+                            r0 = [PackageTreeNode alloc];
+                            r0 = [r0 initWithProfile:r19];
+                            r23 = r0;
+                            [r0 setDescriptionFont:r22[0x4]];
+                            if ([r23 isUnknown] != 0x0) {
+                                    r24 = *(r22[0x9] + 0x8);
+                                    r0 = [r23 retain];
+                                    r22 = r24[0x5];
+                                    r24[0x5] = r0;
+                            }
+                            else {
+                                    [r22[0x5] addObject:r23];
+                                    if ([r23 isUnknown] != 0x0) {
+                                            r22 = [r22[0x6] retain];
+                                    }
+                                    else {
+                                            r0 = [r20 valueForKey:@"category"];
+                                            r0 = [r0 retain];
+                                            r24 = r0;
+                                            r25 = r22[0x7];
+                                            r26 = [[r0 componentsSeparatedByString:@"/"] retain];
+                                            r22 = [[r25 packageForCategory:r26 root:r22[0x6] cache:r22[0x8]] retain];
+                                            [r26 release];
+                                            [r24 release];
+                                    }
+                                    r0 = [r22 unfilteredChildren];
+                                    r0 = [r0 retain];
+                                    r24 = r0;
+                                    [r22 insertObject:r23 inUnfilteredChildrenAtIndex:[r0 count]];
+                                    [r24 release];
+                            }
+                            [r22 release];
+                            [r23 release];
+                            [r21 release];
+                            [r20 release];
+                            r0 = [r19 release];
+                    }
+            }
+            else {
+                    r0 = [r19 release];
+            }
+    }
+    else {
+            r0 = [r19 release];
+    }
+    return r0;
+
+
+// 0x10003b86c
+// ___41-[PackageViewController populatePackages]_block_invoke.67
+    var_10 = r20;
+    decomp_var_8 = r19;
+    r31 = r31 + 0xffffffffffffffe0;
+    saved_fp = r29;
+    decomp_var_m8 = r30;
+    r19 = arg0;
+    r0 = arg0[0x4];
+    [r0 setPackages:r0[0x5]];
+    [r19[0x4] setUnknownPackage:*(*(r19[0x6] + 0x8) + 0x28)];
+    [r19[0x4] updateVisiblePackages];
+    r0 = r19[0x4];
+    r0 = [r0 collectionView];
+    r0 = [r0 retain];
+    r20 = r0;
+    [r0 reloadData];
+    [r20 release];
+    r0 = r19[0x4];
+    r0 = [r0 installer];
+    r0 = [r0 retain];
+    r20 = r0;
+    r0 = [r0 release];
+    if (r20 != 0x0) {
+            r0 = r19[0x4];
+            r0 = [r0 installer];
+            r0 = [r0 retain];
+            r20 = r0;
+            [r0 updateProfiles];
+            [r20 release];
+            r20 = [[r19[0x4] installer] retain];
+            r19 = [[r19[0x4] unknownPackage] retain];
+            [r20 setUnknownPackage:r19];
+            [r19 release];
+            r0 = [r20 release];
+    }
+    return r0;
+
+
+// 0x10003b9c4
+// ___41-[PackageViewController populatePackages]_block_invoke.69
+    [PackageTreeNode updateIconList];
+    r0 = arg0[0x4];
+    r0 = [r0 loadIcons];
+    return r0;
+
+
+// 0x10003bac0
+// ___34-[PackageViewController loadIcons]_block_invoke
+    r31 = r31 - 0x110;
+    var_30 = r28;
+    decomp_var_28 = r27;
+    var_20 = r22;
+    decomp_var_18 = r21;
+    var_10 = r20;
+    decomp_var_8 = r19;
+    saved_fp = r29;
+    decomp_var_m8 = r30;
+    var_38 = **___stack_chk_guard;
+    var_100 = q0;
+    var_F0 = q0;
+    r0 = arg0[0x4];
+    r0 = [r0 retain];
+    r19 = r0;
+    r0 = [r0 countByEnumeratingWithState:&var_100 objects:&decomp_var_b8 count:0x10];
+    if (r0 != 0x0) {
+            r20 = r0;
+            r21 = *var_F0;
+            do {
+                    r22 = 0x0;
+                    do {
+                            if (*var_F0 != r21) {
+                                    objc_enumerationMutation(r19);
+                            }
+                            [*(var_F8 + r22 * 0x8) loadIcon];
+                            r22 = r22 + 0x1;
+                    } while (r20 != r22);
+                    r0 = [r19 countByEnumeratingWithState:&var_100 objects:&decomp_var_b8 count:0x10];
+                    r20 = r0;
+            } while (r0 != 0x0);
+    }
+    r0 = [r19 release];
+    if (**___stack_chk_guard != var_38) {
+            __stack_chk_fail();
+    }
+    return r0;
+
+
+// 0x10003d1ac
+// ___49-[PackageViewController autoPlayWithAutorunFile:]_block_invoke
+    r0 = arg0;
+    if (r1 == 0x3e9) {
+            [r0[0x4] displayLoadingSheetAndPrepareCrossTie:r0[0x5]];
+    }
+    return;
+
+
+// 0x10003d588
+// ___52-[PackageViewController prepareDropinC4pAndAutorun:]_block_invoke
+    r0 = [arg0[0x4] displayRevokedFileAlert:arg0[0x5]];
+    return r0;
+
+
+// 0x10003d594
+// ___52-[PackageViewController prepareDropinC4pAndAutorun:]_block_invoke.114
+    r0 = [arg0[0x4] displayEmptyFileAlert:arg0[0x5]];
+    return r0;
+
+
+// 0x10003d5a0
+// ___52-[PackageViewController prepareDropinC4pAndAutorun:]_block_invoke_2
+    r0 = [arg0[0x4] autoPlayWithParsedFile:arg0[0x5]];
+    return r0;
+
+
+// 0x10003d728
+// ___63-[PackageViewController displayLoadingSheetAndPrepareCrossTie:]_block_invoke
+    return;
+
+
+// 0x10003d72c
+// ___63-[PackageViewController displayLoadingSheetAndPrepareCrossTie:]_block_invoke_2
+    [arg0[0x4] prepareDropinC4pAndAutorun:arg0[0x5]];
+    var_40 = *__NSConcreteStackBlock;
+    var_18 = [arg0[0x6] retain];
+    dispatch_async(*__dispatch_main_q, &var_40);
+    r0 = [var_18 release];
+    return r0;
+
+
+// 0x10003d7b4
+// ___63-[PackageViewController displayLoadingSheetAndPrepareCrossTie:]_block_invoke_3
+    r20 = [[arg0[0x4] window] retain];
+    r19 = [[arg0[0x5] window] retain];
+    [r20 endSheet:r19];
+    [r19 release];
+    r0 = [r20 release];
+    return r0;
+
+
+// 0x10003dc9c
+// ___49-[PackageViewController displayRevokedFileAlert:]_block_invoke
+    r0 = arg0;
+    if (r1 == 0x3e9) {
+            r31 = r31 - 0x40;
+            var_30 = r22;
+            decomp_var_28 = r21;
+            var_20 = r20;
+            decomp_var_18 = r19;
+            var_10 = r29;
+            decomp_var_8 = r30;
+            r0 = r0[0x4];
+            r0 = [r0 valueForKey:@"malware_appid"];
+            r0 = [r0 retain];
+            r20 = r0;
+            r19 = [[r0 stringByReplacingOccurrencesOfString:@"." withString:@"-"] retain];
+            [r20 release];
+            r20 = [[NSString stringWithFormat:@"https://support.codeweavers.com/malware/%@", r3] retain];
+            r0 = [NSURL URLWithString:r20];
+            r0 = [r0 retain];
+            r21 = r0;
+            if (r0 != 0x0) {
+                    r0 = [NSWorkspace sharedWorkspace];
+                    r0 = [r0 retain];
+                    r22 = r0;
+                    [r0 openURL:r21];
+                    [r22 release];
+            }
+            [r21 release];
+            [r20 release];
+            [r19 release];
+    }
+    return;
+
+

@@ -118,3 +118,68 @@
     return;
 
 
+// === Block Invocations for LoggingOption ===
+
+// 0x10003429c
+// ___30+[LoggingOption commonPresets]_block_invoke
+    r31 = r31 - 0x140;
+    var_50 = r28;
+    decomp_var_48 = r27;
+    var_40 = r26;
+    decomp_var_38 = r25;
+    var_30 = r24;
+    decomp_var_28 = r23;
+    var_20 = r22;
+    decomp_var_18 = r21;
+    var_10 = r20;
+    decomp_var_8 = r19;
+    saved_fp = r29;
+    decomp_var_m8 = r30;
+    r19 = arg0;
+    var_60 = **___stack_chk_guard;
+    r0 = [NSMutableArray array];
+    r0 = [r0 retain];
+    r8 = *_commonPresets.presets;
+    *_commonPresets.presets = r0;
+    [r8 release];
+    var_120 = q0;
+    var_110 = q0;
+    r0 = [CXSetupLib cxUtilsClass];
+    r0 = [r0 loggingPresets];
+    r0 = [r0 retain];
+    var_128 = r0;
+    r0 = [r0 countByEnumeratingWithState:&var_120 objects:&decomp_var_e0 count:0x10];
+    if (r0 != 0x0) {
+            r23 = r0;
+            r21 = *var_110;
+            do {
+                    r22 = 0x0;
+                    do {
+                            if (*var_110 != r21) {
+                                    objc_enumerationMutation(var_128);
+                            }
+                            r25 = *(var_118 + r22 * 0x8);
+                            r26 = *_commonPresets.presets;
+                            r27 = r19[0x4];
+                            r28 = [[r25 valueForKey:@"label"] retain];
+                            r20 = [[r25 valueForKey:@"channels"] retain];
+                            r25 = [[r25 valueForKey:@"environment"] retain];
+                            r27 = [[r27 loggingOptionWithName:r28 channels:r20 environment:r25] retain];
+                            [r26 addObject:r27];
+                            [r27 release];
+                            [r25 release];
+                            [r20 release];
+                            [r28 release];
+                            r22 = r22 + 0x1;
+                    } while (r23 != r22);
+                    r0 = [var_128 countByEnumeratingWithState:&var_120 objects:&decomp_var_e0 count:0x10];
+                    r23 = r0;
+            } while (r0 != 0x0);
+    }
+    r0 = [var_128 release];
+    if (**___stack_chk_guard != var_60) {
+            __stack_chk_fail();
+    }
+    return r0;
+
+

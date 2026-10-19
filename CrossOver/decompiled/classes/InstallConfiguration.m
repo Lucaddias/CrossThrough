@@ -1043,3 +1043,126 @@
     return;
 
 
+// === Block Invocations for InstallConfiguration ===
+
+// 0x100055ae0
+// ___46+[InstallConfiguration resolveInstanceMethod:]_block_invoke
+    r31 = r31 - 0x110;
+    var_50 = r28;
+    decomp_var_48 = r27;
+    var_40 = r26;
+    decomp_var_38 = r25;
+    var_30 = r24;
+    decomp_var_28 = r23;
+    var_20 = r22;
+    decomp_var_18 = r21;
+    var_10 = r20;
+    decomp_var_8 = r19;
+    saved_fp = r29;
+    decomp_var_m8 = r30;
+    var_60 = **___stack_chk_guard;
+    var_D0 = @"bottleName";
+    var_98 = @"bottlename";
+    r0 = [NSDictionary dictionaryWithObjects:&var_98 forKeys:&var_D0 count:0x7];
+    var_E0 = [r0 retain];
+    r26 = [[NSMutableDictionary alloc] init];
+    r0 = objc_opt_class(@class(InstallConfiguration));
+    r0 = class_copyPropertyList(r0, &var_D4);
+    r21 = r0;
+    if (var_D4 != 0x0) {
+            r19 = 0x0;
+            var_E8 = r26;
+            do {
+                    r28 = objc_autoreleasePoolPush();
+                    r0 = *(r21 + r19 * 0x8);
+                    r0 = property_copyAttributeValue(r0, "D");
+                    if (r0 != 0x0) {
+                            free(r0);
+                            r27 = [[NSString stringWithUTF8String:property_getName(*(r21 + r19 * 0x8))] retain];
+                            r23 = [[PropertyDescriptor alloc] init];
+                            r24 = [[var_E0 objectForKey:r27] retain];
+                            r2 = r24;
+                            [r23 setInstallTaskAttribute:r2];
+                            [r24 release];
+                            r0 = [r23 installTaskAttribute];
+                            r0 = [r0 retain];
+                            r24 = r0;
+                            [r0 release];
+                            if (r24 == 0x0) {
+                                    r2 = r27;
+                                    [r23 setInstallTaskAttribute:r2];
+                            }
+                            r0 = *(r21 + r19 * 0x8);
+                            r0 = property_copyAttributeValue(r0, "T");
+                            r24 = r0;
+                            if (strcmp(r0, "B") == 0x0) {
+                                    r2 = 0x1;
+                            }
+                            [r23 setBoolTyped:r2];
+                            free(r24);
+                            r0 = *(r21 + r19 * 0x8);
+                            r0 = property_copyAttributeValue(r0, "G");
+                            if (r0 != 0x0) {
+                                    r25 = [[NSString stringWithUTF8String:r0] retain];
+                                    [r23 setGetter:r25];
+                                    [r25 release];
+                                    free(r0);
+                            }
+                            else {
+                                    [r23 setGetter:r27];
+                            }
+                            r24 = [[r23 getter] retain];
+                            r3 = r24;
+                            [r26 setObject:r23 forKey:r3];
+                            [r24 release];
+                            r0 = *(r21 + r19 * 0x8);
+                            r0 = property_copyAttributeValue(r0, "R");
+                            if (r0 != 0x0) {
+                                    free(r0);
+                            }
+                            else {
+                                    r0 = *(r21 + r19 * 0x8);
+                                    r0 = property_copyAttributeValue(r0, "S");
+                                    if (r0 != 0x0) {
+                                            r24 = [[NSString stringWithUTF8String:r0] retain];
+                                            [r23 setSetter:r24];
+                                            [r24 release];
+                                            free(r0);
+                                    }
+                                    else {
+                                            r0 = [r27 substringToIndex:0x1];
+                                            r0 = [r0 retain];
+                                            r25 = r0;
+                                            r26 = [[r0 uppercaseString] retain];
+                                            r22 = [[r27 substringFromIndex:0x1] retain];
+                                            r24 = [[NSString stringWithFormat:@"set%@%@:", r3, r4] retain];
+                                            [r23 setSetter:r24];
+                                            [r24 release];
+                                            [r22 release];
+                                            r0 = r26;
+                                            r26 = var_E8;
+                                            [r0 release];
+                                            [r25 release];
+                                    }
+                                    r22 = [[r23 setter] retain];
+                                    [r26 setObject:r23 forKey:r22];
+                                    [r22 release];
+                            }
+                            [r23 release];
+                            [r27 release];
+                    }
+                    objc_autoreleasePoolPop(r28);
+                    r19 = r19 + 0x1;
+            } while (r19 < var_D4);
+    }
+    free(r21);
+    r0 = *_selectorToProperty;
+    *_selectorToProperty = r26;
+    [r0 release];
+    [var_E0 release];
+    if (**___stack_chk_guard != var_60) {
+            __stack_chk_fail();
+    }
+    return;
+
+

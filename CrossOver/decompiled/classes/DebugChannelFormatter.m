@@ -418,3 +418,22 @@
     return r0;
 
 
+// === Block Invocations for DebugChannelFormatter ===
+
+// 0x100030bd8
+// ___47+[DebugChannelFormatter sanitizePartialString:]_block_invoke
+    r0 = [[NSMutableCharacterSet alloc] init];
+    r19 = r0;
+    [r0 addCharactersInRange:0x41];
+    [r19 addCharactersInRange:0x61];
+    [r19 addCharactersInRange:0x30];
+    [r19 addCharactersInString:@"_,+-:. "];
+    r0 = [r19 invertedSet];
+    r0 = [r0 retain];
+    r8 = *_sanitizePartialString:.invalidCharacters;
+    *_sanitizePartialString:.invalidCharacters = r0;
+    [r8 release];
+    [r19 release];
+    return;
+
+

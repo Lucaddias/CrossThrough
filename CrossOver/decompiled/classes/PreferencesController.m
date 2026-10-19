@@ -660,3 +660,173 @@ loc_100011da4:
     return;
 
 
+// === Block Invocations for PreferencesController ===
+
+// 0x10001105c
+// ___38-[PreferencesController windowDidLoad]_block_invoke
+    r0 = arg0[0x4];
+    r0 = [r0 calculateInstallerCacheSize];
+    return r0;
+
+
+// 0x10001154c
+// ___48-[PreferencesController browseForBottlesFolder:]_block_invoke
+    r0 = arg0;
+    if (r1 == 0x1) {
+            r20 = [[r0[0x5] URL] retain];
+            [r0[0x4] setBottlesFolderURL:r20];
+            [r20 release];
+            [r0[0x4] bottlesFolderChanged:0x0];
+    }
+    return;
+
+
+// 0x1000119b0
+// ___49-[PreferencesController browseForProgramsFolder:]_block_invoke
+    r0 = arg0;
+    if (r1 == 0x1) {
+            r20 = [[r0[0x5] URL] retain];
+            [r0[0x4] setProgramsFolderURL:r20];
+            [r20 release];
+            [r0[0x4] programsFolderChanged:0x0];
+    }
+    return;
+
+
+// 0x10001202c
+// ___52-[PreferencesController calculateInstallerCacheSize]_block_invoke
+    r31 = r31 - 0x30;
+    var_10 = r20;
+    decomp_var_8 = r19;
+    saved_fp = r29;
+    decomp_var_m8 = r30;
+    r19 = arg0;
+    var_18 = 0x0;
+    r0 = [arg1 getResourceValue:&var_18 forKey:**_NSURLTotalFileAllocatedSizeKey error:0x0];
+    if (r0 != 0x0) {
+            r0 = [var_18 retain];
+            r20 = r0;
+            r0 = [r0 unsignedLongLongValue];
+            r8 = r19[0x4];
+            r8 = r8[0x1];
+            r8[0x3] = r8[0x3] + r0;
+            r0 = [r20 release];
+    }
+    return r0;
+
+
+// 0x1000120bc
+// ___52-[PreferencesController calculateInstallerCacheSize]_block_invoke.50
+    r8 = arg0[0x4];
+    r19 = arg0[0x5];
+    r0 = objc_loadWeakRetained((int64_t *)&r8->_installerCacheSizeLabel);
+    r20 = r0;
+    [r0 setStringValue:r19];
+    r0 = [r20 release];
+    return r0;
+
+
+// 0x100012164
+// ___59-[PreferencesController installersCacheEventStreamCallback]_block_invoke
+    r20 = [[arg0[0x4] installerCacheSizeStringWhileCalculating] retain];
+    r0 = objc_loadWeakRetained(arg0[0x4] + sign_extend_64(*(int32_t *)ivar_offset(_installerCacheSizeLabel)));
+    r19 = r0;
+    [r0 setStringValue:r20];
+    [r19 release];
+    r0 = [r20 release];
+    return r0;
+
+
+// 0x100012220
+// ___45-[PreferencesController clearInstallerCache:]_block_invoke
+    r31 = r31 - 0x1b0;
+    var_60 = d9;
+    decomp_var_58 = d8;
+    var_50 = r28;
+    decomp_var_48 = r27;
+    var_40 = r26;
+    decomp_var_38 = r25;
+    var_30 = r24;
+    decomp_var_28 = r23;
+    var_20 = r22;
+    decomp_var_18 = r21;
+    var_10 = r20;
+    decomp_var_8 = r19;
+    saved_fp = r29;
+    decomp_var_m8 = r30;
+    r19 = arg0;
+    var_70 = **___stack_chk_guard;
+    r21 = *__NSConcreteStackBlock;
+    var_118 = r21;
+    dispatch_async(*__dispatch_main_q, &var_118);
+    r0 = [NSMutableArray array];
+    r0 = [r0 retain];
+    r20 = r19[0x4];
+    var_140 = r21;
+    r0 = [r0 retain];
+    r21 = r0;
+    var_120 = r0;
+    [r20 enumerateCachedInstallersWithBlock:&var_140];
+    r20 = [[NSFileManager defaultManager] retain];
+    var_180 = q0;
+    var_170 = q0;
+    r0 = [r21 retain];
+    r21 = r0;
+    r0 = [r0 countByEnumeratingWithState:&var_180 objects:&decomp_var_f0 count:0x10];
+    if (r0 != 0x0) {
+            r22 = r0;
+            r27 = *var_170;
+            do {
+                    r28 = 0x0;
+                    do {
+                            if (*var_170 != r27) {
+                                    objc_enumerationMutation(r21);
+                            }
+                            r24 = *(var_178 + r28 * 0x8);
+                            var_188 = 0x0;
+                            r0 = [r20 removeItemAtURL:r24 error:&var_188];
+                            r26 = r0;
+                            r25 = [var_188 retain];
+                            if ((r26 & 0x1) == 0x0) {
+                                    NSLog(@"Failed to delete cached installer %@: %@\n", r1, r2);
+                            }
+                            [r25 release];
+                            r28 = r28 + 0x1;
+                    } while (r22 != r28);
+                    r0 = [r21 countByEnumeratingWithState:&var_180 objects:&decomp_var_f0 count:0x10];
+                    r22 = r0;
+            } while (r0 != 0x0);
+    }
+    [r21 release];
+    [r19[0x4] calculateInstallerCacheSize];
+    [r20 release];
+    [var_120 release];
+    r0 = [r21 release];
+    if (**___stack_chk_guard != var_70) {
+            __stack_chk_fail();
+    }
+    return r0;
+
+
+// 0x100012430
+// ___45-[PreferencesController clearInstallerCache:]_block_invoke_2
+    r0 = [NSBundle mainBundle];
+    r0 = [r0 retain];
+    r20 = r0;
+    r21 = [[r0 localizedStringForKey:@"Clearing…" value:@"" table:0x0] retain];
+    r0 = objc_loadWeakRetained(arg0[0x4] + sign_extend_64(*(int32_t *)ivar_offset(_installerCacheSizeLabel)));
+    r19 = r0;
+    [r0 setStringValue:r21];
+    [r19 release];
+    [r21 release];
+    r0 = [r20 release];
+    return r0;
+
+
+// 0x1000124c4
+// ___45-[PreferencesController clearInstallerCache:]_block_invoke_3
+    r0 = arg0[0x4];
+    r0 = [r0 addObject:arg1];
+    return r0;
+
+

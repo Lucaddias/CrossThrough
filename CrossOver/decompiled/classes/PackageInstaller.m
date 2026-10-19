@@ -2679,3 +2679,242 @@
     return;
 
 
+// === Block Invocations for PackageInstaller ===
+
+// 0x100009200
+// ___27-[PackageInstaller install]_block_invoke
+    var_20 = r22;
+    decomp_var_18 = r21;
+    r31 = r31 + 0xffffffffffffffd0;
+    var_10 = r20;
+    decomp_var_8 = r19;
+    saved_fp = r29;
+    decomp_var_m8 = r30;
+    r19 = arg0;
+    r0 = arg0[0x4];
+    r0 = [r0 installConfiguration];
+    r0 = [r0 retain];
+    r20 = r0;
+    r21 = [r0 hasBottle];
+    r0 = [r20 release];
+    if (r21 != 0x0) {
+            r0 = r19[0x4];
+            r0 = [r0 install];
+    }
+    return r0;
+
+
+// 0x100009784
+// ___36-[PackageInstaller selectInstaller:]_block_invoke
+    r0 = arg0;
+    if (r1 == 0x1) {
+            var_30 = r22;
+            decomp_var_28 = r21;
+            r31 = r31 + 0xffffffffffffffd0;
+            var_20 = r20;
+            decomp_var_18 = r19;
+            var_10 = r29;
+            decomp_var_8 = r30;
+            r19 = r0;
+            r0 = r0[0x4];
+            r0 = [r0 URL];
+            r0 = [r0 retain];
+            r21 = r0;
+            r0 = [r0 path];
+            r0 = [r0 retain];
+            r22 = r0;
+            r20 = [[r0 stringInFileSystemRepresentationForm] retain];
+            [r22 release];
+            [r21 release];
+            r0 = r19[0x5];
+            r0 = [r0 installConfiguration];
+            r0 = [r0 retain];
+            r21 = r0;
+            [r0 setInstallerSource:r20 forUser:0x1];
+            [r21 release];
+            if (r19[0x6] == 0x0) {
+                    [r19[0x5] install];
+            }
+            [r20 release];
+    }
+    return;
+
+
+// 0x100009a1c
+// ___47-[PackageInstaller selectBottleWithCompletion:]_block_invoke
+    r0 = arg0[0x4];
+    if (r0 != 0x0) {
+            r0 = (r0[0x2])();
+    }
+    return r0;
+
+
+// 0x10000c718
+// ___45-[PackageInstaller displayNextFailureMessage]_block_invoke
+    r31 = r31 - 0xf0;
+    var_40 = r26;
+    decomp_var_38 = r25;
+    var_30 = r24;
+    decomp_var_28 = r23;
+    var_20 = r22;
+    decomp_var_18 = r21;
+    var_10 = r20;
+    decomp_var_8 = r19;
+    saved_fp = r29;
+    decomp_var_m8 = r30;
+    r20 = arg1;
+    r19 = arg0;
+    var_48 = **___stack_chk_guard;
+    r0 = arg0[0x4];
+    r0 = [r0 window];
+    r0 = [r0 retain];
+    r21 = r0;
+    [r0 orderOut:r19[0x5]];
+    [r21 release];
+    switch (r20) {
+        case 1003:
+            [r19[0x5] queueInstallOperationWithTaskStatus:r19[0x7]];
+            r0 = r19[0x5];
+            r0 = [r0 installQueue];
+            r0 = [r0 retain];
+            r20 = r0;
+            [r0 setSuspended:0x0];
+            [r20 release];
+            r0 = r19[0x5];
+            if (**___stack_chk_guard != var_48) {
+                    __stack_chk_fail();
+            }
+            r0 = [r0 continueInstallation];
+            break;
+        case 1002:
+            r0 = [NSOpenPanel openPanel];
+            r0 = [r0 retain];
+            r20 = r0;
+            [r0 setCanChooseFiles:0x1];
+            [r20 setCanChooseDirectories:0x0];
+            r0 = [NSBundle mainBundle];
+            r0 = [r0 retain];
+            r22 = r0;
+            r24 = [[r0 localizedStringForKey:@"Please locate the installer file for %@" value:@"" table:0x0] retain];
+            r25 = [[r19[0x6] valueForKeyPath:@"aiecore.name"] retain];
+            r21 = [[NSString stringWithFormat:r24] retain];
+            [r20 setMessage:r21];
+            [r21 release];
+            [r25 release];
+            [r24 release];
+            [r22 release];
+            r0 = [NSBundle mainBundle];
+            r0 = [r0 retain];
+            r21 = r0;
+            r22 = [[r0 localizedStringForKey:@"Use this installer" value:@"" table:0x0] retain];
+            [r20 setPrompt:r22];
+            [r22 release];
+            [r21 release];
+            var_A0 = @"exe";
+            r0 = [NSArray arrayWithObjects:&var_A0 count:0xb];
+            r21 = [r0 retain];
+            [r20 setAllowedFileTypes:r21];
+            [r21 release];
+            r0 = r19[0x5];
+            r0 = [r0 delegate];
+            r0 = [r0 retain];
+            r21 = r0;
+            r22 = [[r0 window] retain];
+            var_D8 = *__NSConcreteStackBlock;
+            var_A8 = [r19[0x7] retain];
+            r0 = [r20 retain];
+            r19 = r0;
+            [r0 beginSheetModalForWindow:r22 completionHandler:&var_D8];
+            [r22 release];
+            [r21 release];
+            [var_A8 release];
+            [r20 release];
+            r0 = [r19 release];
+            if (**___stack_chk_guard != var_48) {
+                    __stack_chk_fail();
+            }
+            break;
+        default:
+            if (r20 == 0x3e8) {
+                    [r19[0x5] setCancelled:0x1];
+                    r20 = r19[0x5];
+                    [r20 setInstallStepsCancelled:[r20 installStepsCancelled] + 0x1];
+                    [r19[0x6] done];
+            }
+            else {
+                    [r19[0x6] done];
+                    r0 = r19[0x5];
+                    r0 = [r0 currentTasks];
+                    r0 = [r0 retain];
+                    r20 = r0;
+                    [r0 removeObject:r19[0x7]];
+                    [r20 release];
+                    r20 = r19[0x5];
+                    [r20 setInstallStepsCompleted:[r20 installStepsCompleted] + 0x1];
+                    r20 = r19[0x5];
+                    [r20 setInstallStepsSkipped:[r20 installStepsSkipped] + 0x1];
+            }
+            r0 = r19[0x5];
+            r0 = [r0 installQueue];
+            r0 = [r0 retain];
+            r20 = r0;
+            [r0 setSuspended:0x0];
+            [r20 release];
+            r0 = r19[0x5];
+            if (**___stack_chk_guard != var_48) {
+                    __stack_chk_fail();
+            }
+            r0 = [r0 continueInstallation];
+            break;
+    }
+    return r0;
+
+
+// 0x10000cb28
+// ___45-[PackageInstaller displayNextFailureMessage]_block_invoke_2
+    var_30 = r24;
+    decomp_var_28 = r23;
+    r31 = r31 + 0xffffffffffffffc0;
+    var_20 = r22;
+    decomp_var_18 = r21;
+    var_10 = r20;
+    decomp_var_8 = r19;
+    saved_fp = r29;
+    decomp_var_m8 = r30;
+    r20 = arg0;
+    [arg0[0x4] orderOut:r20[0x5]];
+    r19 = [[r20[0x6] task] retain];
+    if (arg1 == 0x1) {
+            r0 = r20[0x4];
+            r0 = [r0 URL];
+            r0 = [r0 retain];
+            r21 = r0;
+            r0 = [r0 path];
+            r0 = [r0 retain];
+            r22 = r0;
+            r23 = [[r0 stringInFileSystemRepresentationForm] retain];
+            [r22 release];
+            [r21 release];
+            [r19 setValue:r23 forKeyPath:@"aiecore.state.install_source"];
+            [r20[0x5] queueInstallOperationWithTaskStatus:r20[0x6]];
+            [r23 release];
+    }
+    else {
+            r0 = r20[0x5];
+            r0 = [r0 failedTasks];
+            r0 = [r0 retain];
+            r21 = r0;
+            [r0 insertObject:r20[0x6] atIndex:0x0];
+            [r21 release];
+            [r20[0x5] displayNextFailureMessage];
+    }
+    r0 = r20[0x5];
+    r0 = [r0 installQueue];
+    r0 = [r0 retain];
+    r20 = r0;
+    [r0 setSuspended:0x0];
+    [r20 release];
+    r0 = [r19 release];
+    return r0;
+
+

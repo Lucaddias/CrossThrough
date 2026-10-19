@@ -164,3 +164,37 @@
     return;
 
 
+// === Block Invocations for BottleTableCellView ===
+
+// 0x1000599d8
+// ___38-[BottleTableCellView updateTextField]_block_invoke
+    var_30 = r24;
+    decomp_var_28 = r23;
+    r31 = r31 + 0xffffffffffffffc0;
+    var_20 = r22;
+    decomp_var_18 = r21;
+    var_10 = r20;
+    decomp_var_8 = r19;
+    saved_fp = r29;
+    decomp_var_m8 = r30;
+    r19 = arg3;
+    r20 = arg2;
+    r21 = arg0;
+    r23 = [arg1 retain];
+    r0 = [NSFontManager sharedFontManager];
+    r0 = [r0 retain];
+    r22 = r0;
+    if (r21[0x28] != 0x0) {
+            r3 = 0x2;
+    }
+    else {
+            r3 = 0x4;
+    }
+    r24 = [[r0 convertFont:r23 toHaveTrait:r3] retain];
+    [r23 release];
+    [r22 release];
+    [r21[0x4] addAttribute:**_NSFontAttributeName value:r24 range:r20];
+    r0 = [r24 release];
+    return r0;
+
+

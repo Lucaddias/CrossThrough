@@ -281,3 +281,16 @@
     return;
 
 
+// === Block Invocations for BottleNode ===
+
+// 0x10006468c
+// ___22-[BottleNode setName:]_block_invoke
+    r0 = [CXSetupLib bottleCollectionClass];
+    r0 = [r0 sharedCollection];
+    r0 = [r0 retain];
+    r19 = r0;
+    [r0 refresh];
+    [r19 release];
+    return;
+
+

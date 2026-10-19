@@ -924,3 +924,441 @@
     return;
 
 
+// === Block Invocations for BottleMenuHandler ===
+
+// 0x10000d624
+// ___45+[BottleMenuHandler deleteBottle:withWindow:]_block_invoke
+    r0 = arg0;
+    if (r1 == 0x3e9) {
+            r31 = r31 - 0x80;
+            var_30 = r22;
+            decomp_var_28 = r21;
+            var_20 = r20;
+            decomp_var_18 = r19;
+            var_10 = r29;
+            decomp_var_8 = r30;
+            r20 = r0;
+            r0 = r0[0x4];
+            r0 = [r0 isIsManaged];
+            r21 = r0;
+            if (r0 != 0x0) {
+                    r0 = [SFAuthorization authorization];
+                    r0 = [r0 retain];
+                    r19 = r0;
+                    if ([r0 obtainWithRight:"system.privilege.admin" flags:0x13 error:0x0] == 0x0) {
+                            [r19 release];
+                    }
+                    else {
+                            [BottleMenuHandler rateBottle:r20[0x4] withWindow:r20[0x5] isDeleting:0x1];
+                            r22 = [r20[0x4] retain];
+                            [r20[0x6] retain];
+                            [r20[0x5] retain];
+                            r19 = [r19 retain];
+                            [r22 delete:&var_78];
+                            [var_40 release];
+                            [var_48 release];
+                            [var_50 release];
+                            [var_58 release];
+                            [r19 release];
+                    }
+            }
+            else {
+                    [BottleMenuHandler rateBottle:r20[0x4] withWindow:r20[0x5] isDeleting:0x1];
+                    r22 = [r20[0x4] retain];
+                    [r20[0x6] retain];
+                    [r20[0x5] retain];
+                    r19 = [0x0 retain];
+                    [r22 delete:&var_78];
+                    [var_40 release];
+                    [var_48 release];
+                    [var_50 release];
+                    [var_58 release];
+                    [r19 release];
+            }
+    }
+    return;
+
+
+// 0x10000d750
+// ___45+[BottleMenuHandler deleteBottle:withWindow:]_block_invoke_2
+    r31 = r31 - 0x80;
+    var_30 = r24;
+    decomp_var_28 = r23;
+    var_20 = r22;
+    decomp_var_18 = r21;
+    var_10 = r20;
+    decomp_var_8 = r19;
+    saved_fp = r29;
+    decomp_var_m8 = r30;
+    r19 = arg0;
+    r0 = arg0[0x4];
+    r0 = [r0 isIsDeleted];
+    if (r0 != 0x0) {
+            r0 = [CXSetupLib bottleCollectionClass];
+            r0 = [r0 sharedCollection];
+            r0 = [r0 retain];
+            r20 = r0;
+            [r0 refresh];
+            r0 = [r20 release];
+    }
+    else {
+            if (r19[0x40] == 0x0) {
+                    r20 = [[NSAlert alloc] init];
+                    r0 = [NSBundle mainBundle];
+                    r0 = [r0 retain];
+                    r22 = r0;
+                    r23 = [[r0 localizedStringForKey:@"Failed to delete the bottle '%@'." value:@"" table:0x0] retain];
+                    r21 = [[NSString stringWithFormat:r23] retain];
+                    [r20 setMessageText:r21];
+                    [r21 release];
+                    [r23 release];
+                    [r22 release];
+                    [r20 beginSheetModalForWindow:r19[0x6] completionHandler:0x0];
+                    r0 = [r20 release];
+            }
+    }
+    if (r19[0x40] != 0x0) {
+            r20 = [dispatch_get_global_queue(0x0, 0x0) retain];
+            var_68 = *__NSConcreteStackBlock;
+            var_48 = [r19[0x4] retain];
+            var_40 = [r19[0x6] retain];
+            var_38 = [r19[0x7] retain];
+            dispatch_sync(r20, &var_68);
+            [r20 release];
+            [var_38 release];
+            [var_40 release];
+            r0 = [var_48 release];
+    }
+    return r0;
+
+
+// 0x10000d91c
+// ___45+[BottleMenuHandler deleteBottle:withWindow:]_block_invoke_3
+    r0 = [BottleMenuHandler deleteManagedBottle:arg0[0x4] withWindow:arg0[0x5] authorization:arg0[0x6]];
+    return r0;
+
+
+// 0x10000db9c
+// ___66+[BottleMenuHandler deleteManagedBottle:withWindow:authorization:]_block_invoke
+    r0 = [CXSetupLib bottleCollectionClass];
+    r0 = [r0 sharedCollection];
+    r0 = [r0 retain];
+    r19 = r0;
+    [r0 refresh];
+    [r19 release];
+    return;
+
+
+// 0x10000dbd8
+// ___66+[BottleMenuHandler deleteManagedBottle:withWindow:authorization:]_block_invoke_2
+    r0 = [NSBundle mainBundle];
+    r0 = [r0 retain];
+    r21 = r0;
+    r20 = [[r0 localizedStringForKey:@"Could not obtain the authorization to delete files owned by the administrator." value:@"" table:0x0] retain];
+    [r21 release];
+    r21 = [[NSAlert alloc] init];
+    r0 = [NSBundle mainBundle];
+    r0 = [r0 retain];
+    r24 = r0;
+    r22 = [[r0 localizedStringForKey:@"Failed to delete the published bottle '%@'." value:@"" table:0x0] retain];
+    r23 = [[NSString stringWithFormat:r22] retain];
+    [r21 setMessageText:r23];
+    [r23 release];
+    [r22 release];
+    [r24 release];
+    [r21 setInformativeText:r20];
+    [r21 beginSheetModalForWindow:arg0[0x5] completionHandler:0x0];
+    [r21 release];
+    r0 = [r20 release];
+    return r0;
+
+
+// 0x10000e070
+// ___45+[BottleMenuHandler exportBottle:withWindow:]_block_invoke
+    r0 = arg0;
+    if (r1 == 0x1) {
+            r19 = r0;
+            r0 = r0[0x4];
+            r0 = [r0 URL];
+            r0 = [r0 retain];
+            r21 = r0;
+            r0 = [r0 path];
+            r0 = [r0 retain];
+            r22 = r0;
+            r20 = [[r0 stringInFileSystemRepresentationForm] retain];
+            [r22 release];
+            [r21 release];
+            [r19[0x5] retain];
+            dispatch_async(*__dispatch_main_q, &var_68);
+            r21 = [dispatch_get_global_queue(0x0, 0x0) retain];
+            [r19[0x6] retain];
+            [r19[0x7] retain];
+            [r19[0x5] retain];
+            r19 = [r20 retain];
+            dispatch_async(r21, &var_A8);
+            [r21 release];
+            [var_70 release];
+            [var_78 release];
+            [var_80 release];
+            [var_88 release];
+            [var_48 release];
+            [r19 release];
+    }
+    return;
+
+
+// 0x10000e1e0
+// ___45+[BottleMenuHandler exportBottle:withWindow:]_block_invoke_2
+    r19 = arg0[0x4];
+    r20 = [[[CXSetupLib cxSetupClass] bottleStatus:@"ARCHIVING"] retain];
+    [r19 addStatusOverride:r20];
+    r0 = [r20 release];
+    return r0;
+
+
+// 0x10000e230
+// ___45+[BottleMenuHandler exportBottle:withWindow:]_block_invoke.42
+    r0 = [CXSetupLib bottleManagementClass];
+    r0 = [r0 archiveBottle:arg0[0x4] toPath:arg0[0x5]];
+    r0 = [r0 retain];
+    r20 = r0;
+    r0 = [r0 objectAtIndex:0x0];
+    r0 = [r0 retain];
+    r21 = r0;
+    [r0 boolValue];
+    [r21 release];
+    var_68 = *__NSConcreteStackBlock;
+    var_40 = [arg0[0x4] retain];
+    var_38 = [arg0[0x6] retain];
+    var_30 = [arg0[0x7] retain];
+    r19 = [r20 retain];
+    dispatch_async(*__dispatch_main_q, &var_68);
+    [var_30 release];
+    [var_38 release];
+    [var_40 release];
+    [r20 release];
+    r0 = [r19 release];
+    return r0;
+
+
+// 0x10000e33c
+// ___45+[BottleMenuHandler exportBottle:withWindow:]_block_invoke_2.43
+    r31 = r31 - 0x50;
+    var_30 = r24;
+    decomp_var_28 = r23;
+    var_20 = r22;
+    decomp_var_18 = r21;
+    var_10 = r20;
+    decomp_var_8 = r19;
+    saved_fp = r29;
+    decomp_var_m8 = r30;
+    r19 = arg0;
+    if (arg0[0x40] == 0x0) {
+            r0 = r19[0x4];
+            r0 = [r0 objectAtIndex:0x1];
+            r0 = [r0 retain];
+            r20 = r0;
+            if (r0 != 0x0) {
+                    r0 = [NSBundle mainBundle];
+                    r0 = [r0 retain];
+                    r21 = r0;
+                    r22 = [[r0 localizedStringForKey:@"Failed to export bottle '%@' to an archive." value:@"" table:0x0] retain];
+                    [r21 release];
+                    r21 = [[NSAlert alloc] init];
+                    r23 = [[NSString stringWithFormat:r22] retain];
+                    [r21 setMessageText:r23];
+                    [r23 release];
+                    [r21 setInformativeText:r20];
+                    [r21 beginSheetModalForWindow:r19[0x6] completionHandler:0x0];
+                    [r21 release];
+                    [r22 release];
+            }
+            [r20 release];
+    }
+    r19 = r19[0x7];
+    r20 = [[[CXSetupLib cxSetupClass] bottleStatus:@"ARCHIVING"] retain];
+    [r19 removeStatusOverride:r20];
+    r0 = [r20 release];
+    return r0;
+
+
+// 0x10000eae8
+// ___40+[BottleMenuHandler openShellForBottle:]_block_invoke
+    r31 = r31 - 0x60;
+    var_40 = r26;
+    decomp_var_38 = r25;
+    var_30 = r24;
+    decomp_var_28 = r23;
+    var_20 = r22;
+    decomp_var_18 = r21;
+    var_10 = r20;
+    decomp_var_8 = r19;
+    saved_fp = r29;
+    decomp_var_m8 = r30;
+    r21 = arg0;
+    r19 = [arg1 retain];
+    r20 = [arg2 retain];
+    if (([r21[0x4] containsObject:r19] & 0x1) == 0x0) {
+            r23 = [[r19 stringQuotedForBash] retain];
+            r24 = [[r20 stringQuotedForBash] retain];
+            r22 = [[NSString stringWithFormat:@"export %@=%@", r3, r4] retain];
+            [r24 release];
+            [r23 release];
+            r24 = [[r22 stringQuotedForAppleScript] retain];
+            r23 = [[NSString stringWithFormat:@"do script %@ in theWindow\ndelay 0.1\n", r3] retain];
+            [r24 release];
+            [r21[0x5] appendString:r23];
+            [r23 release];
+            [r22 release];
+    }
+    [r20 release];
+    r0 = [r19 release];
+    return r0;
+
+
+// 0x10000ede4
+// ___54+[BottleMenuHandler rateBottle:withWindow:isDeleting:]_block_invoke
+    var_20 = r22;
+    decomp_var_18 = r21;
+    r31 = r31 + 0xffffffffffffffd0;
+    var_10 = r20;
+    decomp_var_8 = r19;
+    saved_fp = r29;
+    decomp_var_m8 = r30;
+    r20 = arg0;
+    r0 = [SubmitRatingController alloc];
+    r0 = [r0 initWithBottle:r20[0x4] isNag:0x1 isDeleting:r20[0x30]];
+    r19 = r0;
+    if (r0 != 0x0) {
+            r22 = r20[0x5];
+            r21 = [[r19 window] retain];
+            if (r22 != 0x0) {
+                    [r22 beginSheet:r21 completionHandler:0x0];
+            }
+            else {
+                    [r21 center];
+                    [r21 release];
+                    r0 = [r19 window];
+                    r0 = [r0 retain];
+                    r21 = r0;
+                    [r0 makeKeyAndOrderFront:r20[0x5]];
+            }
+            [r21 release];
+    }
+    r0 = [r19 release];
+    return r0;
+
+
+// 0x10000efbc
+// ___41+[BottleMenuHandler toggleDefaultBottle:]_block_invoke
+    r0 = [CXSetupLib bottleCollectionClass];
+    r0 = [r0 sharedCollection];
+    r0 = [r0 retain];
+    r19 = r0;
+    [r0 refreshDefaultBottle];
+    [r19 release];
+    return;
+
+
+// 0x10000f37c
+// ___76+[BottleMenuHandler toggleMSyncForBottle:withWindow:modalCompletionHandler:]_block_invoke
+    var_10 = r20;
+    decomp_var_8 = r19;
+    r31 = r31 + 0xffffffffffffffe0;
+    saved_fp = r29;
+    decomp_var_m8 = r30;
+    r19 = arg1;
+    r20 = arg0;
+    if (arg1 == 0x3e8) {
+            r8 = r20[0x30];
+            r0 = r20[0x4];
+            if (r8 != 0x0) {
+                    [r0 enableMSync];
+            }
+            else {
+                    [r0 disableMSync];
+            }
+    }
+    r0 = r20[0x5];
+    if (r0 != 0x0) {
+            r0 = (r0[0x2])();
+    }
+    return r0;
+
+
+// 0x10000fa6c
+// ___85+[BottleMenuHandler toggleHighResolutionForBottle:withWindow:modalCompletionHandler:]_block_invoke
+    var_10 = r20;
+    decomp_var_8 = r19;
+    r31 = r31 + 0xffffffffffffffe0;
+    saved_fp = r29;
+    decomp_var_m8 = r30;
+    r19 = arg1;
+    r20 = arg0;
+    if (arg1 == 0x3e8) {
+            r8 = r20[0x30];
+            r0 = r20[0x4];
+            if (r8 != 0x0) {
+                    [r0 enableHighResolution];
+            }
+            else {
+                    [r0 disableHighResolution];
+            }
+    }
+    r0 = r20[0x5];
+    if (r0 != 0x0) {
+            r0 = (r0[0x2])();
+    }
+    return r0;
+
+
+// 0x10000ffe4
+// ___78+[BottleMenuHandler togglePreviewForBottle:withWindow:modalCompletionHandler:]_block_invoke
+    r31 = r31 - 0x50;
+    var_10 = r20;
+    decomp_var_8 = r19;
+    saved_fp = r29;
+    decomp_var_m8 = r30;
+    r19 = arg1;
+    r20 = arg0;
+    if (arg1 == 0x3e8) {
+            r0 = r20[0x4];
+            var_38 = *__NSConcreteStackBlock;
+            r0 = [r0 retain];
+            var_18 = r0;
+            [r0 quit:&var_38];
+            [var_18 release];
+    }
+    r0 = r20[0x5];
+    if (r0 != 0x0) {
+            r0 = (r0[0x2])();
+    }
+    return r0;
+
+
+// 0x100010074
+// ___78+[BottleMenuHandler togglePreviewForBottle:withWindow:modalCompletionHandler:]_block_invoke_2
+    r0 = arg0[0x4];
+    r0 = [r0 disablePreview];
+    return r0;
+
+
+// 0x10001007c
+// ___78+[BottleMenuHandler togglePreviewForBottle:withWindow:modalCompletionHandler:]_block_invoke.170
+    var_10 = r20;
+    decomp_var_8 = r19;
+    r31 = r31 + 0xffffffffffffffe0;
+    saved_fp = r29;
+    decomp_var_m8 = r30;
+    r19 = arg1;
+    r20 = arg0;
+    if (arg1 == 0x3e8) {
+            [r20[0x4] enablePreview];
+    }
+    r0 = r20[0x5];
+    if (r0 != 0x0) {
+            r0 = (r0[0x2])();
+    }
+    return r0;
+
+

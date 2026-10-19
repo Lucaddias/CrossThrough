@@ -1,9 +1,70 @@
-# CrossOver 26.3 (arm64) procedure index
+# CrossOver 26.3 (arm64) Procedure Index
 
-10627 procedures, 94 ObjC classes, 8520 non-ObjC
+- **Total procedures analyzed by Hopper**: 10627
+- **Executable code (`__TEXT,__text`)**: 2294 (100% decompiled)
+  - Objective-C methods across 94 classes: 2107
+  - Objective-C block invocations: 132
+  - Standalone C functions / callbacks / helpers: 55
+- **Linker & Selector Stubs (`__stubs`, `__objc_stubs`)**: 8333 (184 dynamic symbol stubs, 8149 `objc_msgSend$` trampolines)
 
+## Standalone C Functions & Helpers (`c_functions.c`)
+- `0x100009260` `___copy_helper_block_e8_32s`
+- `0x100009268` `___destroy_helper_block_e8_32s`
+- `0x100009834` `___copy_helper_block_e8_32s40s48s`
+- `0x100009864` `___destroy_helper_block_e8_32s40s48s`
+- `0x100009a30` `___copy_helper_block_e8_32b`
+- `0x10000cc44` `___copy_helper_block_e8_32s40s48s56s`
+- `0x10000cc7c` `___destroy_helper_block_e8_32s40s48s56s`
+- `0x10000dd0c` `___copy_helper_block_e8_32s40s`
+- `0x10000dd34` `___destroy_helper_block_e8_32s40s`
+- `0x10000f3dc` `___copy_helper_block_e8_32s40b`
+- `0x100011054` `_InstallersCacheEventStreamCallback`
+- `0x1000120a0` `___copy_helper_block_e8_32r`
+- `0x1000120b0` `___destroy_helper_block_e8_32r`
+- `0x100013ae4` `sub_100013ae4`
+- `0x100014aa0` `_observeProxyChange`
+- `0x100014b0c` `sub_100014b0c`
+- `0x100015568` `sub_100015568`
+- `0x10002ea0c` `_initCharacterSets`
+- `0x1000301b4` `___copy_helper_block_e8_32w`
+- `0x1000301c0` `___destroy_helper_block_e8_32w`
+- `0x100033adc` `_CompareLanguageEntries`
+- `0x10003a5b0` `sub_10003a5b0`
+- `0x10003b4f4` `___Block_byref_object_copy_`
+- `0x10003b504` `___Block_byref_object_dispose_`
+- `0x10003b7cc` `___copy_helper_block_e8_32s40s48s56s64s72r`
+- `0x10003b820` `___destroy_helper_block_e8_32s40s48s56s64s72r`
+- `0x10003b954` `___copy_helper_block_e8_32s40s48r`
+- `0x10003b990` `___destroy_helper_block_e8_32s40s48r`
+- `0x100040318` `sub_100040318`
+- `0x1000417ec` `_CXLog`
+- `0x100046084` `___Block_byref_object_copy__100046084`
+- `0x100046094` `___Block_byref_object_dispose__100046094`
+- `0x100046464` `___copy_helper_block_e8_32s40s48s56r`
+- `0x1000464a8` `___destroy_helper_block_e8_32s40s48s56r`
+- `0x100049e9c` `sub_100049e9c`
+- `0x1000541d4` `_InitializePython`
+- `0x100055f28` `_boolGetterMethodFastIMP`
+- `0x100055f9c` `_boolGetterMethodIMP`
+- `0x100056068` `_objectGetterMethodFastIMP`
+- `0x1000560c4` `_objectGetterMethodIMP`
+- `0x100056180` `_boolSetterMethodIMP`
+- `0x100056254` `_objectSetterMethodIMP`
+- `0x100059e98` `_PFMoveToApplicationsFolderIfNecessary`
+- `0x10005ab4c` `_IsLaunchedFromDMG`
+- `0x10005ac90` `_PathIsWithinPath`
+- `0x10005ad24` `_Trash`
+- `0x100064868` `_main`
+- `0x10006486c` `___isOSVersionAtLeast`
+- `0x100064954` `_compatibilityInitializeAvailabilityCheck`
+- `0x10006495c` `___isPlatformVersionAtLeast`
+- `0x100064aa8` `_initializeAvailabilityCheck`
+- `0x100064ab0` `___isPlatformOrVariantPlatformVersionAtLeast`
+- `0x100064d0c` `__initializeAvailabilityCheck`
+- `0x10006503c` `-[CXSparkleUserDriver showUpdateFoundWithAppcastItem:state:reply:].cold.1`
+- `0x100065064` `___isPlatformOrVariantPlatformVersionAtLeast.cold.1`
 
-## AddDependenciesViewController (13)
+## AddDependenciesViewController (13 methods, 0 blocks)
 - `0x1000360ec` -[AddDependenciesViewController init]
 - `0x10003612c` -[AddDependenciesViewController dealloc]
 - `0x10003618c` +[AddDependenciesViewController keyPathsForValuesAffectingInstallConfiguration]
@@ -18,15 +79,15 @@
 - `0x10003665c` -[AddDependenciesViewController setAddableDependencies:]
 - `0x100036668` -[AddDependenciesViewController .cxx_destruct]
 
-## AskUpdateBottlesOp (1)
+## AskUpdateBottlesOp (1 methods, 0 blocks)
 - `0x10003a644` -[AskUpdateBottlesOp main]
 
-## BooleanToLabelColorTransformer (3)
+## BooleanToLabelColorTransformer (3 methods, 0 blocks)
 - `0x1000100e4` +[BooleanToLabelColorTransformer allowsReverseTransformation]
 - `0x1000100ec` +[BooleanToLabelColorTransformer transformedValueClass]
 - `0x1000100f8` -[BooleanToLabelColorTransformer transformedValue:]
 
-## BottleMenuHandler (21)
+## BottleMenuHandler (21 methods, 17 blocks)
 - `0x10000d2fc` +[BottleMenuHandler deleteBottle:withWindow:]
 - `0x10000d934` +[BottleMenuHandler deleteManagedBottle:withWindow:authorization:]
 - `0x10000dd5c` +[BottleMenuHandler duplicateBottle:withWindow:]
@@ -48,14 +109,31 @@
 - `0x10000fad4` +[BottleMenuHandler togglePreviewForBottle:withWindow:modalCompletionHandler:]
 - `0x1000100cc` +[BottleMenuHandler quitBottle:]
 - `0x1000100d8` +[BottleMenuHandler forceQuitBottle:]
+- `0x10000d624` `___45+[BottleMenuHandler deleteBottle:withWindow:]_block_invoke`
+- `0x10000d750` `___45+[BottleMenuHandler deleteBottle:withWindow:]_block_invoke_2`
+- `0x10000d91c` `___45+[BottleMenuHandler deleteBottle:withWindow:]_block_invoke_3`
+- `0x10000db9c` `___66+[BottleMenuHandler deleteManagedBottle:withWindow:authorization:]_block_invoke`
+- `0x10000dbd8` `___66+[BottleMenuHandler deleteManagedBottle:withWindow:authorization:]_block_invoke_2`
+- `0x10000e070` `___45+[BottleMenuHandler exportBottle:withWindow:]_block_invoke`
+- `0x10000e1e0` `___45+[BottleMenuHandler exportBottle:withWindow:]_block_invoke_2`
+- `0x10000e230` `___45+[BottleMenuHandler exportBottle:withWindow:]_block_invoke.42`
+- `0x10000e33c` `___45+[BottleMenuHandler exportBottle:withWindow:]_block_invoke_2.43`
+- `0x10000eae8` `___40+[BottleMenuHandler openShellForBottle:]_block_invoke`
+- `0x10000ede4` `___54+[BottleMenuHandler rateBottle:withWindow:isDeleting:]_block_invoke`
+- `0x10000efbc` `___41+[BottleMenuHandler toggleDefaultBottle:]_block_invoke`
+- `0x10000f37c` `___76+[BottleMenuHandler toggleMSyncForBottle:withWindow:modalCompletionHandler:]_block_invoke`
+- `0x10000fa6c` `___85+[BottleMenuHandler toggleHighResolutionForBottle:withWindow:modalCompletionHandler:]_block_invoke`
+- `0x10000ffe4` `___78+[BottleMenuHandler togglePreviewForBottle:withWindow:modalCompletionHandler:]_block_invoke`
+- `0x100010074` `___78+[BottleMenuHandler togglePreviewForBottle:withWindow:modalCompletionHandler:]_block_invoke_2`
+- `0x10001007c` `___78+[BottleMenuHandler togglePreviewForBottle:withWindow:modalCompletionHandler:]_block_invoke.170`
 
-## BottleNameFormatter (4)
+## BottleNameFormatter (4 methods, 0 blocks)
 - `0x10001c450` +[BottleNameFormatter accessInstanceVariablesDirectly]
 - `0x10001c458` -[BottleNameFormatter stringForObjectValue:]
 - `0x10001c4e8` -[BottleNameFormatter getObjectValue:forString:errorDescription:]
 - `0x10001c518` -[BottleNameFormatter isPartialStringValid:newEditingString:errorDescription:]
 
-## BottleNode (25)
+## BottleNode (25 methods, 1 blocks)
 - `0x1000642d0` +[BottleNode bottleNodeWithBottle:]
 - `0x100064324` +[BottleNode groupBottleNodeWithName:]
 - `0x100064378` +[BottleNode allBottlesBottleNode]
@@ -81,8 +159,9 @@
 - `0x1000647e0` -[BottleNode sortPriority]
 - `0x1000647f0` -[BottleNode setSortPriority:]
 - `0x100064800` -[BottleNode .cxx_destruct]
+- `0x10006468c` `___22-[BottleNode setName:]_block_invoke`
 
-## BottleTableCellView (9)
+## BottleTableCellView (9 methods, 1 blocks)
 - `0x100059604` -[BottleTableCellView dealloc]
 - `0x100059670` -[BottleTableCellView awakeFromNib]
 - `0x1000596fc` -[BottleTableCellView setBackgroundStyle:]
@@ -92,12 +171,13 @@
 - `0x100059b20` -[BottleTableCellView needsUpgradeButton]
 - `0x100059b40` -[BottleTableCellView setNeedsUpgradeButton:]
 - `0x100059b54` -[BottleTableCellView .cxx_destruct]
+- `0x1000599d8` `___38-[BottleTableCellView updateTextField]_block_invoke`
 
-## BottleTableRowView (2)
+## BottleTableRowView (2 methods, 0 blocks)
 - `0x100055140` -[BottleTableRowView drawRect:]
 - `0x100055174` -[BottleTableRowView isEmphasized]
 
-## BottleViewController (134)
+## BottleViewController (134 methods, 9 blocks)
 - `0x10001f470` -[BottleViewController init]
 - `0x10001f5c4` -[BottleViewController dealloc]
 - `0x10001f748` -[BottleViewController viewDidLoad]
@@ -232,8 +312,17 @@
 - `0x100024934` -[BottleViewController installedSoftware]
 - `0x100024954` -[BottleViewController setInstalledSoftware:]
 - `0x100024968` -[BottleViewController .cxx_destruct]
+- `0x100022160` `___44-[BottleViewController iconForControlPanel:]_block_invoke`
+- `0x1000222a0` `___42-[BottleViewController sortControlPanels:]_block_invoke`
+- `0x100022348` `___42-[BottleViewController sortControlPanels:]_block_invoke_2`
+- `0x1000237cc` `___37-[BottleViewController msyncToggled:]_block_invoke`
+- `0x1000238fc` `___46-[BottleViewController highResolutionToggled:]_block_invoke`
+- `0x100023a2c` `___39-[BottleViewController previewToggled:]_block_invoke`
+- `0x100023be4` `___50-[BottleViewController controlPanelButtonClicked:]_block_invoke`
+- `0x100023c84` `___50-[BottleViewController controlPanelButtonClicked:]_block_invoke_2`
+- `0x100023d0c` `___50-[BottleViewController controlPanelButtonClicked:]_block_invoke.182`
 
-## BuySupportNagController (42)
+## BuySupportNagController (42 methods, 0 blocks)
 - `0x100057134` -[BuySupportNagController initWithAppcastItem:]
 - `0x1000572c8` -[BuySupportNagController setOwnsSelf:]
 - `0x100057358` -[BuySupportNagController bundleVersion]
@@ -277,7 +366,7 @@
 - `0x100058e0c` -[BuySupportNagController setReleaseNotesSpinner:]
 - `0x100058e20` -[BuySupportNagController .cxx_destruct]
 
-## CDTools (6)
+## CDTools (6 methods, 0 blocks)
 - `0x1000101d8` +[CDTools isValidInstallerVolume:requireRemovable:]
 - `0x1000105f8` +[CDTools isValidInstallerVolume:]
 - `0x100010600` +[CDTools removeCDHelper]
@@ -285,7 +374,7 @@
 - `0x100010ab4` +[CDTools removeCDHelperAndPrefsForAllInstalls]
 - `0x100010c78` +[CDTools identifyInstallablePackagesForVolume:]
 
-## CXApplication (23)
+## CXApplication (23 methods, 0 blocks)
 - `0x10001cec4` +[CXApplication accessInstanceVariablesDirectly]
 - `0x10001cecc` -[CXApplication init]
 - `0x10001cff4` -[CXApplication setDelegate:]
@@ -310,7 +399,7 @@
 - `0x10001e31c` -[CXApplication setCXServer:]
 - `0x10001e330` -[CXApplication .cxx_destruct]
 
-## CXBundle (13)
+## CXBundle (13 methods, 0 blocks)
 - `0x10002ac20` -[CXBundle initWithURL:]
 - `0x10002ae00` -[CXBundle dealloc]
 - `0x10002ae54` +[CXBundle bundleWithURL:]
@@ -325,7 +414,7 @@
 - `0x10002b0e4` -[CXBundle setCfBundle:]
 - `0x10002b0f4` -[CXBundle .cxx_destruct]
 
-## CXDisclosureView (22)
+## CXDisclosureView (22 methods, 0 blocks)
 - `0x100005284` -[CXDisclosureView initWithFrame:]
 - `0x1000052d4` -[CXDisclosureView initWithCoder:]
 - `0x100005324` -[CXDisclosureView finishInit]
@@ -349,14 +438,14 @@
 - `0x100005e5c` -[CXDisclosureView setTitleButton:]
 - `0x100005e70` -[CXDisclosureView .cxx_destruct]
 
-## CXDragView (5)
+## CXDragView (5 methods, 0 blocks)
 - `0x10001013c` -[CXDragView draggingEntered:]
 - `0x100010144` -[CXDragView performDragOperation:]
 - `0x1000101a8` -[CXDragView delegate]
 - `0x1000101b8` -[CXDragView setDelegate:]
 - `0x1000101c4` -[CXDragView .cxx_destruct]
 
-## CXFlatButton (65)
+## CXFlatButton (65 methods, 0 blocks)
 - `0x100005ee8` +[CXFlatButton flatButtonWithTitle:icon:]
 - `0x100005fc8` +[CXFlatButton flatButtonWithTitle:]
 - `0x100005fd0` -[CXFlatButton initWithFrame:]
@@ -423,7 +512,7 @@
 - `0x100007c48` -[CXFlatButton setTextColor:]
 - `0x100007c5c` -[CXFlatButton .cxx_destruct]
 
-## CXFlatPopUpButton (25)
+## CXFlatPopUpButton (25 methods, 0 blocks)
 - `0x100007d00` -[CXFlatPopUpButton initWithFrame:]
 - `0x100007d50` -[CXFlatPopUpButton initWithCoder:]
 - `0x100007da0` -[CXFlatPopUpButton finishInit]
@@ -450,13 +539,13 @@
 - `0x1000084a8` -[CXFlatPopUpButton setSelected:]
 - `0x1000084b8` -[CXFlatPopUpButton .cxx_destruct]
 
-## CXFlippedClipView (1)
+## CXFlippedClipView (1 methods, 0 blocks)
 - `0x10000850c` -[CXFlippedClipView isFlipped]
 
-## CXObject (1)
+## CXObject (1 methods, 0 blocks)
 - `0x100039c08` +[CXObject accessInstanceVariablesDirectly]
 
-## CXRatioTextField (7)
+## CXRatioTextField (7 methods, 0 blocks)
 - `0x100038378` -[CXRatioTextField initWithCoder:]
 - `0x1000383c4` -[CXRatioTextField initWithFrame:]
 - `0x100038410` -[CXRatioTextField intrinsicContentSize]
@@ -465,7 +554,7 @@
 - `0x10003872c` -[CXRatioTextField maxAspectRatio]
 - `0x10003873c` -[CXRatioTextField setMaxAspectRatio:]
 
-## CXServer (65)
+## CXServer (65 methods, 7 blocks)
 - `0x100012780` -[CXServer init]
 - `0x1000129ec` -[CXServer dealloc]
 - `0x100012ad0` -[CXServer demoRegisterController]
@@ -531,8 +620,15 @@
 - `0x1000168bc` -[CXServer processFirstRun:]
 - `0x100016904` -[CXServer handleGetURLEvent:withReplyEvent:]
 - `0x100016c80` -[CXServer .cxx_destruct]
+- `0x100012c4c` `___49-[CXServer doPeriodicDemoNagForCommand:withArgs:]_block_invoke`
+- `0x100012d18` `___21-[CXServer demoCheck]_block_invoke`
+- `0x100012e08` `___33-[CXServer continueFromDemoCheck]_block_invoke`
+- `0x100015958` `___33-[CXServer application:openFile:]_block_invoke`
+- `0x100015c78` `___25-[CXServer openDocument:]_block_invoke`
+- `0x10001605c` `___36-[CXServer addToRecentItems:bottle:]_block_invoke`
+- `0x100016c6c` `___45-[CXServer handleGetURLEvent:withReplyEvent:]_block_invoke`
 
-## CXServerCrossOver (81)
+## CXServerCrossOver (81 methods, 6 blocks)
 - `0x10004719c` -[CXServerCrossOver init]
 - `0x100047530` -[CXServerCrossOver preferencesController]
 - `0x10004757c` -[CXServerCrossOver mainWindowController]
@@ -614,8 +710,14 @@
 - `0x100053c2c` -[CXServerCrossOver observedBottles]
 - `0x100053c3c` -[CXServerCrossOver setObservedBottles:]
 - `0x100053c48` -[CXServerCrossOver .cxx_destruct]
+- `0x100048dec` `___54-[CXServerCrossOver handleGetURLEvent:withReplyEvent:]_block_invoke`
+- `0x10004aa24` `___73-[CXServerCrossOver addProgramsFromMenuPlist:bottle:toDictionary:atPath:]_block_invoke`
+- `0x1000526cc` `___49-[CXServerCrossOver applicationOpenUntitledFile:]_block_invoke`
+- `0x10005306c` `___57-[CXServerCrossOver bestValidUpdateInAppcast:forUpdater:]_block_invoke`
+- `0x100053824` `___35-[CXServerCrossOver repairBottles:]_block_invoke`
+- `0x100053880` `___35-[CXServerCrossOver repairBottles:]_block_invoke_2`
 
-## CXSetupLib (18)
+## CXSetupLib (18 methods, 0 blocks)
 - `0x100039c10` +[CXSetupLib initialize]
 - `0x10003a050` +[CXSetupLib bottleQueryClass]
 - `0x10003a05c` +[CXSetupLib bottleManagementClass]
@@ -635,15 +737,15 @@
 - `0x10003a104` +[CXSetupLib systemInfoClass]
 - `0x10003a110` +[CXSetupLib webUtilsClass]
 
-## CXSourceList (2)
+## CXSourceList (2 methods, 0 blocks)
 - `0x1000540ac` -[CXSourceList frameOfCellAtColumn:row:]
 - `0x10005411c` -[CXSourceList validateProposedFirstResponder:forEvent:]
 
-## CXSparkleUserDriver (2)
+## CXSparkleUserDriver (2 methods, 0 blocks)
 - `0x10003fdb8` -[CXSparkleUserDriver setNotLicensed:]
 - `0x10003fdc8` -[CXSparkleUserDriver showUpdateFoundWithAppcastItem:state:reply:]
 
-## CXTask (9)
+## CXTask (9 methods, 0 blocks)
 - `0x100039774` -[CXTask initWithTask:]
 - `0x10003980c` -[CXTask init]
 - `0x100039854` -[CXTask dealloc]
@@ -654,7 +756,7 @@
 - `0x100039be4` -[CXTask forwardingTargetForSelector:]
 - `0x100039bf4` -[CXTask .cxx_destruct]
 
-## CXTaskSpecialString (8)
+## CXTaskSpecialString (8 methods, 0 blocks)
 - `0x10003965c` -[CXTaskSpecialString initWithString:]
 - `0x100039690` -[CXTaskSpecialString copy]
 - `0x100039698` -[CXTaskSpecialString mutableCopy]
@@ -664,7 +766,7 @@
 - `0x100039750` -[CXTaskSpecialString forwardingTargetForSelector:]
 - `0x100039760` -[CXTaskSpecialString .cxx_destruct]
 
-## CXUpdater (25)
+## CXUpdater (25 methods, 0 blocks)
 - `0x10001c5b0` +[CXUpdater sharedUpdater]
 - `0x10001c608` +[CXUpdater updaterForBundle:]
 - `0x10001c6c0` -[CXUpdater initForBundle:]
@@ -691,17 +793,17 @@
 - `0x10001ce84` -[CXUpdater setUpdateCheckInterval:]
 - `0x10001ce8c` -[CXUpdater .cxx_destruct]
 
-## CXViewController (1)
+## CXViewController (1 methods, 0 blocks)
 - `0x1000540a4` +[CXViewController accessInstanceVariablesDirectly]
 
-## CXWindowController (5)
+## CXWindowController (5 methods, 0 blocks)
 - `0x10003927c` +[CXWindowController accessInstanceVariablesDirectly]
 - `0x100039284` -[CXWindowController dealloc]
 - `0x1000392f0` -[CXWindowController windowDidLoad]
 - `0x100039470` -[CXWindowController windowWillClose:]
 - `0x100039534` -[CXWindowController showWindow:]
 
-## ControlPanelLauncherTreeNode (9)
+## ControlPanelLauncherTreeNode (9 methods, 0 blocks)
 - `0x100026d14` -[ControlPanelLauncherTreeNode isOpenable]
 - `0x100026d84` +[ControlPanelLauncherTreeNode keyPathsForValuesAffectingPersistentID]
 - `0x100026dbc` -[ControlPanelLauncherTreeNode persistentID]
@@ -712,7 +814,7 @@
 - `0x100027044` -[ControlPanelLauncherTreeNode setControlPanel:]
 - `0x100027058` -[ControlPanelLauncherTreeNode .cxx_destruct]
 
-## CrossTieURLHandler (9)
+## CrossTieURLHandler (9 methods, 0 blocks)
 - `0x100058f3c` -[CrossTieURLHandler dealloc]
 - `0x100058fa4` -[CrossTieURLHandler downloadWindowWillClose:]
 - `0x1000590d0` -[CrossTieURLHandler doInstallWithParameters:]
@@ -723,20 +825,21 @@
 - `0x1000595d0` -[CrossTieURLHandler setDownloadProgress:]
 - `0x1000595d8` -[CrossTieURLHandler .cxx_destruct]
 
-## DebugChannelFormatter (5)
+## DebugChannelFormatter (5 methods, 1 blocks)
 - `0x100030a3c` -[DebugChannelFormatter stringForObjectValue:]
 - `0x100030a44` -[DebugChannelFormatter getObjectValue:forString:errorDescription:]
 - `0x100030a74` +[DebugChannelFormatter sanitizePartialString:]
 - `0x100030c64` +[DebugChannelFormatter sanitizeChannelString:]
 - `0x100030da4` -[DebugChannelFormatter isPartialStringValid:proposedSelectedRange:originalString:originalSelectedRange:errorDescription:]
+- `0x100030bd8` `___47+[DebugChannelFormatter sanitizePartialString:]_block_invoke`
 
-## DemoBaseController (4)
+## DemoBaseController (4 methods, 0 blocks)
 - `0x100053ea8` -[DemoBaseController initWithWindowNibName:]
 - `0x100054074` -[DemoBaseController expirationText]
 - `0x100054084` -[DemoBaseController setExpirationText:]
 - `0x100054090` -[DemoBaseController .cxx_destruct]
 
-## DemoNagController (23)
+## DemoNagController (23 methods, 2 blocks)
 - `0x10001eb1c` -[DemoNagController init]
 - `0x10001eb28` -[DemoNagController windowDidLoad]
 - `0x10001ef14` -[DemoNagController buy:]
@@ -760,8 +863,10 @@
 - `0x10001f3a0` -[DemoNagController buyToRegisterSpacer]
 - `0x10001f3c0` -[DemoNagController setBuyToRegisterSpacer:]
 - `0x10001f3d4` -[DemoNagController .cxx_destruct]
+- `0x10001f08c` `___43-[DemoNagController showSerialCodeRegister]_block_invoke`
+- `0x10001f174` `___33-[DemoNagController registerapp:]_block_invoke`
 
-## DemoRegisterController (19)
+## DemoRegisterController (19 methods, 3 blocks)
 - `0x100027098` -[DemoRegisterController init]
 - `0x10002710c` -[DemoRegisterController setRefreshLicenseMode:]
 - `0x100027248` -[DemoRegisterController windowDidLoad]
@@ -781,8 +886,11 @@
 - `0x100027de4` -[DemoRegisterController forgotPasswordTextField]
 - `0x100027e04` -[DemoRegisterController setForgotPasswordTextField:]
 - `0x100027e18` -[DemoRegisterController .cxx_destruct]
+- `0x100027744` `___38-[DemoRegisterController registerapp:]_block_invoke`
+- `0x10002795c` `___38-[DemoRegisterController registerapp:]_block_invoke_2`
+- `0x100027aac` `___47-[DemoRegisterController openSerialCodeWindow:]_block_invoke`
 
-## DownloadProgressController (23)
+## DownloadProgressController (23 methods, 3 blocks)
 - `0x10002daf8` -[DownloadProgressController initWithURL:]
 - `0x10002dbf8` -[DownloadProgressController windowDidLoad]
 - `0x10002dd48` -[DownloadProgressController formattedSize:]
@@ -806,8 +914,11 @@
 - `0x10002e5d0` -[DownloadProgressController progressFormat]
 - `0x10002e5e0` -[DownloadProgressController setProgressFormat:]
 - `0x10002e5ec` -[DownloadProgressController .cxx_destruct]
+- `0x10002e174` `___80-[DownloadProgressController URLSession:downloadTask:didFinishDownloadingToURL:]_block_invoke`
+- `0x10002e214` `___111-[DownloadProgressController URLSession:downloadTask:didWriteData:totalBytesWritten:totalBytesExpectedToWrite:]_block_invoke`
+- `0x10002e468` `___67-[DownloadProgressController URLSession:task:didCompleteWithError:]_block_invoke`
 
-## FilteredTreeNode (35)
+## FilteredTreeNode (35 methods, 3 blocks)
 - `0x100024c64` -[FilteredTreeNode init]
 - `0x100024c98` -[FilteredTreeNode dealloc]
 - `0x100024db0` +[FilteredTreeNode keyPathsForValuesAffectingAncestors]
@@ -843,8 +954,11 @@
 - `0x1000261dc` -[FilteredTreeNode parent]
 - `0x1000261fc` -[FilteredTreeNode setParent:]
 - `0x100026210` -[FilteredTreeNode .cxx_destruct]
+- `0x1000253d4` `___45-[FilteredTreeNode insertChildren:atIndexes:]_block_invoke`
+- `0x100025554` `___44-[FilteredTreeNode removeChildrenAtIndexes:]_block_invoke`
+- `0x100026148` `___39-[FilteredTreeNode filterWithPredicate]_block_invoke`
 
-## IconCollectionView (7)
+## IconCollectionView (7 methods, 0 blocks)
 - `0x100041b6c` -[IconCollectionView acceptsFirstResponder]
 - `0x100041b74` -[IconCollectionView becomeFirstResponder]
 - `0x100041b90` -[IconCollectionView resignFirstResponder]
@@ -853,7 +967,7 @@
 - `0x100041c84` -[IconCollectionView isFirstResponder]
 - `0x100041c98` -[IconCollectionView setIsFirstResponder:]
 
-## IconCollectionViewController (35)
+## IconCollectionViewController (35 methods, 4 blocks)
 - `0x100045774` -[IconCollectionViewController init]
 - `0x1000457b4` -[IconCollectionViewController viewDidLoad]
 - `0x100045938` -[IconCollectionViewController margins]
@@ -889,8 +1003,12 @@
 - `0x10004710c` -[IconCollectionViewController contextualMenu]
 - `0x10004712c` -[IconCollectionViewController setContextualMenu:]
 - `0x100047140` -[IconCollectionViewController .cxx_destruct]
+- `0x100045f8c` `___67-[IconCollectionViewController openLauncherTreeNode:fromRect:view:]_block_invoke`
+- `0x100046014` `___67-[IconCollectionViewController openLauncherTreeNode:fromRect:view:]_block_invoke_2`
+- `0x10004609c` `___67-[IconCollectionViewController openLauncherTreeNode:fromRect:view:]_block_invoke.11`
+- `0x1000464e4` `___67-[IconCollectionViewController openLauncherTreeNode:fromRect:view:]_block_invoke.16`
 
-## IconViewBox (18)
+## IconViewBox (18 methods, 0 blocks)
 - `0x10005d4c8` -[IconViewBox dealloc]
 - `0x10005d530` -[IconViewBox pathForIconHighlight]
 - `0x10005d5c8` -[IconViewBox pathForLabelHighlight]
@@ -910,13 +1028,14 @@
 - `0x10005e1b0` -[IconViewBox setItem:]
 - `0x10005e1c4` -[IconViewBox .cxx_destruct]
 
-## IconViewItem (4)
+## IconViewItem (4 methods, 1 blocks)
 - `0x10005e1fc` -[IconViewItem setRepresentedObject:]
 - `0x10005e3e0` -[IconViewItem setSelected:]
 - `0x10005e464` -[IconViewItem setHighlightState:]
 - `0x10005e4e8` -[IconViewItem draggingImageComponents]
+- `0x10005e898` `___39-[IconViewItem draggingImageComponents]_block_invoke`
 
-## InstallConfiguration (77)
+## InstallConfiguration (77 methods, 1 blocks)
 - `0x10005531c` -[InstallConfiguration init]
 - `0x100055408` -[InstallConfiguration dealloc]
 - `0x10005545c` -[InstallConfiguration newBottleCollidesWithExistingBottle]
@@ -994,8 +1113,9 @@
 - `0x100057050` -[InstallConfiguration selectedPackage]
 - `0x100057060` -[InstallConfiguration bottleCollection]
 - `0x100057080` -[InstallConfiguration .cxx_destruct]
+- `0x100055ae0` `___46+[InstallConfiguration resolveInstanceMethod:]_block_invoke`
 
-## InstallDependency (30)
+## InstallDependency (30 methods, 0 blocks)
 - `0x100031270` -[InstallDependency description]
 - `0x100031364` -[InstallDependency isEqual:]
 - `0x100031418` -[InstallDependency hash]
@@ -1027,7 +1147,7 @@
 - `0x100031974` -[InstallDependency setUndo:]
 - `0x100031984` -[InstallDependency .cxx_destruct]
 
-## InstallOptionsSheetController (41)
+## InstallOptionsSheetController (41 methods, 1 blocks)
 - `0x1000319fc` -[InstallOptionsSheetController initWithInstallConfiguration:]
 - `0x100031a84` -[InstallOptionsSheetController dealloc]
 - `0x100031ae8` -[InstallOptionsSheetController windowDidLoad]
@@ -1069,8 +1189,9 @@
 - `0x100034050` -[InstallOptionsSheetController environment]
 - `0x100034060` -[InstallOptionsSheetController setEnvironment:]
 - `0x10003406c` -[InstallOptionsSheetController .cxx_destruct]
+- `0x100032d30` `___51-[InstallOptionsSheetController fillDependencyList]_block_invoke`
 
-## InstallSummaryDetailViewController (20)
+## InstallSummaryDetailViewController (20 methods, 0 blocks)
 - `0x1000366b4` -[InstallSummaryDetailViewController init]
 - `0x1000366f4` -[InstallSummaryDetailViewController hasAction]
 - `0x100036710` +[InstallSummaryDetailViewController keyPathsForValuesAffectingHasAction]
@@ -1092,17 +1213,17 @@
 - `0x100036960` -[InstallSummaryDetailViewController setEditButton:]
 - `0x100036974` -[InstallSummaryDetailViewController .cxx_destruct]
 
-## InstallationNotStartedTransformer (3)
+## InstallationNotStartedTransformer (3 methods, 0 blocks)
 - `0x100008514` +[InstallationNotStartedTransformer allowsReverseTransformation]
 - `0x10000851c` +[InstallationNotStartedTransformer transformedValueClass]
 - `0x100008528` -[InstallationNotStartedTransformer transformedValue:]
 
-## InstallationOperation (3)
+## InstallationOperation (3 methods, 0 blocks)
 - `0x10003a3c4` -[InstallationOperation initWithTaskStatus:completionSelector:andTarget:]
 - `0x10003a488` -[InstallationOperation main]
 - `0x10003a604` -[InstallationOperation .cxx_destruct]
 
-## LaunchFeedbackInfo (10)
+## LaunchFeedbackInfo (10 methods, 0 blocks)
 - `0x10003fe98` -[LaunchFeedbackInfo initWithIcon:]
 - `0x100040114` -[LaunchFeedbackInfo dealloc]
 - `0x1000401a4` -[LaunchFeedbackInfo lifeCounter]
@@ -1114,7 +1235,7 @@
 - `0x100040204` -[LaunchFeedbackInfo connectionAccepted:]
 - `0x10004034c` -[LaunchFeedbackInfo .cxx_destruct]
 
-## LauncherApp (12)
+## LauncherApp (12 methods, 0 blocks)
 - `0x100040cb4` -[LauncherApp initWithURL:]
 - `0x100040f14` +[LauncherApp launcherWithURL:]
 - `0x100040f5c` -[LauncherApp copyWithZone:]
@@ -1128,7 +1249,7 @@
 - `0x1000411dc` -[LauncherApp setHelperVersion:]
 - `0x1000411ec` -[LauncherApp .cxx_destruct]
 
-## LauncherAppTreeNode (12)
+## LauncherAppTreeNode (12 methods, 1 blocks)
 - `0x10002689c` +[LauncherAppTreeNode fromLauncher:]
 - `0x100026968` -[LauncherAppTreeNode isOpenable]
 - `0x100026a04` -[LauncherAppTreeNode canRunCommands]
@@ -1141,8 +1262,9 @@
 - `0x100026cb0` -[LauncherAppTreeNode launcher]
 - `0x100026cc0` -[LauncherAppTreeNode setLauncher:]
 - `0x100026cd4` -[LauncherAppTreeNode .cxx_destruct]
+- `0x100026c30` `___44-[LauncherAppTreeNode openWithErrorHandler:]_block_invoke`
 
-## LauncherControlPanel (7)
+## LauncherControlPanel (7 methods, 1 blocks)
 - `0x10004122c` -[LauncherControlPanel initWithControlPanel:bottle:]
 - `0x1000413ac` +[LauncherControlPanel launcherWithControlPanel:bottle:]
 - `0x100041418` -[LauncherControlPanel copyWithZone:]
@@ -1150,8 +1272,9 @@
 - `0x10004148c` -[LauncherControlPanel launchWithErrorHandler:]
 - `0x100041744` -[LauncherControlPanel description]
 - `0x1000417d8` -[LauncherControlPanel .cxx_destruct]
+- `0x1000416d4` `___47-[LauncherControlPanel launchWithErrorHandler:]_block_invoke`
 
-## LauncherDiskFolder (8)
+## LauncherDiskFolder (8 methods, 0 blocks)
 - `0x1000407a4` -[LauncherDiskFolder initWithURL:]
 - `0x100040894` +[LauncherDiskFolder launcherWithFolderURL:]
 - `0x1000408dc` -[LauncherDiskFolder copyWithZone:]
@@ -1161,7 +1284,7 @@
 - `0x100040a7c` -[LauncherDiskFolder setUrl:]
 - `0x100040a88` -[LauncherDiskFolder .cxx_destruct]
 
-## LauncherDiskFolderTreeNode (8)
+## LauncherDiskFolderTreeNode (8 methods, 0 blocks)
 - `0x10002674c` -[LauncherDiskFolderTreeNode isOpenable]
 - `0x100026754` -[LauncherDiskFolderTreeNode animateOpen]
 - `0x10002675c` -[LauncherDiskFolderTreeNode url]
@@ -1171,7 +1294,7 @@
 - `0x100026874` -[LauncherDiskFolderTreeNode setLauncherFolder:]
 - `0x100026888` -[LauncherDiskFolderTreeNode .cxx_destruct]
 
-## LauncherFolder (10)
+## LauncherFolder (10 methods, 0 blocks)
 - `0x100040588` -[LauncherFolder init]
 - `0x100040590` -[LauncherFolder initWithName:]
 - `0x1000405fc` -[LauncherFolder copyWithZone:]
@@ -1183,10 +1306,10 @@
 - `0x1000406e8` -[LauncherFolder description]
 - `0x100040790` -[LauncherFolder .cxx_destruct]
 
-## LauncherFolderTreeNode (1)
+## LauncherFolderTreeNode (1 methods, 0 blocks)
 - `0x100026744` -[LauncherFolderTreeNode isLeaf]
 
-## LauncherIcon (10)
+## LauncherIcon (10 methods, 0 blocks)
 - `0x100040a9c` -[LauncherIcon initWithName:]
 - `0x100040ad0` -[LauncherIcon copyWithZone:]
 - `0x100040b3c` -[LauncherIcon tooltip]
@@ -1198,13 +1321,14 @@
 - `0x100040c60` -[LauncherIcon setBottle:]
 - `0x100040c74` -[LauncherIcon .cxx_destruct]
 
-## LauncherIconUtils (4)
+## LauncherIconUtils (4 methods, 1 blocks)
 - `0x100044b04` +[LauncherIconUtils imageRepsForCXMenuIconsFromURL:]
 - `0x100044e8c` +[LauncherIconUtils percentOfNonTransparentPixelsAlongEdgeOfImageRep:]
 - `0x1000450f8` +[LauncherIconUtils maskIconToRoundRect:destinationDimension:]
 - `0x1000454dc` +[LauncherIconUtils createIcnsFileAtURL:fromImageReps:forApp:]
+- `0x100044dec` `___52+[LauncherIconUtils imageRepsForCXMenuIconsFromURL:]_block_invoke`
 
-## LauncherIconViewController (16)
+## LauncherIconViewController (16 methods, 0 blocks)
 - `0x10003788c` -[LauncherIconViewController init]
 - `0x1000378cc` -[LauncherIconViewController dealloc]
 - `0x100037990` -[LauncherIconViewController viewDidLoad]
@@ -1222,7 +1346,7 @@
 - `0x100038308` -[LauncherIconViewController setDragView:]
 - `0x10003831c` -[LauncherIconViewController .cxx_destruct]
 
-## LauncherItem (11)
+## LauncherItem (11 methods, 0 blocks)
 - `0x1000403a0` -[LauncherItem init]
 - `0x1000403a8` -[LauncherItem initWithName:]
 - `0x100040428` -[LauncherItem copyWithZone:]
@@ -1235,7 +1359,7 @@
 - `0x100040568` -[LauncherItem setName:]
 - `0x100040574` -[LauncherItem .cxx_destruct]
 
-## LauncherTreeNode (31)
+## LauncherTreeNode (31 methods, 0 blocks)
 - `0x100026274` +[LauncherTreeNode keyPathsForValuesAffectingLeaf]
 - `0x100026280` -[LauncherTreeNode isLeaf]
 - `0x100026288` -[LauncherTreeNode isOpenable]
@@ -1268,7 +1392,7 @@
 - `0x1000266cc` -[LauncherTreeNode setShowBottleName:]
 - `0x1000266dc` -[LauncherTreeNode .cxx_destruct]
 
-## LoadingCrossTieSheetController (10)
+## LoadingCrossTieSheetController (10 methods, 0 blocks)
 - `0x100041860` -[LoadingCrossTieSheetController init]
 - `0x10004189c` -[LoadingCrossTieSheetController setCrossTieDisplayName:]
 - `0x1000418f4` -[LoadingCrossTieSheetController windowDidLoad]
@@ -1280,7 +1404,7 @@
 - `0x100041b0c` -[LoadingCrossTieSheetController setProgressIndicator:]
 - `0x100041b20` -[LoadingCrossTieSheetController .cxx_destruct]
 
-## LoggingOption (11)
+## LoggingOption (11 methods, 1 blocks)
 - `0x100034128` +[LoggingOption loggingOptionWithName:channels:environment:]
 - `0x1000341b0` +[LoggingOption loggingOptionWithName:channels:]
 - `0x100034228` +[LoggingOption commonPresets]
@@ -1292,8 +1416,9 @@
 - `0x100034580` -[LoggingOption logEnvironment]
 - `0x100034588` -[LoggingOption setLogEnvironment:]
 - `0x100034590` -[LoggingOption .cxx_destruct]
+- `0x10003429c` `___30+[LoggingOption commonPresets]_block_invoke`
 
-## LoggingOptionsViewController (39)
+## LoggingOptionsViewController (39 methods, 1 blocks)
 - `0x1000345cc` -[LoggingOptionsViewController initWithLogFileName:]
 - `0x1000346b8` -[LoggingOptionsViewController viewDidLoad]
 - `0x100034bf0` -[LoggingOptionsViewController updateLogFileURL]
@@ -1333,8 +1458,9 @@
 - `0x100035ff8` -[LoggingOptionsViewController recentChannelsMenuItem]
 - `0x100036018` -[LoggingOptionsViewController setRecentChannelsMenuItem:]
 - `0x10003602c` -[LoggingOptionsViewController .cxx_destruct]
+- `0x100034fe8` `___46-[LoggingOptionsViewController selectLogFile:]_block_invoke`
 
-## MainWindowController (97)
+## MainWindowController (97 methods, 8 blocks)
 - `0x10005e8e4` +[MainWindowController initialize]
 - `0x10005e9bc` -[MainWindowController init]
 - `0x10005ea84` -[MainWindowController dealloc]
@@ -1432,13 +1558,21 @@
 - `0x100064174` -[MainWindowController updating]
 - `0x100064188` -[MainWindowController setUpdating:]
 - `0x100064198` -[MainWindowController .cxx_destruct]
+- `0x10005fd30` `___34-[MainWindowController updateC4Ps]_block_invoke`
+- `0x10005fe10` `___34-[MainWindowController updateC4Ps]_block_invoke_2`
+- `0x10005feb4` `___34-[MainWindowController updateC4Ps]_block_invoke_3`
+- `0x100061024` `___71-[MainWindowController observeValueForKeyPath:ofObject:change:context:]_block_invoke`
+- `0x100061070` `___71-[MainWindowController observeValueForKeyPath:ofObject:change:context:]_block_invoke.55`
+- `0x100062d28` `___34-[MainWindowController newBottle:]_block_invoke`
+- `0x100063230` `___51-[MainWindowController importBottleArchiveFromURL:]_block_invoke`
+- `0x100063460` `___44-[MainWindowController importBottleArchive:]_block_invoke`
 
-## NSAttributedString (3)
+## NSAttributedString (3 methods, 0 blocks)
 - `0x1000375fc` +[NSAttributedString cx_attributedStringWithHTML:font:]
 - `0x100037608` +[NSAttributedString cx_attributedStringWithHTML:]
 - `0x100037614` -[NSAttributedString cx_attributedStringByRemovingTrailingWhitespaceAndNewlines]
 
-## NSFileManager (12)
+## NSFileManager (12 methods, 0 blocks)
 - `0x100027e74` -[NSFileManager createDirectoryAtPath:attributes:recursively:]
 - `0x100028078` +[NSFileManager systemPaths]
 - `0x100028170` -[NSFileManager isSameFile:asFile:]
@@ -1452,12 +1586,12 @@
 - `0x100028d38` -[NSFileManager isFile:inDirectory:]
 - `0x100029008` -[NSFileManager clearQuarantine:]
 
-## NSMutableAttributedString (3)
+## NSMutableAttributedString (3 methods, 0 blocks)
 - `0x10003763c` +[NSMutableAttributedString cx_attributedStringWithHTML:font:]
 - `0x100037808` +[NSMutableAttributedString cx_attributedStringWithHTML:]
 - `0x100037810` -[NSMutableAttributedString cx_removeTrailingWhitespaceAndNewlines]
 
-## NSString (19)
+## NSString (19 methods, 0 blocks)
 - `0x10002e684` -[NSString stringQuotedForBash]
 - `0x10002e704` -[NSString stringByRemovingCharactersInSet:]
 - `0x10002e80c` -[NSString componentsOfCommandLine]
@@ -1478,16 +1612,16 @@
 - `0x100059dbc` -[NSString stringByConditionallyResolvingSymlink]
 - `0x100059e2c` -[NSString stringByConditionallyResolvingAlias]
 
-## NSURL (1)
+## NSURL (1 methods, 0 blocks)
 - `0x100058ed0` -[NSURL stringWithFileSystemRepresentation]
 
-## NSWorkspace (4)
+## NSWorkspace (4 methods, 0 blocks)
 - `0x1000369d4` -[NSWorkspace CX_findRunningAppBundleWithIdentifier:]
 - `0x100036a70` -[NSWorkspace CX_absolutePathForAppBundleWithIdentifier:orIdentifyingURLScheme:]
 - `0x100036fbc` -[NSWorkspace CX_launchAppWithBundleIdentifier:orIdentifyingURLScheme:options:additionalEventParamDescriptor:]
 - `0x1000370e4` -[NSWorkspace CX_openURLs:withAppBundleIdentifier:orIdentifyingURLScheme:options:additionalEventParamDescriptor:]
 
-## NewBottleController (46)
+## NewBottleController (46 methods, 3 blocks)
 - `0x10001b2f0` -[NewBottleController init]
 - `0x10001b3a0` -[NewBottleController setCopyMode:withBottleToCopy:]
 - `0x10001b4f8` -[NewBottleController setupGUI]
@@ -1534,8 +1668,11 @@
 - `0x10001c2f8` -[NewBottleController isWorking]
 - `0x10001c30c` -[NewBottleController setIsWorking:]
 - `0x10001c31c` -[NewBottleController .cxx_destruct]
+- `0x10001b8d8` `___31-[NewBottleController setupGUI]_block_invoke`
+- `0x10001bc94` `___31-[NewBottleController doCreate]_block_invoke`
+- `0x10001bd5c` `___31-[NewBottleController doCreate]_block_invoke.25`
 
-## NoBottleController (23)
+## NoBottleController (23 methods, 3 blocks)
 - `0x100054774` -[NoBottleController initWithFileToLaunch:]
 - `0x100054878` -[NoBottleController awakeFromNib]
 - `0x100054acc` -[NoBottleController createPressed:]
@@ -1559,8 +1696,11 @@
 - `0x100055080` -[NoBottleController templateArray]
 - `0x100055090` -[NoBottleController setTemplateArray:]
 - `0x10005509c` -[NoBottleController .cxx_destruct]
+- `0x10005497c` `___34-[NoBottleController awakeFromNib]_block_invoke`
+- `0x100054c74` `___30-[NoBottleController doCreate]_block_invoke`
+- `0x100054ca4` `___30-[NoBottleController doCreate]_block_invoke.20`
 
-## PackageInstaller (91)
+## PackageInstaller (91 methods, 5 blocks)
 - `0x100008690` -[PackageInstaller initWithPackage:]
 - `0x100008814` -[PackageInstaller dealloc]
 - `0x1000089dc` -[PackageInstaller observeValueForKeyPath:ofObject:change:context:]
@@ -1652,8 +1792,13 @@
 - `0x10000d1a4` -[PackageInstaller setDownloadUpdateTimer:]
 - `0x10000d1b8` -[PackageInstaller bottleCollection]
 - `0x10000d1d8` -[PackageInstaller .cxx_destruct]
+- `0x100009200` `___27-[PackageInstaller install]_block_invoke`
+- `0x100009784` `___36-[PackageInstaller selectInstaller:]_block_invoke`
+- `0x100009a1c` `___47-[PackageInstaller selectBottleWithCompletion:]_block_invoke`
+- `0x10000c718` `___45-[PackageInstaller displayNextFailureMessage]_block_invoke`
+- `0x10000cb28` `___45-[PackageInstaller displayNextFailureMessage]_block_invoke_2`
 
-## PackageTreeNode (65)
+## PackageTreeNode (65 methods, 2 blocks)
 - `0x100041ca8` -[PackageTreeNode initRootWithChildren:]
 - `0x100041e84` -[PackageTreeNode initWithProfile:]
 - `0x1000421c8` -[PackageTreeNode initWithCategoryID:name:children:sortKey:]
@@ -1719,8 +1864,10 @@
 - `0x100044950` -[PackageTreeNode icon]
 - `0x100044960` -[PackageTreeNode setIcon:]
 - `0x10004496c` -[PackageTreeNode .cxx_destruct]
+- `0x100044778` `___30+[PackageTreeNode defaultIcon]_block_invoke`
+- `0x1000448dc` `___27-[PackageTreeNode loadIcon]_block_invoke`
 
-## PackageViewController (118)
+## PackageViewController (118 methods, 13 blocks)
 - `0x10003a7c8` -[PackageViewController init]
 - `0x10003a808` -[PackageViewController dealloc]
 - `0x10003a968` -[PackageViewController viewDidLoad]
@@ -1839,14 +1986,27 @@
 - `0x10003fb60` -[PackageViewController installationNotesCollapsedHeightConstraint]
 - `0x10003fb70` -[PackageViewController setInstallationNotesCollapsedHeightConstraint:]
 - `0x10003fb84` -[PackageViewController .cxx_destruct]
+- `0x10003b27c` `___41-[PackageViewController populatePackages]_block_invoke`
+- `0x10003b50c` `___41-[PackageViewController populatePackages]_block_invoke.43`
+- `0x10003b86c` `___41-[PackageViewController populatePackages]_block_invoke.67`
+- `0x10003b9c4` `___41-[PackageViewController populatePackages]_block_invoke.69`
+- `0x10003bac0` `___34-[PackageViewController loadIcons]_block_invoke`
+- `0x10003d1ac` `___49-[PackageViewController autoPlayWithAutorunFile:]_block_invoke`
+- `0x10003d588` `___52-[PackageViewController prepareDropinC4pAndAutorun:]_block_invoke`
+- `0x10003d594` `___52-[PackageViewController prepareDropinC4pAndAutorun:]_block_invoke.114`
+- `0x10003d5a0` `___52-[PackageViewController prepareDropinC4pAndAutorun:]_block_invoke_2`
+- `0x10003d728` `___63-[PackageViewController displayLoadingSheetAndPrepareCrossTie:]_block_invoke`
+- `0x10003d72c` `___63-[PackageViewController displayLoadingSheetAndPrepareCrossTie:]_block_invoke_2`
+- `0x10003d7b4` `___63-[PackageViewController displayLoadingSheetAndPrepareCrossTie:]_block_invoke_3`
+- `0x10003dc9c` `___49-[PackageViewController displayRevokedFileAlert:]_block_invoke`
 
-## PackageViewItem (4)
+## PackageViewItem (4 methods, 0 blocks)
 - `0x10003a744` -[PackageViewItem init]
 - `0x10003a784` -[PackageViewItem dividerLine]
 - `0x10003a7a4` -[PackageViewItem setDividerLine:]
 - `0x10003a7b8` -[PackageViewItem .cxx_destruct]
 
-## PreferencesController (27)
+## PreferencesController (27 methods, 9 blocks)
 - `0x100010cf8` -[PreferencesController init]
 - `0x100010d34` -[PreferencesController dealloc]
 - `0x100010d98` -[PreferencesController windowDidLoad]
@@ -1874,8 +2034,17 @@
 - `0x100012584` -[PreferencesController lastUpdated]
 - `0x100012594` -[PreferencesController setLastUpdated:]
 - `0x1000125a0` -[PreferencesController .cxx_destruct]
+- `0x10001105c` `___38-[PreferencesController windowDidLoad]_block_invoke`
+- `0x10001154c` `___48-[PreferencesController browseForBottlesFolder:]_block_invoke`
+- `0x1000119b0` `___49-[PreferencesController browseForProgramsFolder:]_block_invoke`
+- `0x10001202c` `___52-[PreferencesController calculateInstallerCacheSize]_block_invoke`
+- `0x1000120bc` `___52-[PreferencesController calculateInstallerCacheSize]_block_invoke.50`
+- `0x100012164` `___59-[PreferencesController installersCacheEventStreamCallback]_block_invoke`
+- `0x100012220` `___45-[PreferencesController clearInstallerCache:]_block_invoke`
+- `0x100012430` `___45-[PreferencesController clearInstallerCache:]_block_invoke_2`
+- `0x1000124c4` `___45-[PreferencesController clearInstallerCache:]_block_invoke_3`
 
-## PropertyDescriptor (10)
+## PropertyDescriptor (10 methods, 0 blocks)
 - `0x10005517c` -[PropertyDescriptor description]
 - `0x100055254` -[PropertyDescriptor installTaskAttribute]
 - `0x100055264` -[PropertyDescriptor setInstallTaskAttribute:]
@@ -1887,7 +2056,7 @@
 - `0x1000552bc` -[PropertyDescriptor setSetter:]
 - `0x1000552c8` -[PropertyDescriptor .cxx_destruct]
 
-## PublishController (22)
+## PublishController (22 methods, 2 blocks)
 - `0x100038910` -[PublishController init]
 - `0x10003894c` -[PublishController setBottleName:]
 - `0x1000389c0` -[PublishController setupGUI]
@@ -1910,15 +2079,17 @@
 - `0x1000391f0` -[PublishController isWorking]
 - `0x100039204` -[PublishController setIsWorking:]
 - `0x100039214` -[PublishController .cxx_destruct]
+- `0x100038ce8` `___30-[PublishController doPublish]_block_invoke`
+- `0x100038d40` `___30-[PublishController doPublish]_block_invoke.16`
 
-## RatingNotesFormatter (5)
+## RatingNotesFormatter (5 methods, 0 blocks)
 - `0x10001262c` -[RatingNotesFormatter stringForObjectValue:]
 - `0x100012634` -[RatingNotesFormatter getObjectValue:forString:errorDescription:]
 - `0x100012664` -[RatingNotesFormatter isPartialStringValid:proposedSelectedRange:originalString:originalSelectedRange:errorDescription:]
 - `0x100012760` -[RatingNotesFormatter maxLength]
 - `0x100012770` -[RatingNotesFormatter setMaxLength:]
 
-## RegistrationController (41)
+## RegistrationController (41 methods, 5 blocks)
 - `0x10005add8` -[RegistrationController init]
 - `0x10005b120` -[RegistrationController authIfNeeded]
 - `0x10005b1f8` -[RegistrationController formatSerialCode:]
@@ -1960,8 +2131,13 @@
 - `0x10005cf70` -[RegistrationController completionHandler]
 - `0x10005cf80` -[RegistrationController setCompletionHandler:]
 - `0x10005cf8c` -[RegistrationController .cxx_destruct]
+- `0x10005b780` `___78-[RegistrationController beginRegisterAppWithSerialCodeWithCompletionHandler:]_block_invoke`
+- `0x10005b8b8` `___78-[RegistrationController beginRegisterAppWithSerialCodeWithCompletionHandler:]_block_invoke_2`
+- `0x10005bc00` `___64-[RegistrationController beginRegisterAppWithCompletionHandler:]_block_invoke`
+- `0x10005bd38` `___64-[RegistrationController beginRegisterAppWithCompletionHandler:]_block_invoke_2`
+- `0x10005c3b0` `___49-[RegistrationController handleRegistrationData:]_block_invoke`
 
-## RosettaInstallationController (35)
+## RosettaInstallationController (35 methods, 6 blocks)
 - `0x10002f174` -[RosettaInstallationController init]
 - `0x10002f210` -[RosettaInstallationController findDetailsConstraints:]
 - `0x10002f474` -[RosettaInstallationController windowDidLoad]
@@ -1997,8 +2173,14 @@
 - `0x100030910` -[RosettaInstallationController progressSheetTextView]
 - `0x100030930` -[RosettaInstallationController setProgressSheetTextView:]
 - `0x100030944` -[RosettaInstallationController .cxx_destruct]
+- `0x10002f6b4` `___46-[RosettaInstallationController windowDidLoad]_block_invoke`
+- `0x10002fee4` `___47-[RosettaInstallationController installButton:]_block_invoke`
+- `0x10002ff58` `___47-[RosettaInstallationController installButton:]_block_invoke.40`
+- `0x100030018` `___47-[RosettaInstallationController installButton:]_block_invoke_2`
+- `0x1000301c8` `___47-[RosettaInstallationController installButton:]_block_invoke.52`
+- `0x1000302cc` `___47-[RosettaInstallationController installButton:]_block_invoke_2.55`
 
-## RunCommandController (58)
+## RunCommandController (58 methods, 1 blocks)
 - `0x1000176fc` -[RunCommandController init]
 - `0x100017738` -[RunCommandController initWithFileToRun:]
 - `0x1000177f8` -[RunCommandController dealloc]
@@ -2057,8 +2239,9 @@
 - `0x10001a6d8` -[RunCommandController stdErr]
 - `0x10001a6e8` -[RunCommandController setStdErr:]
 - `0x10001a6f4` -[RunCommandController .cxx_destruct]
+- `0x100017d78` `___41-[RunCommandController browseForCommand:]_block_invoke`
 
-## RunCommandLauncherModeViewController (7)
+## RunCommandLauncherModeViewController (7 methods, 0 blocks)
 - `0x10003874c` -[RunCommandLauncherModeViewController init]
 - `0x10003878c` -[RunCommandLauncherModeViewController loadView]
 - `0x100038870` -[RunCommandLauncherModeViewController launcherIconImageView]
@@ -2067,7 +2250,7 @@
 - `0x1000388c4` -[RunCommandLauncherModeViewController setLauncherNameTextField:]
 - `0x1000388d8` -[RunCommandLauncherModeViewController .cxx_destruct]
 
-## SelectBottleController (14)
+## SelectBottleController (14 methods, 0 blocks)
 - `0x10001e3e0` +[SelectBottleController initialize]
 - `0x10001e470` -[SelectBottleController init]
 - `0x10001e528` -[SelectBottleController dealloc]
@@ -2083,7 +2266,7 @@
 - `0x10001eaac` -[SelectBottleController setCanRunFilterPredicate:]
 - `0x10001eab8` -[SelectBottleController .cxx_destruct]
 
-## SelectBottleSheetController (55)
+## SelectBottleSheetController (55 methods, 2 blocks)
 - `0x10002b108` -[SelectBottleSheetController initWithInstallConfiguration:]
 - `0x10002b1d8` -[SelectBottleSheetController dealloc]
 - `0x10002b22c` -[SelectBottleSheetController windowDidLoad]
@@ -2139,8 +2322,10 @@
 - `0x10002d9c4` -[SelectBottleSheetController templateTypesPopUpButton]
 - `0x10002d9e4` -[SelectBottleSheetController setTemplateTypesPopUpButton:]
 - `0x10002d9f8` -[SelectBottleSheetController .cxx_destruct]
+- `0x10002c360` `___68-[SelectBottleSheetController addMenuItemsFromCategories:isBottles:]_block_invoke`
+- `0x10002d1c0` `___50-[SelectBottleSheetController updateTemplatesList]_block_invoke`
 
-## SerialCodeRegisterController (7)
+## SerialCodeRegisterController (7 methods, 2 blocks)
 - `0x10005d0e4` -[SerialCodeRegisterController init]
 - `0x10005d158` -[SerialCodeRegisterController registerWithSerialCode:]
 - `0x10005d2d4` -[SerialCodeRegisterController exitSuccess]
@@ -2148,8 +2333,10 @@
 - `0x10005d440` -[SerialCodeRegisterController openNormalRegistrationWindow:]
 - `0x10005d4a4` -[SerialCodeRegisterController regController]
 - `0x10005d4b4` -[SerialCodeRegisterController .cxx_destruct]
+- `0x10005d1b8` `___55-[SerialCodeRegisterController registerWithSerialCode:]_block_invoke`
+- `0x10005d2c0` `___55-[SerialCodeRegisterController registerWithSerialCode:]_block_invoke_2`
 
-## ShutdownController (23)
+## ShutdownController (23 methods, 2 blocks)
 - `0x10001a858` -[ShutdownController init]
 - `0x10001a8e0` -[ShutdownController bottleCollection]
 - `0x10001a8fc` -[ShutdownController cancelShutdown:]
@@ -2173,8 +2360,10 @@
 - `0x10001b254` -[ShutdownController shutdownCallbackSelector]
 - `0x10001b264` -[ShutdownController setShutdownCallbackSelector:]
 - `0x10001b274` -[ShutdownController .cxx_destruct]
+- `0x10001ae94` `___50-[ShutdownController shutdownAllBottlesBackground]_block_invoke`
+- `0x10001b108` `___36-[ShutdownController killAllBottles]_block_invoke`
 
-## SubmitRatingController (60)
+## SubmitRatingController (60 methods, 4 blocks)
 - `0x100029200` -[SubmitRatingController initWithBottle:]
 - `0x10002920c` -[SubmitRatingController initWithBottle:isNag:isDeleting:]
 - `0x1000295a8` -[SubmitRatingController windowDidLoad]
@@ -2235,8 +2424,12 @@
 - `0x10002aadc` -[SubmitRatingController appid]
 - `0x10002aaec` -[SubmitRatingController setAppid:]
 - `0x10002aaf8` -[SubmitRatingController .cxx_destruct]
+- `0x10002a0b8` `___33-[SubmitRatingController submit:]_block_invoke`
+- `0x10002a1a8` `___33-[SubmitRatingController submit:]_block_invoke_2`
+- `0x10002a3cc` `___34-[SubmitRatingController doSubmit]_block_invoke`
+- `0x10002a4b4` `___34-[SubmitRatingController doSubmit]_block_invoke_2`
 
-## SummaryDetail (10)
+## SummaryDetail (10 methods, 0 blocks)
 - `0x10000855c` +[SummaryDetail detailWithType:label:action:]
 - `0x1000085d0` -[SummaryDetail type]
 - `0x1000085e0` -[SummaryDetail setType:]
@@ -2248,7 +2441,7 @@
 - `0x10000863c` -[SummaryDetail setImage:]
 - `0x100008650` -[SummaryDetail .cxx_destruct]
 
-## TaskStatus (14)
+## TaskStatus (14 methods, 0 blocks)
 - `0x10003a11c` -[TaskStatus initWithTask:]
 - `0x10003a1d8` -[TaskStatus cancel]
 - `0x10003a288` -[TaskStatus done]
@@ -2264,7 +2457,7 @@
 - `0x10003a364` -[TaskStatus setInstallOp:]
 - `0x10003a370` -[TaskStatus .cxx_destruct]
 
-## UpdateController (20)
+## UpdateController (20 methods, 0 blocks)
 - `0x100016d4c` -[UpdateController initWithManagedBottles:]
 - `0x100016de8` -[UpdateController windowDidLoad]
 - `0x100016f5c` -[UpdateController finish]
@@ -2286,7 +2479,7 @@
 - `0x100017680` -[UpdateController setUpgradeInProgress:]
 - `0x100017690` -[UpdateController .cxx_destruct]
 
-## helperServer (10)
+## helperServer (10 methods, 0 blocks)
 - `0x100037268` -[helperServer init]
 - `0x100037360` -[helperServer getEnvironmentForXConnection]
 - `0x10003740c` +[helperServer defaultHelperServer]

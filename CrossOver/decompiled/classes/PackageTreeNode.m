@@ -2106,3 +2106,25 @@
     return;
 
 
+// === Block Invocations for PackageTreeNode ===
+
+// 0x100044778
+// ___30+[PackageTreeNode defaultIcon]_block_invoke
+    r0 = [NSImage imageNamed:@"exeIcon.icns"];
+    r0 = [r0 retain];
+    r19 = r0;
+    r0 = [r0 copy];
+    r8 = *_defaultIcon.icon;
+    *_defaultIcon.icon = r0;
+    [r8 release];
+    [r19 release];
+    return;
+
+
+// 0x1000448dc
+// ___27-[PackageTreeNode loadIcon]_block_invoke
+    r0 = arg0[0x4];
+    r0 = [r0 setIcon:r0[0x5]];
+    return r0;
+
+

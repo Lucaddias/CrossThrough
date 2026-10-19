@@ -23,9 +23,9 @@ Estudo de engenharia reversa (curiosidade/interoperabilidade) do app **CrossOver
 | Inventário do bundle (frameworks, libs) | ✅ |
 | Índice de procedures (10.627) | ✅ [`INDEX.md`](CrossOver/decompiled/INDEX.md) |
 | Mapa de classes ObjC (94 classes) | ✅ [`objc_methods.json`](CrossOver/decompiled/objc_methods.json) |
-| Descompilação de todos os métodos ObjC (2.107/2.107, 0 erros) | ✅ [`classes/`](CrossOver/decompiled/classes) |
-| Funções C/`sub_*` não-ObjC (~3.000 relevantes de 8.520) | ⏳ pendente |
-| Slice x86_64 | ⏳ pendente |
+| Descompilação de todos os métodos ObjC (2.108/2.108, 0 erros) | ✅ [`classes/`](CrossOver/decompiled/classes) |
+| Funções C, callbacks e blocos ObjC em `__TEXT,__text` (186/186, 100% de `__text`) | ✅ [`c_functions.c`](CrossOver/decompiled/c_functions.c) + [`classes/`](CrossOver/decompiled/classes) |
+| Comparação e mapeamento da slice x86_64 | ⏳ pendente |
 | Scripts Python/Perl em `SharedSupport/CrossOver` | ⏳ pendente |
 | Documentação da arquitetura (GUI ↔ backend) | ⏳ pendente |
 

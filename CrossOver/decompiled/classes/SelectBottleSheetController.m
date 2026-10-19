@@ -1804,3 +1804,162 @@
     return;
 
 
+// === Block Invocations for SelectBottleSheetController ===
+
+// 0x10002c360
+// ___68-[SelectBottleSheetController addMenuItemsFromCategories:isBottles:]_block_invoke
+    r31 = r31 - 0x130;
+    var_50 = r28;
+    decomp_var_48 = r27;
+    var_40 = r26;
+    decomp_var_38 = r25;
+    var_30 = r24;
+    decomp_var_28 = r23;
+    var_20 = r22;
+    decomp_var_18 = r21;
+    var_10 = r20;
+    decomp_var_8 = r19;
+    saved_fp = r29;
+    decomp_var_m8 = r30;
+    var_60 = **___stack_chk_guard;
+    r0 = [CXSetupLib cxSetupClass];
+    r0 = [r0 bottleCategory:@"RECOMMENDED"];
+    r0 = [r0 retain];
+    r19 = r0;
+    var_80 = r0;
+    r20 = [[[CXSetupLib cxSetupClass] bottleCategory:@"COMPATIBLE"] retain];
+    r21 = [[[CXSetupLib cxSetupClass] bottleCategory:@"NONE"] retain];
+    r22 = [[[CXSetupLib cxSetupClass] bottleCategory:@"INCOMPATIBLE"] retain];
+    r0 = [NSArray arrayWithObjects:&var_80 count:0x4];
+    r0 = [r0 retain];
+    r8 = *_addMenuItemsFromCategories:isBottles:.orderedCategoryNumbers;
+    *_addMenuItemsFromCategories:isBottles:.orderedCategoryNumbers = r0;
+    [r8 release];
+    [r22 release];
+    [r21 release];
+    [r20 release];
+    [r19 release];
+    r0 = [CXSetupLib cxSetupClass];
+    r0 = [r0 bottleCategory:@"NONE"];
+    r0 = [r0 retain];
+    var_108 = r0;
+    var_C0 = r0;
+    r0 = [NSBundle mainBundle];
+    r0 = [r0 retain];
+    var_110 = r0;
+    r0 = [r0 localizedStringForKey:@"Bottles" value:@"" table:0x0];
+    r0 = [r0 retain];
+    var_118 = r0;
+    var_A0 = r0;
+    r27 = [[[CXSetupLib cxSetupClass] bottleCategory:@"RECOMMENDED"] retain];
+    r0 = [NSBundle mainBundle];
+    r0 = [r0 retain];
+    r28 = r0;
+    r19 = [[r0 localizedStringForKey:@"Recommended Bottles" value:@"" table:0x0] retain];
+    r20 = [[[CXSetupLib cxSetupClass] bottleCategory:@"COMPATIBLE"] retain];
+    r0 = [NSBundle mainBundle];
+    r0 = [r0 retain];
+    r21 = r0;
+    r23 = [[r0 localizedStringForKey:@"Compatible Bottles" value:@"" table:0x0] retain];
+    r22 = [[[CXSetupLib cxSetupClass] bottleCategory:@"INCOMPATIBLE"] retain];
+    r0 = [NSBundle mainBundle];
+    r0 = [r0 retain];
+    r24 = r0;
+    r25 = [[r0 localizedStringForKey:@"Incompatible Bottles" value:@"" table:0x0] retain];
+    r0 = [NSDictionary dictionaryWithObjects:&var_A0 forKeys:&var_C0 count:0x4];
+    r0 = [r0 retain];
+    r8 = *_addMenuItemsFromCategories:isBottles:.bottleCategoryDisplayNames;
+    *_addMenuItemsFromCategories:isBottles:.bottleCategoryDisplayNames = r0;
+    [r8 release];
+    [r25 release];
+    [r24 release];
+    [r22 release];
+    [r23 release];
+    [r21 release];
+    [r20 release];
+    [r19 release];
+    [r28 release];
+    [r27 release];
+    [var_118 release];
+    [var_110 release];
+    [var_108 release];
+    r0 = [CXSetupLib cxSetupClass];
+    r0 = [r0 bottleCategory:@"NONE"];
+    r0 = [r0 retain];
+    var_108 = r0;
+    decomp_var_100 = r0;
+    r0 = [NSBundle mainBundle];
+    r0 = [r0 retain];
+    var_110 = r0;
+    r0 = [r0 localizedStringForKey:@"Bottle Types" value:@"" table:0x0];
+    r0 = [r0 retain];
+    r25 = r0;
+    var_E0 = r0;
+    r21 = [[[CXSetupLib cxSetupClass] bottleCategory:@"RECOMMENDED"] retain];
+    r0 = [NSBundle mainBundle];
+    r0 = [r0 retain];
+    r26 = r0;
+    r19 = [[r0 localizedStringForKey:@"Recommended Bottle Types" value:@"" table:0x0] retain];
+    r20 = [[[CXSetupLib cxSetupClass] bottleCategory:@"COMPATIBLE"] retain];
+    r0 = [NSBundle mainBundle];
+    r0 = [r0 retain];
+    r27 = r0;
+    r28 = [[r0 localizedStringForKey:@"Compatible Bottle Types" value:@"" table:0x0] retain];
+    r22 = [[[CXSetupLib cxSetupClass] bottleCategory:@"INCOMPATIBLE"] retain];
+    r0 = [NSBundle mainBundle];
+    r0 = [r0 retain];
+    r23 = r0;
+    r24 = [[r0 localizedStringForKey:@"Incompatible Bottle Types" value:@"" table:0x0] retain];
+    r0 = [NSDictionary dictionaryWithObjects:&var_E0 forKeys:&decomp_var_100 count:0x4];
+    r0 = [r0 retain];
+    r8 = *_addMenuItemsFromCategories:isBottles:.templateCategoryDisplayNames;
+    *_addMenuItemsFromCategories:isBottles:.templateCategoryDisplayNames = r0;
+    [r8 release];
+    [r24 release];
+    [r23 release];
+    [r22 release];
+    [r28 release];
+    [r27 release];
+    [r20 release];
+    [r19 release];
+    [r26 release];
+    [r21 release];
+    [r25 release];
+    [var_110 release];
+    [var_108 release];
+    if (**___stack_chk_guard != var_60) {
+            __stack_chk_fail();
+    }
+    return;
+
+
+// 0x10002d1c0
+// ___50-[SelectBottleSheetController updateTemplatesList]_block_invoke
+    r31 = r31 - 0x80;
+    var_30 = r24;
+    decomp_var_28 = r23;
+    var_20 = r22;
+    decomp_var_18 = r21;
+    var_10 = r20;
+    decomp_var_8 = r19;
+    saved_fp = r29;
+    decomp_var_m8 = r30;
+    var_38 = **___stack_chk_guard;
+    r22 = [arg2 retain];
+    r19 = [arg1 retain];
+    r21 = [[[CXSetupLib bottleManagementClass] displayNameForTemplate:r19] retain];
+    var_68 = @"targetBottle";
+    var_50 = r22;
+    r0 = [NSDictionary dictionaryWithObjects:&var_50 forKeys:&var_68 count:0x3];
+    r23 = [r0 retain];
+    [arg0[0x4] addObject:r23];
+    [r22 release];
+    [r19 release];
+    [r23 release];
+    r0 = [r21 release];
+    if (**___stack_chk_guard != var_38) {
+            __stack_chk_fail();
+    }
+    return r0;
+
+

@@ -427,3 +427,89 @@
     return;
 
 
+// === Block Invocations for DemoRegisterController ===
+
+// 0x100027744
+// ___38-[DemoRegisterController registerapp:]_block_invoke
+    r31 = r31 - 0x90;
+    var_40 = r26;
+    decomp_var_38 = r25;
+    var_30 = r24;
+    decomp_var_28 = r23;
+    var_20 = r22;
+    decomp_var_18 = r21;
+    var_10 = r20;
+    decomp_var_8 = r19;
+    saved_fp = r29;
+    decomp_var_m8 = r30;
+    r22 = arg1;
+    r21 = arg0;
+    r19 = [arg2 retain];
+    r20 = [arg3 retain];
+    if (r19 != 0x0) {
+            if (r22 != 0x0 && [r21[0x4] refreshLicenseMode] != 0x0) {
+                    r0 = [[NSDateFormatter alloc] init];
+                    r23 = r0;
+                    [r0 setDateStyle:0x2];
+                    [r23 setTimeStyle:0x0];
+                    r0 = [NSApplication sharedApplication];
+                    r0 = [r0 retain];
+                    r24 = r0;
+                    r25 = [[r0 licenseExpirationDate] retain];
+                    r26 = [[r23 stringFromDate:r25] retain];
+                    [r25 release];
+                    [r24 release];
+                    r0 = [NSBundle mainBundle];
+                    r0 = [r0 retain];
+                    r24 = r0;
+                    r25 = [[r0 localizedStringForKey:@"Your license has been updated. Automatic product updates will now be available through %@." value:@"" table:0x0] retain];
+                    [r20 release];
+                    [r24 release];
+                    r20 = [[NSString stringWithFormat:r25] retain];
+                    [r25 release];
+                    [r26 release];
+                    [r23 release];
+            }
+            r0 = [[NSAlert alloc] init];
+            r23 = r0;
+            [r0 setMessageText:r19];
+            [r23 setInformativeText:r20];
+            r24 = [[r21[0x4] window] retain];
+            var_70 = *__NSConcreteStackBlock;
+            [r23 beginSheetModalForWindow:r24 completionHandler:&var_70];
+            [r24 release];
+            [r23 release];
+    }
+    else {
+            if (r22 != 0x0) {
+                    [r21[0x4] exitSuccess];
+            }
+    }
+    [r20 release];
+    r0 = [r19 release];
+    return r0;
+
+
+// 0x10002795c
+// ___38-[DemoRegisterController registerapp:]_block_invoke_2
+    r0 = arg0;
+    if (r0[0x28] != 0x0) {
+            [r0[0x4] exitSuccess];
+    }
+    return;
+
+
+// 0x100027aac
+// ___47-[DemoRegisterController openSerialCodeWindow:]_block_invoke
+    r0 = arg0;
+    if (r1 == 0x1) {
+            r0 = r0[0x4];
+            r0 = [r0 window];
+            r0 = [r0 retain];
+            r19 = r0;
+            [r0 close];
+            [r19 release];
+    }
+    return;
+
+

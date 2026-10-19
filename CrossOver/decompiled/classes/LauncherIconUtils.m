@@ -385,3 +385,43 @@
     return r0;
 
 
+// === Block Invocations for LauncherIconUtils ===
+
+// 0x100044dec
+// ___52+[LauncherIconUtils imageRepsForCXMenuIconsFromURL:]_block_invoke
+    r0 = arg0;
+    var_20 = r22;
+    decomp_var_18 = r21;
+    r31 = r31 + 0xffffffffffffffd0;
+    var_10 = r20;
+    decomp_var_8 = r19;
+    saved_fp = r29;
+    decomp_var_m8 = r30;
+    r20 = arg2;
+    r2 = arg2 - 0x2;
+    if (r2 < 0x0) {
+            r20 = 0x0;
+    }
+    else {
+            r21 = r0;
+            r0 = r0[0x4];
+            r0 = [r0 objectAtIndexedSubscript:r2];
+            r0 = [r0 retain];
+            r19 = r0;
+            if ([r0 isEqualToString:@"icons"] != 0x0) {
+                    r0 = r21[0x4];
+                    r0 = [r0 objectAtIndexedSubscript:r20 - 0x1];
+                    r0 = [r0 retain];
+                    r21 = r0;
+                    r20 = [r0 isEqualToString:@"hicolor"];
+                    [r21 release];
+            }
+            else {
+                    r20 = 0x0;
+            }
+            [r19 release];
+    }
+    r0 = r20;
+    return r0;
+
+

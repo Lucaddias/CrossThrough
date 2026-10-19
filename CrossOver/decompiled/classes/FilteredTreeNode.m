@@ -1075,3 +1075,55 @@
     return;
 
 
+// === Block Invocations for FilteredTreeNode ===
+
+// 0x1000253d4
+// ___45-[FilteredTreeNode insertChildren:atIndexes:]_block_invoke
+    r0 = [arg1 passesFilter];
+    return r0;
+
+
+// 0x100025554
+// ___44-[FilteredTreeNode removeChildrenAtIndexes:]_block_invoke
+    var_20 = r22;
+    decomp_var_18 = r21;
+    r31 = r31 + 0xffffffffffffffd0;
+    var_10 = r20;
+    decomp_var_8 = r19;
+    saved_fp = r29;
+    decomp_var_m8 = r30;
+    r19 = arg0;
+    r20 = arg0[0x4];
+    r21 = [arg1 retain];
+    [r20 abandonChild:r21];
+    r20 = [*(r19[0x4] + sign_extend_64(*(int32_t *)ivar_offset(_filteredChildren))) indexOfObjectIdenticalTo:r21];
+    r0 = [r21 release];
+    if (r20 != 0x7fffffffffffffff) {
+            r0 = r19[0x5];
+            r0 = [r0 addIndex:r20];
+    }
+    return r0;
+
+
+// 0x100026148
+// ___39-[FilteredTreeNode filterWithPredicate]_block_invoke
+    var_20 = r22;
+    decomp_var_18 = r21;
+    r31 = r31 + 0xffffffffffffffd0;
+    var_10 = r20;
+    decomp_var_8 = r19;
+    saved_fp = r29;
+    decomp_var_m8 = r30;
+    r20 = arg2;
+    r21 = arg0;
+    r19 = [arg1 retain];
+    if ([r21[0x4] containsObject:r19] != 0x0) {
+            [r21[0x4] removeObject:r19];
+    }
+    else {
+            [r21[0x5] addIndex:r20];
+    }
+    r0 = [r19 release];
+    return r0;
+
+

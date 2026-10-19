@@ -280,3 +280,72 @@
     return;
 
 
+// === Block Invocations for NoBottleController ===
+
+// 0x10005497c
+// ___34-[NoBottleController awakeFromNib]_block_invoke
+    r31 = r31 - 0x80;
+    var_40 = r26;
+    decomp_var_38 = r25;
+    var_30 = r24;
+    decomp_var_28 = r23;
+    var_20 = r22;
+    decomp_var_18 = r21;
+    var_10 = r20;
+    decomp_var_8 = r19;
+    saved_fp = r29;
+    decomp_var_m8 = r30;
+    r20 = arg0;
+    var_48 = **___stack_chk_guard;
+    r19 = [arg1 retain];
+    r21 = [[[CXSetupLib bottleManagementClass] displayNameForTemplate:r19] retain];
+    var_68 = @"name";
+    var_58 = r19;
+    r0 = [NSDictionary dictionaryWithObjects:&var_58 forKeys:&var_68 count:0x2];
+    r22 = [r0 retain];
+    [r20[0x4] addObject:r22];
+    r0 = r20[0x5];
+    r0 = [r0 bottleTemplate];
+    r0 = [r0 retain];
+    if (r0 != 0x0) {
+            r23 = r0;
+            r0 = r20[0x5];
+            r0 = [r0 bottleTemplate];
+            r0 = [r0 retain];
+            r24 = r0;
+            r25 = [r0 compare:@"win7"];
+            [r24 release];
+            [r23 release];
+            if (r25 != 0x0) {
+                    [r20[0x5] setBottleTemplate:r19];
+            }
+    }
+    else {
+            [r20[0x5] setBottleTemplate:r19];
+    }
+    [r22 release];
+    [r21 release];
+    r0 = [r19 release];
+    if (**___stack_chk_guard != var_48) {
+            __stack_chk_fail();
+    }
+    return r0;
+
+
+// 0x100054c74
+// ___30-[NoBottleController doCreate]_block_invoke
+    [arg0[0x4] setIsWorking:0x0];
+    r0 = arg0[0x4];
+    r0 = [r0 exitSuccess:0x0];
+    return r0;
+
+
+// 0x100054ca4
+// ___30-[NoBottleController doCreate]_block_invoke.20
+    [arg0[0x4] setIsWorking:0x0];
+    r20 = [[arg0[0x5] objectAtIndex:0x1] retain];
+    [arg0[0x4] createFailed:r20];
+    r0 = [r20 release];
+    return r0;
+
+

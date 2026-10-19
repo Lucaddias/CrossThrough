@@ -3260,3 +3260,233 @@
     return;
 
 
+// === Block Invocations for BottleViewController ===
+
+// 0x100022160
+// ___44-[BottleViewController iconForControlPanel:]_block_invoke
+    r31 = r31 - 0x70;
+    saved_fp = r29;
+    decomp_var_m8 = r30;
+    var_8 = **___stack_chk_guard;
+    var_58 = @"winecfg.exe";
+    var_30 = @"sf-symbols.gearshape";
+    r0 = [NSDictionary dictionaryWithObjects:&var_30 forKeys:&var_58 count:0x5];
+    r0 = [r0 retain];
+    r8 = *_iconForControlPanel:.iconsNamesByExe;
+    *_iconForControlPanel:.iconsNamesByExe = r0;
+    [r8 release];
+    if (**___stack_chk_guard != var_8) {
+            __stack_chk_fail();
+    }
+    return;
+
+
+// 0x1000222a0
+// ___42-[BottleViewController sortControlPanels:]_block_invoke
+    r31 = r31 - 0x40;
+    saved_fp = r29;
+    decomp_var_m8 = r30;
+    var_8 = **___stack_chk_guard;
+    var_30 = @"winecfg.exe";
+    r0 = [NSArray arrayWithObjects:&var_30 count:0x5];
+    r0 = [r0 retain];
+    r8 = *_sortControlPanels:.orderOfWellKnownPanels;
+    *_sortControlPanels:.orderOfWellKnownPanels = r0;
+    [r8 release];
+    if (**___stack_chk_guard != var_8) {
+            __stack_chk_fail();
+    }
+    return;
+
+
+// 0x100022348
+// ___42-[BottleViewController sortControlPanels:]_block_invoke_2
+    var_40 = r26;
+    decomp_var_38 = r25;
+    r31 = r31 + 0xffffffffffffffb0;
+    var_30 = r24;
+    decomp_var_28 = r23;
+    var_20 = r22;
+    decomp_var_18 = r21;
+    var_10 = r20;
+    decomp_var_8 = r19;
+    saved_fp = r29;
+    decomp_var_m8 = r30;
+    r19 = [arg1 retain];
+    r20 = [arg2 retain];
+    r0 = [r19 valueForKey:@"exe"];
+    r0 = [r0 retain];
+    r23 = r0;
+    r0 = [r0 lastPathComponent];
+    r0 = [r0 retain];
+    r24 = r0;
+    r21 = [[r0 lowercaseString] retain];
+    [r24 release];
+    [r23 release];
+    r0 = [r20 valueForKey:@"exe"];
+    r0 = [r0 retain];
+    r23 = r0;
+    r0 = [r0 lastPathComponent];
+    r0 = [r0 retain];
+    r24 = r0;
+    r22 = [[r0 lowercaseString] retain];
+    [r24 release];
+    [r23 release];
+    r23 = [*_sortControlPanels:.orderOfWellKnownPanels indexOfObject:r21];
+    r0 = *_sortControlPanels:.orderOfWellKnownPanels;
+    r0 = [r0 indexOfObject:r22];
+    if (r23 != 0x7fffffffffffffff) {
+            if (r0 != 0x7fffffffffffffff) {
+                    asm { cneg       x23, x8, hs };
+                    [r22 release];
+                    [r21 release];
+                    [r20 release];
+                    [r19 release];
+                    r0 = r23;
+            }
+            else {
+                    bool_3 = r23 != 0x7fffffffffffffff;
+                    asm { cneg       x23, x9, eq };
+                    if (!bool_3) {
+                            if (r0 == 0x7fffffffffffffff) {
+                                    r24 = [[r19 valueForKey:@"name"] retain];
+                                    r25 = [[r20 valueForKey:@"name"] retain];
+                                    r23 = [r24 localizedCaseInsensitiveCompare:r25];
+                                    [r25 release];
+                                    [r24 release];
+                            }
+                    }
+                    [r22 release];
+                    [r21 release];
+                    [r20 release];
+                    [r19 release];
+                    r0 = r23;
+            }
+    }
+    else {
+            bool_1 = r23 != 0x7fffffffffffffff;
+            asm { cneg       x23, x9, eq };
+            if (!bool_1) {
+                    if (r0 == 0x7fffffffffffffff) {
+                            r24 = [[r19 valueForKey:@"name"] retain];
+                            r25 = [[r20 valueForKey:@"name"] retain];
+                            r23 = [r24 localizedCaseInsensitiveCompare:r25];
+                            [r25 release];
+                            [r24 release];
+                    }
+            }
+            [r22 release];
+            [r21 release];
+            [r20 release];
+            [r19 release];
+            r0 = r23;
+    }
+    return r0;
+
+
+// 0x1000237cc
+// ___37-[BottleViewController msyncToggled:]_block_invoke
+    r0 = arg0;
+    if (r1 != 0x0) {
+            var_20 = r20;
+            decomp_var_18 = r19;
+            r31 = r31 + 0xffffffffffffffe0;
+            var_10 = r29;
+            decomp_var_8 = r30;
+            r19 = r0;
+            if ([r0[0x4] state] != 0x1) {
+                    r2 = 0x1;
+            }
+            [r19[0x4] setState:r2];
+    }
+    return;
+
+
+// 0x1000238fc
+// ___46-[BottleViewController highResolutionToggled:]_block_invoke
+    r0 = arg0;
+    if (r1 != 0x0) {
+            var_20 = r20;
+            decomp_var_18 = r19;
+            r31 = r31 + 0xffffffffffffffe0;
+            var_10 = r29;
+            decomp_var_8 = r30;
+            r19 = r0;
+            if ([r0[0x4] state] != 0x1) {
+                    r2 = 0x1;
+            }
+            [r19[0x4] setState:r2];
+    }
+    return;
+
+
+// 0x100023a2c
+// ___39-[BottleViewController previewToggled:]_block_invoke
+    r0 = arg0;
+    if (r1 != 0x0) {
+            var_20 = r20;
+            decomp_var_18 = r19;
+            r31 = r31 + 0xffffffffffffffe0;
+            var_10 = r29;
+            decomp_var_8 = r30;
+            r19 = r0;
+            if ([r0[0x4] state] != 0x1) {
+                    r2 = 0x1;
+            }
+            [r19[0x4] setState:r2];
+    }
+    return;
+
+
+// 0x100023be4
+// ___50-[BottleViewController controlPanelButtonClicked:]_block_invoke
+    r20 = [arg1 retain];
+    var_48 = *__NSConcreteStackBlock;
+    var_18 = [arg0[0x5] retain];
+    r19 = [r20 retain];
+    dispatch_async(*__dispatch_main_q, &var_48);
+    [var_18 release];
+    [r20 release];
+    r0 = [r19 release];
+    return r0;
+
+
+// 0x100023c84
+// ___50-[BottleViewController controlPanelButtonClicked:]_block_invoke_2
+    r20 = arg0[0x4];
+    r21 = arg0[0x5];
+    r0 = [r20 view];
+    r0 = [r0 retain];
+    r22 = r0;
+    r23 = [[r0 window] retain];
+    [r20 presentError:r21 modalForWindow:r23 delegate:0x0 didPresentSelector:0x0 contextInfo:0x0];
+    [r23 release];
+    [r22 release];
+    r0 = arg0[0x6];
+    r0 = [r0 setEnabled:0x1];
+    return r0;
+
+
+// 0x100023d0c
+// ___50-[BottleViewController controlPanelButtonClicked:]_block_invoke.182
+    var_20 = r22;
+    decomp_var_18 = r21;
+    r31 = r31 + 0xffffffffffffffd0;
+    var_10 = r20;
+    decomp_var_8 = r19;
+    saved_fp = r29;
+    decomp_var_m8 = r30;
+    r19 = arg0;
+    r0 = arg0[0x4];
+    r0 = [r0 bottle];
+    r0 = [r0 retain];
+    r20 = r0;
+    r21 = r19[0x5];
+    r0 = [r0 release];
+    if (r20 == r21) {
+            r0 = r19[0x6];
+            r0 = [r0 setEnabled:0x1];
+    }
+    return r0;
+
+

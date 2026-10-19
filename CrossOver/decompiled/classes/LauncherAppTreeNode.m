@@ -181,3 +181,16 @@
     return;
 
 
+// === Block Invocations for LauncherAppTreeNode ===
+
+// 0x100026c30
+// ___44-[LauncherAppTreeNode openWithErrorHandler:]_block_invoke
+    r0 = arg0[0x4];
+    r0 = [r0 launcher];
+    r0 = [r0 retain];
+    r20 = r0;
+    [r0 launchWithErrorHandler:arg0[0x5]];
+    r0 = [r20 release];
+    return r0;
+
+

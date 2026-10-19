@@ -840,3 +840,158 @@
     return;
 
 
+// === Block Invocations for IconCollectionViewController ===
+
+// 0x100045f8c
+// ___67-[IconCollectionViewController openLauncherTreeNode:fromRect:view:]_block_invoke
+    r0 = [arg1 retain];
+    var_40 = *__NSConcreteStackBlock;
+    var_18 = r0;
+    r19 = [r0 retain];
+    dispatch_async(*__dispatch_main_q, &var_40);
+    [var_18 release];
+    r0 = [r19 release];
+    return r0;
+
+
+// 0x100046014
+// ___67-[IconCollectionViewController openLauncherTreeNode:fromRect:view:]_block_invoke_2
+    r19 = arg0[0x4];
+    r20 = arg0[0x5];
+    r0 = [r19 view];
+    r0 = [r0 retain];
+    r21 = r0;
+    r22 = [[r0 window] retain];
+    [r19 presentError:r20 modalForWindow:r22 delegate:0x0 didPresentSelector:0x0 contextInfo:0x0];
+    [r22 release];
+    r0 = [r21 release];
+    return r0;
+
+
+// 0x10004609c
+// ___67-[IconCollectionViewController openLauncherTreeNode:fromRect:view:]_block_invoke.11
+    r1 = arg1;
+    var_40 = d11;
+    decomp_var_38 = d10;
+    r31 = r31 + 0xffffffffffffffb0;
+    var_30 = d9;
+    decomp_var_28 = d8;
+    var_20 = r22;
+    decomp_var_18 = r21;
+    var_10 = r20;
+    decomp_var_8 = r19;
+    saved_fp = r29;
+    decomp_var_m8 = r30;
+    r20 = arg0;
+    d11 = 0x3fe0000000000000;
+    d0 = 0x3fe0000000000000;
+    [r1 setDuration:r2];
+    r0 = r20[0x4];
+    r0 = [r0 view];
+    r0 = [r0 retain];
+    r19 = r0;
+    if (r20[0x5] != 0x0) {
+            d0 = r20[0x8];
+            d1 = r20[0x9];
+            d2 = r20[0xa];
+            d3 = r20[0xb];
+            if (NSIsEmptyRect(r0) != 0x0) {
+                    [r20[0x5] bounds];
+            }
+            else {
+                    d0 = r20[0x8];
+                    d1 = r20[0x9];
+                    d2 = r20[0xa];
+                    d3 = r20[0xb];
+            }
+            r0 = r20[0x5];
+    }
+    else {
+            r0 = r20[0x6];
+            r0 = [r0 icon];
+            r0 = [r0 retain];
+            r21 = r0;
+            [r0 size];
+            [r21 release];
+            [r19 visibleRect];
+            asm { fmadd      d0, d2, d11, d0 };
+            [r19 visibleRect];
+            asm { fmadd      d0, d3, d11, d1 };
+            d1 = d0 - d9 * d11;
+            r0 = r19;
+            d0 = d10;
+            d2 = d8;
+            d3 = d9;
+    }
+    [r0 convertRect:0x0 toView:r3];
+    d8 = d0;
+    d9 = d1;
+    d10 = d2;
+    d11 = d3;
+    [r19 visibleRect];
+    if (NSIntersectsRect([r19 convertRect:0x0 toView:r3], r1) != 0x0) {
+            r0 = r20[0x4];
+            r0 = [r0 view];
+            r0 = [r0 retain];
+            r21 = r0;
+            r0 = [r0 window];
+            r0 = [r0 retain];
+            r22 = r0;
+            [r0 convertRectToScreen:r2];
+            [r22 release];
+            [r21 release];
+            r0 = [NSWindow alloc];
+            r0 = [r0 initWithContentRect:0x0 styleMask:0x2 backing:0x0 defer:r5];
+            r9 = *(r20[0x7] + 0x8);
+            r8 = r9[0x5];
+            r9[0x5] = r0;
+            [r8 release];
+            r21 = *(*(r20[0x7] + 0x8) + 0x28);
+            r22 = [[NSColor clearColor] retain];
+            [r21 setBackgroundColor:r22];
+            [r22 release];
+            [*(*(r20[0x7] + 0x8) + 0x28) setOpaque:0x0];
+            r0 = [NSImageView alloc];
+            r21 = r0;
+            NSOffsetRect(r0, r1, r2);
+            r21 = [r21 initWithFrame:r2];
+            r22 = [[r20[0x6] icon] retain];
+            [r21 setImage:r22];
+            [r22 release];
+            [r21 setImageScaling:0x3];
+            [r21 setWantsLayer:0x1];
+            [*(*(r20[0x7] + 0x8) + 0x28) setContentView:r21];
+            [*(*(r20[0x7] + 0x8) + 0x28) setAlphaValue:r2];
+            [*(*(r20[0x7] + 0x8) + 0x28) setReleasedWhenClosed:0x0];
+            [*(*(r20[0x7] + 0x8) + 0x28) setIgnoresMouseEvents:0x1];
+            [*(*(r20[0x7] + 0x8) + 0x28) orderFront:0x0];
+            [*(*(r20[0x7] + 0x8) + 0x28) setLevel:0x3];
+            [*(*(r20[0x7] + 0x8) + 0x28) display];
+            r0 = *(*(r20[0x7] + 0x8) + 0x28);
+            r0 = [r0 animator];
+            r0 = [r0 retain];
+            r22 = r0;
+            [r0 setAlphaValue:r2];
+            [r22 release];
+            r0 = *(*(r20[0x7] + 0x8) + 0x28);
+            r0 = [r0 animator];
+            r0 = [r0 retain];
+            r22 = r0;
+            r20 = *(*(r20[0x7] + 0x8) + 0x28);
+            NSInsetRect(r0, r1, r2);
+            [r20 frameRectForContentRect:r2];
+            [r22 setFrame:0x0 display:r3];
+            [r22 release];
+            [r21 release];
+    }
+    r0 = [r19 release];
+    return r0;
+
+
+// 0x1000464e4
+// ___67-[IconCollectionViewController openLauncherTreeNode:fromRect:view:]_block_invoke.16
+    r0 = *(*(arg0[0x4] + 0x8) + 0x28);
+    r0 = [r0 close];
+    return r0;
+
+

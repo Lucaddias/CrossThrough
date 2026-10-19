@@ -13891,3 +13891,504 @@ loc_10004ea38:
     return;
 
 
+// === Block Invocations for CXServerCrossOver ===
+
+// 0x100048dec
+// ___54-[CXServerCrossOver handleGetURLEvent:withReplyEvent:]_block_invoke
+    r0 = [arg0[0x4] performSelector:@selector(handleCrossTieURL:) withObject:arg0[0x5]];
+    return r0;
+
+
+// 0x10004aa24
+// ___73-[CXServerCrossOver addProgramsFromMenuPlist:bottle:toDictionary:atPath:]_block_invoke
+    var_40 = r26;
+    decomp_var_38 = r25;
+    r31 = r31 + 0xffffffffffffffb0;
+    var_30 = r24;
+    decomp_var_28 = r23;
+    var_20 = r22;
+    decomp_var_18 = r21;
+    var_10 = r20;
+    decomp_var_8 = r19;
+    saved_fp = r29;
+    decomp_var_m8 = r30;
+    r21 = arg0;
+    r19 = [arg1 retain];
+    r20 = [arg2 retain];
+    if ([r19 hasSuffix:@"/"] != 0x0) {
+            r24 = r21[0x4];
+            r22 = [[r20 objectForKey:@"Children"] retain];
+            r25 = r21[0x5];
+            r26 = r21[0x6];
+            r23 = [[r21[0x7] arrayByAddingObject:r19] retain];
+            [r24 addProgramsFromMenuPlist:r22 bottle:r25 toDictionary:r26 atPath:r23];
+    }
+    else {
+            r22 = [[r21[0x7] arrayByAddingObject:r19] retain];
+            r0 = r21[0x6];
+            r0 = [r0 objectForKey:r22];
+            r0 = [r0 retain];
+            r23 = r0;
+            if (r0 == 0x0) {
+                    r23 = [[NSMutableDictionary dictionary] retain];
+                    [r21[0x6] setObject:r23 forKey:r22];
+            }
+            [r23 setObject:r20 forKey:r21[0x5]];
+    }
+    [r23 release];
+    [r22 release];
+    [r20 release];
+    r0 = [r19 release];
+    return r0;
+
+
+// 0x1000526cc
+// ___49-[CXServerCrossOver applicationOpenUntitledFile:]_block_invoke
+    r0 = arg0[0x4];
+    r0 = [r0 mainWindowController];
+    r0 = [r0 retain];
+    r19 = r0;
+    [r0 showWindow:0x0];
+    r0 = [r19 release];
+    return r0;
+
+
+// 0x10005306c
+// ___57-[CXServerCrossOver bestValidUpdateInAppcast:forUpdater:]_block_invoke
+    r1 = arg1;
+    r31 = r31 - 0x70;
+    var_50 = r28;
+    decomp_var_48 = r27;
+    var_40 = r26;
+    decomp_var_38 = r25;
+    var_30 = r24;
+    decomp_var_28 = r23;
+    var_20 = r22;
+    decomp_var_18 = r21;
+    var_10 = r20;
+    decomp_var_8 = r19;
+    saved_fp = r29;
+    decomp_var_m8 = r30;
+    r21 = arg0;
+    r19 = [r1 retain];
+    r20 = [arg2 retain];
+    r0 = [arg3 retain];
+    r22 = r0;
+    if (r0 != 0x0) {
+            r0 = [r22 localizedDescription];
+            r0 = [r0 retain];
+            r23 = r0;
+            if (r0 != 0x0) {
+                    NSLog(@"Download of license expiration failed: %@\n", r1);
+                    r8 = r21[0x4];
+                    r8 = (int64_t *)&r8->nextUpdateItem;
+                    r0 = *r8;
+                    *r8 = 0x0;
+                    [r0 release];
+                    [r23 release];
+                    [r21[0x5] setNotLicensed:0x0];
+                    [r22 release];
+                    [r20 release];
+                    r0 = [r19 release];
+            }
+            else {
+                    r1 = objc_opt_class(@class(NSHTTPURLResponse));
+                    if ((objc_opt_isKindOfClass() & 0x1) != 0x0) {
+                            r0 = [r20 retain];
+                            r24 = r0;
+                            if ([r0 statusCode] == 0xc8) {
+                                    [r24 release];
+                                    if (r19 != 0x0) {
+                                            r0 = [NSString alloc];
+                                            r0 = [r0 initWithData:r19 encoding:0x4];
+                                            r23 = r0;
+                                            if ([r0 rangeOfString:@"NOT FOUND"] == 0x7fffffffffffffff) {
+                                                    r24 = [[NSDateFormatter alloc] init];
+                                                    r25 = [[NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"] retain];
+                                                    [r24 setLocale:r25];
+                                                    [r25 release];
+                                                    [r24 setDateFormat:@"yyyy-MM-dd HH:mm:ss xx"];
+                                                    r25 = [[NSTimeZone timeZoneForSecondsFromGMT:0x0] retain];
+                                                    [r24 setTimeZone:r25];
+                                                    [r25 release];
+                                                    r26 = [[r24 dateFromString:r23] retain];
+                                                    r27 = [[*(r21[0x4] + sign_extend_64(*(int32_t *)ivar_offset(nextUpdateItem))) date] retain];
+                                                    if ([r26 compare:r27] == 0x1) {
+                                                            r25 = 0x1;
+                                                    }
+                                                    [r27 release];
+                                                    [r26 release];
+                                                    [r24 release];
+                                            }
+                                            else {
+                                                    NSLog(@"Unable to validate this license file at all.\n");
+                                                    r25 = 0x0;
+                                            }
+                                            [r23 release];
+                                    }
+                                    else {
+                                            r25 = 0x0;
+                                    }
+                                    r0 = [BuySupportNagController alloc];
+                                    r8 = r21[0x4];
+                                    r26 = sign_extend_64(*(int32_t *)ivar_offset(nextUpdateItem));
+                                    r0 = [r0 initWithAppcastItem:*(r8 + r26)];
+                                    r23 = r0;
+                                    [r0 setOwnsSelf:0x1];
+                                    [r23 setRegistrationRefreshEnough:r25];
+                                    r0 = [r23 window];
+                                    r0 = [r0 retain];
+                                    r24 = r0;
+                                    [r0 makeKeyAndOrderFront:r21[0x4]];
+                                    [r24 release];
+                                    r8 = r21[0x4];
+                                    r8 = r8 + r26;
+                                    r0 = *r8;
+                                    *r8 = 0x0;
+                                    [r0 release];
+                                    [r23 release];
+                                    [r21[0x5] setNotLicensed:0x0];
+                                    [r22 release];
+                                    [r20 release];
+                                    r0 = [r19 release];
+                            }
+                            else {
+                                    r23 = [[NSHTTPURLResponse localizedStringForStatusCode:[r24 statusCode]] retain];
+                                    [r24 release];
+                                    if (r23 == 0x0) {
+                                            if (r19 != 0x0) {
+                                                    r0 = [NSString alloc];
+                                                    r0 = [r0 initWithData:r19 encoding:0x4];
+                                                    r23 = r0;
+                                                    if ([r0 rangeOfString:@"NOT FOUND"] == 0x7fffffffffffffff) {
+                                                            r24 = [[NSDateFormatter alloc] init];
+                                                            r25 = [[NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"] retain];
+                                                            [r24 setLocale:r25];
+                                                            [r25 release];
+                                                            [r24 setDateFormat:@"yyyy-MM-dd HH:mm:ss xx"];
+                                                            r25 = [[NSTimeZone timeZoneForSecondsFromGMT:0x0] retain];
+                                                            [r24 setTimeZone:r25];
+                                                            [r25 release];
+                                                            r26 = [[r24 dateFromString:r23] retain];
+                                                            r27 = [[*(r21[0x4] + sign_extend_64(*(int32_t *)ivar_offset(nextUpdateItem))) date] retain];
+                                                            if ([r26 compare:r27] == 0x1) {
+                                                                    r25 = 0x1;
+                                                            }
+                                                            [r27 release];
+                                                            [r26 release];
+                                                            [r24 release];
+                                                    }
+                                                    else {
+                                                            NSLog(@"Unable to validate this license file at all.\n");
+                                                            r25 = 0x0;
+                                                    }
+                                                    [r23 release];
+                                            }
+                                            else {
+                                                    r25 = 0x0;
+                                            }
+                                            r0 = [BuySupportNagController alloc];
+                                            r8 = r21[0x4];
+                                            r26 = sign_extend_64(*(int32_t *)ivar_offset(nextUpdateItem));
+                                            r0 = [r0 initWithAppcastItem:*(r8 + r26)];
+                                            r23 = r0;
+                                            [r0 setOwnsSelf:0x1];
+                                            [r23 setRegistrationRefreshEnough:r25];
+                                            r0 = [r23 window];
+                                            r0 = [r0 retain];
+                                            r24 = r0;
+                                            [r0 makeKeyAndOrderFront:r21[0x4]];
+                                            [r24 release];
+                                            r8 = r21[0x4];
+                                            r8 = r8 + r26;
+                                            r0 = *r8;
+                                            *r8 = 0x0;
+                                            [r0 release];
+                                            [r23 release];
+                                            [r21[0x5] setNotLicensed:0x0];
+                                            [r22 release];
+                                            [r20 release];
+                                            r0 = [r19 release];
+                                    }
+                                    else {
+                                            NSLog(@"Download of license expiration failed: %@\n", r1);
+                                            r8 = r21[0x4];
+                                            r8 = (int64_t *)&r8->nextUpdateItem;
+                                            r0 = *r8;
+                                            *r8 = 0x0;
+                                            [r0 release];
+                                            [r23 release];
+                                            [r21[0x5] setNotLicensed:0x0];
+                                            [r22 release];
+                                            [r20 release];
+                                            r0 = [r19 release];
+                                    }
+                            }
+                    }
+                    else {
+                            if (r19 != 0x0) {
+                                    r0 = [NSString alloc];
+                                    r0 = [r0 initWithData:r19 encoding:0x4];
+                                    r23 = r0;
+                                    if ([r0 rangeOfString:@"NOT FOUND"] == 0x7fffffffffffffff) {
+                                            r24 = [[NSDateFormatter alloc] init];
+                                            r25 = [[NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"] retain];
+                                            [r24 setLocale:r25];
+                                            [r25 release];
+                                            [r24 setDateFormat:@"yyyy-MM-dd HH:mm:ss xx"];
+                                            r25 = [[NSTimeZone timeZoneForSecondsFromGMT:0x0] retain];
+                                            [r24 setTimeZone:r25];
+                                            [r25 release];
+                                            r26 = [[r24 dateFromString:r23] retain];
+                                            r27 = [[*(r21[0x4] + sign_extend_64(*(int32_t *)ivar_offset(nextUpdateItem))) date] retain];
+                                            if ([r26 compare:r27] == 0x1) {
+                                                    r25 = 0x1;
+                                            }
+                                            [r27 release];
+                                            [r26 release];
+                                            [r24 release];
+                                    }
+                                    else {
+                                            NSLog(@"Unable to validate this license file at all.\n");
+                                            r25 = 0x0;
+                                    }
+                                    [r23 release];
+                            }
+                            else {
+                                    r25 = 0x0;
+                            }
+                            r0 = [BuySupportNagController alloc];
+                            r8 = r21[0x4];
+                            r26 = sign_extend_64(*(int32_t *)ivar_offset(nextUpdateItem));
+                            r0 = [r0 initWithAppcastItem:*(r8 + r26)];
+                            r23 = r0;
+                            [r0 setOwnsSelf:0x1];
+                            [r23 setRegistrationRefreshEnough:r25];
+                            r0 = [r23 window];
+                            r0 = [r0 retain];
+                            r24 = r0;
+                            [r0 makeKeyAndOrderFront:r21[0x4]];
+                            [r24 release];
+                            r8 = r21[0x4];
+                            r8 = r8 + r26;
+                            r0 = *r8;
+                            *r8 = 0x0;
+                            [r0 release];
+                            [r23 release];
+                            [r21[0x5] setNotLicensed:0x0];
+                            [r22 release];
+                            [r20 release];
+                            r0 = [r19 release];
+                    }
+            }
+    }
+    else {
+            r1 = objc_opt_class(@class(NSHTTPURLResponse));
+            if ((objc_opt_isKindOfClass() & 0x1) != 0x0) {
+                    r0 = [r20 retain];
+                    r24 = r0;
+                    if ([r0 statusCode] == 0xc8) {
+                            [r24 release];
+                            if (r19 != 0x0) {
+                                    r0 = [NSString alloc];
+                                    r0 = [r0 initWithData:r19 encoding:0x4];
+                                    r23 = r0;
+                                    if ([r0 rangeOfString:@"NOT FOUND"] == 0x7fffffffffffffff) {
+                                            r24 = [[NSDateFormatter alloc] init];
+                                            r25 = [[NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"] retain];
+                                            [r24 setLocale:r25];
+                                            [r25 release];
+                                            [r24 setDateFormat:@"yyyy-MM-dd HH:mm:ss xx"];
+                                            r25 = [[NSTimeZone timeZoneForSecondsFromGMT:0x0] retain];
+                                            [r24 setTimeZone:r25];
+                                            [r25 release];
+                                            r26 = [[r24 dateFromString:r23] retain];
+                                            r27 = [[*(r21[0x4] + sign_extend_64(*(int32_t *)ivar_offset(nextUpdateItem))) date] retain];
+                                            if ([r26 compare:r27] == 0x1) {
+                                                    r25 = 0x1;
+                                            }
+                                            [r27 release];
+                                            [r26 release];
+                                            [r24 release];
+                                    }
+                                    else {
+                                            NSLog(@"Unable to validate this license file at all.\n");
+                                            r25 = 0x0;
+                                    }
+                                    [r23 release];
+                            }
+                            else {
+                                    r25 = 0x0;
+                            }
+                            r0 = [BuySupportNagController alloc];
+                            r8 = r21[0x4];
+                            r26 = sign_extend_64(*(int32_t *)ivar_offset(nextUpdateItem));
+                            r0 = [r0 initWithAppcastItem:*(r8 + r26)];
+                            r23 = r0;
+                            [r0 setOwnsSelf:0x1];
+                            [r23 setRegistrationRefreshEnough:r25];
+                            r0 = [r23 window];
+                            r0 = [r0 retain];
+                            r24 = r0;
+                            [r0 makeKeyAndOrderFront:r21[0x4]];
+                            [r24 release];
+                            r8 = r21[0x4];
+                            r8 = r8 + r26;
+                            r0 = *r8;
+                            *r8 = 0x0;
+                            [r0 release];
+                            [r23 release];
+                            [r21[0x5] setNotLicensed:0x0];
+                            [r22 release];
+                            [r20 release];
+                            r0 = [r19 release];
+                    }
+                    else {
+                            r23 = [[NSHTTPURLResponse localizedStringForStatusCode:[r24 statusCode]] retain];
+                            [r24 release];
+                            if (r23 == 0x0) {
+                                    if (r19 != 0x0) {
+                                            r0 = [NSString alloc];
+                                            r0 = [r0 initWithData:r19 encoding:0x4];
+                                            r23 = r0;
+                                            if ([r0 rangeOfString:@"NOT FOUND"] == 0x7fffffffffffffff) {
+                                                    r24 = [[NSDateFormatter alloc] init];
+                                                    r25 = [[NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"] retain];
+                                                    [r24 setLocale:r25];
+                                                    [r25 release];
+                                                    [r24 setDateFormat:@"yyyy-MM-dd HH:mm:ss xx"];
+                                                    r25 = [[NSTimeZone timeZoneForSecondsFromGMT:0x0] retain];
+                                                    [r24 setTimeZone:r25];
+                                                    [r25 release];
+                                                    r26 = [[r24 dateFromString:r23] retain];
+                                                    r27 = [[*(r21[0x4] + sign_extend_64(*(int32_t *)ivar_offset(nextUpdateItem))) date] retain];
+                                                    if ([r26 compare:r27] == 0x1) {
+                                                            r25 = 0x1;
+                                                    }
+                                                    [r27 release];
+                                                    [r26 release];
+                                                    [r24 release];
+                                            }
+                                            else {
+                                                    NSLog(@"Unable to validate this license file at all.\n");
+                                                    r25 = 0x0;
+                                            }
+                                            [r23 release];
+                                    }
+                                    else {
+                                            r25 = 0x0;
+                                    }
+                                    r0 = [BuySupportNagController alloc];
+                                    r8 = r21[0x4];
+                                    r26 = sign_extend_64(*(int32_t *)ivar_offset(nextUpdateItem));
+                                    r0 = [r0 initWithAppcastItem:*(r8 + r26)];
+                                    r23 = r0;
+                                    [r0 setOwnsSelf:0x1];
+                                    [r23 setRegistrationRefreshEnough:r25];
+                                    r0 = [r23 window];
+                                    r0 = [r0 retain];
+                                    r24 = r0;
+                                    [r0 makeKeyAndOrderFront:r21[0x4]];
+                                    [r24 release];
+                                    r8 = r21[0x4];
+                                    r8 = r8 + r26;
+                                    r0 = *r8;
+                                    *r8 = 0x0;
+                                    [r0 release];
+                                    [r23 release];
+                                    [r21[0x5] setNotLicensed:0x0];
+                                    [r22 release];
+                                    [r20 release];
+                                    r0 = [r19 release];
+                            }
+                            else {
+                                    NSLog(@"Download of license expiration failed: %@\n", r1);
+                                    r8 = r21[0x4];
+                                    r8 = (int64_t *)&r8->nextUpdateItem;
+                                    r0 = *r8;
+                                    *r8 = 0x0;
+                                    [r0 release];
+                                    [r23 release];
+                                    [r21[0x5] setNotLicensed:0x0];
+                                    [r22 release];
+                                    [r20 release];
+                                    r0 = [r19 release];
+                            }
+                    }
+            }
+            else {
+                    if (r19 != 0x0) {
+                            r0 = [NSString alloc];
+                            r0 = [r0 initWithData:r19 encoding:0x4];
+                            r23 = r0;
+                            if ([r0 rangeOfString:@"NOT FOUND"] == 0x7fffffffffffffff) {
+                                    r24 = [[NSDateFormatter alloc] init];
+                                    r25 = [[NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"] retain];
+                                    [r24 setLocale:r25];
+                                    [r25 release];
+                                    [r24 setDateFormat:@"yyyy-MM-dd HH:mm:ss xx"];
+                                    r25 = [[NSTimeZone timeZoneForSecondsFromGMT:0x0] retain];
+                                    [r24 setTimeZone:r25];
+                                    [r25 release];
+                                    r26 = [[r24 dateFromString:r23] retain];
+                                    r27 = [[*(r21[0x4] + sign_extend_64(*(int32_t *)ivar_offset(nextUpdateItem))) date] retain];
+                                    if ([r26 compare:r27] == 0x1) {
+                                            r25 = 0x1;
+                                    }
+                                    [r27 release];
+                                    [r26 release];
+                                    [r24 release];
+                            }
+                            else {
+                                    NSLog(@"Unable to validate this license file at all.\n");
+                                    r25 = 0x0;
+                            }
+                            [r23 release];
+                    }
+                    else {
+                            r25 = 0x0;
+                    }
+                    r0 = [BuySupportNagController alloc];
+                    r8 = r21[0x4];
+                    r26 = sign_extend_64(*(int32_t *)ivar_offset(nextUpdateItem));
+                    r0 = [r0 initWithAppcastItem:*(r8 + r26)];
+                    r23 = r0;
+                    [r0 setOwnsSelf:0x1];
+                    [r23 setRegistrationRefreshEnough:r25];
+                    r0 = [r23 window];
+                    r0 = [r0 retain];
+                    r24 = r0;
+                    [r0 makeKeyAndOrderFront:r21[0x4]];
+                    [r24 release];
+                    r8 = r21[0x4];
+                    r8 = r8 + r26;
+                    r0 = *r8;
+                    *r8 = 0x0;
+                    [r0 release];
+                    [r23 release];
+                    [r21[0x5] setNotLicensed:0x0];
+                    [r22 release];
+                    [r20 release];
+                    r0 = [r19 release];
+            }
+    }
+    return r0;
+
+
+// 0x100053824
+// ___35-[CXServerCrossOver repairBottles:]_block_invoke
+    var_28 = *__NSConcreteStackBlock;
+    r0 = *__dispatch_main_q;
+    r0 = dispatch_async(r0, &var_28);
+    return r0;
+
+
+// 0x100053880
+// ___35-[CXServerCrossOver repairBottles:]_block_invoke_2
+    r19 = arg0[0x4];
+    r20 = [[[CXSetupLib cxSetupClass] bottleStatus:@"REPAIRING"] retain];
+    [r19 removeStatusOverride:r20];
+    r0 = [r20 release];
+    return r0;
+
+

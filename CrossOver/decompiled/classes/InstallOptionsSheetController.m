@@ -1341,3 +1341,32 @@ loc_100033834:
     return;
 
 
+// === Block Invocations for InstallOptionsSheetController ===
+
+// 0x100032d30
+// ___51-[InstallOptionsSheetController fillDependencyList]_block_invoke
+    var_20 = r22;
+    decomp_var_18 = r21;
+    r31 = r31 + 0xffffffffffffffd0;
+    var_10 = r20;
+    decomp_var_8 = r19;
+    saved_fp = r29;
+    decomp_var_m8 = r30;
+    r21 = arg0;
+    r19 = [arg1 retain];
+    r20 = [arg2 retain];
+    r0 = r21[0x4];
+    r0 = [r0 objectForKey:r20];
+    r0 = [r0 retain];
+    r22 = r0;
+    if (r0 == 0x0) {
+            r22 = [[NSMutableArray array] retain];
+            [r21[0x4] setObject:r22 forKey:r20];
+    }
+    [r22 addObject:r19];
+    [r22 release];
+    [r20 release];
+    r0 = [r19 release];
+    return r0;
+
+

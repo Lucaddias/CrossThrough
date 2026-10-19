@@ -1883,3 +1883,24 @@
     return;
 
 
+// === Block Invocations for RunCommandController ===
+
+// 0x100017d78
+// ___41-[RunCommandController browseForCommand:]_block_invoke
+    r0 = arg0;
+    if (r1 == 0x1) {
+            r20 = r0[0x4];
+            r0 = r0[0x5];
+            r0 = [r0 URL];
+            r0 = [r0 retain];
+            r21 = r0;
+            r22 = [[r0 path] retain];
+            r19 = [[NSString stringWithFormat:@"\"%@\"", r3] retain];
+            [r20 setCommand:r19];
+            [r19 release];
+            [r22 release];
+            [r21 release];
+    }
+    return;
+
+

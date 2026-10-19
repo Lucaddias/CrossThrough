@@ -1947,3 +1947,80 @@
     return;
 
 
+// === Block Invocations for RegistrationController ===
+
+// 0x10005b780
+// ___78-[RegistrationController beginRegisterAppWithSerialCodeWithCompletionHandler:]_block_invoke
+    r22 = arg0[0x4];
+    var_68 = *__NSConcreteStackBlock;
+    r24 = [arg3 retain];
+    r20 = [arg2 retain];
+    r21 = [arg1 retain];
+    r0 = [NSBundle mainBundle];
+    r0 = [r0 retain];
+    r23 = r0;
+    r25 = [[r0 localizedStringForKey:@"Activation failed" value:@"" table:0x0] retain];
+    [r22 downloadTaskCompleted:r21 response:r20 error:r24 successHandler:&var_68 errorMessageText:r25];
+    [r24 release];
+    [r20 release];
+    [r21 release];
+    [r25 release];
+    [r23 release];
+    r8 = arg0[0x4];
+    r9 = sign_extend_64(*(int32_t *)ivar_offset(downloadTask));
+    r0 = *(r8 + r9);
+    *(r8 + r9) = 0x0;
+    r0 = [r0 release];
+    return r0;
+
+
+// 0x10005b8b8
+// ___78-[RegistrationController beginRegisterAppWithSerialCodeWithCompletionHandler:]_block_invoke_2
+    r0 = arg0[0x4];
+    r0 = [r0 handleSerialCodeAccountCreationData:arg1];
+    return r0;
+
+
+// 0x10005bc00
+// ___64-[RegistrationController beginRegisterAppWithCompletionHandler:]_block_invoke
+    r22 = arg0[0x4];
+    var_68 = *__NSConcreteStackBlock;
+    r24 = [arg3 retain];
+    r20 = [arg2 retain];
+    r21 = [arg1 retain];
+    r0 = [NSBundle mainBundle];
+    r0 = [r0 retain];
+    r23 = r0;
+    r25 = [[r0 localizedStringForKey:@"Unlocking failed" value:@"" table:0x0] retain];
+    [r22 downloadTaskCompleted:r21 response:r20 error:r24 successHandler:&var_68 errorMessageText:r25];
+    [r24 release];
+    [r20 release];
+    [r21 release];
+    [r25 release];
+    [r23 release];
+    r8 = arg0[0x4];
+    r9 = sign_extend_64(*(int32_t *)ivar_offset(downloadTask));
+    r0 = *(r8 + r9);
+    *(r8 + r9) = 0x0;
+    r0 = [r0 release];
+    return r0;
+
+
+// 0x10005bd38
+// ___64-[RegistrationController beginRegisterAppWithCompletionHandler:]_block_invoke_2
+    r0 = arg0[0x4];
+    r0 = [r0 handleRegistrationData:arg1];
+    return r0;
+
+
+// 0x10005c3b0
+// ___49-[RegistrationController handleRegistrationData:]_block_invoke
+    r20 = [CXSetupLib webUtilsClass];
+    r21 = [[arg0[0x4] login] retain];
+    r19 = [[arg0[0x4] password] retain];
+    objc_unsafeClaimAutoreleasedReturnValue([r20 createToken:r21 password:r19]);
+    [r19 release];
+    r0 = [r21 release];
+    return r0;
+
+

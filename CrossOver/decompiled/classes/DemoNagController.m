@@ -317,3 +317,33 @@
     return;
 
 
+// === Block Invocations for DemoNagController ===
+
+// 0x10001f08c
+// ___43-[DemoNagController showSerialCodeRegister]_block_invoke
+    r0 = arg0;
+    if (r1 != 0x3) {
+            if (r1 == 0x1) {
+                    [r0[0x4] runapp:0x0];
+            }
+    }
+    else {
+            [r0[0x4] registerapp:0x0];
+    }
+    return;
+
+
+// 0x10001f174
+// ___33-[DemoNagController registerapp:]_block_invoke
+    r0 = arg0;
+    if (r1 != 0x2) {
+            if (r1 == 0x1) {
+                    [r0[0x4] runapp:0x0];
+            }
+    }
+    else {
+            [r0[0x4] showSerialCodeRegister];
+    }
+    return;
+
+

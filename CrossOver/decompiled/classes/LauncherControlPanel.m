@@ -164,3 +164,15 @@
     return;
 
 
+// === Block Invocations for LauncherControlPanel ===
+
+// 0x1000416d4
+// ___47-[LauncherControlPanel launchWithErrorHandler:]_block_invoke
+    r20 = [[arg0[0x4] bottle] retain];
+    r19 = [[*(arg0[0x4] + sign_extend_64(*(int32_t *)ivar_offset(_controlPanel))) valueForKey:@"exe"] retain];
+    [r20 launchControlPanelApplet:r19];
+    [r19 release];
+    r0 = [r20 release];
+    return r0;
+
+

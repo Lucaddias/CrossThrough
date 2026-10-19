@@ -342,3 +342,27 @@
     return;
 
 
+// === Block Invocations for PublishController ===
+
+// 0x100038ce8
+// ___30-[PublishController doPublish]_block_invoke
+    r0 = [CXSetupLib bottleCollectionClass];
+    r0 = [r0 sharedCollection];
+    r0 = [r0 retain];
+    r20 = r0;
+    [r0 refresh];
+    [r20 release];
+    [arg0[0x4] setIsWorking:0x0];
+    r0 = arg0[0x4];
+    r0 = [r0 exitSuccess:0x0];
+    return r0;
+
+
+// 0x100038d40
+// ___30-[PublishController doPublish]_block_invoke.16
+    [arg0[0x4] setIsWorking:0x0];
+    r0 = arg0[0x4];
+    r0 = [r0 publishFailed];
+    return r0;
+
+

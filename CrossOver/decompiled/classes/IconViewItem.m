@@ -217,3 +217,16 @@
     return r0;
 
 
+// === Block Invocations for IconViewItem ===
+
+// 0x10005e898
+// ___39-[IconViewItem draggingImageComponents]_block_invoke
+    r0 = [arg1 key];
+    r0 = [r0 retain];
+    r19 = r0;
+    r20 = [r0 isEqualToString:**_NSDraggingImageComponentLabelKey];
+    [r19 release];
+    r0 = r20;
+    return r0;
+
+

@@ -619,3 +619,247 @@
     return;
 
 
+// === Block Invocations for RosettaInstallationController ===
+
+// 0x10002f6b4
+// ___46-[RosettaInstallationController windowDidLoad]_block_invoke
+    r31 = r31 - 0x90;
+    var_50 = r28;
+    decomp_var_48 = r27;
+    var_40 = r26;
+    decomp_var_38 = r25;
+    var_30 = r24;
+    decomp_var_28 = r23;
+    var_20 = r22;
+    decomp_var_18 = r21;
+    var_10 = r20;
+    decomp_var_8 = r19;
+    saved_fp = r29;
+    decomp_var_m8 = r30;
+    var_58 = **___stack_chk_guard;
+    r21 = arg0[0x4];
+    r22 = [arg1 retain];
+    r0 = [r21 licenseLabel];
+    r0 = [r0 retain];
+    r23 = r0;
+    r0 = [r0 attributedStringValue];
+    r0 = [r0 retain];
+    r24 = r0;
+    r21 = [r0 mutableCopy];
+    [r24 release];
+    [r23 release];
+    var_78 = **_NSForegroundColorAttributeName;
+    r0 = [NSColor linkColor];
+    r0 = [r0 retain];
+    r24 = r0;
+    var_68 = r0;
+    r25 = [@(0x1) retain];
+    r0 = [NSDictionary dictionaryWithObjects:&var_68 forKeys:&var_78 count:0x2];
+    r23 = [r0 retain];
+    [r25 release];
+    [r24 release];
+    [r21 beginEditing];
+    [r21 addAttributes:r23 range:[r22 range]];
+    r24 = **_NSLinkAttributeName;
+    r25 = [[r22 URL] retain];
+    r26 = [r22 range];
+    [r22 release];
+    [r21 addAttribute:r24 value:r25 range:r26];
+    [r25 release];
+    [r21 endEditing];
+    r0 = arg0[0x4];
+    r0 = [r0 licenseLabel];
+    r0 = [r0 retain];
+    r22 = r0;
+    [r0 setAttributedStringValue:r21];
+    [r22 release];
+    r0 = arg0[0x4];
+    r0 = [r0 licenseLabel];
+    r0 = [r0 retain];
+    r20 = r0;
+    [r0 setAllowsEditingTextAttributes:0x1];
+    [r20 release];
+    *(int8_t *)arg3 = 0x1;
+    [r23 release];
+    r0 = [r21 release];
+    if (**___stack_chk_guard != var_58) {
+            __stack_chk_fail();
+    }
+    return r0;
+
+
+// 0x10002fee4
+// ___47-[RosettaInstallationController installButton:]_block_invoke
+    var_20 = r22;
+    decomp_var_18 = r21;
+    r31 = r31 + 0xffffffffffffffd0;
+    var_10 = r20;
+    decomp_var_8 = r19;
+    saved_fp = r29;
+    decomp_var_m8 = r30;
+    r19 = arg0;
+    r20 = [[**_NSApp modalWindow] retain];
+    r0 = r19[0x4];
+    r0 = [r0 window];
+    r0 = [r0 retain];
+    r21 = r0;
+    [r0 release];
+    [r20 release];
+    if (r20 == r21) {
+            [**_NSApp abortModal];
+    }
+    r0 = r19[0x4];
+    r0 = [r0 close];
+    return r0;
+
+
+// 0x10002ff58
+// ___47-[RosettaInstallationController installButton:]_block_invoke.40
+    r0 = [arg1 retain];
+    r20 = r0;
+    [r0 isRunning];
+    [r20 terminationStatus];
+    [r20 release];
+    _CXLog();
+    var_48 = *__NSConcreteStackBlock;
+    r20 = &var_48 + 0x20;
+    objc_copyWeak(r20, arg0 + 0x20);
+    dispatch_async(*__dispatch_main_q, &var_48);
+    r0 = objc_destroyWeak(r20);
+    return r0;
+
+
+// 0x100030018
+// ___47-[RosettaInstallationController installButton:]_block_invoke_2
+    r31 = r31 - 0x50;
+    var_30 = r24;
+    decomp_var_28 = r23;
+    var_20 = r22;
+    decomp_var_18 = r21;
+    var_10 = r20;
+    decomp_var_8 = r19;
+    saved_fp = r29;
+    decomp_var_m8 = r30;
+    r19 = arg0;
+    if (___isPlatformVersionAtLeast(0x1, 0xb, 0x0, 0x0) != 0x0) {
+            r0 = CFBundleIsArchitectureLoadable();
+            r20 = r0;
+            r8 = "installed";
+            if (r0 == 0x0) {
+                    r8 = "not installed";
+            }
+            _CXLog();
+            if (r20 == 0x0) {
+                    r0 = objc_loadWeakRetained(r19 + 0x20);
+                    r20 = r0;
+                    [r0 installFailed];
+            }
+            else {
+                    r0 = [NSBundle mainBundle];
+                    r0 = [r0 retain];
+                    r20 = r0;
+                    r21 = [[r0 localizedStringForKey:@"Rosetta installation is complete. Click Done to continue." value:@"" table:0x0] retain];
+                    r0 = objc_loadWeakRetained(r19 + 0x20);
+                    r22 = r0;
+                    r0 = [r0 progressSheetDetailsLabel];
+                    r0 = [r0 retain];
+                    r23 = r0;
+                    [r0 setStringValue:r21];
+                    [r23 release];
+                    [r22 release];
+                    [r21 release];
+            }
+    }
+    else {
+            _CXLog();
+            r0 = [NSBundle mainBundle];
+            r0 = [r0 retain];
+            r20 = r0;
+            r21 = [[r0 localizedStringForKey:@"Rosetta installation is complete. Click Done to continue." value:@"" table:0x0] retain];
+            r0 = objc_loadWeakRetained(r19 + 0x20);
+            r22 = r0;
+            r0 = [r0 progressSheetDetailsLabel];
+            r0 = [r0 retain];
+            r23 = r0;
+            [r0 setStringValue:r21];
+            [r23 release];
+            [r22 release];
+            [r21 release];
+    }
+    [r20 release];
+    r0 = objc_loadWeakRetained(r19 + 0x20);
+    r20 = r0;
+    r0 = [r0 progressSheetProgressIndicator];
+    r0 = [r0 retain];
+    r21 = r0;
+    [r0 setIndeterminate:0x0];
+    [r21 release];
+    [r20 release];
+    r0 = objc_loadWeakRetained(r19 + 0x20);
+    r19 = r0;
+    r0 = [r0 progressSheetDoneButton];
+    r0 = [r0 retain];
+    r20 = r0;
+    [r0 setEnabled:0x1];
+    [r20 release];
+    r0 = [r19 release];
+    return r0;
+
+
+// 0x1000301c8
+// ___47-[RosettaInstallationController installButton:]_block_invoke.52
+    r31 = r31 - 0x70;
+    var_20 = r22;
+    decomp_var_18 = r21;
+    var_10 = r20;
+    decomp_var_8 = r19;
+    saved_fp = r29;
+    decomp_var_m8 = r30;
+    r21 = arg0;
+    r0 = [arg1 retain];
+    r19 = r0;
+    r0 = [r0 availableData];
+    r0 = [r0 retain];
+    r20 = r0;
+    if ([r0 length] != 0x0) {
+            r22 = [[NSString alloc] initWithData:r20 encoding:0x4];
+            _CXLog();
+            [r22 release];
+            var_50 = *__NSConcreteStackBlock;
+            var_28 = [r20 retain];
+            dispatch_async(*__dispatch_main_q, &var_50);
+            [var_28 release];
+    }
+    if ([r20 length] == 0x0) {
+            [r19 setReadabilityHandler:0x0];
+    }
+    [r20 release];
+    r0 = [r19 release];
+    return r0;
+
+
+// 0x1000302cc
+// ___47-[RosettaInstallationController installButton:]_block_invoke_2.55
+    r0 = arg0[0x4];
+    r0 = [r0 progressSheetTextView];
+    r0 = [r0 retain];
+    r20 = r0;
+    r0 = [r0 textStorage];
+    r0 = [r0 retain];
+    r21 = r0;
+    r22 = [[r0 mutableString] retain];
+    r23 = [[NSString alloc] initWithData:arg0[0x5] encoding:0x4];
+    [r22 appendString:r23];
+    [r23 release];
+    [r22 release];
+    [r21 release];
+    [r20 release];
+    r0 = arg0[0x4];
+    r0 = [r0 progressSheetTextView];
+    r0 = [r0 retain];
+    r19 = r0;
+    [r0 scrollToEndOfDocument:0x0];
+    r0 = [r19 release];
+    return r0;
+
+

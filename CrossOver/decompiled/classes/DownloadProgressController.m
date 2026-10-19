@@ -414,3 +414,93 @@
     return;
 
 
+// === Block Invocations for DownloadProgressController ===
+
+// 0x10002e174
+// ___80-[DownloadProgressController URLSession:downloadTask:didFinishDownloadingToURL:]_block_invoke
+    r0 = arg0[0x4];
+    r0 = [r0 window];
+    r0 = [r0 retain];
+    r20 = r0;
+    [r0 orderOut:arg0[0x4]];
+    [r20 release];
+    r0 = arg0[0x4];
+    r0 = [r0 close];
+    return r0;
+
+
+// 0x10002e214
+// ___111-[DownloadProgressController URLSession:downloadTask:didWriteData:totalBytesWritten:totalBytesExpectedToWrite:]_block_invoke
+    r31 = r31 - 0x60;
+    var_40 = d9;
+    decomp_var_38 = d8;
+    var_30 = r24;
+    decomp_var_28 = r23;
+    var_20 = r22;
+    decomp_var_18 = r21;
+    var_10 = r20;
+    decomp_var_8 = r19;
+    saved_fp = r29;
+    decomp_var_m8 = r30;
+    r19 = arg0;
+    r21 = **_NSURLSessionTransferSizeUnknown;
+    r0 = arg0[0x4];
+    r22 = r0[0x5];
+    r0 = [r0 progressBar];
+    r0 = [r0 retain];
+    r20 = r0;
+    if (r22 == r21) {
+            [r0 setIndeterminate:0x1];
+            [r20 release];
+            r20 = [[r19[0x4] formattedSize:r19[0x6]] retain];
+            r0 = r19[0x4];
+            r0 = [r0 progressText];
+            r0 = [r0 retain];
+            r21 = r0;
+            [r0 setStringValue:r20];
+    }
+    else {
+            [r0 setIndeterminate:0x0];
+            [r20 release];
+            r0 = r19[0x4];
+            r0 = [r0 progressBar];
+            r0 = [r0 retain];
+            r20 = r0;
+            [r0 setDoubleValue:r2];
+            [r20 release];
+            r20 = [[r19[0x4] progressFormat] retain];
+            r21 = [[r19[0x4] formattedSize:r19[0x6]] retain];
+            r23 = [[r19[0x4] formattedSize:r19[0x5]] retain];
+            r22 = [[NSString stringWithFormat:r20] retain];
+            r0 = r19[0x4];
+            r0 = [r0 progressText];
+            r0 = [r0 retain];
+            r24 = r0;
+            [r0 setStringValue:r22];
+            [r24 release];
+            [r22 release];
+            [r23 release];
+    }
+    [r21 release];
+    [r20 release];
+    r0 = r19[0x4];
+    r0 = [r0 progressText];
+    r0 = [r0 retain];
+    r19 = r0;
+    [r0 setHidden:0x0];
+    r0 = [r19 release];
+    return r0;
+
+
+// 0x10002e468
+// ___67-[DownloadProgressController URLSession:task:didCompleteWithError:]_block_invoke
+    r20 = [[arg0[0x4] window] retain];
+    r0 = arg0[0x4];
+    r21 = arg0[0x5];
+    r22 = [[r0 window] retain];
+    [r20 presentError:r21 modalForWindow:r22 delegate:arg0[0x4] didPresentSelector:@selector(didPresentErrorWithRecovery:contextInfo:) contextInfo:0x0];
+    [r22 release];
+    r0 = [r20 release];
+    return r0;
+
+

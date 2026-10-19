@@ -1015,3 +1015,26 @@ loc_100035b04:
     return;
 
 
+// === Block Invocations for LoggingOptionsViewController ===
+
+// 0x100034fe8
+// ___46-[LoggingOptionsViewController selectLogFile:]_block_invoke
+    r0 = arg0;
+    if (r1 == 0x1) {
+            r19 = r0;
+            [r0[0x4] setLogFileNameFromUser:0x1];
+            r20 = [[r19[0x5] URL] retain];
+            [r19[0x4] setLogFileURL:r20];
+            [r20 release];
+            r0 = r19[0x4];
+            r0 = [r0 logFileURL];
+            r0 = [r0 retain];
+            r20 = r0;
+            r21 = [[r0 URLByDeletingLastPathComponent] retain];
+            [r19[0x4] setLogDirectoryURL:r21];
+            [r21 release];
+            [r20 release];
+    }
+    return;
+
+
