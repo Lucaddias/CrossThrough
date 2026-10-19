@@ -2814,3 +2814,449 @@
     return r0;
 
 
+// 0x10002433c
+// -[BottleViewController setDependencyButton:]
+    objc_storeWeak((int64_t *)&self->_dependencyButton, arg2);
+    return;
+
+
+// 0x100024350
+// -[BottleViewController graphicsOptionView]
+    r0 = objc_loadWeakRetained((int64_t *)&self->_graphicsOptionView);
+    r0 = [r0 autorelease];
+    return r0;
+
+
+// 0x100024370
+// -[BottleViewController setGraphicsOptionView:]
+    objc_storeWeak((int64_t *)&self->_graphicsOptionView, arg2);
+    return;
+
+
+// 0x100024384
+// -[BottleViewController graphicsLabel]
+    r0 = objc_loadWeakRetained((int64_t *)&self->_graphicsLabel);
+    r0 = [r0 autorelease];
+    return r0;
+
+
+// 0x1000243a4
+// -[BottleViewController setGraphicsLabel:]
+    objc_storeWeak((int64_t *)&self->_graphicsLabel, arg2);
+    return;
+
+
+// 0x1000243b8
+// -[BottleViewController graphicsPopUpButton]
+    r0 = objc_loadWeakRetained((int64_t *)&self->_graphicsPopUpButton);
+    r0 = [r0 autorelease];
+    return r0;
+
+
+// 0x1000243d8
+// -[BottleViewController setGraphicsPopUpButton:]
+    objc_storeWeak((int64_t *)&self->_graphicsPopUpButton, arg2);
+    return;
+
+
+// 0x1000243ec
+// -[BottleViewController autoGraphicsMenuItem]
+    r0 = objc_loadWeakRetained((int64_t *)&self->_autoGraphicsMenuItem);
+    r0 = [r0 autorelease];
+    return r0;
+
+
+// 0x10002440c
+// -[BottleViewController setAutoGraphicsMenuItem:]
+    objc_storeWeak((int64_t *)&self->_autoGraphicsMenuItem, arg2);
+    return;
+
+
+// 0x100024420
+// -[BottleViewController dxmtMenuItem]
+    r0 = objc_loadWeakRetained((int64_t *)&self->_dxmtMenuItem);
+    r0 = [r0 autorelease];
+    return r0;
+
+
+// 0x100024440
+// -[BottleViewController setDxmtMenuItem:]
+    objc_storeWeak((int64_t *)&self->_dxmtMenuItem, arg2);
+    return;
+
+
+// 0x100024454
+// -[BottleViewController dxvkMenuItem]
+    r0 = objc_loadWeakRetained((int64_t *)&self->_dxvkMenuItem);
+    r0 = [r0 autorelease];
+    return r0;
+
+
+// 0x100024474
+// -[BottleViewController setDxvkMenuItem:]
+    objc_storeWeak((int64_t *)&self->_dxvkMenuItem, arg2);
+    return;
+
+
+// 0x100024488
+// -[BottleViewController d3dMetalMenuItem]
+    r0 = objc_loadWeakRetained((int64_t *)&self->_d3dMetalMenuItem);
+    r0 = [r0 autorelease];
+    return r0;
+
+
+// 0x1000244a8
+// -[BottleViewController setD3dMetalMenuItem:]
+    objc_storeWeak((int64_t *)&self->_d3dMetalMenuItem, arg2);
+    return;
+
+
+// 0x1000244bc
+// -[BottleViewController wined3dMenuItem]
+    r0 = objc_loadWeakRetained((int64_t *)&self->_wined3dMenuItem);
+    r0 = [r0 autorelease];
+    return r0;
+
+
+// 0x1000244dc
+// -[BottleViewController setWined3dMenuItem:]
+    objc_storeWeak((int64_t *)&self->_wined3dMenuItem, arg2);
+    return;
+
+
+// 0x1000244f0
+// -[BottleViewController vulkanOptionView]
+    r0 = objc_loadWeakRetained((int64_t *)&self->_vulkanOptionView);
+    r0 = [r0 autorelease];
+    return r0;
+
+
+// 0x100024510
+// -[BottleViewController setVulkanOptionView:]
+    objc_storeWeak((int64_t *)&self->_vulkanOptionView, arg2);
+    return;
+
+
+// 0x100024524
+// -[BottleViewController vulkanLabel]
+    r0 = objc_loadWeakRetained((int64_t *)&self->_vulkanLabel);
+    r0 = [r0 autorelease];
+    return r0;
+
+
+// 0x100024544
+// -[BottleViewController setVulkanLabel:]
+    objc_storeWeak((int64_t *)&self->_vulkanLabel, arg2);
+    return;
+
+
+// 0x100024558
+// -[BottleViewController vulkanPopUpButton]
+    r0 = objc_loadWeakRetained((int64_t *)&self->_vulkanPopUpButton);
+    r0 = [r0 autorelease];
+    return r0;
+
+
+// 0x100024578
+// -[BottleViewController setVulkanPopUpButton:]
+    objc_storeWeak((int64_t *)&self->_vulkanPopUpButton, arg2);
+    return;
+
+
+// 0x10002458c
+// -[BottleViewController moltenvkMenuItem]
+    r0 = objc_loadWeakRetained((int64_t *)&self->_moltenvkMenuItem);
+    r0 = [r0 autorelease];
+    return r0;
+
+
+// 0x1000245ac
+// -[BottleViewController setMoltenvkMenuItem:]
+    objc_storeWeak((int64_t *)&self->_moltenvkMenuItem, arg2);
+    return;
+
+
+// 0x1000245c0
+// -[BottleViewController mtlvkMenuItem]
+    r0 = objc_loadWeakRetained((int64_t *)&self->_mtlvkMenuItem);
+    r0 = [r0 autorelease];
+    return r0;
+
+
+// 0x1000245e0
+// -[BottleViewController setMtlvkMenuItem:]
+    objc_storeWeak((int64_t *)&self->_mtlvkMenuItem, arg2);
+    return;
+
+
+// 0x1000245f4
+// -[BottleViewController msyncLabel]
+    r0 = objc_loadWeakRetained((int64_t *)&self->_msyncLabel);
+    r0 = [r0 autorelease];
+    return r0;
+
+
+// 0x100024614
+// -[BottleViewController setMsyncLabel:]
+    objc_storeWeak((int64_t *)&self->_msyncLabel, arg2);
+    return;
+
+
+// 0x100024628
+// -[BottleViewController msyncSwitch]
+    r0 = objc_loadWeakRetained((int64_t *)&self->_msyncSwitch);
+    r0 = [r0 autorelease];
+    return r0;
+
+
+// 0x100024648
+// -[BottleViewController setMsyncSwitch:]
+    objc_storeWeak((int64_t *)&self->_msyncSwitch, arg2);
+    return;
+
+
+// 0x10002465c
+// -[BottleViewController msyncView]
+    r0 = objc_loadWeakRetained((int64_t *)&self->_msyncView);
+    r0 = [r0 autorelease];
+    return r0;
+
+
+// 0x10002467c
+// -[BottleViewController setMsyncView:]
+    objc_storeWeak((int64_t *)&self->_msyncView, arg2);
+    return;
+
+
+// 0x100024690
+// -[BottleViewController dlssLabel]
+    r0 = objc_loadWeakRetained((int64_t *)&self->_dlssLabel);
+    r0 = [r0 autorelease];
+    return r0;
+
+
+// 0x1000246b0
+// -[BottleViewController setDlssLabel:]
+    objc_storeWeak((int64_t *)&self->_dlssLabel, arg2);
+    return;
+
+
+// 0x1000246c4
+// -[BottleViewController dlssSwitch]
+    r0 = objc_loadWeakRetained((int64_t *)&self->_dlssSwitch);
+    r0 = [r0 autorelease];
+    return r0;
+
+
+// 0x1000246e4
+// -[BottleViewController setDlssSwitch:]
+    objc_storeWeak((int64_t *)&self->_dlssSwitch, arg2);
+    return;
+
+
+// 0x1000246f8
+// -[BottleViewController dlssView]
+    r0 = objc_loadWeakRetained((int64_t *)&self->_dlssView);
+    r0 = [r0 autorelease];
+    return r0;
+
+
+// 0x100024718
+// -[BottleViewController setDlssView:]
+    objc_storeWeak((int64_t *)&self->_dlssView, arg2);
+    return;
+
+
+// 0x10002472c
+// -[BottleViewController highResolutionLabel]
+    r0 = objc_loadWeakRetained((int64_t *)&self->_highResolutionLabel);
+    r0 = [r0 autorelease];
+    return r0;
+
+
+// 0x10002474c
+// -[BottleViewController setHighResolutionLabel:]
+    objc_storeWeak((int64_t *)&self->_highResolutionLabel, arg2);
+    return;
+
+
+// 0x100024760
+// -[BottleViewController highResolutionSwitch]
+    r0 = objc_loadWeakRetained((int64_t *)&self->_highResolutionSwitch);
+    r0 = [r0 autorelease];
+    return r0;
+
+
+// 0x100024780
+// -[BottleViewController setHighResolutionSwitch:]
+    objc_storeWeak((int64_t *)&self->_highResolutionSwitch, arg2);
+    return;
+
+
+// 0x100024794
+// -[BottleViewController highResolutionView]
+    r0 = objc_loadWeakRetained((int64_t *)&self->_highResolutionView);
+    r0 = [r0 autorelease];
+    return r0;
+
+
+// 0x1000247b4
+// -[BottleViewController setHighResolutionView:]
+    objc_storeWeak((int64_t *)&self->_highResolutionView, arg2);
+    return;
+
+
+// 0x1000247c8
+// -[BottleViewController previewLabel]
+    r0 = objc_loadWeakRetained((int64_t *)&self->_previewLabel);
+    r0 = [r0 autorelease];
+    return r0;
+
+
+// 0x1000247e8
+// -[BottleViewController setPreviewLabel:]
+    objc_storeWeak((int64_t *)&self->_previewLabel, arg2);
+    return;
+
+
+// 0x1000247fc
+// -[BottleViewController previewSwitch]
+    r0 = objc_loadWeakRetained((int64_t *)&self->_previewSwitch);
+    r0 = [r0 autorelease];
+    return r0;
+
+
+// 0x10002481c
+// -[BottleViewController setPreviewSwitch:]
+    objc_storeWeak((int64_t *)&self->_previewSwitch, arg2);
+    return;
+
+
+// 0x100024830
+// -[BottleViewController previewView]
+    r0 = objc_loadWeakRetained((int64_t *)&self->_previewView);
+    r0 = [r0 autorelease];
+    return r0;
+
+
+// 0x100024850
+// -[BottleViewController setPreviewView:]
+    objc_storeWeak((int64_t *)&self->_previewView, arg2);
+    return;
+
+
+// 0x100024864
+// -[BottleViewController controlPanelsSection]
+    r0 = objc_loadWeakRetained((int64_t *)&self->_controlPanelsSection);
+    r0 = [r0 autorelease];
+    return r0;
+
+
+// 0x100024884
+// -[BottleViewController setControlPanelsSection:]
+    objc_storeWeak((int64_t *)&self->_controlPanelsSection, arg2);
+    return;
+
+
+// 0x100024898
+// -[BottleViewController controlPanelsLoadingView]
+    r0 = objc_loadWeakRetained((int64_t *)&self->_controlPanelsLoadingView);
+    r0 = [r0 autorelease];
+    return r0;
+
+
+// 0x1000248b8
+// -[BottleViewController setControlPanelsLoadingView:]
+    objc_storeWeak((int64_t *)&self->_controlPanelsLoadingView, arg2);
+    return;
+
+
+// 0x1000248cc
+// -[BottleViewController controlPanelsLoadingSpinner]
+    r0 = objc_loadWeakRetained((int64_t *)&self->_controlPanelsLoadingSpinner);
+    r0 = [r0 autorelease];
+    return r0;
+
+
+// 0x1000248ec
+// -[BottleViewController setControlPanelsLoadingSpinner:]
+    objc_storeWeak((int64_t *)&self->_controlPanelsLoadingSpinner, arg2);
+    return;
+
+
+// 0x100024900
+// -[BottleViewController installedSoftwareTableView]
+    r0 = objc_loadWeakRetained((int64_t *)&self->_installedSoftwareTableView);
+    r0 = [r0 autorelease];
+    return r0;
+
+
+// 0x100024920
+// -[BottleViewController setInstalledSoftwareTableView:]
+    objc_storeWeak((int64_t *)&self->_installedSoftwareTableView, arg2);
+    return;
+
+
+// 0x100024934
+// -[BottleViewController installedSoftware]
+    r0 = objc_loadWeakRetained((int64_t *)&self->_installedSoftware);
+    r0 = [r0 autorelease];
+    return r0;
+
+
+// 0x100024954
+// -[BottleViewController setInstalledSoftware:]
+    objc_storeWeak((int64_t *)&self->_installedSoftware, arg2);
+    return;
+
+
+// 0x100024968
+// -[BottleViewController .cxx_destruct]
+    objc_destroyWeak((int64_t *)&self->_installedSoftware);
+    objc_destroyWeak((int64_t *)&self->_installedSoftwareTableView);
+    objc_destroyWeak((int64_t *)&self->_controlPanelsLoadingSpinner);
+    objc_destroyWeak((int64_t *)&self->_controlPanelsLoadingView);
+    objc_destroyWeak((int64_t *)&self->_controlPanelsSection);
+    objc_destroyWeak((int64_t *)&self->_previewView);
+    objc_destroyWeak((int64_t *)&self->_previewSwitch);
+    objc_destroyWeak((int64_t *)&self->_previewLabel);
+    objc_destroyWeak((int64_t *)&self->_highResolutionView);
+    objc_destroyWeak((int64_t *)&self->_highResolutionSwitch);
+    objc_destroyWeak((int64_t *)&self->_highResolutionLabel);
+    objc_destroyWeak((int64_t *)&self->_dlssView);
+    objc_destroyWeak((int64_t *)&self->_dlssSwitch);
+    objc_destroyWeak((int64_t *)&self->_dlssLabel);
+    objc_destroyWeak((int64_t *)&self->_msyncView);
+    objc_destroyWeak((int64_t *)&self->_msyncSwitch);
+    objc_destroyWeak((int64_t *)&self->_msyncLabel);
+    objc_destroyWeak((int64_t *)&self->_mtlvkMenuItem);
+    objc_destroyWeak((int64_t *)&self->_moltenvkMenuItem);
+    objc_destroyWeak((int64_t *)&self->_vulkanPopUpButton);
+    objc_destroyWeak((int64_t *)&self->_vulkanLabel);
+    objc_destroyWeak((int64_t *)&self->_vulkanOptionView);
+    objc_destroyWeak((int64_t *)&self->_wined3dMenuItem);
+    objc_destroyWeak((int64_t *)&self->_d3dMetalMenuItem);
+    objc_destroyWeak((int64_t *)&self->_dxvkMenuItem);
+    objc_destroyWeak((int64_t *)&self->_dxmtMenuItem);
+    objc_destroyWeak((int64_t *)&self->_autoGraphicsMenuItem);
+    objc_destroyWeak((int64_t *)&self->_graphicsPopUpButton);
+    objc_destroyWeak((int64_t *)&self->_graphicsLabel);
+    objc_destroyWeak((int64_t *)&self->_graphicsOptionView);
+    objc_destroyWeak((int64_t *)&self->_dependencyButton);
+    objc_destroyWeak((int64_t *)&self->_deleteButton);
+    objc_destroyWeak((int64_t *)&self->_quitButton);
+    objc_destroyWeak((int64_t *)&self->_openCDriveButton);
+    objc_destroyWeak((int64_t *)&self->_installIntoBottleButton);
+    objc_destroyWeak((int64_t *)&self->_runCommandButton);
+    objc_destroyWeak((int64_t *)&self->_runWithOptionsButton);
+    objc_storeStrong((int64_t *)&self->_controlPanelLaunchers, 0x0);
+    objc_destroyWeak((int64_t *)&self->_leaveRatingButton);
+    objc_destroyWeak((int64_t *)&self->_noAppsFoundLabel);
+    objc_destroyWeak((int64_t *)&self->_iconCollectionView);
+    objc_storeStrong((int64_t *)&self->_iconCollectionViewController, 0x0);
+    objc_storeStrong((int64_t *)&self->_package, 0x0);
+    objc_storeStrong((int64_t *)&self->_observers, 0x0);
+    objc_storeStrong((int64_t *)&self->_bottle, 0x0);
+    return;
+
+
