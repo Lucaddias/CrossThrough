@@ -1,5 +1,6 @@
-# CrossOver
+# CrossThrough
 
+Engenharia reversa do CrossOver 26.3 para macOS (CodeWeavers). Os nomes que vêm do app, como classes, caminhos e binários, continuam `CrossOver`.
 
 ## Alvo
 
@@ -17,21 +18,21 @@
 | Etapa | Estado |
 |---|---|
 | Inventário do bundle (frameworks, libs) | ✅ |
-| Índice de procedures (10.627) | ✅ [`INDEX.md`](CrossOver/decompiled/INDEX.md) |
-| Mapa de classes ObjC (94 classes) | ✅ [`objc_methods.json`](CrossOver/decompiled/objc_methods.json) |
-| Descompilação de todos os métodos ObjC (2.108/2.108, 0 erros) | ✅ [`classes/`](CrossOver/decompiled/classes) |
-| Funções C, callbacks e blocos ObjC em `__TEXT,__text` (186/186, 100% de `__text`) | ✅ [`c_functions.c`](CrossOver/decompiled/c_functions.c) + [`classes/`](CrossOver/decompiled/classes) |
-| Comparação e mapeamento da slice x86_64 (2287/2288 funções pareadas, 6 com referências diferentes) | ✅ [`x86_64/`](CrossOver/decompiled/x86_64) |
-| Scripts Python/Perl em `SharedSupport/CrossOver` (36 entradas de `bin/`, 16 scripts e 66 módulos Perl, 50 módulos Python 3.13 desmontados) | ✅ [`sharedsupport/`](CrossOver/sharedsupport) |
-| Documentação da arquitetura (GUI ↔ backend: inicialização do Python, ponte PyObjC, processos, privilégios, helper apps) | ✅ [`ARCHITECTURE.md`](CrossOver/ARCHITECTURE.md) |
+| Índice de procedures (10.627) | ✅ [`INDEX.md`](CrossThrough/decompiled/INDEX.md) |
+| Mapa de classes ObjC (94 classes) | ✅ [`objc_methods.json`](CrossThrough/decompiled/objc_methods.json) |
+| Descompilação de todos os métodos ObjC (2.108/2.108, 0 erros) | ✅ [`classes/`](CrossThrough/decompiled/classes) |
+| Funções C, callbacks e blocos ObjC em `__TEXT,__text` (186/186, 100% de `__text`) | ✅ [`c_functions.c`](CrossThrough/decompiled/c_functions.c) + [`classes/`](CrossThrough/decompiled/classes) |
+| Comparação e mapeamento da slice x86_64 (2287/2288 funções pareadas, 6 com referências diferentes) | ✅ [`x86_64/`](CrossThrough/decompiled/x86_64) |
+| Scripts Python/Perl em `SharedSupport/CrossOver` (36 entradas de `bin/`, 16 scripts e 66 módulos Perl, 50 módulos Python 3.13 desmontados) | ✅ [`sharedsupport/`](CrossThrough/sharedsupport) |
+| Documentação da arquitetura (GUI ↔ backend: inicialização do Python, ponte PyObjC, processos, privilégios, helper apps) | ✅ [`ARCHITECTURE.md`](CrossThrough/ARCHITECTURE.md) |
 
 ## Arquitetura (resumo)
 
-Detalhes em [`ARCHITECTURE.md`](CrossOver/ARCHITECTURE.md).
+Detalhes em [`ARCHITECTURE.md`](CrossThrough/ARCHITECTURE.md).
 
 - **GUI nativa em Objective-C/Cocoa.** As classes principais são `MainWindowController`, `BottleViewController`, `PackageViewController` e `PackageInstaller`.
 - **`CXServerCrossOver`** (~13,9 mil linhas de pseudocódigo) é a maior classe. Gera os apps "helper" do macOS por bottle (`CrossOverHelper*`, `CFBundleDocumentTypes`, associações de extensão/URL como `steam`, `mailto`) e os menus a partir dos dados da bottle (`%WINEPREFIX%`, `--bottle %@`).
-- **Python 3.13 embutido** (`Contents/Frameworks/Python.framework`). A lógica de bottles e instalação fica em `SharedSupport/CrossOver/{bin,lib,share}`: a GUI usa classes Python via PyObjC (`cxobjc.Proxy`), que chamam as ferramentas Perl (`wine`, `cxbottle`, `cxmenu`, `cxassoc`, `cxsu`). Detalhes em [`sharedsupport/`](CrossOver/sharedsupport).
+- **Python 3.13 embutido** (`Contents/Frameworks/Python.framework`). A lógica de bottles e instalação fica em `SharedSupport/CrossOver/{bin,lib,share}`: a GUI usa classes Python via PyObjC (`cxobjc.Proxy`), que chamam as ferramentas Perl (`wine`, `cxbottle`, `cxmenu`, `cxassoc`, `cxsu`). Detalhes em [`sharedsupport/`](CrossThrough/sharedsupport).
 - **Wine só x86_64.** `wineloader`, `wineserver` e as dylibs de `lib64/` não têm slice arm64; no Apple Silicon o Wine roda sob Rosetta 2.
 - **Sparkle 2.4.1** cuida das atualizações (`CXUpdater`, `CXSparkleUserDriver`).
 - **CrossTie** (`CrossTieURLHandler`, `LoadingCrossTieSheetController`) é o formato de receitas de instalação.
@@ -39,7 +40,7 @@ Detalhes em [`ARCHITECTURE.md`](CrossOver/ARCHITECTURE.md).
 ## Estrutura
 
 ```
-CrossOver/
+CrossThrough/
 ├── ARCHITECTURE.md         # como a GUI, o Python, o Perl e o Wine se ligam
 ├── reproduce.sh            # regenera e confere x86_64/ e sharedsupport/
 ├── decompiled/
@@ -62,16 +63,16 @@ CrossOver/
 
 1. Conceda a permissão *Automation → Hopper Disassembler* ao app que roda o REA.
 2. `open_binary` no binário, depois `list_procedures`.
-3. Rode `batch_decompile` em lotes de endereços e passe cada saída para `python3 CrossOver/decompiled/.ingest.py <saida.json>`.
+3. Rode `batch_decompile` em lotes de endereços e passe cada saída para `python3 CrossThrough/decompiled/.ingest.py <saida.json>`.
 
 ### Todo o resto (um comando)
 
-[`CrossOver/reproduce.sh`](CrossOver/reproduce.sh) regenera as saídas de `decompiled/x86_64/` e de `sharedsupport/` a partir do `CrossOver.app` instalado e compara cada arquivo com o que está no repositório. Ele extrai as slices com `lipo`, roda `.slicediff.py`, `analyze_python.py`, `analyze_tools.py`, `make_index.py` e `bridge.py`. O CrossOver não é executado.
+[`CrossThrough/reproduce.sh`](CrossThrough/reproduce.sh) regenera as saídas de `decompiled/x86_64/` e de `sharedsupport/` a partir do `CrossOver.app` instalado e compara cada arquivo com o que está no repositório. Ele extrai as slices com `lipo`, roda `.slicediff.py`, `analyze_python.py`, `analyze_tools.py`, `make_index.py` e `bridge.py`. O CrossOver não é executado.
 
 Precisa de Python ≥ 3.13 (por padrão `python3.14`) e de um bundle de Evidence do REA com `inspect_with_objdump` `symbols` e `disassemble` das duas slices, exportado com `export_evidence_bundle`:
 
 ```bash
-CrossOver/reproduce.sh <rea-bundle.json> [dir-de-saida]
+CrossThrough/reproduce.sh <rea-bundle.json> [dir-de-saida]
 ```
 
 O script termina com `idênticos: N   diferentes: 0` quando tudo bate. Com o CrossOver 26.3 são 110 arquivos idênticos.

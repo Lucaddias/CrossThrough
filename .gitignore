@@ -1,5 +1,5 @@
 # Internal REA/ingest working state (regenerable, large)
-CrossOver/decompiled/.store.json
-CrossOver/decompiled/.batches.json
+CrossThrough/decompiled/.store.json
+CrossThrough/decompiled/.batches.json
 .DS_Store
 __pycache__/

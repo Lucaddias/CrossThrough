@@ -3,7 +3,7 @@
 # bundle de Evidence do REA (export_evidence_bundle), e compara com o que está no repo.
 # Nada do CrossOver é executado: só lipo, leitura de arquivos e os scripts deste repo.
 #
-# uso: CrossOver/reproduce.sh <rea-bundle.json> [dir-de-saida]
+# uso: CrossThrough/reproduce.sh <rea-bundle.json> [dir-de-saida]
 set -euo pipefail
 
 APP=${APP:-/Applications/CrossOver.app}
