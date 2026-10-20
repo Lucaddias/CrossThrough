@@ -4,6 +4,7 @@
 
 #import <Cocoa/Cocoa.h>
 #import <WebKit/WebKit.h>
+#import <CoreServices/CoreServices.h>
 #import "CrossThroughProtocols.h"
 #import "SparkleShim.h"
 #import "PythonShim.h"
@@ -14,10 +15,13 @@
 
 @interface PreferencesController : CXWindowController <NSOpenSavePanelDelegate, NSObject>
 {
-    id _installersCache;
-    id * _fsEventStream;
+    NSURL * _installersCache;
+    FSEventStreamRef _fsEventStream;
     NSTextField * _installerCacheSizeLabel;
-    id _lastUpdated;
+    NSString * _lastUpdated;
+    dispatch_queue_t _queue;
+    NSURL * _bottlesFolderURL;
+    NSURL * _programsFolderURL;
 }
 
 // Instance Methods
@@ -34,7 +38,7 @@
 - (void)browseForProgramsFolder:(id)arg1;
 - (BOOL)panel:(id)arg1 isValidFilename:(id)arg2;
 - (id)installerCacheSizeStringWhileCalculating;
-- (void)enumerateCachedInstallersWithBlock:(id)arg1;
+- (void)enumerateCachedInstallersWithBlock:(void (^)(NSURL *itemURL))arg1;
 - (void)calculateInstallerCacheSize;
 - (void)installersCacheEventStreamCallback;
 - (void)clearInstallerCache:(id)arg1;

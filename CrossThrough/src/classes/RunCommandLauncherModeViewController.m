@@ -6,43 +6,40 @@
 @implementation RunCommandLauncherModeViewController
 
 - (id)init {
-    self = [super init];
-    if (self) {
-        // Initialized
-    }
+    self = [super initWithNibName:@"RunCommandLauncherModeView" bundle:nil];
     return self;
 }
 
 - (void)loadView {
-    return;
+    [super loadView];
+    NSTextField *nameField = [self launcherNameTextField];
+    NSImageView *iconView = [self launcherIconImageView];
+    if (nameField && iconView && self.view) {
+        NSLayoutConstraint *constraint = [NSLayoutConstraint constraintWithItem:nameField
+                                                                      attribute:NSLayoutAttributeCenterY
+                                                                      relatedBy:NSLayoutRelationEqual
+                                                                         toItem:iconView
+                                                                      attribute:NSLayoutAttributeCenterY
+                                                                     multiplier:1.0
+                                                                       constant:0.0];
+        [self.view addConstraint:constraint];
+    }
 }
 
 - (id)launcherIconImageView {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_launcherIconImageView);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return self->_launcherIconImageView;
 }
 
 - (void)setLauncherIconImageView:(id)arg1 {
-    return;
+    self->_launcherIconImageView = arg1;
 }
 
 - (id)launcherNameTextField {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_launcherNameTextField);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return self->_launcherNameTextField;
 }
 
 - (void)setLauncherNameTextField:(id)arg1 {
-    return;
+    self->_launcherNameTextField = arg1;
 }
 
 @end

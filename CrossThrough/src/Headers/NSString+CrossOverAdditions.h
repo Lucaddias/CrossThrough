@@ -7,8 +7,13 @@
 #import "SparkleShim.h"
 #import "PythonShim.h"
 
-
 @interface NSString (CrossOverAdditions)
+
+- (NSString *)stringQuotedForBash;
+- (NSString *)stringQuotedForAppleScript;
+- (NSString *)stringInFileSystemRepresentationForm;
+- (NSArray *)componentsOfCommandLine;
+- (NSString *)lastUnixOrWindowsPathComponent;
 
 @end
 

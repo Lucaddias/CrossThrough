@@ -89,7 +89,10 @@ void _PFMoveToApplicationsFolderIfNecessary(void) {
 }
 
 void _InstallersCacheEventStreamCallback(ConstFSEventStreamRef streamRef, void *clientCallBackInfo, size_t numEvents, void *eventPaths, const FSEventStreamEventFlags eventFlags[], const FSEventStreamEventId eventIds[]) {
-    // Notify package installers
+    id controller = (id)clientCallBackInfo;
+    if ([controller respondsToSelector:@selector(installersCacheEventStreamCallback)]) {
+        [controller installersCacheEventStreamCallback];
+    }
     [[NSNotificationCenter defaultCenter] postNotificationName:@"InstallersCacheChanged" object:nil];
 }
 
