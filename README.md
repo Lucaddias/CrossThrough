@@ -23,9 +23,11 @@
 | Funções C, callbacks e blocos ObjC em `__TEXT,__text` (186/186, 100% de `__text`) | ✅ [`c_functions.c`](CrossOver/decompiled/c_functions.c) + [`classes/`](CrossOver/decompiled/classes) |
 | Comparação e mapeamento da slice x86_64 (2287/2288 funções pareadas, 6 com referências diferentes) | ✅ [`x86_64/`](CrossOver/decompiled/x86_64) |
 | Scripts Python/Perl em `SharedSupport/CrossOver` (36 entradas de `bin/`, 16 scripts e 66 módulos Perl, 50 módulos Python 3.13 desmontados) | ✅ [`sharedsupport/`](CrossOver/sharedsupport) |
-| Documentação da arquitetura (GUI ↔ backend) | ⏳ pendente |
+| Documentação da arquitetura (GUI ↔ backend: inicialização do Python, ponte PyObjC, processos, privilégios, helper apps) | ✅ [`ARCHITECTURE.md`](CrossOver/ARCHITECTURE.md) |
 
-## Arquitetura (observações iniciais)
+## Arquitetura (resumo)
+
+Detalhes em [`ARCHITECTURE.md`](CrossOver/ARCHITECTURE.md).
 
 - **GUI nativa em Objective-C/Cocoa.** As classes principais são `MainWindowController`, `BottleViewController`, `PackageViewController` e `PackageInstaller`.
 - **`CXServerCrossOver`** (~13,9 mil linhas de pseudocódigo) é a maior classe. Gera os apps "helper" do macOS por bottle (`CrossOverHelper*`, `CFBundleDocumentTypes`, associações de extensão/URL como `steam`, `mailto`) e os menus a partir dos dados da bottle (`%WINEPREFIX%`, `--bottle %@`).
@@ -38,6 +40,7 @@
 
 ```
 CrossOver/
+├── ARCHITECTURE.md         # como a GUI, o Python, o Perl e o Wine se ligam
 ├── decompiled/
 │   ├── INDEX.md            # todas as procedures por classe, com endereço
 │   ├── objc_methods.json   # classe -> [(endereço, seletor)]
@@ -48,7 +51,7 @@ CrossOver/
 └── sharedsupport/
     ├── README.md           # ferramentas Perl, biblioteca Python, Wine e como se ligam
     ├── TOOLS.md            # inventário de bin/ e lib/perl/ (tools.json)
-    ├── python/             # INDEX.md, outline/*.py, dis/*.dis, modules.json
+    ├── python/             # INDEX.md, BRIDGE.md, outline/*.py, dis/*.dis, modules.json
     └── .tools/             # leitor de .pyc 3.13 e geradores dos índices
 ```
 

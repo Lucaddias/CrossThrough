@@ -11,10 +11,12 @@ Esta análise é estática. Nenhum script, `.pyc` ou binário foi executado.
 | [`TOOLS.md`](TOOLS.md) | Tabela de `bin/` (tipo, linhas, módulos usados, opções, variáveis de ambiente, ferramentas chamadas) e de `lib/perl/` (pacotes, quem usa quem, subs, exports), mais hashes |
 | [`tools.json`](tools.json) | Os mesmos fatos em JSON, um registro por arquivo |
 | [`python/INDEX.md`](python/INDEX.md) | Os 50 módulos Python: docstring, classes, funções, imports e quem importa quem |
-| [`python/outline/`](python/outline) | Esboço reconstruído de cada módulo a partir do bytecode: imports, atribuições de módulo, classes, assinaturas, docstrings e nomes referenciados por cada função |
+| [`python/outline/`](python/outline) | Esboço reconstruído de cada módulo a partir do bytecode: imports, atribuições de módulo, classes, decoradores, assinaturas, docstrings e nomes referenciados por cada função |
+| [`python/BRIDGE.md`](python/BRIDGE.md) | Superfície Objective-C das classes Python (propriedades KVO e seletores), cruzada com `__objc_methname` e o pseudocódigo da GUI |
+| [`python/bridge.json`](python/bridge.json) | Os mesmos dados em JSON |
 | [`python/dis/`](python/dis) | Desmontagem completa do bytecode CPython 3.13 de cada módulo |
 | [`python/modules.json`](python/modules.json) | Fatos por módulo (SHA-256, flags do `.pyc`, `co_filename`, contagens) |
-| [`.tools/`](.tools) | Scripts que geram tudo acima (`pyc313.py`, `analyze_python.py`, `analyze_tools.py`, `make_index.py`) |
+| [`.tools/`](.tools) | Scripts que geram tudo acima (`pyc313.py`, `analyze_python.py`, `analyze_tools.py`, `make_index.py`, `bridge.py`) |
 
 ## Layout
 
@@ -109,9 +111,9 @@ Grupos por função:
 
 ### Ponte PyObjC (`cxobjc`)
 
-`cxobjc` define `CXMacObject` (subclasse de `Foundation.NSObject`) e `Proxy`, mais decoradores e descritores (`object_property`, `array_property`, `method`) que publicam atributos Python como propriedades KVO/KVC do Objective-C. O descritor `object_property` aceita `python_name`, `typestr` (por exemplo `cxobjc.BOOL`), `read_only`, `getter` e `depends_on`. Assim o Cocoa Bindings da GUI observa diretamente o estado Python.
+`cxobjc` define `CXMacObject` (subclasse de `Foundation.NSObject`) e `Proxy`, mais decoradores e descritores que publicam código Python no Objective-C: `method(Classe, 'sel_')` (função de módulo vira método de classe), `namedSelector(b'sel')` (método com nome ObjC explícito, 71 usos), `python_method` (esconde do ObjC, 103 usos), `delegate` (marca callbacks implementados no lado ObjC) e `object_property`/`array_property` (propriedades KVO/KVC). O descritor `object_property` aceita `python_name`, `typestr` (por exemplo `cxobjc.BOOL`), `read_only`, `getter` e `depends_on`. Assim o Cocoa Bindings da GUI observa diretamente o estado Python.
 
-As classes publicadas desse jeito (subclasses de `cxobjc.Proxy`) são `BottleWrapper`, `BottleCollection`, `BottleManagement`, `BottleQuery`, `InstallTask`, `AIEScheduler`, `C4Profiles`, `AppDetector`, `InstalledApplication`, `CDDetector`, `CXMenu`, `CXUtils`, `DemoUtils`, `RatingUtils`, `WebUtils`, `IconUtils` e `SystemInfo`.
+O mapa completo, com os usos na GUI, está em [`python/BRIDGE.md`](python/BRIDGE.md). As classes publicadas desse jeito (subclasses de `cxobjc.Proxy`, direta ou indiretamente) são `BottleWrapper`, `BottleCollection`, `BottleManagement`, `BottleQuery`, `InstallTask`, `AIEScheduler`, `Engine`, `C4Profiles`, `AppDetector`, `InstalledApplication`, `CDDetector`, `CXMenu`, `CXUtils`, `DemoUtils`, `RatingUtils`, `WebUtils`, `IconUtils` e `SystemInfo`.
 
 ### Fontes `.py` em `Contents/Resources`
 
@@ -138,14 +140,14 @@ As chamadas usam `cxutils.run`/`system` com o caminho `CX_ROOT/bin/<ferramenta>`
 ## Método
 
 1. **Inventário** (`analyze_tools.py`): percorre `bin/` e `lib/perl/` e classifica cada arquivo pelo cabeçalho (Mach-O, `#!` perl ou sh, `.pm`, symlink). Para Perl, extrai os pacotes (respeitando blocos `{ package X; … }`), `use`/`require`, subs, `@EXPORT`, `$ENV{…}`, as opções declaradas em `add_options` e os caminhos `{CX_ROOT}/bin/…` usados (ignorando os que só aparecem em testes `-x`/`-f`).
-2. **Bytecode Python** (`pyc313.py`): leitor próprio do formato marshal do CPython 3.13 e do cabeçalho `.pyc`. Ele não usa o `marshal` do Python local, porque o 3.14 tem outro formato de code object. A tabela de opcodes (150 entradas) é reconstruída a partir do `_opcode_metadata.pyc` **embarcado no próprio CrossOver**, então os nomes batem com o interpretador que roda os módulos. O desmontador trata caches inline, `EXTENDED_ARG`, tabela de exceções e tabela de linhas. O esboço vem de uma pilha simbólica sobre o bytecode de nível de módulo e de classe.
+2. **Bytecode Python** (`pyc313.py`): leitor próprio do formato marshal do CPython 3.13 e do cabeçalho `.pyc`. Ele não usa o `marshal` do Python local, porque o 3.14 tem outro formato de code object. A tabela de opcodes (150 entradas) é reconstruída a partir do `_opcode_metadata.pyc` **embarcado no próprio CrossOver**, então os nomes batem com o interpretador que roda os módulos. O desmontador trata caches inline, `EXTENDED_ARG`, tabela de exceções e tabela de linhas. O esboço vem de uma pilha simbólica sobre o bytecode de nível de módulo e de classe. Isso inclui os decoradores, que no 3.13 aparecem como `CALL 0` com a função no lugar de `self`.
 3. **Fontes `.py`**: lidas com `ast`, só para estrutura.
 4. **Binários**: `inspect_macho` do REA em `wineloader` e `wineserver` (Evidence acima). As arquiteturas de todos os Mach-O vêm do cabeçalho fat ou thin.
 
 Para regenerar (o `ast` precisa de Python ≥ 3.13; a leitura do `.pyc` independe da versão local):
 
 ```bash
-python3 -I .tools/analyze_python.py /Applications/CrossOver.app python && python3 -I .tools/analyze_tools.py /Applications/CrossOver.app . && python3 -I .tools/make_index.py .
+python3 -I .tools/analyze_python.py /Applications/CrossOver.app python && python3 -I .tools/analyze_tools.py /Applications/CrossOver.app . && python3 -I .tools/make_index.py . && python3 -I .tools/bridge.py /Applications/CrossOver.app . ../decompiled
 ```
 
 ## Limites

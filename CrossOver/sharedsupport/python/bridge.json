@@ -1,0 +1,2314 @@
+{
+ "classes": {
+  "AIEScheduler": {
+   "bases": [
+    "cxobjc.Proxy"
+   ],
+   "module": "cxaiebase",
+   "properties": [],
+   "selectors": [
+    {
+     "gui_files": [],
+     "how": "implicit",
+     "in_gui_methname": false,
+     "objc": "lock",
+     "python": "lock"
+    },
+    {
+     "gui_files": [],
+     "how": "implicit",
+     "in_gui_methname": false,
+     "objc": "unlock",
+     "python": "unlock"
+    },
+    {
+     "gui_files": [
+      "PackageInstaller"
+     ],
+     "how": "implicit",
+     "in_gui_methname": true,
+     "objc": "sortedRunnable",
+     "python": "sortedRunnable"
+    },
+    {
+     "gui_files": [],
+     "how": "implicit",
+     "in_gui_methname": false,
+     "objc": "runnable",
+     "python": "runnable"
+    },
+    {
+     "gui_files": [
+      "PackageInstaller"
+     ],
+     "how": "namedSelector",
+     "in_gui_methname": true,
+     "objc": "schedule:",
+     "python": "schedule"
+    },
+    {
+     "gui_files": [
+      "PackageInstaller"
+     ],
+     "how": "implicit",
+     "in_gui_methname": true,
+     "objc": "allDone",
+     "python": "allDone"
+    },
+    {
+     "gui_files": [
+      "PackageInstaller"
+     ],
+     "how": "namedSelector",
+     "in_gui_methname": true,
+     "objc": "sortedTasks",
+     "python": "get_sorted_tasks"
+    }
+   ]
+  },
+  "AppDetector": {
+   "bases": [
+    "cxobjc.Proxy"
+   ],
+   "module": "appdetector",
+   "properties": [],
+   "selectors": []
+  },
+  "BottleCollection": {
+   "bases": [
+    "cxobjc.Proxy"
+   ],
+   "module": "bottlecollection",
+   "properties": [
+    {
+     "depends_on": null,
+     "gui_files": [
+      "AskUpdateBottlesOp",
+      "CXServerCrossOver",
+      "MainWindowController",
+      "PackageInstaller",
+      "ShutdownController"
+     ],
+     "in_gui_methname": true,
+     "kind": "array",
+     "objc": "bottleList",
+     "python": "bottleList",
+     "read_only": false,
+     "type": "id"
+    },
+    {
+     "depends_on": "['bottleList']",
+     "gui_files": [],
+     "in_gui_methname": false,
+     "kind": "object",
+     "objc": "has32BitBottle",
+     "python": "has32BitBottle",
+     "read_only": true,
+     "type": "BOOL"
+    }
+   ],
+   "selectors": [
+    {
+     "gui_files": [
+      "BottleMenuHandler",
+      "BottleNode",
+      "BottleViewController",
+      "BuySupportNagController",
+      "CDTools",
+      "CXApplication",
+      "CXBundle",
+      "CXServer",
+      "CXServerCrossOver",
+      "CXTask",
+      "CXUpdater",
+      "CXWindowController",
+      "DebugChannelFormatter",
+      "DemoNagController",
+      "DemoRegisterController",
+      "DownloadProgressController",
+      "FilteredTreeNode",
+      "InstallConfiguration",
+      "InstallOptionsSheetController",
+      "InstallationOperation",
+      "LaunchFeedbackInfo",
+      "LauncherAppTreeNode",
+      "LauncherFolder",
+      "LauncherIconViewController",
+      "LauncherItem",
+      "LoggingOption",
+      "MainWindowController",
+      "NSFileManager",
+      "NSString",
+      "NewBottleController",
+      "NoBottleController",
+      "PackageInstaller",
+      "PackageTreeNode",
+      "PackageViewController",
+      "PreferencesController",
+      "PublishController",
+      "RegistrationController",
+      "RosettaInstallationController",
+      "RunCommandController",
+      "SelectBottleSheetController",
+      "SerialCodeRegisterController",
+      "SubmitRatingController",
+      "SummaryDetail",
+      "TaskStatus",
+      "helperServer",
+      "c_functions"
+     ],
+     "how": "implicit",
+     "in_gui_methname": true,
+     "objc": "init",
+     "python": "init"
+    },
+    {
+     "gui_files": [
+      "BottleMenuHandler",
+      "BottleNode",
+      "NewBottleController",
+      "NoBottleController",
+      "PackageInstaller",
+      "PublishController"
+     ],
+     "how": "namedSelector",
+     "in_gui_methname": true,
+     "objc": "refresh",
+     "python": "refresh"
+    },
+    {
+     "gui_files": [
+      "PreferencesController"
+     ],
+     "how": "namedSelector",
+     "in_gui_methname": true,
+     "objc": "reset",
+     "python": "reset"
+    },
+    {
+     "gui_files": [
+      "BottleMenuHandler"
+     ],
+     "how": "namedSelector",
+     "in_gui_methname": true,
+     "objc": "refreshDefaultBottle",
+     "python": "refreshDefaultBottle"
+    },
+    {
+     "gui_files": [
+      "CXServerCrossOver",
+      "InstallConfiguration",
+      "LauncherApp",
+      "NewBottleController",
+      "NoBottleController",
+      "PackageInstaller",
+      "SelectBottleSheetController",
+      "helperServer"
+     ],
+     "how": "namedSelector",
+     "in_gui_methname": true,
+     "objc": "bottleWithName:",
+     "python": "bottle_with_name"
+    },
+    {
+     "gui_files": [
+      "CXServerCrossOver"
+     ],
+     "how": "namedSelector",
+     "in_gui_methname": true,
+     "objc": "addChangeDelegate:",
+     "python": "addChangeDelegate"
+    },
+    {
+     "gui_files": [
+      "AskUpdateBottlesOp",
+      "BottleMenuHandler",
+      "BottleNode",
+      "CXServer",
+      "CXServerCrossOver",
+      "InstallConfiguration",
+      "LauncherApp",
+      "LauncherIconViewController",
+      "MainWindowController",
+      "NewBottleController",
+      "NoBottleController",
+      "PackageInstaller",
+      "PreferencesController",
+      "PublishController",
+      "RunCommandController",
+      "SelectBottleController",
+      "SelectBottleSheetController",
+      "ShutdownController",
+      "helperServer"
+     ],
+     "how": "cxobjc.method",
+     "in_gui_methname": true,
+     "objc": "sharedCollection",
+     "python": "sharedCollection"
+    }
+   ]
+  },
+  "BottleManagement": {
+   "bases": [
+    "cxobjc.Proxy"
+   ],
+   "module": "bottlemanagement",
+   "properties": [],
+   "selectors": [
+    {
+     "gui_files": [
+      "NewBottleController",
+      "NoBottleController"
+     ],
+     "how": "cxobjc.method",
+     "in_gui_methname": true,
+     "objc": "createBottle:fromTemplate:",
+     "python": "create_bottle"
+    },
+    {
+     "gui_files": [
+      "MainWindowController",
+      "NewBottleController"
+     ],
+     "how": "cxobjc.method",
+     "in_gui_methname": true,
+     "objc": "duplicateBottle:fromBottle:",
+     "python": "copy_bottle"
+    },
+    {
+     "gui_files": [
+      "NewBottleController"
+     ],
+     "how": "cxobjc.method",
+     "in_gui_methname": true,
+     "objc": "restoreBottle:fromArchive:",
+     "python": "restore_bottle"
+    },
+    {
+     "gui_files": [
+      "BottleMenuHandler"
+     ],
+     "how": "cxobjc.method",
+     "in_gui_methname": true,
+     "objc": "archiveBottle:toPath:",
+     "python": "archive_bottle"
+    },
+    {
+     "gui_files": [
+      "NewBottleController",
+      "NoBottleController",
+      "SelectBottleSheetController"
+     ],
+     "how": "cxobjc.method",
+     "in_gui_methname": true,
+     "objc": "displayNameForTemplate:",
+     "python": "get_template_name"
+    },
+    {
+     "gui_files": [
+      "InstallConfiguration",
+      "NewBottleController",
+      "NoBottleController",
+      "SelectBottleSheetController"
+     ],
+     "how": "cxobjc.method",
+     "in_gui_methname": true,
+     "objc": "templates",
+     "python": "template_list"
+    }
+   ]
+  },
+  "BottleQuery": {
+   "bases": [
+    "cxobjc.Proxy"
+   ],
+   "module": "bottlequery",
+   "properties": [],
+   "selectors": [
+    {
+     "gui_files": [
+      "NewBottleController",
+      "NoBottleController",
+      "PublishController"
+     ],
+     "how": "cxobjc.method",
+     "in_gui_methname": true,
+     "objc": "uniqueBottleName:",
+     "python": "unique_bottle_name"
+    },
+    {
+     "gui_files": [
+      "NewBottleController",
+      "PublishController"
+     ],
+     "how": "cxobjc.method",
+     "in_gui_methname": true,
+     "objc": "isValidNewBottleName:",
+     "python": "is_valid_new_bottle_name"
+    }
+   ]
+  },
+  "BottleWrapper": {
+   "bases": [
+    "cxobjc.Proxy"
+   ],
+   "module": "bottlewrapper",
+   "properties": [
+    {
+     "depends_on": null,
+     "gui_files": [
+      "AddDependenciesViewController",
+      "BottleMenuHandler",
+      "BottleNode",
+      "BottleViewController",
+      "CXServer",
+      "CXServerCrossOver",
+      "CXTask",
+      "ControlPanelLauncherTreeNode",
+      "InstallConfiguration",
+      "InstallDependency",
+      "InstallOptionsSheetController",
+      "LauncherAppTreeNode",
+      "LauncherControlPanel",
+      "LauncherIcon",
+      "LauncherItem",
+      "LauncherTreeNode",
+      "LoggingOptionsViewController",
+      "MainWindowController",
+      "NewBottleController",
+      "NoBottleController",
+      "PackageInstaller",
+      "PackageTreeNode",
+      "PackageViewController",
+      "RunCommandController",
+      "SubmitRatingController",
+      "UpdateController",
+      "helperServer"
+     ],
+     "in_gui_methname": true,
+     "kind": "object",
+     "objc": "name",
+     "python": "name",
+     "read_only": false,
+     "type": "id"
+    },
+    {
+     "depends_on": null,
+     "gui_files": [
+      "BottleMenuHandler",
+      "BottleViewController",
+      "LauncherTreeNode",
+      "PackageInstaller",
+      "PackageTreeNode",
+      "SubmitRatingController"
+     ],
+     "in_gui_methname": true,
+     "kind": "object",
+     "objc": "appid",
+     "python": "appid",
+     "read_only": false,
+     "type": "id"
+    },
+    {
+     "depends_on": null,
+     "gui_files": [
+      "CXServer",
+      "CXServerCrossOver"
+     ],
+     "in_gui_methname": true,
+     "kind": "object",
+     "objc": "winePrefix",
+     "python": "wine_prefix",
+     "read_only": false,
+     "type": "id"
+    },
+    {
+     "depends_on": null,
+     "gui_files": [
+      "BottleMenuHandler",
+      "RunCommandController"
+     ],
+     "in_gui_methname": true,
+     "kind": "object",
+     "objc": "systemDrive",
+     "python": "system_drive",
+     "read_only": false,
+     "type": "id"
+    },
+    {
+     "depends_on": null,
+     "gui_files": [
+      "BottleNode"
+     ],
+     "in_gui_methname": true,
+     "kind": "object",
+     "objc": "changeableName",
+     "python": "changeablename",
+     "read_only": false,
+     "type": "id"
+    },
+    {
+     "depends_on": null,
+     "gui_files": [
+      "BottleViewController"
+     ],
+     "in_gui_methname": true,
+     "kind": "object",
+     "objc": "currentDescription",
+     "python": "current_description",
+     "read_only": false,
+     "type": "id"
+    },
+    {
+     "depends_on": null,
+     "gui_files": [],
+     "in_gui_methname": false,
+     "kind": "object",
+     "objc": "lastQuitFailed",
+     "python": "last_quit_failed",
+     "read_only": false,
+     "type": "BOOL"
+    },
+    {
+     "depends_on": null,
+     "gui_files": [
+      "RunCommandController",
+      "SelectBottleController"
+     ],
+     "in_gui_methname": false,
+     "kind": "object",
+     "objc": "isDefault",
+     "python": "is_default",
+     "read_only": false,
+     "type": "BOOL"
+    },
+    {
+     "depends_on": null,
+     "gui_files": [],
+     "in_gui_methname": false,
+     "kind": "object",
+     "objc": "isManaged",
+     "python": "is_managed",
+     "read_only": false,
+     "type": "BOOL"
+    },
+    {
+     "depends_on": null,
+     "gui_files": [],
+     "in_gui_methname": false,
+     "kind": "object",
+     "objc": "isUpToDate",
+     "python": "up_to_date",
+     "read_only": false,
+     "type": "BOOL"
+    },
+    {
+     "depends_on": null,
+     "gui_files": [],
+     "in_gui_methname": false,
+     "kind": "object",
+     "objc": "isD3DMetalAvailable",
+     "python": "is_d3dmetal_available",
+     "read_only": false,
+     "type": "BOOL"
+    },
+    {
+     "depends_on": null,
+     "gui_files": [],
+     "in_gui_methname": false,
+     "kind": "object",
+     "objc": "isDXMTAvailable",
+     "python": "is_dxmt_available",
+     "read_only": false,
+     "type": "BOOL"
+    },
+    {
+     "depends_on": null,
+     "gui_files": [],
+     "in_gui_methname": false,
+     "kind": "object",
+     "objc": "isMoltenVKAvailable",
+     "python": "is_moltenvk_available",
+     "read_only": false,
+     "type": "BOOL"
+    },
+    {
+     "depends_on": null,
+     "gui_files": [],
+     "in_gui_methname": false,
+     "kind": "object",
+     "objc": "isMTLVKAvailable",
+     "python": "is_mtlvk_available",
+     "read_only": false,
+     "type": "BOOL"
+    },
+    {
+     "depends_on": null,
+     "gui_files": [
+      "BottleViewController"
+     ],
+     "in_gui_methname": true,
+     "kind": "array",
+     "objc": "controlPanelTable",
+     "python": "control_panel_table",
+     "read_only": false,
+     "type": "id"
+    },
+    {
+     "depends_on": null,
+     "gui_files": [
+      "BottleViewController"
+     ],
+     "in_gui_methname": false,
+     "kind": "object",
+     "objc": "isControlPanelReady",
+     "python": "control_panel_ready",
+     "read_only": false,
+     "type": "BOOL"
+    },
+    {
+     "depends_on": null,
+     "gui_files": [],
+     "in_gui_methname": false,
+     "kind": "object",
+     "objc": "isHighResolutionEnabledReady",
+     "python": "is_high_resolution_enabled_ready",
+     "read_only": false,
+     "type": "BOOL"
+    },
+    {
+     "depends_on": null,
+     "gui_files": [
+      "SelectBottleSheetController"
+     ],
+     "in_gui_methname": true,
+     "kind": "dict",
+     "objc": "installedPackages",
+     "python": "installed_packages",
+     "read_only": false,
+     "type": "id"
+    },
+    {
+     "depends_on": null,
+     "gui_files": [
+      "PackageInstaller"
+     ],
+     "in_gui_methname": false,
+     "kind": "object",
+     "objc": "isInstalledPackagesReady",
+     "python": "installed_packages_ready",
+     "read_only": false,
+     "type": "BOOL"
+    },
+    {
+     "depends_on": null,
+     "gui_files": [
+      "CXServerCrossOver"
+     ],
+     "in_gui_methname": false,
+     "kind": "object",
+     "objc": "menuChangedTime",
+     "python": "menuChangedTime",
+     "read_only": false,
+     "type": "id"
+    },
+    {
+     "depends_on": "['graphics_backend_state']",
+     "gui_files": [],
+     "in_gui_methname": false,
+     "kind": "object",
+     "objc": "isD3DMetalEnabled",
+     "python": "isD3DMetalEnabled",
+     "read_only": true,
+     "type": "BOOL"
+    },
+    {
+     "depends_on": "['graphics_backend_state']",
+     "gui_files": [],
+     "in_gui_methname": false,
+     "kind": "object",
+     "objc": "isDXMTEnabled",
+     "python": "isDXMTEnabled",
+     "read_only": true,
+     "type": "BOOL"
+    },
+    {
+     "depends_on": "['graphics_backend_state']",
+     "gui_files": [],
+     "in_gui_methname": false,
+     "kind": "object",
+     "objc": "isDXVKEnabled",
+     "python": "isDXVKEnabled",
+     "read_only": true,
+     "type": "BOOL"
+    },
+    {
+     "depends_on": "['graphics_backend_state']",
+     "gui_files": [],
+     "in_gui_methname": false,
+     "kind": "object",
+     "objc": "isWineD3DEnabled",
+     "python": "isWineD3DEnabled",
+     "read_only": true,
+     "type": "BOOL"
+    },
+    {
+     "depends_on": "['vulkan_backend_state']",
+     "gui_files": [],
+     "in_gui_methname": false,
+     "kind": "object",
+     "objc": "isMoltenVKEnabled",
+     "python": "isMoltenVKEnabled",
+     "read_only": true,
+     "type": "BOOL"
+    },
+    {
+     "depends_on": "['vulkan_backend_state']",
+     "gui_files": [],
+     "in_gui_methname": false,
+     "kind": "object",
+     "objc": "isMTLVKEnabled",
+     "python": "isMTLVKEnabled",
+     "read_only": true,
+     "type": "BOOL"
+    },
+    {
+     "depends_on": "['is_dlss_enabled_state']",
+     "gui_files": [],
+     "in_gui_methname": false,
+     "kind": "object",
+     "objc": "isDLSSEnabled",
+     "python": "isDLSSEnabled",
+     "read_only": true,
+     "type": "BOOL"
+    },
+    {
+     "depends_on": "['is_dlss_enabled_state']",
+     "gui_files": [],
+     "in_gui_methname": false,
+     "kind": "object",
+     "objc": "isDLSSAvailable",
+     "python": "isDLSSAvailable",
+     "read_only": true,
+     "type": "BOOL"
+    },
+    {
+     "depends_on": "['is_high_resolution_enabled_state']",
+     "gui_files": [],
+     "in_gui_methname": false,
+     "kind": "object",
+     "objc": "isHighResolutionEnabled",
+     "python": "isHighResolutionEnabled",
+     "read_only": true,
+     "type": "BOOL"
+    },
+    {
+     "depends_on": "['is_msync_enabled_state']",
+     "gui_files": [],
+     "in_gui_methname": false,
+     "kind": "object",
+     "objc": "isMSyncEnabled",
+     "python": "isMSyncEnabled",
+     "read_only": true,
+     "type": "BOOL"
+    },
+    {
+     "depends_on": "['is_preview_enabled_state']",
+     "gui_files": [],
+     "in_gui_methname": false,
+     "kind": "object",
+     "objc": "isPreviewEnabled",
+     "python": "isPreviewEnabled",
+     "read_only": true,
+     "type": "BOOL"
+    },
+    {
+     "depends_on": "['config']",
+     "gui_files": [],
+     "in_gui_methname": false,
+     "kind": "object",
+     "objc": "shouldNagForRatings",
+     "python": "shouldNagForRatings",
+     "read_only": true,
+     "type": "BOOL"
+    },
+    {
+     "depends_on": "['up_to_date', 'is_managed', 'is_busy']",
+     "gui_files": [
+      "BottleViewController",
+      "IconCollectionViewController"
+     ],
+     "in_gui_methname": true,
+     "kind": "object",
+     "objc": "canRunCommands",
+     "python": "canRunCommands",
+     "read_only": true,
+     "type": "BOOL"
+    },
+    {
+     "depends_on": "['up_to_date', 'is_managed', 'is_busy']",
+     "gui_files": [],
+     "in_gui_methname": false,
+     "kind": "object",
+     "objc": "canEdit",
+     "python": "canEdit",
+     "read_only": true,
+     "type": "BOOL"
+    },
+    {
+     "depends_on": "['status']",
+     "gui_files": [],
+     "in_gui_methname": false,
+     "kind": "object",
+     "objc": "isUsable",
+     "python": "isUsable",
+     "read_only": true,
+     "type": "BOOL"
+    },
+    {
+     "depends_on": "['is_managed', 'is_usable']",
+     "gui_files": [
+      "PackageInstaller"
+     ],
+     "in_gui_methname": false,
+     "kind": "object",
+     "objc": "canInstall",
+     "python": "canInstall",
+     "read_only": true,
+     "type": "BOOL"
+    },
+    {
+     "depends_on": "['status', 'up_to_date']",
+     "gui_files": [
+      "CXServer",
+      "PackageViewController",
+      "c_functions"
+     ],
+     "in_gui_methname": true,
+     "kind": "object",
+     "objc": "isActive",
+     "python": "isActive",
+     "read_only": true,
+     "type": "BOOL"
+    },
+    {
+     "depends_on": "['status', 'last_quit_failed']",
+     "gui_files": [
+      "BottleViewController"
+     ],
+     "in_gui_methname": false,
+     "kind": "object",
+     "objc": "canForceQuit",
+     "python": "canForceQuit",
+     "read_only": true,
+     "type": "BOOL"
+    },
+    {
+     "depends_on": "['arch']",
+     "gui_files": [],
+     "in_gui_methname": false,
+     "kind": "object",
+     "objc": "is32Bit",
+     "python": "is32Bit",
+     "read_only": true,
+     "type": "BOOL"
+    },
+    {
+     "depends_on": "['status']",
+     "gui_files": [
+      "MainWindowController"
+     ],
+     "in_gui_methname": false,
+     "kind": "object",
+     "objc": "isBusy",
+     "python": "isBusy",
+     "read_only": true,
+     "type": "BOOL"
+    },
+    {
+     "depends_on": "['status']",
+     "gui_files": [],
+     "in_gui_methname": false,
+     "kind": "object",
+     "objc": "isDisabled",
+     "python": "isDisabled",
+     "read_only": true,
+     "type": "BOOL"
+    },
+    {
+     "depends_on": null,
+     "gui_files": [],
+     "in_gui_methname": false,
+     "kind": "object",
+     "objc": "isDeleted",
+     "python": "isDeleted",
+     "read_only": true,
+     "type": "BOOL"
+    },
+    {
+     "depends_on": "['status']",
+     "gui_files": [],
+     "in_gui_methname": false,
+     "kind": "object",
+     "objc": "isRenaming",
+     "python": "isRenaming",
+     "read_only": true,
+     "type": "BOOL"
+    },
+    {
+     "depends_on": "['status', 'is_managed']",
+     "gui_files": [],
+     "in_gui_methname": false,
+     "kind": "object",
+     "objc": "canRename",
+     "python": "canRename",
+     "read_only": true,
+     "type": "BOOL"
+    },
+    {
+     "depends_on": "['up_to_date', 'is_managed']",
+     "gui_files": [],
+     "in_gui_methname": false,
+     "kind": "object",
+     "objc": "needsUpgrade",
+     "python": "needsUpgrade",
+     "read_only": true,
+     "type": "BOOL"
+    },
+    {
+     "depends_on": "['name', 'is_default']",
+     "gui_files": [
+      "InstallOptionsSheetController",
+      "RunCommandController",
+      "SelectBottleController",
+      "c_functions"
+     ],
+     "in_gui_methname": true,
+     "kind": "object",
+     "objc": "displayName",
+     "python": "displayName",
+     "read_only": true,
+     "type": "id"
+    },
+    {
+     "depends_on": "['windows_version', 'arch']",
+     "gui_files": [],
+     "in_gui_methname": false,
+     "kind": "object",
+     "objc": "windowsVersionDisplayName",
+     "python": "windowsVersionDisplayName",
+     "read_only": true,
+     "type": "id"
+    }
+   ],
+   "selectors": [
+    {
+     "gui_files": [
+      "CXServerCrossOver",
+      "LauncherApp",
+      "LauncherControlPanel",
+      "LauncherDiskFolder",
+      "LauncherFolder",
+      "LauncherIcon",
+      "LauncherItem",
+      "LoggingOption"
+     ],
+     "how": "implicit",
+     "in_gui_methname": true,
+     "objc": "initWithName:",
+     "python": "initWithName_"
+    },
+    {
+     "gui_files": [],
+     "how": "namedSelector",
+     "in_gui_methname": false,
+     "objc": "addMenuObservers",
+     "python": "add_menu_observers"
+    },
+    {
+     "gui_files": [],
+     "how": "namedSelector",
+     "in_gui_methname": false,
+     "objc": "removeMenuObservers",
+     "python": "remove_menu_observers"
+    },
+    {
+     "gui_files": [],
+     "how": "implicit",
+     "in_gui_methname": false,
+     "objc": "unset:config:value",
+     "python": "unset_config_value"
+    },
+    {
+     "gui_files": [
+      "ShutdownController"
+     ],
+     "how": "implicit",
+     "in_gui_methname": true,
+     "objc": "suspend",
+     "python": "suspend"
+    },
+    {
+     "gui_files": [
+      "CXServerCrossOver",
+      "DownloadProgressController",
+      "RegistrationController"
+     ],
+     "how": "implicit",
+     "in_gui_methname": true,
+     "objc": "resume",
+     "python": "resume"
+    },
+    {
+     "gui_files": [],
+     "how": "namedSelector",
+     "in_gui_methname": false,
+     "objc": "removeObservers",
+     "python": "remove_observers"
+    },
+    {
+     "gui_files": [],
+     "how": "namedSelector",
+     "in_gui_methname": false,
+     "objc": "loadBasicInfo",
+     "python": "load_basic_info"
+    },
+    {
+     "gui_files": [
+      "PackageInstaller"
+     ],
+     "how": "namedSelector",
+     "in_gui_methname": true,
+     "objc": "reloadInfo",
+     "python": "reload_info"
+    },
+    {
+     "gui_files": [],
+     "how": "namedSelector",
+     "in_gui_methname": true,
+     "objc": "refreshUpToDate",
+     "python": "refresh_up_to_date"
+    },
+    {
+     "gui_files": [
+      "BottleMenuHandler"
+     ],
+     "how": "namedSelector",
+     "in_gui_methname": true,
+     "objc": "setIsDefault:completionHandler:",
+     "python": "set_is_default"
+    },
+    {
+     "gui_files": [
+      "BottleViewController",
+      "MainWindowController"
+     ],
+     "how": "namedSelector",
+     "in_gui_methname": true,
+     "objc": "setGraphicsBackendAuto",
+     "python": "set_graphics_backend_auto"
+    },
+    {
+     "gui_files": [
+      "BottleViewController",
+      "MainWindowController"
+     ],
+     "how": "namedSelector",
+     "in_gui_methname": true,
+     "objc": "setGraphicsBackendD3DMetal",
+     "python": "set_graphics_backend_d3dmetal"
+    },
+    {
+     "gui_files": [
+      "BottleViewController",
+      "MainWindowController"
+     ],
+     "how": "namedSelector",
+     "in_gui_methname": true,
+     "objc": "setGraphicsBackendDXMT",
+     "python": "set_graphics_backend_dxmt"
+    },
+    {
+     "gui_files": [
+      "BottleViewController",
+      "MainWindowController"
+     ],
+     "how": "namedSelector",
+     "in_gui_methname": true,
+     "objc": "setGraphicsBackendDXVK",
+     "python": "set_graphics_backend_dxvk"
+    },
+    {
+     "gui_files": [
+      "BottleViewController",
+      "MainWindowController"
+     ],
+     "how": "namedSelector",
+     "in_gui_methname": true,
+     "objc": "setGraphicsBackendWine",
+     "python": "set_graphics_backend_wine"
+    },
+    {
+     "gui_files": [
+      "BottleViewController",
+      "MainWindowController"
+     ],
+     "how": "namedSelector",
+     "in_gui_methname": true,
+     "objc": "setVulkanBackendMoltenVK",
+     "python": "set_vulkan_backend_moltenvk"
+    },
+    {
+     "gui_files": [
+      "BottleViewController",
+      "MainWindowController"
+     ],
+     "how": "namedSelector",
+     "in_gui_methname": true,
+     "objc": "setVulkanBackendMTLVK",
+     "python": "set_vulkan_backend_mtlvk"
+    },
+    {
+     "gui_files": [
+      "BottleViewController",
+      "MainWindowController"
+     ],
+     "how": "namedSelector",
+     "in_gui_methname": true,
+     "objc": "enableDLSS",
+     "python": "enable_dlss"
+    },
+    {
+     "gui_files": [
+      "BottleViewController",
+      "MainWindowController"
+     ],
+     "how": "namedSelector",
+     "in_gui_methname": true,
+     "objc": "disableDLSS",
+     "python": "disable_dlss"
+    },
+    {
+     "gui_files": [
+      "MainWindowController"
+     ],
+     "how": "namedSelector",
+     "in_gui_methname": true,
+     "objc": "loadHighResolutionInfo",
+     "python": "load_high_resolution_info"
+    },
+    {
+     "gui_files": [
+      "BottleMenuHandler"
+     ],
+     "how": "implicit",
+     "in_gui_methname": true,
+     "objc": "enableHighResolution",
+     "python": "enableHighResolution"
+    },
+    {
+     "gui_files": [
+      "BottleMenuHandler"
+     ],
+     "how": "namedSelector",
+     "in_gui_methname": true,
+     "objc": "disableHighResolution",
+     "python": "disable_high_resolution"
+    },
+    {
+     "gui_files": [
+      "BottleMenuHandler"
+     ],
+     "how": "namedSelector",
+     "in_gui_methname": true,
+     "objc": "enableMSync",
+     "python": "enable_msync"
+    },
+    {
+     "gui_files": [
+      "BottleMenuHandler"
+     ],
+     "how": "namedSelector",
+     "in_gui_methname": true,
+     "objc": "disableMSync",
+     "python": "disable_msync"
+    },
+    {
+     "gui_files": [
+      "BottleMenuHandler"
+     ],
+     "how": "namedSelector",
+     "in_gui_methname": true,
+     "objc": "enablePreview",
+     "python": "enable_preview"
+    },
+    {
+     "gui_files": [
+      "BottleMenuHandler"
+     ],
+     "how": "namedSelector",
+     "in_gui_methname": true,
+     "objc": "disablePreview",
+     "python": "disable_preview"
+    },
+    {
+     "gui_files": [
+      "SubmitRatingController"
+     ],
+     "how": "namedSelector",
+     "in_gui_methname": true,
+     "objc": "disableRatingNag",
+     "python": "disable_rating_nag"
+    },
+    {
+     "gui_files": [
+      "BottleViewController"
+     ],
+     "how": "namedSelector",
+     "in_gui_methname": true,
+     "objc": "loadControlPanelInfo",
+     "python": "load_control_panel_info"
+    },
+    {
+     "gui_files": [
+      "LauncherControlPanel"
+     ],
+     "how": "namedSelector",
+     "in_gui_methname": true,
+     "objc": "launchControlPanelApplet:",
+     "python": "launch_control_panel_applet"
+    },
+    {
+     "gui_files": [
+      "BottleViewController",
+      "PackageInstaller"
+     ],
+     "how": "namedSelector",
+     "in_gui_methname": true,
+     "objc": "loadApplicationInfo",
+     "python": "load_application_info"
+    },
+    {
+     "gui_files": [
+      "CXServerCrossOver"
+     ],
+     "how": "namedSelector",
+     "in_gui_methname": true,
+     "objc": "fileIsInBottle:",
+     "python": "file_is_in_bottle"
+    },
+    {
+     "gui_files": [
+      "BottleViewController"
+     ],
+     "how": "namedSelector",
+     "in_gui_methname": true,
+     "objc": "writeDescription",
+     "python": "write_description"
+    },
+    {
+     "gui_files": [
+      "BottleMenuHandler"
+     ],
+     "how": "namedSelector",
+     "in_gui_methname": true,
+     "objc": "delete:",
+     "python": "delete"
+    },
+    {
+     "gui_files": [
+      "BottleNode"
+     ],
+     "how": "namedSelector",
+     "in_gui_methname": true,
+     "objc": "rename:completionHandler:",
+     "python": "rename"
+    },
+    {
+     "gui_files": [
+      "CXServerCrossOver"
+     ],
+     "how": "namedSelector",
+     "in_gui_methname": true,
+     "objc": "addChangeDelegate:",
+     "python": "add_change_delegate"
+    },
+    {
+     "gui_files": [],
+     "how": "namedSelector",
+     "in_gui_methname": false,
+     "objc": "removeChangeDelegate:",
+     "python": "remove_change_delegate"
+    },
+    {
+     "gui_files": [
+      "BottleMenuHandler",
+      "CXServerCrossOver",
+      "PackageInstaller"
+     ],
+     "how": "namedSelector",
+     "in_gui_methname": true,
+     "objc": "addStatusOverride:",
+     "python": "add_status_override"
+    },
+    {
+     "gui_files": [
+      "PackageInstaller"
+     ],
+     "how": "namedSelector",
+     "in_gui_methname": true,
+     "objc": "removeAllStatusOverrides:",
+     "python": "remove_all_status_overrides"
+    },
+    {
+     "gui_files": [
+      "BottleMenuHandler",
+      "CXServerCrossOver"
+     ],
+     "how": "namedSelector",
+     "in_gui_methname": true,
+     "objc": "removeStatusOverride:",
+     "python": "remove_status_override"
+    },
+    {
+     "gui_files": [
+      "BottleMenuHandler"
+     ],
+     "how": "namedSelector",
+     "in_gui_methname": true,
+     "objc": "quit:",
+     "python": "quit"
+    },
+    {
+     "gui_files": [
+      "BottleMenuHandler"
+     ],
+     "how": "namedSelector",
+     "in_gui_methname": true,
+     "objc": "forceQuit:",
+     "python": "force_quit"
+    },
+    {
+     "gui_files": [
+      "BottleMenuHandler"
+     ],
+     "how": "namedSelector",
+     "in_gui_methname": true,
+     "objc": "getMissingDependenciesProfile",
+     "python": "get_missing_dependencies_profile"
+    },
+    {
+     "gui_files": [
+      "InstallConfiguration",
+      "NewBottleController",
+      "PackageInstaller",
+      "PublishController"
+     ],
+     "how": "implicit",
+     "in_gui_methname": true,
+     "objc": "bottleName",
+     "python": "bottleName"
+    }
+   ]
+  },
+  "C4Profiles": {
+   "bases": [
+    "cxobjc.Proxy"
+   ],
+   "module": "c4profilesmanager",
+   "properties": [],
+   "selectors": [
+    {
+     "gui_files": [
+      "BottleViewController",
+      "CDTools",
+      "PackageViewController",
+      "SubmitRatingController"
+     ],
+     "how": "cxobjc.method",
+     "in_gui_methname": true,
+     "objc": "profilesSet",
+     "python": "profilesSet"
+    },
+    {
+     "gui_files": [
+      "PackageViewController"
+     ],
+     "how": "cxobjc.method",
+     "in_gui_methname": true,
+     "objc": "dropinC4PFile:withSig:",
+     "python": "dropin_C4PFile"
+    },
+    {
+     "gui_files": [
+      "PackageViewController"
+     ],
+     "how": "cxobjc.method",
+     "in_gui_methname": true,
+     "objc": "tasteC4PFile:",
+     "python": "taste_c4p"
+    },
+    {
+     "gui_files": [
+      "PackageViewController"
+     ],
+     "how": "cxobjc.method",
+     "in_gui_methname": true,
+     "objc": "prepareSingleUseC4PFile:",
+     "python": "prepare_temp_c4p"
+    },
+    {
+     "gui_files": [
+      "CXServerCrossOver"
+     ],
+     "how": "cxobjc.method",
+     "in_gui_methname": true,
+     "objc": "getOnlineFilePath",
+     "python": "getOnlineFilePath"
+    },
+    {
+     "gui_files": [
+      "MainWindowController"
+     ],
+     "how": "cxobjc.method",
+     "in_gui_methname": true,
+     "objc": "updateOnlineProfilesFromURL:",
+     "python": "update_online_profiles"
+    },
+    {
+     "gui_files": [
+      "CXServerCrossOver",
+      "PackageViewController"
+     ],
+     "how": "cxobjc.method",
+     "in_gui_methname": true,
+     "objc": "getMatchingProfiles:",
+     "python": "get_matching_profiles"
+    }
+   ]
+  },
+  "CDDetector": {
+   "bases": [
+    "cxobjc.Proxy"
+   ],
+   "module": "cddetector",
+   "properties": [],
+   "selectors": [
+    {
+     "gui_files": [
+      "CDTools"
+     ],
+     "how": "cxobjc.method",
+     "in_gui_methname": true,
+     "objc": "findMatchingProfilesForVolume:inProfiles:",
+     "python": "get_cd_profiles"
+    }
+   ]
+  },
+  "CXMacObject": {
+   "bases": [
+    "Foundation.NSObject"
+   ],
+   "module": "cxobjc",
+   "properties": [],
+   "selectors": []
+  },
+  "CXMenu": {
+   "bases": [
+    "cxobjc.Proxy"
+   ],
+   "module": "cxmenu",
+   "properties": [],
+   "selectors": [
+    {
+     "gui_files": [
+      "RunCommandController"
+     ],
+     "how": "cxobjc.method",
+     "in_gui_methname": true,
+     "objc": "localStartMenuPath",
+     "python": "local_start_menu_path"
+    },
+    {
+     "gui_files": [
+      "RunCommandController"
+     ],
+     "how": "cxobjc.method",
+     "in_gui_methname": true,
+     "objc": "localDesktopPath",
+     "python": "local_desktop_path"
+    },
+    {
+     "gui_files": [
+      "RunCommandController"
+     ],
+     "how": "cxobjc.method",
+     "in_gui_methname": true,
+     "objc": "createShortcutForBottle:command:name:folder:localDesktopPath:andStartMenuPath:",
+     "python": "create_custom_shortcut"
+    }
+   ]
+  },
+  "CXUtils": {
+   "bases": [
+    "cxobjc.Proxy"
+   ],
+   "module": "cxutils",
+   "properties": [],
+   "selectors": [
+    {
+     "gui_files": [
+      "InstallConfiguration"
+     ],
+     "how": "cxobjc.method",
+     "in_gui_methname": true,
+     "objc": "sanitizedBottleName:",
+     "python": "sanitize_bottlename"
+    },
+    {
+     "gui_files": [
+      "RunCommandController"
+     ],
+     "how": "cxobjc.method",
+     "in_gui_methname": true,
+     "objc": "cmdLineToArgv:",
+     "python": "cmdlinetoargv"
+    },
+    {
+     "gui_files": [],
+     "how": "cxobjc.method",
+     "in_gui_methname": false,
+     "objc": "basename:",
+     "python": "basename"
+    },
+    {
+     "gui_files": [
+      "RunCommandController"
+     ],
+     "how": "cxobjc.method",
+     "in_gui_methname": true,
+     "objc": "dirname:",
+     "python": "dirname"
+    },
+    {
+     "gui_files": [
+      "PackageTreeNode"
+     ],
+     "how": "cxobjc.method",
+     "in_gui_methname": true,
+     "objc": "getLanguageValue:forLanguage:",
+     "python": "get_language_value"
+    },
+    {
+     "gui_files": [
+      "InstallOptionsSheetController"
+     ],
+     "how": "cxobjc.method",
+     "in_gui_methname": true,
+     "objc": "installerLoggingPreset",
+     "python": "installer_logging_preset"
+    },
+    {
+     "gui_files": [
+      "LoggingOption"
+     ],
+     "how": "cxobjc.method",
+     "in_gui_methname": true,
+     "objc": "loggingPresets",
+     "python": "logging_presets"
+    }
+   ]
+  },
+  "DemoUtils": {
+   "bases": [
+    "cxobjc.Proxy"
+   ],
+   "module": "demoutils",
+   "properties": [],
+   "selectors": [
+    {
+     "gui_files": [
+      "CXApplication",
+      "RegistrationController"
+     ],
+     "how": "cxobjc.method",
+     "in_gui_methname": true,
+     "objc": "demoStatusForLicenseFile:andSig:",
+     "python": "demo_status"
+    },
+    {
+     "gui_files": [
+      "RegistrationController"
+     ],
+     "how": "cxobjc.method",
+     "in_gui_methname": true,
+     "objc": "serialRegistrationURL",
+     "python": "serial_reg_url"
+    },
+    {
+     "gui_files": [
+      "RegistrationController"
+     ],
+     "how": "cxobjc.method",
+     "in_gui_methname": true,
+     "objc": "licenseUrlForLogin:andPassword:",
+     "python": "reg_license_url"
+    },
+    {
+     "gui_files": [
+      "RegistrationController"
+     ],
+     "how": "cxobjc.method",
+     "in_gui_methname": true,
+     "objc": "createAccountRequestBodyForEmail:name:andPassword:withSerialCode:",
+     "python": "create_account_request_body_for_email_name_password_with_serial_code"
+    },
+    {
+     "gui_files": [
+      "RegistrationController"
+     ],
+     "how": "cxobjc.method",
+     "in_gui_methname": true,
+     "objc": "checkSerialCodeRegistrationResponse:",
+     "python": "checkSerialCodeRegistrationResponse"
+    },
+    {
+     "gui_files": [
+      "RegistrationController"
+     ],
+     "how": "cxobjc.method",
+     "in_gui_methname": true,
+     "objc": "splitLicenseAndSigFromBuffer:",
+     "python": "splitLicenseAndSigFromBuffer"
+    },
+    {
+     "gui_files": [
+      "RegistrationController"
+     ],
+     "how": "cxobjc.method",
+     "in_gui_methname": true,
+     "objc": "lastResort",
+     "python": "lastResort"
+    },
+    {
+     "gui_files": [
+      "RegistrationController"
+     ],
+     "how": "cxobjc.method",
+     "in_gui_methname": true,
+     "objc": "checkLicenseDownload:",
+     "python": "checkLicenseDownload"
+    }
+   ]
+  },
+  "Engine": {
+   "bases": [
+    "cxaiebase.AIEScheduler"
+   ],
+   "module": "cxaiengine",
+   "properties": [],
+   "selectors": [
+    {
+     "gui_files": [
+      "InstallConfiguration"
+     ],
+     "how": "implicit",
+     "in_gui_methname": true,
+     "objc": "initWithInstallTask:logFile:channels:env:",
+     "python": "initWithInstallTask_logFile_channels_env_"
+    }
+   ]
+  },
+  "IconUtils": {
+   "bases": [
+    "cxobjc.Proxy"
+   ],
+   "module": "iconutils",
+   "properties": [],
+   "selectors": [
+    {
+     "gui_files": [
+      "BottleMenuHandler",
+      "BottleNode",
+      "BottleViewController",
+      "BuySupportNagController",
+      "CDTools",
+      "CXApplication",
+      "CXBundle",
+      "CXServer",
+      "CXServerCrossOver",
+      "CXTask",
+      "CXUpdater",
+      "CXWindowController",
+      "DebugChannelFormatter",
+      "DemoNagController",
+      "DemoRegisterController",
+      "DownloadProgressController",
+      "FilteredTreeNode",
+      "InstallConfiguration",
+      "InstallOptionsSheetController",
+      "InstallationOperation",
+      "LaunchFeedbackInfo",
+      "LauncherAppTreeNode",
+      "LauncherFolder",
+      "LauncherIconViewController",
+      "LauncherItem",
+      "LoggingOption",
+      "MainWindowController",
+      "NSFileManager",
+      "NSString",
+      "NewBottleController",
+      "NoBottleController",
+      "PackageInstaller",
+      "PackageTreeNode",
+      "PackageViewController",
+      "PreferencesController",
+      "PublishController",
+      "RegistrationController",
+      "RosettaInstallationController",
+      "RunCommandController",
+      "SelectBottleSheetController",
+      "SerialCodeRegisterController",
+      "SubmitRatingController",
+      "SummaryDetail",
+      "TaskStatus",
+      "helperServer",
+      "c_functions"
+     ],
+     "how": "implicit",
+     "in_gui_methname": true,
+     "objc": "init",
+     "python": "init"
+    },
+    {
+     "gui_files": [
+      "PackageTreeNode"
+     ],
+     "how": "namedSelector",
+     "in_gui_methname": true,
+     "objc": "getIconPath:",
+     "python": "get_icon_path"
+    },
+    {
+     "gui_files": [
+      "PackageTreeNode"
+     ],
+     "how": "namedSelector",
+     "in_gui_methname": true,
+     "objc": "fetchIconList",
+     "python": "fetch_icon_list"
+    },
+    {
+     "gui_files": [
+      "PackageTreeNode"
+     ],
+     "how": "namedSelector",
+     "in_gui_methname": true,
+     "objc": "fetchIcon:",
+     "python": "fetch_icon"
+    }
+   ]
+  },
+  "InstallTask": {
+   "bases": [
+    "cxobjc.Proxy"
+   ],
+   "module": "installtask",
+   "properties": [],
+   "selectors": [
+    {
+     "gui_files": [
+      "InstallConfiguration"
+     ],
+     "how": "implicit",
+     "in_gui_methname": true,
+     "objc": "initWithDelegate:",
+     "python": "initWithDelegate_"
+    },
+    {
+     "gui_files": [
+      "BottleMenuHandler",
+      "BottleNode",
+      "BottleViewController",
+      "BuySupportNagController",
+      "CDTools",
+      "CXApplication",
+      "CXBundle",
+      "CXServer",
+      "CXServerCrossOver",
+      "CXTask",
+      "CXUpdater",
+      "CXWindowController",
+      "DebugChannelFormatter",
+      "DemoNagController",
+      "DemoRegisterController",
+      "DownloadProgressController",
+      "FilteredTreeNode",
+      "InstallConfiguration",
+      "InstallOptionsSheetController",
+      "InstallationOperation",
+      "LaunchFeedbackInfo",
+      "LauncherAppTreeNode",
+      "LauncherFolder",
+      "LauncherIconViewController",
+      "LauncherItem",
+      "LoggingOption",
+      "MainWindowController",
+      "NSFileManager",
+      "NSString",
+      "NewBottleController",
+      "NoBottleController",
+      "PackageInstaller",
+      "PackageTreeNode",
+      "PackageViewController",
+      "PreferencesController",
+      "PublishController",
+      "RegistrationController",
+      "RosettaInstallationController",
+      "RunCommandController",
+      "SelectBottleSheetController",
+      "SerialCodeRegisterController",
+      "SubmitRatingController",
+      "SummaryDetail",
+      "TaskStatus",
+      "helperServer",
+      "c_functions"
+     ],
+     "how": "implicit",
+     "in_gui_methname": true,
+     "objc": "init",
+     "python": "init"
+    },
+    {
+     "gui_files": [
+      "BottleViewController",
+      "CXApplication",
+      "CXServer",
+      "CXServerCrossOver",
+      "CXWindowController",
+      "IconCollectionViewController",
+      "InstallConfiguration",
+      "InstallOptionsSheetController",
+      "LauncherIconViewController",
+      "MainWindowController",
+      "PackageViewController",
+      "PreferencesController",
+      "RegistrationController"
+     ],
+     "how": "namedSelector",
+     "in_gui_methname": true,
+     "objc": "setDelegate:",
+     "python": "set_delegate"
+    },
+    {
+     "gui_files": [
+      "InstallConfiguration",
+      "PackageInstaller"
+     ],
+     "how": "namedSelector",
+     "in_gui_methname": true,
+     "objc": "autoFillSettings",
+     "python": "auto_fill_settings"
+    },
+    {
+     "gui_files": [
+      "InstallConfiguration",
+      "PackageInstaller"
+     ],
+     "how": "namedSelector",
+     "in_gui_methname": true,
+     "objc": "volumeMatchesProfile:",
+     "python": "volume_matches_profile"
+    },
+    {
+     "gui_files": [
+      "InstallConfiguration",
+      "InstallOptionsSheetController"
+     ],
+     "how": "implicit",
+     "in_gui_methname": true,
+     "objc": "profileLanguages",
+     "python": "profileLanguages"
+    },
+    {
+     "gui_files": [
+      "InstallConfiguration"
+     ],
+     "how": "implicit",
+     "in_gui_methname": true,
+     "objc": "setProfile:",
+     "python": "setProfile_"
+    },
+    {
+     "gui_files": [
+      "InstallConfiguration",
+      "PackageInstaller",
+      "PackageViewController"
+     ],
+     "how": "namedSelector",
+     "in_gui_methname": true,
+     "objc": "updateProfiles",
+     "python": "update_profiles"
+    },
+    {
+     "gui_files": [
+      "InstallConfiguration",
+      "PackageInstaller"
+     ],
+     "how": "namedSelector",
+     "in_gui_methname": true,
+     "objc": "useAutorunFile:",
+     "python": "use_autorun_file"
+    },
+    {
+     "gui_files": [
+      "CXApplication",
+      "CXServerCrossOver",
+      "InstallConfiguration",
+      "PackageTreeNode"
+     ],
+     "how": "namedSelector",
+     "in_gui_methname": true,
+     "objc": "setLocale:",
+     "python": "SetLocale"
+    },
+    {
+     "gui_files": [
+      "AddDependenciesViewController",
+      "InstallOptionsSheetController"
+     ],
+     "how": "namedSelector",
+     "in_gui_methname": true,
+     "objc": "addDependencyOverrides:ofType:",
+     "python": "AddDependencyOverrides"
+    },
+    {
+     "gui_files": [
+      "InstallOptionsSheetController"
+     ],
+     "how": "namedSelector",
+     "in_gui_methname": true,
+     "objc": "removeDependencyOverrides:",
+     "python": "RemoveDependencyOverrides"
+    },
+    {
+     "gui_files": [
+      "InstallOptionsSheetController"
+     ],
+     "how": "implicit",
+     "in_gui_methname": true,
+     "objc": "ClearDependencyOverrides",
+     "python": "ClearDependencyOverrides"
+    },
+    {
+     "gui_files": [
+      "AddDependenciesViewController"
+     ],
+     "how": "implicit",
+     "in_gui_methname": true,
+     "objc": "SuggestedDependencyOverrides",
+     "python": "SuggestedDependencyOverrides"
+    },
+    {
+     "gui_files": [
+      "InstallConfiguration",
+      "PackageInstaller"
+     ],
+     "how": "namedSelector",
+     "in_gui_methname": true,
+     "objc": "addSourceMedia:withLabel:andDevice:",
+     "python": "add_source_media"
+    },
+    {
+     "gui_files": [
+      "InstallConfiguration",
+      "PackageInstaller"
+     ],
+     "how": "namedSelector",
+     "in_gui_methname": true,
+     "objc": "removeSourceMedia:",
+     "python": "remove_source_media"
+    },
+    {
+     "gui_files": [
+      "InstallConfiguration",
+      "PackageInstaller",
+      "PackageViewController"
+     ],
+     "how": "implicit",
+     "in_gui_methname": true,
+     "objc": "setInstallerSource:Requested:",
+     "python": "setInstallerSource_Requested_"
+    },
+    {
+     "gui_files": [
+      "InstallConfiguration",
+      "PackageViewController"
+     ],
+     "how": "implicit",
+     "in_gui_methname": true,
+     "objc": "setInstallerDownload",
+     "python": "setInstallerDownload"
+    },
+    {
+     "gui_files": [
+      "InstallConfiguration",
+      "PackageViewController"
+     ],
+     "how": "implicit",
+     "in_gui_methname": true,
+     "objc": "setInstallerSteam",
+     "python": "setInstallerSteam"
+    },
+    {
+     "gui_files": [
+      "InstallConfiguration",
+      "PackageInstaller"
+     ],
+     "how": "namedSelector",
+     "in_gui_methname": true,
+     "objc": "addBottle:",
+     "python": "add_bottle"
+    },
+    {
+     "gui_files": [
+      "InstallConfiguration",
+      "PackageInstaller"
+     ],
+     "how": "namedSelector",
+     "in_gui_methname": true,
+     "objc": "installedApplicationsReady:",
+     "python": "installed_applications_ready"
+    },
+    {
+     "gui_files": [
+      "InstallConfiguration",
+      "PackageInstaller"
+     ],
+     "how": "namedSelector",
+     "in_gui_methname": true,
+     "objc": "triggerBottleAnalysis",
+     "python": "trigger_bottle_analysis"
+    },
+    {
+     "gui_files": [
+      "InstallConfiguration",
+      "PackageInstaller"
+     ],
+     "how": "namedSelector",
+     "in_gui_methname": true,
+     "objc": "removeBottle:",
+     "python": "remove_bottle"
+    },
+    {
+     "gui_files": [
+      "InstallConfiguration",
+      "SelectBottleSheetController"
+     ],
+     "how": "namedSelector",
+     "in_gui_methname": true,
+     "objc": "isNewBottleNameValid:",
+     "python": "is_new_bottle_name_valid"
+    },
+    {
+     "gui_files": [
+      "InstallConfiguration",
+      "PackageInstaller",
+      "PackageViewController"
+     ],
+     "how": "namedSelector",
+     "in_gui_methname": true,
+     "objc": "setNewBottleName:",
+     "python": "_set_new_bottle_name"
+    },
+    {
+     "gui_files": [
+      "InstallConfiguration",
+      "SelectBottleSheetController"
+     ],
+     "how": "implicit",
+     "in_gui_methname": true,
+     "objc": "createNewBottle:template:",
+     "python": "createNewBottle_template_"
+    },
+    {
+     "gui_files": [
+      "InstallConfiguration"
+     ],
+     "how": "implicit",
+     "in_gui_methname": true,
+     "objc": "GetCreateNewBottle",
+     "python": "GetCreateNewBottle"
+    },
+    {
+     "gui_files": [],
+     "how": "implicit",
+     "in_gui_methname": true,
+     "objc": "is64bit",
+     "python": "is64bit"
+    },
+    {
+     "gui_files": [
+      "InstallConfiguration"
+     ],
+     "how": "namedSelector",
+     "in_gui_methname": true,
+     "objc": "getDependencyDetails",
+     "python": "get_dependency_details"
+    },
+    {
+     "gui_files": [
+      "InstallConfiguration"
+     ],
+     "how": "namedSelector",
+     "in_gui_methname": true,
+     "objc": "getInstallerDetails",
+     "python": "get_installer_details"
+    },
+    {
+     "gui_files": [
+      "InstallConfiguration"
+     ],
+     "how": "namedSelector",
+     "in_gui_methname": true,
+     "objc": "getBottleDetails",
+     "python": "get_bottle_details"
+    },
+    {
+     "gui_files": [
+      "InstallConfiguration"
+     ],
+     "how": "namedSelector",
+     "in_gui_methname": true,
+     "objc": "getLanguageDetails",
+     "python": "get_language_details"
+    },
+    {
+     "gui_files": [
+      "InstallConfiguration"
+     ],
+     "how": "namedSelector",
+     "in_gui_methname": true,
+     "objc": "getMiscDetails",
+     "python": "get_misc_details"
+    },
+    {
+     "gui_files": [
+      "BottleViewController"
+     ],
+     "how": "cxobjc.method",
+     "in_gui_methname": true,
+     "objc": "getMissingDependencies:",
+     "python": "get_missing_dependencies"
+    }
+   ]
+  },
+  "InstalledApplication": {
+   "bases": [
+    "cxobjc.Proxy"
+   ],
+   "module": "appdetector",
+   "properties": [],
+   "selectors": [
+    {
+     "gui_files": [],
+     "how": "implicit",
+     "in_gui_methname": false,
+     "objc": "initWithBottleName:profile:andKeyName:",
+     "python": "initWithBottleName_profile_andKeyName_"
+    },
+    {
+     "gui_files": [
+      "BottleViewController"
+     ],
+     "how": "implicit",
+     "in_gui_methname": true,
+     "objc": "canUninstall",
+     "python": "canUninstall"
+    },
+    {
+     "gui_files": [
+      "BottleViewController"
+     ],
+     "how": "implicit",
+     "in_gui_methname": true,
+     "objc": "uninstall",
+     "python": "uninstall"
+    }
+   ]
+  },
+  "Proxy": {
+   "bases": [
+    "CXMacObject"
+   ],
+   "module": "cxobjc",
+   "properties": [],
+   "selectors": [
+    {
+     "gui_files": [],
+     "how": "implicit",
+     "in_gui_methname": false,
+     "objc": "valueForUndefinedKey:",
+     "python": "valueForUndefinedKey_"
+    },
+    {
+     "gui_files": [
+      "DemoRegisterController",
+      "PackageInstaller",
+      "RegistrationController",
+      "SubmitRatingController",
+      "c_functions"
+     ],
+     "how": "implicit",
+     "in_gui_methname": false,
+     "objc": "setValue:forUndefinedKey:",
+     "python": "setValue_forUndefinedKey_"
+    }
+   ]
+  },
+  "RatingUtils": {
+   "bases": [
+    "cxobjc.Proxy"
+   ],
+   "module": "ratingutils",
+   "properties": [],
+   "selectors": [
+    {
+     "gui_files": [
+      "SubmitRatingController"
+     ],
+     "how": "implicit",
+     "in_gui_methname": true,
+     "objc": "initWithAppID:",
+     "python": "initWithAppID_"
+    },
+    {
+     "gui_files": [
+      "SubmitRatingController"
+     ],
+     "how": "namedSelector",
+     "in_gui_methname": true,
+     "objc": "fetchRating",
+     "python": "get_rating"
+    },
+    {
+     "gui_files": [
+      "SubmitRatingController"
+     ],
+     "how": "namedSelector",
+     "in_gui_methname": true,
+     "objc": "setRating:Notes:",
+     "python": "set_rating"
+    }
+   ]
+  },
+  "SystemInfo": {
+   "bases": [
+    "cxobjc.Proxy"
+   ],
+   "module": "systeminfo",
+   "properties": [],
+   "selectors": [
+    {
+     "gui_files": [
+      "RunCommandController"
+     ],
+     "how": "cxobjc.method",
+     "in_gui_methname": true,
+     "objc": "systemInformationString",
+     "python": "system_info_string"
+    },
+    {
+     "gui_files": [
+      "RunCommandController"
+     ],
+     "how": "cxobjc.method",
+     "in_gui_methname": true,
+     "objc": "systemInformationStringForBottle:",
+     "python": "_system_info_string_for_bottle"
+    }
+   ]
+  },
+  "WebUtils": {
+   "bases": [
+    "cxobjc.Proxy"
+   ],
+   "module": "webutils",
+   "properties": [],
+   "selectors": [
+    {
+     "gui_files": [
+      "RegistrationController",
+      "SubmitRatingController"
+     ],
+     "how": "cxobjc.method",
+     "in_gui_methname": true,
+     "objc": "createToken:password:",
+     "python": "create_token"
+    },
+    {
+     "gui_files": [
+      "MainWindowController"
+     ],
+     "how": "cxobjc.method",
+     "in_gui_methname": true,
+     "objc": "updateCompatDB",
+     "python": "update_compatdb"
+    }
+   ]
+  },
+  "_UrlGetterDelegate": {
+   "bases": [
+    "Foundation.NSObject"
+   ],
+   "module": "cxurlget_nsurl",
+   "properties": [],
+   "selectors": [
+    {
+     "gui_files": [],
+     "how": "implicit",
+     "in_gui_methname": false,
+     "objc": "initWithOwner:",
+     "python": "initWithOwner_"
+    },
+    {
+     "gui_files": [
+      "DownloadProgressController"
+     ],
+     "how": "implicit",
+     "in_gui_methname": true,
+     "objc": "URLSession:didBecomeInvalidWithError:",
+     "python": "URLSession_didBecomeInvalidWithError_"
+    },
+    {
+     "gui_files": [
+      "DownloadProgressController"
+     ],
+     "how": "implicit",
+     "in_gui_methname": true,
+     "objc": "URLSession:task:didCompleteWithError:",
+     "python": "URLSession_task_didCompleteWithError_"
+    },
+    {
+     "gui_files": [
+      "DownloadProgressController"
+     ],
+     "how": "implicit",
+     "in_gui_methname": false,
+     "objc": "URLSession:dataTask:didReceiveResponse:completionHandler:",
+     "python": "URLSession_dataTask_didReceiveResponse_completionHandler_"
+    },
+    {
+     "gui_files": [
+      "DownloadProgressController"
+     ],
+     "how": "implicit",
+     "in_gui_methname": false,
+     "objc": "URLSession:dataTask:didReceiveData:",
+     "python": "URLSession_dataTask_didReceiveData_"
+    }
+   ]
+  }
+ },
+ "source": "python/outline + Contents/MacOS/CrossOver (arm64 __objc_methname) + decompiled pseudocode"
+}
