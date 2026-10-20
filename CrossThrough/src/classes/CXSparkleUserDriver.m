@@ -10,7 +10,13 @@
 }
 
 - (void)showUpdateFoundWithAppcastItem:(id)arg1 state:(id)arg2 reply:(id)arg3 {
-    return;
+    assert(NSThread.isMainThread);
+    if (self->_isNotLicensed) {
+        // Unlicensed copies never offer the update; dismiss it straight away.
+        ((void (^)(SPUUserUpdateChoice))arg3)(SPUUserUpdateChoiceDismiss);
+    } else {
+        [super showUpdateFoundWithAppcastItem:arg1 state:arg2 reply:arg3];
+    }
 }
 
 @end

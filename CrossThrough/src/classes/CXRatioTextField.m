@@ -8,7 +8,7 @@
 - (id)initWithCoder:(id)arg1 {
     self = [super initWithCoder:arg1];
     if (self) {
-        // Initialized
+        self->_maxAspectRatio = 19.0 / 3.0;
     }
     return self;
 }
@@ -16,50 +16,75 @@
 - (id)initWithFrame:(NSRect)arg1 {
     self = [super initWithFrame:arg1];
     if (self) {
-        // Initialized
+        self->_maxAspectRatio = 19.0 / 3.0;
     }
     return self;
 }
 
 - (NSSize)intrinsicContentSize {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r31 = r31 - 0x90;
-     *   var_70 = d15;
-     *   decomp_var_68 = d14;
-     *   var_60 = d13;
-     *   decomp_var_58 = d12;
-     *   var_50 = d11;
-     *   decomp_var_48 = d10;
-     *   var_40 = d9;
-     *   decomp_var_38 = d8;
-     *   var_30 = r24;
-     *   decomp_var_28 = r23;
-     *   var_20 = r22;
-     *   decomp_var_18 = r21;
-     *   var_10 = r20;
-     *   decomp_var_8 = r19;
-     *   saved_fp = r29;
-     *   decomp_var_m8 = r30;
-     *   r19 = self;
-     *   r21 = (int64_t *)&self->_cachedIntrinsicContentSize;
-     *   r0 = NSEqualSizes(self, _cmd);
-     *   if ((r0 & 0x1) != 0x0) {
-     *   r0 = [r19 cell];
-     *   r0 = [r0 retain];
-     *   r20 = r0;
-     *   d2 = 0x7fefffffffffffff;
-     *   ... (88 more lines)
-     */
-    return NSZeroSize;
+    if (!NSEqualSizes(self->_cachedIntrinsicContentSize, NSZeroSize)) {
+        return self->_cachedIntrinsicContentSize;
+    }
+    // Wrap the text so the field is no wider than _maxAspectRatio times its
+    // height, then pick the narrowest width that keeps that height.
+    NSCell *cell = [self cell];
+    NSSize size = [cell cellSizeForBounds:NSMakeRect(0.0, 0.0, CGFLOAT_MAX, CGFLOAT_MAX)];
+    CGFloat ratio = self->_maxAspectRatio;
+    CGFloat bestWidth = size.height * ratio;
+    if (size.width > bestWidth) {
+        CGFloat singleLineHeight = size.height;
+        CGFloat bestHeight = size.height + size.height;
+
+        // Widest width that still satisfies the ratio.
+        CGFloat high = size.width;
+        CGFloat low = bestWidth;
+        while (high - low > 1.0) {
+            CGFloat mid = (high + low) * 0.5;
+            NSSize trial = [cell cellSizeForBounds:NSMakeRect(0.0, 0.0, mid, CGFLOAT_MAX)];
+            ratio = self->_maxAspectRatio;
+            if (trial.width > trial.height * ratio) {
+                high = mid;
+            } else {
+                low = mid;
+                bestWidth = trial.width;
+                bestHeight = trial.height;
+            }
+        }
+
+        if (bestHeight > singleLineHeight) {
+            // Narrowest width that doesn't add another line.
+            CGFloat narrowest = bestWidth;
+            CGFloat lowWidth = singleLineHeight * ratio;
+            CGFloat highWidth = bestWidth;
+            while (highWidth - lowWidth > 1.0) {
+                CGFloat mid = (highWidth + lowWidth) * 0.5;
+                NSSize trial = [cell cellSizeForBounds:NSMakeRect(0.0, 0.0, mid, CGFLOAT_MAX)];
+                if (trial.height > bestHeight) {
+                    lowWidth = mid;
+                } else {
+                    narrowest = trial.width;
+                    highWidth = mid;
+                }
+            }
+            CGFloat width = narrowest + (bestWidth - narrowest) * 0.25;
+            size = [cell cellSizeForBounds:NSMakeRect(0.0, 0.0, width, CGFLOAT_MAX)];
+        } else {
+            size = NSMakeSize(bestWidth, bestHeight);
+        }
+    }
+    NSRect frame = NSMakeRect(0.0, 0.0, ceil(size.width), ceil(size.height));
+    self->_cachedIntrinsicContentSize = [self alignmentRectForFrame:frame].size;
+    return self->_cachedIntrinsicContentSize;
 }
 
 - (void)invalidateIntrinsicContentSize {
-    return;
+    self->_cachedIntrinsicContentSize = NSZeroSize;
+    [super invalidateIntrinsicContentSize];
 }
 
 - (void)invalidateIntrinsicContentSizeForCell:(id)arg1 {
-    return;
+    [self invalidateIntrinsicContentSize];
+    [super invalidateIntrinsicContentSizeForCell:arg1];
 }
 
 - (CGFloat)maxAspectRatio {

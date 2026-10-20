@@ -28,6 +28,7 @@
 - (void)finish;
 - (void)updatePressed:(id)arg1;
 - (void)doUpdateWithAuthorization:(id)arg1;
+- (NSArray *)managedUpdateArgumentsForBottleName:(NSString *)arg1;
 - (void)updateBottle:(id)arg1 WithAuthorization:(id)arg2;
 - (void)updateLaterPressed:(id)arg1;
 - (id)messageTextField;

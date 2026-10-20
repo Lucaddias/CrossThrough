@@ -10,15 +10,15 @@
 }
 
 - (id)init {
-    self = [super init];
-    if (self) {
-        // Initialized
-    }
-    return self;
+    return [super initWithNibName:@"AddDependenciesView" bundle:nil];
 }
 
 - (void)dealloc {
-    return;
+    [[self installConfiguration] removeDelegate:self];
+    objc_destroyWeak((id *)&self->_searchField);
+    objc_destroyWeak((id *)&self->_arrayController);
+    [self->_addableDependencies release];
+    [super dealloc];
 }
 
 - (id)installConfiguration {
@@ -26,11 +26,27 @@
 }
 
 - (void)loadView {
-    return;
+    [super loadView];
+    InstallConfiguration *configuration = [self installConfiguration];
+    [configuration addDelegate:self];
+    NSMutableArray *dependencies = [[NSMutableArray alloc] init];
+    for (id appID in [(InstallTask *)[configuration installTask] SuggestedDependencyOverrides]) {
+        id profile = [configuration profileForAppID:appID];
+        if ([[profile valueForKey:@"is_ranked"] boolValue]) {
+            NSString *name = [configuration nameForProfileWithAppID:appID];
+            [dependencies addObject:[NSDictionary dictionaryWithObjectsAndKeys:appID, @"appID", name, @"name", nil]];
+        }
+    }
+    [self setAddableDependencies:dependencies];
+    NSSortDescriptor *sortByName = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES selector:@selector(localizedStandardCompare:)];
+    [[self arrayController] setSortDescriptors:[NSArray arrayWithObject:sortByName]];
+    [dependencies release];
 }
 
 - (void)addDependencies:(id)arg1 {
-    return;
+    NSArray *appIDs = [[[self arrayController] selectedObjects] valueForKey:@"appID"];
+    [(InstallTask *)[[self installConfiguration] installTask] addDependencyOverrides:appIDs ofType:[InstallConfiguration overrideInclude]];
+    [[self view] tryToPerform:@selector(performClose:) with:arg1];
 }
 
 - (id)searchField {

@@ -111,6 +111,8 @@ extern void _Py_Dealloc(PyObject *);
 - (void)delete:(id)arg1;
 - (void)quit:(id)arg1;
 - (void)forceQuit:(id)arg1;
+- (void)suspend;
+- (void)resume;
 - (id)getMissingDependenciesProfile;
 - (BOOL)isIsControlPanelReady;
 - (id)controlPanelTable;
@@ -156,10 +158,38 @@ extern void _Py_Dealloc(PyObject *);
 @interface InstallTask : NSObject
 + (id)getMissingDependencies:(id)arg1;
 - (id)initWithDelegate:(id)arg1;
+- (id)SuggestedDependencyOverrides;
+- (void)addDependencyOverrides:(id)arg1 ofType:(id)arg2;
+@end
+
+// Task objects scheduled on the cxinstaller engine (wrapped by TaskStatus).
+@interface InstallEngineTask : NSObject
+- (id)main;
+- (id)canCancel;
+- (void)cancel;
+- (void)done;
 @end
 
 @interface CDDetector : NSObject
 + (id)findMatchingProfilesForVolume:(id)arg1 inProfiles:(id)arg2;
+@end
+
+// demoutils: licensing and activation helpers.
+@interface DemoUtils : NSObject
++ (id)createAccountRequestBodyForEmail:(id)arg1 name:(id)arg2 andPassword:(id)arg3 withSerialCode:(id)arg4;
++ (id)serialRegistrationURL;
++ (id)licenseUrlForLogin:(id)arg1 andPassword:(id)arg2;
++ (id)lastResort;
++ (id)checkLicenseDownload:(id)arg1;
++ (id)splitLicenseAndSigFromBuffer:(id)arg1;
++ (id)demoStatusForLicenseFile:(id)arg1 andSig:(id)arg2;
++ (id)checkSerialCodeRegistrationResponse:(id)arg1;
+@end
+
+// webutils: CodeWeavers web service helpers.
+@interface WebUtils : NSObject
++ (id)createToken:(id)arg1 password:(id)arg2;
++ (void)updateCompatDB;
 @end
 
 // Rows of a bottle's installed-software list.

@@ -3,196 +3,162 @@
 #import "CrossThrough.h"
 #import "HopperCompat.h"
 
+#import "c_functions.h"
+
+// One updater per bundle, keyed by the (unretained) bundle.
+static NSMutableDictionary *_sharedUpdaters = nil;
+
 @implementation CXUpdater
 
 + (id)sharedUpdater {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r20 = [[NSBundle mainBundle] retain];
-     *   r19 = [[self updaterForBundle:r20] retain];
-     *   [r20 release];
-     *   r0 = [r19 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return [self updaterForBundle:[NSBundle mainBundle]];
 }
 
 + (id)updaterForBundle:(id)arg1 {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   var_20 = r22;
-     *   decomp_var_18 = r21;
-     *   r31 = r31 + 0xffffffffffffffd0;
-     *   var_10 = r20;
-     *   decomp_var_8 = r19;
-     *   saved_fp = r29;
-     *   decomp_var_m8 = r30;
-     *   r20 = self;
-     *   r0 = [arg2 retain];
-     *   r19 = r0;
-     *   if (r0 == 0x0) {
-     *   r19 = [[NSBundle mainBundle] retain];
-     *   }
-     *   r21 = *_sharedUpdaters;
-     *   r22 = [[NSValue valueWithNonretainedObject:r19] retain];
-     *   r21 = [[r21 objectForKey:r22] retain];
-     *   [r22 release];
-     *   if (r21 == 0x0) {
-     *   r21 = [[objc_opt_class(r20) alloc] initForBundle:r19];
-     *   }
-     *   [r19 release];
-     *   r0 = [r21 autorelease];
-     *   return r0;
-     */
-    return nil;
+    NSBundle *bundle = arg1 ? arg1 : [NSBundle mainBundle];
+    id updater = [_sharedUpdaters objectForKey:[NSValue valueWithNonretainedObject:bundle]];
+    if (updater) {
+        return updater;
+    }
+    // -initForBundle: registers the new updater in _sharedUpdaters, which
+    // keeps it alive.
+    return [[[[self class] alloc] initForBundle:bundle] autorelease];
 }
 
 - (id)initForBundle:(id)arg1 {
     self = [super init];
+    NSBundle *bundle = arg1 ? arg1 : [NSBundle mainBundle];
+    id existing = [_sharedUpdaters objectForKey:[NSValue valueWithNonretainedObject:bundle]];
+    if (existing) {
+        [self release];
+        return [existing retain];
+    }
     if (self) {
-        // Initialized
+        if (!_sharedUpdaters) {
+            _sharedUpdaters = [[NSMutableDictionary alloc] init];
+        }
+        [_sharedUpdaters setObject:self forKey:[NSValue valueWithNonretainedObject:bundle]];
+        self->_userDriver = [[CXSparkleUserDriver alloc] initWithHostBundle:bundle delegate:self];
+        self->_updater = [[SPUUpdater alloc] initWithHostBundle:bundle applicationBundle:bundle userDriver:self->_userDriver delegate:self];
+        NSError *error = nil;
+        if (![self->_updater startUpdater:&error]) {
+            _CXLog(@"Error: Failed to start updater with error: %@", error);
+        }
+        [self setUserAgentString];
     }
     return self;
 }
 
 - (id)init {
-    self = [super init];
-    if (self) {
-        // Initialized
-    }
-    return self;
+    return [self initForBundle:[NSBundle mainBundle]];
 }
 
 - (void)setUserAgentString {
-    return;
+    // Sparkle's agent ends in " Sparkle"; add the OS version in front of it.
+    NSOperatingSystemVersion version = [[NSProcessInfo processInfo] operatingSystemVersion];
+    NSString *replacement = [NSString stringWithFormat:@" (macOS %ld.%ld.%ld) Sparkle",
+                             (long)version.majorVersion, (long)version.minorVersion, (long)version.patchVersion];
+    [self->_updater setUserAgentString:[[self->_updater userAgentString] stringByReplacingOccurrencesOfString:@" Sparkle" withString:replacement]];
 }
 
 - (BOOL)automaticallyChecksForUpdates {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = self[0x1];
-     *   r0 = [r0 automaticallyChecksForUpdates];
-     *   return r0;
-     */
-    return NO;
+    return [self->_updater automaticallyChecksForUpdates];
 }
 
 - (void)setAutomaticallyChecksForUpdates:(BOOL)arg1 {
-    return;
+    [self->_updater setAutomaticallyChecksForUpdates:arg1];
 }
 
 - (CGFloat)updateCheckInterval {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = self[0x1];
-     *   r0 = [r0 updateCheckInterval];
-     *   return r0;
-     */
-    return 0.0;
+    return [self->_updater updateCheckInterval];
 }
 
 - (void)checkForUpdates:(id)arg1 {
-    return;
+    [self->_updater checkForUpdates];
 }
 
 - (BOOL)validateMenuItem:(id)arg1 {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   var_10 = r20;
-     *   decomp_var_8 = r19;
-     *   r31 = r31 + 0xffffffffffffffe0;
-     *   saved_fp = r29;
-     *   decomp_var_m8 = r30;
-     *   r19 = self;
-     *   if ([arg2 action] != @selector(checkForUpdates:)) {
-     *   r0 = 0x1;
-     *   }
-     *   else {
-     *   r0 = r19[0x1];
-     *   r0 = [r0 canCheckForUpdates];
-     *   }
-     *   return r0;
-     */
-    return NO;
+    if ([arg1 action] != @selector(checkForUpdates:)) {
+        return YES;
+    }
+    return [self->_updater canCheckForUpdates];
 }
 
 - (void)checkForUpdatesInBackground {
-    return;
+    // An update the user driver deferred has to be shown in the foreground.
+    if (self->_delayShowingUserUpdate) {
+        [self checkForUpdates:nil];
+    } else {
+        [self->_updater checkForUpdatesInBackground];
+    }
 }
 
 - (id)lastUpdateCheckDate {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = self[0x1];
-     *   r0 = [r0 lastUpdateCheckDate];
-     *   return r0;
-     */
-    return nil;
+    return [self->_updater lastUpdateCheckDate];
 }
 
 - (id)bestValidUpdateInAppcast:(id)arg1 forUpdater:(id)arg2 {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   var_30 = r24;
-     *   decomp_var_28 = r23;
-     *   r31 = r31 + 0xffffffffffffffc0;
-     *   var_20 = r22;
-     *   decomp_var_18 = r21;
-     *   var_10 = r20;
-     *   decomp_var_8 = r19;
-     *   saved_fp = r29;
-     *   decomp_var_m8 = r30;
-     *   r20 = self;
-     *   r19 = [arg2 retain];
-     *   r21 = r20 + 0x20;
-     *   r22 = objc_loadWeakRetained(r21);
-     *   r23 = objc_opt_respondsToSelector();
-     *   [r22 release];
-     *   if ((r23 & 0x1) != 0x0) {
-     *   r0 = objc_loadWeakRetained(r21);
-     *   r21 = r0;
-     *   r20 = [[r0 bestValidUpdateInAppcast:r19 forUpdater:r20] retain];
-     *   [r21 release];
-     *   }
-     *   else {
-     *   r20 = 0x0;
-     *   }
-     *   [r19 release];
-     *   ... (2 more lines)
-     */
+    id<CXUpdaterDelegate> delegate = [self delegate];
+    if ([delegate respondsToSelector:@selector(bestValidUpdateInAppcast:forUpdater:)]) {
+        return [delegate bestValidUpdateInAppcast:arg1 forUpdater:self];
+    }
     return nil;
 }
 
 - (void)updaterDidNotFindUpdate:(id)arg1 {
-    return;
+    id<CXUpdaterDelegate> delegate = [self delegate];
+    if ([delegate respondsToSelector:@selector(updaterDidNotFindUpdate:)]) {
+        [delegate updaterDidNotFindUpdate:self];
+    }
 }
 
 - (void)updater:(id)arg1 didAbortWithError:(id)arg2 {
-    return;
+    id<CXUpdaterDelegate> delegate = [self delegate];
+    if ([delegate respondsToSelector:@selector(updaterDidAbortWithError:error:)]) {
+        [delegate updaterDidAbortWithError:self error:arg2];
+    }
 }
 
 - (void)updater:(id)arg1 userDidMakeChoice:(NSInteger)arg2 forUpdate:(id)arg3 state:(id)arg4 {
-    return;
+    id<CXUpdaterDelegate> delegate = [self delegate];
+    // SPUUserUpdateChoice: 0 = skip, 1 = install, 2 = dismiss.
+    if (arg2 == 2) {
+        if ([delegate respondsToSelector:@selector(userDidCancelDownload:)]) {
+            [delegate userDidCancelDownload:self];
+        }
+    } else if (arg2 == 0) {
+        if ([delegate respondsToSelector:@selector(updater:userDidSkipThisVersion:)]) {
+            [delegate updater:self userDidSkipThisVersion:arg3];
+        }
+    }
 }
 
 - (void)updater:(id)arg1 failedToDownloadUpdate:(id)arg2 error:(id)arg3 {
-    return;
+    id<CXUpdaterDelegate> delegate = [self delegate];
+    if ([delegate respondsToSelector:@selector(updater:failedToDownloadUpdate:error:)]) {
+        [delegate updater:self failedToDownloadUpdate:arg2 error:arg3];
+    }
 }
 
 - (void)userDidCancelDownload:(id)arg1 {
-    return;
+    id<CXUpdaterDelegate> delegate = [self delegate];
+    if ([delegate respondsToSelector:@selector(userDidCancelDownload:)]) {
+        [delegate userDidCancelDownload:self];
+    }
 }
 
 - (void)setNotLicensed:(BOOL)arg1 {
-    return;
+    [self->_userDriver setNotLicensed:arg1];
 }
 
 - (void)standardUserDriverWillHandleShowingUpdate:(BOOL)arg1 forUpdate:(id)arg2 state:(id)arg3 {
-    return;
+    if (!arg1) {
+        self->_delayShowingUserUpdate = YES;
+    }
 }
 
 - (void)standardUserDriverWillFinishUpdateSession {
-    return;
+    self->_delayShowingUserUpdate = NO;
 }
 
 - (id)delegate {
@@ -205,6 +171,13 @@
 
 - (void)setUpdateCheckInterval:(CGFloat)arg1 {
     self->_updateCheckInterval = arg1;
+}
+
+- (void)dealloc {
+    [self->_updater release];
+    [self->_userDriver release];
+    objc_destroyWeak((id *)&self->_delegate);
+    [super dealloc];
 }
 
 @end

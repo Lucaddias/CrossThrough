@@ -8,17 +8,25 @@
 - (id)initWithTask:(id)arg1 {
     self = [super init];
     if (self) {
-        // Initialized
+        [self setTask:arg1];
+        [self setLabel:[[self task] valueForKey:@"label"]];
     }
     return self;
 }
 
 - (void)cancel {
-    return;
+    [[self installOp] cancel];
+    if ([[(InstallEngineTask *)[self task] canCancel] boolValue]) {
+        [(InstallEngineTask *)[self task] cancel];
+    }
+    [self done];
+    [self setSuccess:NO];
 }
 
 - (void)done {
-    return;
+    [(InstallEngineTask *)[self task] done];
+    [self setFinished:YES];
+    [self setInstallOp:nil];
 }
 
 - (BOOL)finished {
@@ -68,6 +76,13 @@
         [self->_installOp release];
         self->_installOp = [arg1 retain];
     }
+}
+
+- (void)dealloc {
+    [self->_label release];
+    [self->_task release];
+    [self->_installOp release];
+    [super dealloc];
 }
 
 @end

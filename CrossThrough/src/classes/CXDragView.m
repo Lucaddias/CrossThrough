@@ -10,19 +10,7 @@
 }
 
 - (BOOL)performDragOperation:(id)arg1 {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r20 = [arg2 retain];
-     *   r0 = [self delegate];
-     *   r0 = [r0 retain];
-     *   r19 = r0;
-     *   r21 = [r0 performDragOperation:r20];
-     *   [r20 release];
-     *   [r19 release];
-     *   r0 = r21;
-     *   return r0;
-     */
-    return NO;
+    return [(id<CXDragViewDelegate>)[self delegate] performDragOperation:arg1];
 }
 
 - (id)delegate {
@@ -34,6 +22,11 @@
         [self->_delegate release];
         self->_delegate = [arg1 retain];
     }
+}
+
+- (void)dealloc {
+    [self->_delegate release];
+    [super dealloc];
 }
 
 @end

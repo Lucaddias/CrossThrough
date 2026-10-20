@@ -2,13 +2,18 @@
 #import "ShutdownController.h"
 #import "CrossThrough.h"
 #import "HopperCompat.h"
+#import "c_functions.h"
 
 @implementation ShutdownController
 
 - (id)init {
-    self = [super init];
+    self = [super initWithWindowNibName:@"ShutdownProgress"];
     if (self) {
-        // Initialized
+        dispatch_semaphore_t semaphore = dispatch_semaphore_create(1);
+        [self setQuitBottleSemaphore:semaphore];
+        [semaphore release];
+        [self setCancelingShutdown:NO];
+        [self setForcingShutdown:NO];
     }
     return self;
 }
@@ -18,27 +23,77 @@
 }
 
 - (void)cancelShutdown:(id)arg1 {
-    return;
+    [self setCancelingShutdown:YES];
+    [self setForcingShutdown:NO];
 }
 
 - (void)forceShutdown:(id)arg1 {
-    return;
+    [self setCancelingShutdown:NO];
+    [self setForcingShutdown:YES];
 }
 
 - (void)shutdownAllBottles {
-    return;
+    _CXLog(@"Shutting down all bottles.\n");
+    for (BottleWrapper *bottle in [[self bottleCollection] bottleList]) {
+        [bottle suspend];
+    }
+    [NSThread detachNewThreadSelector:@selector(shutdownAllBottlesBackground) toTarget:self withObject:nil];
 }
 
 - (void)shutdownAllBottlesBackground {
-    return;
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+    for (BottleWrapper *bottle in [[self bottleCollection] bottleList]) {
+        // Each bottle gets 60 seconds to quit before the shutdown gives up.
+        if (dispatch_semaphore_wait([self quitBottleSemaphore], dispatch_time(DISPATCH_TIME_NOW, 60 * NSEC_PER_SEC)) != 0) {
+            if (![self forcingShutdown]) {
+                [self performSelectorOnMainThread:@selector(setCancelingShutdown:) withObject:[NSNumber numberWithBool:YES] waitUntilDone:YES];
+            }
+        }
+        if ([self cancelingShutdown] || [self forcingShutdown]) {
+            _CXLog([self forcingShutdown] ? @"Forcing shutdown.\n" : @"Canceling shutdown.\n");
+            dispatch_semaphore_signal([self quitBottleSemaphore]);
+            break;
+        }
+        void (^completion)(void) = [^{
+            dispatch_semaphore_signal([self quitBottleSemaphore]);
+        } copy];
+        [bottle performSelectorOnMainThread:@selector(quit:) withObject:completion waitUntilDone:NO];
+        [completion release];
+    }
+    if ([self forcingShutdown] && ![self cancelingShutdown]) {
+        [self killAllBottles];
+    }
+    [[(CXApplication *)NSApp CXServer] performSelectorOnMainThread:@selector(replyToApplicationShouldTerminateTrampoline:)
+                                                        withObject:[NSNumber numberWithBool:![self cancelingShutdown]]
+                                                     waitUntilDone:NO];
+    if ([self cancelingShutdown]) {
+        for (BottleWrapper *bottle in [[self bottleCollection] bottleList]) {
+            [bottle performSelectorOnMainThread:@selector(resume) withObject:nil waitUntilDone:NO];
+        }
+    }
+    [pool drain];
 }
 
 - (void)killAllBottles {
-    return;
+    for (BottleWrapper *bottle in [[self bottleCollection] bottleList]) {
+        if (dispatch_semaphore_wait([self quitBottleSemaphore], dispatch_time(DISPATCH_TIME_NOW, 60 * NSEC_PER_SEC)) != 0) {
+            [self performSelectorOnMainThread:@selector(setCancelingShutdown:) withObject:[NSNumber numberWithBool:YES] waitUntilDone:YES];
+        }
+        if ([self cancelingShutdown]) {
+            dispatch_semaphore_signal([self quitBottleSemaphore]);
+            break;
+        }
+        void (^completion)(void) = [^{
+            dispatch_semaphore_signal([self quitBottleSemaphore]);
+        } copy];
+        [bottle performSelectorOnMainThread:@selector(forceQuit:) withObject:completion waitUntilDone:NO];
+        [completion release];
+    }
 }
 
 - (void)windowDidLoad {
-    return;
+    [super windowDidLoad];
+    [[self window] recalculateKeyViewLoop];
 }
 
 - (id)quitBottleSemaphore {
@@ -107,6 +162,14 @@
 
 - (void)setShutdownCallbackSelector:(SEL)arg1 {
     self->_shutdownCallbackSelector = arg1;
+}
+
+- (void)dealloc {
+    [self->_quitBottleSemaphore release];
+    [self->_bottleList release];
+    [self->_canRunFilterPredicate release];
+    [self->_shutdownCallbackObject release];
+    [super dealloc];
 }
 
 @end
