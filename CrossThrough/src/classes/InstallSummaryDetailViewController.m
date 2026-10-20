@@ -6,65 +6,65 @@
 @implementation InstallSummaryDetailViewController
 
 + (id)keyPathsForValuesAffectingHasAction {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = [NSSet setWithObject:@"action"];
-     *   return r0;
-     */
-    return nil;
+    return [NSSet setWithObject:@"action"];
 }
 
 - (id)init {
-    self = [super init];
-    if (self) {
-        // Initialized
-    }
+    self = [super initWithNibName:@"InstallSummaryDetailView" bundle:nil];
     return self;
 }
 
+- (void)dealloc {
+    objc_destroyWeak((id *)&self->_editButton);
+    objc_destroyWeak((id *)&self->_delegate);
+    [self->_text release];
+    self->_text = nil;
+    [self->_image release];
+    self->_image = nil;
+    [super dealloc];
+}
+
 - (BOOL)hasAction {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   saved_fp = r29;
-     *   decomp_var_m8 = r30;
-     *   r31 = r31 + 0xfffffffffffffff0;
-     *   r0 = [self action];
-     *   if (r0 != 0x0) {
-     *   r0 = 0x1;
-     *   }
-     *   return r0;
-     */
-    return NO;
+    return self->_action != NULL;
 }
 
 - (void)select:(id)arg1 {
-    return;
+    if (self->_action != NULL) {
+        id del = [self delegate];
+        if ([del respondsToSelector:self->_action]) {
+            [del performSelector:self->_action withObject:arg1];
+        }
+    }
 }
 
 - (void)setSendsActionOnMouseDown:(BOOL)arg1 {
     self->_sendsActionOnMouseDown = arg1;
+    NSButton *button = [self editButton];
+    if (button) {
+        [button sendActionOn:(arg1 ? NSEventMaskLeftMouseDown : NSEventMaskLeftMouseUp)];
+    }
 }
 
 - (void)setButtonEnabled:(BOOL)arg1 {
     self->_buttonEnabled = arg1;
+    NSButton *button = [self editButton];
+    if (button) {
+        [button setEnabled:arg1];
+    }
 }
 
 - (void)viewDidLoad {
-    return;
+    [super viewDidLoad];
+    [self setSendsActionOnMouseDown:[self sendsActionOnMouseDown]];
+    [self setButtonEnabled:[self buttonEnabled]];
 }
 
 - (id)delegate {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_delegate);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return objc_loadWeakRetained((id *)&self->_delegate);
 }
 
 - (void)setDelegate:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_delegate, arg1);
 }
 
 - (id)image {
@@ -72,7 +72,10 @@
 }
 
 - (void)setImage:(id)arg1 {
-    return;
+    if (self->_image != arg1) {
+        [self->_image release];
+        self->_image = [arg1 copy];
+    }
 }
 
 - (id)text {
@@ -80,7 +83,10 @@
 }
 
 - (void)setText:(id)arg1 {
-    return;
+    if (self->_text != arg1) {
+        [self->_text release];
+        self->_text = [arg1 copy];
+    }
 }
 
 - (SEL)action {
@@ -88,7 +94,7 @@
 }
 
 - (void)setAction:(SEL)arg1 {
-    return;
+    self->_action = arg1;
 }
 
 - (BOOL)sendsActionOnMouseDown {
@@ -100,17 +106,11 @@
 }
 
 - (id)editButton {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_editButton);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return objc_loadWeakRetained((id *)&self->_editButton);
 }
 
 - (void)setEditButton:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_editButton, arg1);
 }
 
 @end

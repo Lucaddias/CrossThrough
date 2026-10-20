@@ -2,6 +2,17 @@
 #import "PackageViewController.h"
 #import "CrossThrough.h"
 #import "HopperCompat.h"
+#import "PackageTreeNode.h"
+#import "PackageViewItem.h"
+#import "PackageInstaller.h"
+#import "InstallConfiguration.h"
+#import "SummaryDetail.h"
+#import "InstallSummaryDetailViewController.h"
+#import "SelectBottleSheetController.h"
+#import "InstallOptionsSheetController.h"
+#import "LoadingCrossTieSheetController.h"
+#import "NSAttributedString+CrossOverAdditions.h"
+#import "CDTools.h"
 
 @implementation PackageViewController
 
@@ -15,7 +26,39 @@
 }
 
 - (void)dealloc {
-    // dealloc
+    if (self->_collectionView) {
+        [self->_collectionView removeObserver:self forKeyPath:@"selectionIndexPaths"];
+    }
+    if (self->_installer) {
+        [self->_installer removeObserver:self forKeyPath:@"summaryDetails"];
+    }
+    if (self->_installerView) {
+        [self->_installerView setDelegate:nil];
+    }
+    if (self->_packageView) {
+        [self->_packageView setDelegate:nil];
+    }
+    if (self->_packageDescriptionTextField) {
+        [self stopObservingFrameOfView:self->_packageDescriptionTextField];
+    }
+    if (self->_installationNotesTextField) {
+        [self stopObservingFrameOfView:self->_installationNotesTextField];
+    }
+    [[NSUserDefaultsController sharedUserDefaultsController] removeObserver:self forKeyPath:@"values.ShowUntestedApps" context:NULL];
+
+    [self->_packages release];
+    [self->_visiblePackages release];
+    [self->_sortDescriptors release];
+    [self->_filterPredicate release];
+    [self->_packageViewTitle release];
+    [self->_installer release];
+    [self->_summaryDetailsControllers release];
+    [self->_unknownPackage release];
+    [self->_optionsMenu release];
+    [self->_installerSourceMenu release];
+    [self->_installWithSteamMenuItem release];
+    [self->_downloadInstallerMenuItem release];
+    [super dealloc];
 }
 
 - (void)viewDidLoad {
@@ -25,6 +68,7 @@
     if (self->_packageView) {
         [self->_packageView setFrame:b];
         [self->_packageView setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable];
+        [self->_packageView registerForDraggedTypes:@[NSPasteboardTypeFileURL]];
         [self->_packageView setDelegate:self];
     }
     if (self->_installerView) {
@@ -41,8 +85,33 @@
 
     if (self->_collectionView) {
         [self->_collectionView registerClass:[PackageViewItem class] forItemWithIdentifier:@"PackageViewItem"];
+        [self->_collectionView setSelectable:YES];
+        [self->_collectionView setAllowsEmptySelection:YES];
+        [self->_collectionView setAllowsMultipleSelection:NO];
+        [self->_collectionView addObserver:self forKeyPath:@"selectionIndexPaths" options:0 context:NULL];
         [self->_collectionView setDataSource:self];
         [self->_collectionView setDelegate:self];
+    }
+
+    if (self->_installButton) {
+        [self->_installButton setBezelColor:[NSColor controlAccentColor]];
+    }
+
+    if (self->_optionsButton) {
+        [self->_optionsButton sendActionOn:NSEventMaskLeftMouseDown];
+    }
+
+    if (self->_installUnlistedAppButton) {
+        [self->_installUnlistedAppButton setContentTintColor:[NSColor linkColor]];
+        [self->_installUnlistedAppButton setTarget:self];
+        [self->_installUnlistedAppButton setAction:@selector(selectUnknownPackage:)];
+    }
+
+    if (self->_packageDescriptionTextField) {
+        [self startObservingFrameOfView:self->_packageDescriptionTextField];
+    }
+    if (self->_installationNotesTextField) {
+        [self startObservingFrameOfView:self->_installationNotesTextField];
     }
 
     if (self->_searchField) {
@@ -50,13 +119,10 @@
         [self->_searchField setAction:@selector(search:)];
     }
 
-    if (self->_installUnlistedAppButton) {
-        [self->_installUnlistedAppButton setTarget:self];
-        [self->_installUnlistedAppButton setAction:@selector(selectUnknownPackage:)];
-    }
-
     NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"softwarePackage" ascending:YES selector:@selector(localizedStandardCompare:)];
     [self setSortDescriptors:@[sort]];
+
+    [[NSUserDefaultsController sharedUserDefaultsController] addObserver:self forKeyPath:@"values.ShowUntestedApps" options:0 context:NULL];
 
     if ([self->_packages count] == 0) {
         [self populatePackages];
@@ -161,13 +227,47 @@
 }
 
 - (void)setInstaller:(id)arg1 {
-    self->_installer = arg1;
+    if (self->_installer != arg1) {
+        if (self->_installer) {
+            [self->_installer removeObserver:self forKeyPath:@"summaryDetails"];
+        }
+        [self->_installer release];
+        self->_installer = [arg1 retain];
+        if (self->_installer) {
+            [self->_installer addObserver:self forKeyPath:@"summaryDetails" options:0 context:NULL];
+            [self->_installer setDelegate:self];
+            [self updateSummaryDetails];
+            [self expandPackageDescription:NO];
+            [self expandInstallationNotes:NO];
+        }
+    }
 }
 
 - (void)setSelectedBottle:(id)arg1 {
+    if (arg1) {
+        if (!self->_installer) {
+            PackageInstaller *installer = [[PackageInstaller alloc] initWithPackage:nil];
+            [self setInstaller:installer];
+            [installer release];
+        }
+        [self->_installer setSelectedBottle:arg1];
+        NSBundle *bundle = [NSBundle mainBundle];
+        NSString *fmt = [bundle localizedStringForKey:@"Install a Windows Application into %@" value:@"" table:nil];
+        NSString *bottleName = [arg1 respondsToSelector:@selector(name)] ? [arg1 name] : @"";
+        [self setPackageViewTitle:[NSString stringWithFormat:fmt, bottleName]];
+    }
 }
 
 - (void)setSelectedPackage:(id)arg1 {
+    if (!arg1) return;
+    if (self->_installer) {
+        [self->_installer setSelectedPackage:arg1];
+    } else {
+        PackageInstaller *installer = [[PackageInstaller alloc] initWithPackage:arg1];
+        [self setInstaller:installer];
+        [installer release];
+    }
+    [self openInstallerView];
 }
 
 - (void)updateVisiblePackages {
@@ -266,6 +366,7 @@
 }
 
 - (void)setSortDescriptors:(id)arg1 {
+    [self->_sortDescriptors release];
     self->_sortDescriptors = [arg1 copy];
 }
 
@@ -278,35 +379,262 @@
 }
 
 - (void)updateSummaryDetails {
+    if (self->_installButton) {
+        [self->_installButton setEnabled:YES];
+    }
+
+    InstallConfiguration *config = [self->_installer installConfiguration];
+    NSString *steamID = [config steamID];
+    NSString *downloadURL = [config downloadURL];
+    NSArray *details = [[self->_installer summaryDetails] copy];
+
+    NSMutableArray *controllers = [[NSMutableArray alloc] init];
+    BOOL hasSteamOrDownload = (steamID != nil || downloadURL != nil);
+
+    for (SummaryDetail *sd in details) {
+        InstallSummaryDetailViewController *vc = [[InstallSummaryDetailViewController alloc] init];
+        
+        NSAttributedString *as = [NSAttributedString cx_attributedStringWithHTML:[sd label]];
+        [vc setText:as];
+        [vc setImage:[sd image]];
+        [vc setAction:[sd action]];
+        [vc setDelegate:self];
+
+        if ([sd action] != @selector(editInstallerSource:)) {
+            // Default
+        } else if (!hasSteamOrDownload) {
+            [vc setSendsActionOnMouseDown:YES];
+        }
+
+        [vc setButtonEnabled:([self->_installer status] == 0)];
+        [controllers addObject:vc];
+
+        if ([sd type] == 0) {
+            if (self->_installButton) {
+                [self->_installButton setEnabled:NO];
+            }
+        }
+
+        [vc release];
+    }
+    [details release];
+
+    if (self->_summaryDetailsControllers) {
+        for (InstallSummaryDetailViewController *oldVC in self->_summaryDetailsControllers) {
+            [[oldVC view] removeFromSuperview];
+        }
+    }
+
+    [self setSummaryDetailsControllers:controllers];
+
+    if (self->_summaryDetailsView) {
+        for (InstallSummaryDetailViewController *newVC in controllers) {
+            [self->_summaryDetailsView addArrangedSubview:[newVC view]];
+        }
+    }
+    [controllers release];
+
+    if (self->_installWithSteamMenuItem) {
+        [self->_installWithSteamMenuItem setHidden:(steamID == nil)];
+        [self->_installWithSteamMenuItem setState:[config installWithSteam]];
+    }
+
+    if (self->_downloadInstallerMenuItem) {
+        [self->_downloadInstallerMenuItem setHidden:(downloadURL == nil)];
+        [self->_downloadInstallerMenuItem setState:([config installerDownloadSource] != nil)];
+    }
 }
 
 - (void)openInstallerView {
+    if ([[self installer] status] == 1) {
+        [self installationStarted];
+    }
+    if ([[self installer] status] == 2) {
+        [self installationCompleted];
+    }
+    [[self installer] setDelegate:self];
     if (self->_packageView) [self->_packageView setHidden:YES];
     if (self->_installerView) [self->_installerView setHidden:NO];
+    if (self->_installButton) [self->_installButton setHidden:NO];
 }
 
-- (void)optionsButtonClicked:(id)arg1 {
+- (void)optionsButtonClicked:(id)sender {
+    NSPoint point = NSMakePoint(0, NSHeight([sender bounds]));
+    [self.optionsMenu popUpMenuPositioningItem:nil atLocation:point inView:sender];
 }
 
 - (void)autoPlay:(id)arg1 {
+    if (![NSThread isMainThread]) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self autoPlay:arg1];
+        });
+        return;
+    }
+
+    PackageInstaller *inst = [self installer];
+    if (!inst) {
+        inst = [[[PackageInstaller alloc] initWithPackage:nil] autorelease];
+    }
+
+    id c4Profiles = (id)[CXSetupLib c4ProfilesClass];
+    id matching = [c4Profiles getMatchingProfiles:arg1];
+    if ([matching count] == 1) {
+        for (id key in matching) {
+            id prof = matching[key];
+            PackageTreeNode *node = [[[PackageTreeNode alloc] initWithProfile:prof] autorelease];
+            [inst setSelectedPackage:node];
+        }
+    }
+
+    [inst setInstallerSource:arg1];
+    if (self->_unknownPackage) {
+        [inst setUnknownPackage:self->_unknownPackage];
+    }
+    [self setInstaller:inst];
+    [self openInstallerView];
 }
 
 - (void)autoPlayWithParsedFile:(id)arg1 {
+    if (![NSThread isMainThread]) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self autoPlayWithParsedFile:arg1];
+        });
+        return;
+    }
+
+    PackageInstaller *inst = [self installer];
+    if (!inst) {
+        inst = [[[PackageInstaller alloc] initWithPackage:nil] autorelease];
+    }
+
+    [inst autoPlayWithParsedAutorunFile:arg1];
+    if (self->_unknownPackage) {
+        [inst setUnknownPackage:self->_unknownPackage];
+    }
+    [self setInstaller:inst];
+    [self openInstallerView];
 }
 
 - (void)autoPlayWithAutorunFile:(id)arg1 {
+    if (![NSThread isMainThread]) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self autoPlayWithAutorunFile:arg1];
+        });
+        return;
+    }
+
+    id c4Profiles = (id)[CXSetupLib c4ProfilesClass];
+    id taste = [c4Profiles tasteC4PFile:arg1];
+    if ([taste boolValue]) {
+        [[self window] makeKeyAndOrderFront:self];
+        [self displayLoadingSheetAndPrepareCrossTie:arg1];
+    } else {
+        NSBundle *bundle = [NSBundle mainBundle];
+        NSString *infoFmt = [bundle localizedStringForKey:@"The CrossTie file '%@' is not from a trusted source!\n\nThis means that CodeWeavers has no knowledge or control over what actions profiles from this file may attempt. Be VERY cautious loading untrusted CrossTies as they can cause great damage to your computer." value:@"" table:nil];
+        NSString *fileName = [[NSFileManager defaultManager] displayNameAtPath:arg1];
+
+        NSAlert *alert = [[[NSAlert alloc] init] autorelease];
+        [alert setMessageText:[bundle localizedStringForKey:@"Load untrusted CrossTie file?" value:@"" table:nil]];
+        [alert setInformativeText:[NSString stringWithFormat:infoFmt, fileName]];
+        [alert addButtonWithTitle:[bundle localizedStringForKey:@"Don't Load" value:@"" table:nil]];
+        [alert addButtonWithTitle:[bundle localizedStringForKey:@"Load" value:@"" table:nil]];
+
+        [[self window] makeKeyAndOrderFront:self];
+        [alert beginSheetModalForWindow:[self window] completionHandler:^(NSModalResponse returnCode) {
+            if (returnCode == NSAlertSecondButtonReturn) {
+                [self displayLoadingSheetAndPrepareCrossTie:arg1];
+            }
+        }];
+    }
 }
 
 - (void)prepareDropinC4pAndAutorun:(id)arg1 {
+    id c4Profiles = (id)[CXSetupLib c4ProfilesClass];
+    id res = [c4Profiles prepareSingleUseC4PFile:arg1];
+    if ([res count] == 2) {
+        id file0 = [res objectAtIndex:0];
+        id sig1 = [res objectAtIndex:1];
+        if (file0 && ![file0 isKindOfClass:[NSNull class]]) {
+            id dropped = [c4Profiles dropinC4PFile:file0 withSig:sig1];
+            [[NSFileManager defaultManager] removeItemAtPath:file0 error:nil];
+            if (sig1 && ![sig1 isKindOfClass:[NSNull class]]) {
+                [[NSFileManager defaultManager] removeItemAtPath:sig1 error:nil];
+            }
+
+            if ([dropped valueForKey:@"malware_appid"]) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self displayRevokedFileAlert:dropped];
+                });
+            } else if ([[dropped valueForKey:@"useful_for_current_product"] boolValue]) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self populatePackages];
+                    [self autoPlayWithParsedFile:dropped];
+                });
+            } else {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self displayEmptyFileAlert:arg1];
+                });
+            }
+        }
+    }
 }
 
 - (void)displayLoadingSheetAndPrepareCrossTie:(id)arg1 {
+    LoadingCrossTieSheetController *sheet = [[[LoadingCrossTieSheetController alloc] init] autorelease];
+    NSString *dName = [[NSFileManager defaultManager] displayNameAtPath:arg1];
+    [sheet setCrossTieDisplayName:dName];
+    [[self window] beginSheet:[sheet window] completionHandler:^(NSModalResponse returnCode) {
+    }];
+
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        [self prepareDropinC4pAndAutorun:arg1];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [[self window] endSheet:[sheet window]];
+            [[sheet window] orderOut:nil];
+        });
+    });
 }
 
 - (void)displayEmptyFileAlert:(id)arg1 {
+    if (![NSThread isMainThread]) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self displayEmptyFileAlert:arg1];
+        });
+        return;
+    }
+
+    NSBundle *bundle = [NSBundle mainBundle];
+    NSString *fmt = [bundle localizedStringForKey:@"The CrossTie file '%@' does not contain installation profiles for anything that can be installed with this product." value:@"" table:nil];
+    NSString *fileName = [[NSFileManager defaultManager] displayNameAtPath:arg1];
+
+    NSAlert *alert = [[[NSAlert alloc] init] autorelease];
+    [alert setMessageText:[bundle localizedStringForKey:@"Invalid File" value:@"" table:nil]];
+    [alert setInformativeText:[NSString stringWithFormat:fmt, fileName]];
+    [alert beginSheetModalForWindow:[self window] completionHandler:nil];
 }
 
 - (void)displayRevokedFileAlert:(id)arg1 {
+    if (![NSThread isMainThread]) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self displayRevokedFileAlert:arg1];
+        });
+        return;
+    }
+
+    NSBundle *bundle = [NSBundle mainBundle];
+    NSAlert *alert = [[[NSAlert alloc] init] autorelease];
+    [alert setMessageText:[bundle localizedStringForKey:@"Malware Detected" value:@"" table:nil]];
+    [alert setInformativeText:[bundle localizedStringForKey:@"This file cannot be used because it would install malicious software or otherwise harm your computer." value:@"" table:nil]];
+    [alert addButtonWithTitle:[bundle localizedStringForKey:@"OK" value:@"" table:nil]];
+    [alert addButtonWithTitle:[bundle localizedStringForKey:@"More Info" value:@"" table:nil]];
+    [alert beginSheetModalForWindow:[self window] completionHandler:^(NSModalResponse returnCode) {
+        if (returnCode == NSAlertSecondButtonReturn) {
+            NSString *urlStr = [arg1 valueForKey:@"malware_url"];
+            if (urlStr) {
+                [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:urlStr]];
+            }
+        }
+    }];
 }
 
 - (NSInteger)numberOfSectionsInCollectionView:(id)arg1 {
@@ -327,48 +655,131 @@
 }
 
 - (void)collectionView:(id)arg1 willDisplayItem:(id)arg2 forRepresentedObjectAtIndexPath:(id)arg3 {
+    NSCollectionView *cv = (NSCollectionView *)arg1;
+    PackageViewItem *pvi = (PackageViewItem *)arg2;
+    NSIndexPath *ip = (NSIndexPath *)arg3;
+
+    NSInteger total = [cv numberOfItemsInSection:0];
+    BOOL hideDivider = NO;
+    if (total <= 1) {
+        hideDivider = YES;
+    } else if (ip.item >= total - 10) {
+        NSIndexPath *lastPath = [NSIndexPath indexPathForItem:total - 1 inSection:0];
+        NSCollectionViewLayoutAttributes *lastAttr = [cv layoutAttributesForItemAtIndexPath:lastPath];
+        NSCollectionViewLayoutAttributes *itemAttr = [cv layoutAttributesForItemAtIndexPath:ip];
+        if (lastAttr && itemAttr && CGRectGetMaxY([itemAttr frame]) == CGRectGetMaxY([lastAttr frame])) {
+            hideDivider = YES;
+        }
+    }
+    [[pvi dividerLine] setHidden:hideDivider];
+}
+
+- (void)collectionView:(NSCollectionView *)collectionView didSelectItemsAtIndexPaths:(NSSet<NSIndexPath *> *)indexPaths {
+    if ([indexPaths count] == 1) {
+        NSIndexPath *indexPath = [indexPaths anyObject];
+        if (indexPath.item < (NSInteger)[self->_visiblePackages count]) {
+            PackageTreeNode *node = self->_visiblePackages[indexPath.item];
+            [self setSelectedPackage:node];
+        }
+    }
 }
 
 - (void)observeValueForKeyPath:(id)arg1 ofObject:(id)arg2 change:(id)arg3 context:(void *)arg4 {
+    if ([arg1 isEqualToString:@"selectionIndexPaths"]) {
+        NSSet *selectedPaths = [self.collectionView selectionIndexPaths];
+        if ([selectedPaths count] == 1) {
+            NSIndexPath *indexPath = [selectedPaths anyObject];
+            if (indexPath.item < (NSInteger)[self.visiblePackages count]) {
+                PackageTreeNode *node = self.visiblePackages[indexPath.item];
+                [self setSelectedPackage:node];
+            }
+        }
+    } else if ([arg1 isEqualToString:@"summaryDetails"]) {
+        [self updateSummaryDetails];
+    } else if ([arg1 isEqualToString:@"values.ShowUntestedApps"]) {
+        [self updateVisiblePackages];
+        if (self->_collectionView) {
+            [self->_collectionView reloadData];
+        }
+    } else {
+        [super observeValueForKeyPath:arg1 ofObject:arg2 change:arg3 context:arg4];
+    }
 }
 
-
 - (void)install:(id)arg1 {
-    [self openInstallerView];
+    if ([[self installer] status] == 1) {
+        [[self installer] cancel];
+    } else {
+        [[self installer] install];
+    }
 }
 
 - (void)selectUnknownPackage:(id)arg1 {
-    [self openInstallerView];
+    [self setSelectedPackage:[self unknownPackage]];
+    [[[self installer] installConfiguration] setNewBottleName:@""];
 }
 
 - (void)editInstallerSource:(id)arg1 {
+    InstallConfiguration *config = [[self installer] installConfiguration];
+    if ([config steamID] != nil || [config downloadURL] != nil) {
+        NSPoint point = NSMakePoint(0, NSHeight([arg1 bounds]));
+        [[self installerSourceMenu] popUpMenuPositioningItem:nil atLocation:point inView:arg1];
+    } else {
+        [self selectInstaller:arg1];
+    }
 }
 
 - (void)selectSteamInstall:(id)arg1 {
+    [[[self installer] installConfiguration] setInstallerSteam];
 }
 
 - (void)selectInstallerDownload:(id)arg1 {
+    [[[self installer] installConfiguration] setInstallerDownload];
 }
 
 - (void)selectInstaller:(id)arg1 {
+    [[self installer] selectInstaller:arg1];
 }
 
 - (void)selectBottle:(id)arg1 {
+    [[self installer] selectBottleWithCompletion:nil];
 }
 
 - (void)c4pButton:(id)arg1 {
+    NSString *url = [[[self installer] package] c4pPage];
+    if (url) {
+        [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:url]];
+    }
 }
 
 - (void)downloadButton:(id)arg1 {
+    NSString *url = [[[self installer] package] homePage];
+    if (url) {
+        [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:url]];
+    }
 }
 
 - (void)installOptions:(id)arg1 {
+    [[self installer] installOptions];
 }
 
 - (void)installationCompleted {
+    NSString *installTitle = [[NSBundle mainBundle] localizedStringForKey:@"Install" value:@"" table:nil];
+    [[self installButton] setTitle:installTitle];
+    [[self optionsButton] setEnabled:YES];
+
+    if ([[self installer] status] == 2) {
+        id d = [self delegate];
+        if ([d respondsToSelector:@selector(revealNewBottle:)]) {
+            [d revealNewBottle:[[self installer] bottle]];
+        }
+    }
 }
 
 - (void)installationStarted {
+    NSString *cancelTitle = [[NSBundle mainBundle] localizedStringForKey:@"Cancel" value:@"" table:nil];
+    [[self installButton] setTitle:cancelTitle];
+    [[self optionsButton] setEnabled:NO];
 }
 
 - (id)window {
@@ -380,34 +791,66 @@
 }
 
 - (BOOL)textFieldIsTruncated:(id)arg1 {
-    return NO;
+    NSTextField *tf = (NSTextField *)arg1;
+    NSRect frame = [tf frame];
+    NSRect exp = [[tf cell] expansionFrameWithFrame:frame inView:[tf superview]];
+    return !NSEqualRects(exp, NSZeroRect);
 }
 
 - (void)startObservingFrameOfView:(id)arg1 {
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(subviewFrameChanged:) name:NSViewFrameDidChangeNotification object:arg1];
+    [arg1 setPostsFrameChangedNotifications:YES];
 }
 
 - (void)stopObservingFrameOfView:(id)arg1 {
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:NSViewFrameDidChangeNotification object:arg1];
 }
 
 - (void)subviewFrameChanged:(id)arg1 {
+    id obj = [arg1 object];
+    if (obj == [self packageDescriptionTextField]) {
+        [self updatePackageDescriptionTruncation];
+    } else if (obj == [self installationNotesTextField]) {
+        [self updateInstallationNotesTruncation];
+    }
 }
 
 - (void)updatePackageDescriptionTruncation {
+    BOOL showExpand = NO;
+    if ([[self packageDescriptionCollapsedHeightConstraint] isActive]) {
+        showExpand = [self textFieldIsTruncated:[self packageDescriptionTextField]];
+    }
+    [[self packageDescriptionTextField] setSelectable:!showExpand];
+    [[self packageDescriptionMoreLabel] setHidden:!showExpand];
+    [[self packageDescriptionExpandButton] setHidden:!showExpand];
 }
 
 - (void)updateInstallationNotesTruncation {
+    BOOL showExpand = NO;
+    if ([[self installationNotesCollapsedHeightConstraint] isActive]) {
+        showExpand = [self textFieldIsTruncated:[self installationNotesTextField]];
+    }
+    [[self installationNotesTextField] setSelectable:!showExpand];
+    [[self installationNotesMoreLabel] setHidden:!showExpand];
+    [[self installationNotesExpandButton] setHidden:!showExpand];
 }
 
 - (void)expandPackageDescription:(BOOL)arg1 {
+    [[self packageDescriptionCollapsedHeightConstraint] setActive:!arg1];
+    [self updatePackageDescriptionTruncation];
 }
 
 - (void)expandInstallationNotes:(BOOL)arg1 {
+    [[self installationNotesCollapsedHeightConstraint] setActive:!arg1];
+    [self updateInstallationNotesTruncation];
 }
 
 - (void)packageDescriptionExpandButtonClicked:(id)arg1 {
+    [self expandPackageDescription:YES];
 }
 
 - (void)installationNotesExpandButtonClicked:(id)arg1 {
+    [self expandInstallationNotes:YES];
 }
 
 - (id)delegate {
@@ -423,7 +866,12 @@
 }
 
 - (void)setPackages:(id)arg1 {
-    self->_packages = [arg1 mutableCopy];
+    [self willChangeValueForKey:@"packages"];
+    if (self->_packages != arg1) {
+        [self->_packages release];
+        self->_packages = [arg1 mutableCopy];
+    }
+    [self didChangeValueForKey:@"packages"];
 }
 
 - (id)unknownPackage {
@@ -431,7 +879,10 @@
 }
 
 - (void)setUnknownPackage:(id)arg1 {
-    self->_unknownPackage = arg1;
+    if (self->_unknownPackage != arg1) {
+        [self->_unknownPackage release];
+        self->_unknownPackage = [arg1 retain];
+    }
 }
 
 - (id)sortDescriptors {
@@ -457,7 +908,10 @@
 }
 
 - (void)setVisiblePackages:(id)arg1 {
-    self->_visiblePackages = [arg1 mutableCopy];
+    if (self->_visiblePackages != arg1) {
+        [self->_visiblePackages release];
+        self->_visiblePackages = [arg1 mutableCopy];
+    }
 }
 
 - (id)summaryDetailsControllers {
@@ -465,7 +919,10 @@
 }
 
 - (void)setSummaryDetailsControllers:(id)arg1 {
-    self->_summaryDetailsControllers = [arg1 copy];
+    if (self->_summaryDetailsControllers != arg1) {
+        [self->_summaryDetailsControllers release];
+        self->_summaryDetailsControllers = [arg1 copy];
+    }
 }
 
 - (id)installer {
@@ -562,7 +1019,10 @@
 }
 
 - (void)setOptionsMenu:(id)arg1 {
-    self->_optionsMenu = arg1;
+    if (self->_optionsMenu != arg1) {
+        [self->_optionsMenu release];
+        self->_optionsMenu = [arg1 retain];
+    }
 }
 
 - (id)installerSourceMenu {
@@ -570,7 +1030,10 @@
 }
 
 - (void)setInstallerSourceMenu:(id)arg1 {
-    self->_installerSourceMenu = arg1;
+    if (self->_installerSourceMenu != arg1) {
+        [self->_installerSourceMenu release];
+        self->_installerSourceMenu = [arg1 retain];
+    }
 }
 
 - (id)installWithSteamMenuItem {
@@ -578,7 +1041,10 @@
 }
 
 - (void)setInstallWithSteamMenuItem:(id)arg1 {
-    self->_installWithSteamMenuItem = arg1;
+    if (self->_installWithSteamMenuItem != arg1) {
+        [self->_installWithSteamMenuItem release];
+        self->_installWithSteamMenuItem = [arg1 retain];
+    }
 }
 
 - (id)downloadInstallerMenuItem {
@@ -586,7 +1052,10 @@
 }
 
 - (void)setDownloadInstallerMenuItem:(id)arg1 {
-    self->_downloadInstallerMenuItem = arg1;
+    if (self->_downloadInstallerMenuItem != arg1) {
+        [self->_downloadInstallerMenuItem release];
+        self->_downloadInstallerMenuItem = [arg1 retain];
+    }
 }
 
 - (id)summaryDetailsView {

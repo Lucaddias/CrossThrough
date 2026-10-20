@@ -14,6 +14,7 @@
 - (NSString *)stringInFileSystemRepresentationForm;
 - (NSArray *)componentsOfCommandLine;
 - (NSString *)lastUnixOrWindowsPathComponent;
+- (NSString *)MD5;
 
 @end
 

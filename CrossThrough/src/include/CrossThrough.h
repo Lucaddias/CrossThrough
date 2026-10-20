@@ -193,4 +193,20 @@
 #import "UpdateController.h"
 #import "helperServer.h"
 
+@interface NSObject (CrossThroughDynamicDispatch)
++ (id)getOnlineFilePath;
+- (id)getOnlineFilePath;
+- (id)profilesSet;
+- (id)contentsDict;
+- (id)createToken:(id)arg1 password:(id)arg2;
+- (id)sortedTasks;
+- (id)sortedRunnable;
+- (id)schedule:(id)arg1;
+- (id)allDone;
+- (id)bottleStatus:(id)arg1;
+- (id)packageobject;
+- (id)packageid;
+- (id)softwarePackage;
+@end
+
 #endif /* CrossThrough_h */

@@ -25,6 +25,42 @@
     BottleCollection * _bottleCollection;
 }
 
+@property (nonatomic, copy) NSString *bottleName;
+@property (nonatomic, readonly, copy) NSDictionary *bottles;
+@property (nonatomic, readonly) BOOL newBottleCollidesWithExistingBottle;
+@property (nonatomic, readonly) BOOL hasBottle;
+@property (nonatomic, readonly) BOOL hasInstallerSource;
+@property (nonatomic, readonly) BOOL hasPackage;
+@property (nonatomic, readonly) BOOL bottleIsCompatibleWithPackage;
+@property (nonatomic, readonly) BOOL creatingNewBottle;
+@property (nonatomic, readonly, copy) NSDictionary *dependencyOverrides;
+@property (nonatomic, readonly, copy) NSString *downloadURL;
+@property (nonatomic, readonly, copy) NSString *installationNotes;
+@property (nonatomic, readonly, copy) NSString *installerDownloadSource;
+@property (nonatomic, copy) NSString *installerLocale;
+@property (nonatomic, readonly, copy) NSString *installerSource;
+@property (nonatomic, readonly) BOOL installWithSteam;
+@property (nonatomic, copy) NSString *environment;
+@property (nonatomic, copy) NSString *logChannels;
+@property (nonatomic, copy) NSString *logEnvironment;
+@property (nonatomic, readonly, copy) NSString *logFileName;
+@property (nonatomic, copy) NSURL *logFileURL;
+@property (nonatomic, readonly, copy) NSString *nameForNewBottle;
+@property (nonatomic, readonly, copy) NSString *postInstallURL;
+@property (nonatomic, readonly) id profile;
+@property (nonatomic, readonly, copy) NSArray *profileLanguages;
+@property (nonatomic, readonly) PackageTreeNode *selectedPackage;
+@property (nonatomic, readonly, copy) NSString *steamID;
+@property (nonatomic, readonly) id targetBottle;
+@property (nonatomic, readonly, copy) NSDictionary *templates;
+@property (nonatomic, readonly, getter=isVirtual) BOOL virtual;
+@property (nonatomic, readonly) BOOL is64bit;
+@property (nonatomic, readonly, copy) NSDictionary *dependencyDetails;
+@property (nonatomic, readonly, copy) NSDictionary *installerDetails;
+@property (nonatomic, readonly, copy) NSDictionary *bottleDetails;
+@property (nonatomic, readonly, copy) NSDictionary *languageDetails;
+@property (nonatomic, readonly, copy) NSDictionary *miscDetails;
+
 // Class Methods
 + (BOOL)automaticallyNotifiesObserversOfSelectedPackage;
 + (BOOL)resolveInstanceMethod:(SEL)arg1;
@@ -44,7 +80,7 @@
 - (BOOL)hasPackage;
 - (BOOL)bottleIsCompatibleWithPackage;
 - (BOOL)creatingNewBottle;
-- (void)setInstallerLocale:(id)arg1;
+- (void)setInstallerLocale:(NSString *)arg1;
 - (void)setInstallerSource:(id)arg1 forUser:(BOOL)arg2;
 - (void)setInstallerSteam;
 - (void)setInstallerDownload;
@@ -94,14 +130,14 @@
 - (id)installTask;
 - (id)delegates;
 - (void)setDelegates:(id)arg1;
-- (id)environment;
-- (void)setEnvironment:(id)arg1;
-- (id)logChannels;
-- (void)setLogChannels:(id)arg1;
-- (id)logEnvironment;
-- (void)setLogEnvironment:(id)arg1;
-- (id)logFileURL;
-- (void)setLogFileURL:(id)arg1;
+- (NSString *)environment;
+- (void)setEnvironment:(NSString *)arg1;
+- (NSString *)logChannels;
+- (void)setLogChannels:(NSString *)arg1;
+- (NSString *)logEnvironment;
+- (void)setLogEnvironment:(NSString *)arg1;
+- (NSURL *)logFileURL;
+- (void)setLogFileURL:(NSURL *)arg1;
 - (id)selectedPackage;
 - (id)bottleCollection;
 

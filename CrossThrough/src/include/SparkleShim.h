@@ -21,6 +21,7 @@
 @interface SUAppcastItem : NSObject
 @property (copy, readonly) NSString *versionString;
 @property (copy, readonly) NSString *displayVersionString;
+@property (copy, readonly) NSDate *date;
 @end
 
 @interface SUStandardVersionComparator : NSObject

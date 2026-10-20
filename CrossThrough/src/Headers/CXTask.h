@@ -26,6 +26,7 @@
 - (void)dealloc;
 - (void)cxtaskObserveRealTaskTermination:(id)arg1;
 - (void)setArguments:(id)arg1;
+- (void)setTerminationHandler:(id)arg1;
 - (id)forwardingTargetForSelector:(SEL)arg1;
 
 @end

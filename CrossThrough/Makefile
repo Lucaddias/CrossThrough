@@ -76,4 +76,14 @@ app: $(TARGET)
 clean:
 	rm -rf build
 
-.PHONY: all app clean
+test: app build/obj/test_wizard.o
+	@echo "Linking $(APP_BUNDLE)/Contents/MacOS/test_wizard..."
+	$(CC) $(LDFLAGS) build/obj/test_wizard.o $(filter-out build/obj/main.o, $(OBJS)) -o $(APP_BUNDLE)/Contents/MacOS/test_wizard
+	@echo "Running test_wizard inside app bundle..."
+	@./$(APP_BUNDLE)/Contents/MacOS/test_wizard
+
+build/obj/test_wizard.o: tests/test_wizard.m
+	@mkdir -p build/obj
+	$(CC) $(CFLAGS) -c $< -o $@
+
+.PHONY: all app clean test

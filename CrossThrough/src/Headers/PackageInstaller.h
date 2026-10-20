@@ -20,11 +20,20 @@
     BottleWrapper * _bottle;
     NSString * _currentTaskDownloadDescription;
     NSInteger _totalInstallSteps;
+    NSInteger _installStepsCancelled;
+    NSInteger _installStepsCompleted;
+    NSInteger _installStepsSkipped;
     NSAttributedString * _completionNotes;
+    NSAttributedString * _installationNotes;
     id _summaryDetails;
     NSOperationQueue * _installQueue;
     NSMutableArray * _currentTasks;
+    NSMutableArray * _failedTasks;
     id _downloadUpdateTimer;
+    id _installEngine;
+    id _installConfiguration;
+    id _delegate;
+    id _bottleCollection;
 }
 
 // Class Methods

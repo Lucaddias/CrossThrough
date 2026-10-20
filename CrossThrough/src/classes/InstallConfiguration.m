@@ -2,6 +2,11 @@
 #import "InstallConfiguration.h"
 #import "CrossThrough.h"
 #import "HopperCompat.h"
+#import "PropertyDescriptor.h"
+#import <objc/runtime.h>
+
+static dispatch_once_t _resolveOnceToken = 0;
+static NSMutableDictionary *_selectorToProperty = nil;
 
 @implementation InstallConfiguration
 
@@ -9,623 +14,512 @@
     return NO;
 }
 
-+ (BOOL)resolveInstanceMethod:(SEL)arg1 {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r31 = r31 - 0x60;
-     *   var_40 = r26;
-     *   decomp_var_38 = r25;
-     *   var_30 = r24;
-     *   decomp_var_28 = r23;
-     *   var_20 = r22;
-     *   decomp_var_18 = r21;
-     *   var_10 = r20;
-     *   decomp_var_8 = r19;
-     *   saved_fp = r29;
-     *   decomp_var_m8 = r30;
-     *   r21 = arg2;
-     *   r22 = self;
-     *   if (*_resolveInstanceMethod:.onceToken != -0x1) {
-     *   dispatch_once(_resolveInstanceMethod:.onceToken, ___block_literal_global);
-     *   }
-     *   r19 = [NSStringFromSelector(r21) retain];
-     *   r0 = *_selectorToProperty;
-     *   r0 = [r0 objectForKey:r19];
-     *   r0 = [r0 retain];
-     *   r20 = r0;
-     *   if (r0 != 0x0) {
-     *   r0 = [r20 getter];
-     *   r0 = [r0 retain];
-     *   r23 = r0;
-     *   ... (64 more lines)
-     */
-    return NO;
++ (BOOL)resolveInstanceMethod:(SEL)sel {
+    if (_resolveOnceToken != -1) {
+        dispatch_once(&_resolveOnceToken, ^{
+            NSDictionary *attrMap = @{
+                @"bottleName": @"bottlename",
+                @"dependencyOverrides": @"dependency_overrides",
+                @"downloadURL": @"download_url",
+                @"nameForNewBottle": @"newBottleName",
+                @"postInstallURL": @"post_install_url",
+                @"steamID": @"steamid",
+                @"targetBottle": @"target_bottle"
+            };
+            _selectorToProperty = [[NSMutableDictionary alloc] init];
+            unsigned int count = 0;
+            objc_property_t *props = class_copyPropertyList([InstallConfiguration class], &count);
+            if (props) {
+                for (unsigned int i = 0; i < count; i++) {
+                    objc_property_t prop = props[i];
+                    char *dynamic = property_copyAttributeValue(prop, "D");
+                    if (dynamic) {
+                        free(dynamic);
+                        NSString *propName = [NSString stringWithUTF8String:property_getName(prop)];
+                        PropertyDescriptor *desc = [[PropertyDescriptor alloc] init];
+                        NSString *attr = [attrMap objectForKey:propName];
+                        if (!attr) attr = propName;
+                        [desc setInstallTaskAttribute:attr];
+
+                        char *type = property_copyAttributeValue(prop, "T");
+                        if (type) {
+                            if (strcmp(type, "B") == 0 || strcmp(type, "c") == 0) {
+                                [desc setBoolTyped:YES];
+                            }
+                            free(type);
+                        }
+
+                        char *getter = property_copyAttributeValue(prop, "G");
+                        if (getter) {
+                            [desc setGetter:[NSString stringWithUTF8String:getter]];
+                            free(getter);
+                        } else {
+                            [desc setGetter:propName];
+                        }
+                        [_selectorToProperty setObject:desc forKey:[desc getter]];
+
+                        char *readonly = property_copyAttributeValue(prop, "R");
+                        if (readonly) {
+                            free(readonly);
+                        } else {
+                            char *setter = property_copyAttributeValue(prop, "S");
+                            if (setter) {
+                                [desc setSetter:[NSString stringWithUTF8String:setter]];
+                                free(setter);
+                            } else {
+                                NSString *firstCap = [[propName substringToIndex:1] uppercaseString];
+                                NSString *rest = [propName substringFromIndex:1];
+                                [desc setSetter:[NSString stringWithFormat:@"set%@%@:", firstCap, rest]];
+                            }
+                            [_selectorToProperty setObject:desc forKey:[desc setter]];
+                        }
+                        [desc release];
+                    }
+                }
+                free(props);
+            }
+        });
+    }
+
+    NSString *selStr = NSStringFromSelector(sel);
+    PropertyDescriptor *desc = [_selectorToProperty objectForKey:selStr];
+    if (desc) {
+        if ([[desc getter] isEqualToString:selStr]) {
+            BOOL isAttrEqual = [[desc installTaskAttribute] isEqualToString:[desc getter]];
+            IMP imp = NULL;
+            const char *types = NULL;
+            if ([desc boolTyped]) {
+                imp = isAttrEqual ? (IMP)_boolGetterMethodFastIMP : (IMP)_boolGetterMethodIMP;
+                types = "c@:";
+            } else {
+                imp = isAttrEqual ? (IMP)_objectGetterMethodFastIMP : (IMP)_objectGetterMethodIMP;
+                types = "@@:";
+            }
+            class_addMethod(self, sel, imp, types);
+            return YES;
+        } else if ([[desc setter] isEqualToString:selStr]) {
+            IMP imp = NULL;
+            const char *types = NULL;
+            if ([desc boolTyped]) {
+                imp = (IMP)_boolSetterMethodIMP;
+                types = "v@:c";
+            } else {
+                imp = (IMP)_objectSetterMethodIMP;
+                types = "v@:@";
+            }
+            class_addMethod(self, sel, imp, types);
+            return YES;
+        }
+    }
+
+    return [super resolveInstanceMethod:sel];
+}
+
+static id _objectGetterMethodIMP(id self, SEL _cmd) {
+    InstallConfiguration *config = (InstallConfiguration *)self;
+    PropertyDescriptor *desc = [_selectorToProperty objectForKey:NSStringFromSelector(_cmd)];
+    NSString *attr = [desc installTaskAttribute] ?: NSStringFromSelector(_cmd);
+    return [config->_installTask valueForKey:attr];
+}
+
+static id _objectGetterMethodFastIMP(id self, SEL _cmd) {
+    InstallConfiguration *config = (InstallConfiguration *)self;
+    return [config->_installTask valueForKey:NSStringFromSelector(_cmd)];
+}
+
+static BOOL _boolGetterMethodIMP(id self, SEL _cmd) {
+    InstallConfiguration *config = (InstallConfiguration *)self;
+    PropertyDescriptor *desc = [_selectorToProperty objectForKey:NSStringFromSelector(_cmd)];
+    NSString *attr = [desc installTaskAttribute] ?: NSStringFromSelector(_cmd);
+    return [[config->_installTask valueForKey:attr] boolValue];
+}
+
+static BOOL _boolGetterMethodFastIMP(id self, SEL _cmd) {
+    InstallConfiguration *config = (InstallConfiguration *)self;
+    return [[config->_installTask valueForKey:NSStringFromSelector(_cmd)] boolValue];
+}
+
+static void _objectSetterMethodIMP(id self, SEL _cmd, id value) {
+    InstallConfiguration *config = (InstallConfiguration *)self;
+    PropertyDescriptor *desc = [_selectorToProperty objectForKey:NSStringFromSelector(_cmd)];
+    NSString *attr = [desc installTaskAttribute];
+    [config->_installTask setValue:value forKey:attr];
+}
+
+static void _boolSetterMethodIMP(id self, SEL _cmd, BOOL value) {
+    InstallConfiguration *config = (InstallConfiguration *)self;
+    PropertyDescriptor *desc = [_selectorToProperty objectForKey:NSStringFromSelector(_cmd)];
+    NSString *attr = [desc installTaskAttribute];
+    [config->_installTask setValue:@(value) forKey:attr];
 }
 
 + (id)reasonMain {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = [CXSetupLib cxSetupClass];
-     *   r0 = [r0 dependencyReason:@"MAIN"];
-     *   return r0;
-     */
-    return nil;
+    return [[CXSetupLib cxSetupClass] dependencyReason:@"MAIN"];
 }
 
 + (id)reasonSteam {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = [CXSetupLib cxSetupClass];
-     *   r0 = [r0 dependencyReason:@"STEAM"];
-     *   return r0;
-     */
-    return nil;
+    return [[CXSetupLib cxSetupClass] dependencyReason:@"STEAM"];
 }
 
 + (id)reasonOverride {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = [CXSetupLib cxSetupClass];
-     *   r0 = [r0 dependencyReason:@"OVERRIDE"];
-     *   return r0;
-     */
-    return nil;
+    return [[CXSetupLib cxSetupClass] dependencyReason:@"OVERRIDE"];
 }
 
 + (id)reasonDependency {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = [CXSetupLib cxSetupClass];
-     *   r0 = [r0 dependencyReason:@"DEPENDENCY"];
-     *   return r0;
-     */
-    return nil;
+    return [[CXSetupLib cxSetupClass] dependencyReason:@"DEPENDENCY"];
 }
 
 + (id)overrideExclude {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = [CXSetupLib cxSetupClass];
-     *   r0 = [r0 dependencyOverride:@"EXCLUDE"];
-     *   return r0;
-     */
-    return nil;
+    return [[CXSetupLib cxSetupClass] dependencyOverride:@"EXCLUDE"];
 }
 
 + (id)overrideInclude {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = [CXSetupLib cxSetupClass];
-     *   r0 = [r0 dependencyOverride:@"INCLUDE"];
-     *   return r0;
-     */
-    return nil;
+    return [[CXSetupLib cxSetupClass] dependencyOverride:@"INCLUDE"];
 }
 
 - (id)init {
     self = [super init];
     if (self) {
-        // Initialized
+        Class taskClass = [CXSetupLib installTaskClass];
+        if (taskClass) {
+            self->_installTask = [[taskClass alloc] initWithDelegate:self];
+        }
+        self->_delegates = [[NSMutableArray alloc] init];
+        self->_bottleCollection = [[[CXSetupLib bottleCollectionClass] sharedCollection] retain];
     }
     return self;
 }
 
 - (void)dealloc {
-    return;
+    [self->_installTask setDelegate:nil];
+    [self->_installTask release];
+    self->_installTask = nil;
+    [self->_delegates release];
+    self->_delegates = nil;
+    [self->_environment release];
+    [self->_logChannels release];
+    [self->_logEnvironment release];
+    [self->_logFileURL release];
+    [self->_selectedPackage release];
+    [self->_bottleCollection release];
+    self->_bottleCollection = nil;
+    [super dealloc];
 }
 
+#pragma mark - Bottle & Package Compatibility
+
 - (BOOL)newBottleCollidesWithExistingBottle {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   var_20 = r22;
-     *   decomp_var_18 = r21;
-     *   r31 = r31 + 0xffffffffffffffd0;
-     *   var_10 = r20;
-     *   decomp_var_8 = r19;
-     *   saved_fp = r29;
-     *   decomp_var_m8 = r30;
-     *   r19 = self;
-     *   if ([self creatingNewBottle] != 0x0) {
-     *   r20 = [[r19 bottleCollection] retain];
-     *   r21 = [[r19 nameForNewBottle] retain];
-     *   r0 = [r20 bottleWithName:r21];
-     *   r0 = [r0 retain];
-     *   if (r0 != 0x0) {
-     *   r19 = 0x1;
-     *   }
-     *   [r0 release];
-     *   [r21 release];
-     *   [r20 release];
-     *   }
-     *   else {
-     *   r19 = 0x0;
-     *   }
-     *   r0 = r19;
-     *   return r0;
-     */
+    if ([self creatingNewBottle]) {
+        id bc = [self bottleCollection];
+        NSString *name = [self nameForNewBottle];
+        if (name && [bc bottleWithName:name]) {
+            return YES;
+        }
+    }
     return NO;
 }
 
 - (BOOL)hasBottle {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   var_10 = r20;
-     *   decomp_var_8 = r19;
-     *   r31 = r31 + 0xffffffffffffffe0;
-     *   saved_fp = r29;
-     *   decomp_var_m8 = r30;
-     *   r19 = self;
-     *   if (([self newBottleCollidesWithExistingBottle] & 0x1) != 0x0) {
-     *   r19 = 0x0;
-     *   }
-     *   else {
-     *   r0 = [r19 bottleName];
-     *   r0 = [r0 retain];
-     *   r20 = r0;
-     *   if ([r0 length] != 0x0) {
-     *   r19 = 0x1;
-     *   }
-     *   [r20 release];
-     *   }
-     *   r0 = r19;
-     *   return r0;
-     */
-    return NO;
+    if ([self newBottleCollidesWithExistingBottle]) {
+        return NO;
+    }
+    NSString *name = [self bottleName];
+    return [name length] > 0;
 }
 
 - (BOOL)hasInstallerSource {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   var_20 = r22;
-     *   decomp_var_18 = r21;
-     *   r31 = r31 + 0xffffffffffffffd0;
-     *   var_10 = r20;
-     *   decomp_var_8 = r19;
-     *   saved_fp = r29;
-     *   decomp_var_m8 = r30;
-     *   r21 = self;
-     *   r0 = [self installerSource];
-     *   r0 = [r0 retain];
-     *   r19 = r0;
-     *   if ([r0 length] != 0x0) {
-     *   r21 = 0x1;
-     *   }
-     *   else {
-     *   r0 = [r21 installerDownloadSource];
-     *   r0 = [r0 retain];
-     *   r20 = r0;
-     *   if ([r0 length] == 0x0 && ([r21 installWithSteam] & 0x1) == 0x0) {
-     *   r21 = [r21 isVirtual];
-     *   }
-     *   else {
-     *   r21 = 0x1;
-     *   }
-     *   [r20 release];
-     *   ... (4 more lines)
-     */
-    return NO;
+    NSString *src = [self installerSource];
+    if ([src length] > 0) {
+        return YES;
+    }
+    NSString *dl = [self installerDownloadSource];
+    if ([dl length] == 0 && ![self installWithSteam]) {
+        return [self isVirtual];
+    }
+    return YES;
 }
 
 - (BOOL)hasPackage {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   var_10 = r20;
-     *   decomp_var_8 = r19;
-     *   r31 = r31 + 0xffffffffffffffe0;
-     *   saved_fp = r29;
-     *   decomp_var_m8 = r30;
-     *   r0 = [self profile];
-     *   r0 = [r0 retain];
-     *   if (r0 != 0x0) {
-     *   r19 = 0x1;
-     *   }
-     *   [r0 release];
-     *   r0 = r19;
-     *   return r0;
-     */
-    return NO;
+    return [self profile] != nil;
 }
 
 - (BOOL)bottleIsCompatibleWithPackage {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   var_20 = r22;
-     *   decomp_var_18 = r21;
-     *   r31 = r31 + 0xffffffffffffffd0;
-     *   var_10 = r20;
-     *   decomp_var_8 = r19;
-     *   saved_fp = r29;
-     *   decomp_var_m8 = r30;
-     *   r19 = self;
-     *   if ([self hasPackage] != 0x0) {
-     *   r0 = [r19 targetBottle];
-     *   r0 = [r0 retain];
-     *   r20 = r0;
-     *   r21 = [[r0 getCategory] retain];
-     *   r22 = [[[CXSetupLib cxSetupClass] bottleCategory:@"INCOMPATIBLE"] retain];
-     *   r19 = [r21 isEqualToNumber:r22] ^ 0x1;
-     *   [r22 release];
-     *   [r21 release];
-     *   [r20 release];
-     *   }
-     *   else {
-     *   r19 = 0x1;
-     *   }
-     *   r0 = r19;
-     *   return r0;
-     */
-    return NO;
+    if ([self hasPackage]) {
+        id tb = [self targetBottle];
+        if (!tb) return YES;
+        NSNumber *cat = [tb getCategory];
+        NSNumber *incomp = [[CXSetupLib cxSetupClass] bottleCategory:@"INCOMPATIBLE"];
+        return ![cat isEqualToNumber:incomp];
+    }
+    return YES;
 }
 
 - (BOOL)creatingNewBottle {
-    return self->_installTask;
+    return [self->_installTask GetCreateNewBottle];
 }
 
-- (void)setInstallerLocale:(id)arg1 {
-    return;
+- (void)setInstallerLocale:(NSString *)arg1 {
+    [self->_installTask setLocale:arg1];
 }
 
 - (void)setInstallerSource:(id)arg1 forUser:(BOOL)arg2 {
-    return;
+    [self->_installTask setInstallerSource:arg1 Requested:@(arg2)];
 }
 
 - (void)setInstallerSteam {
-    return;
+    [self->_installTask setInstallerSteam];
 }
 
 - (void)setInstallerDownload {
-    return;
+    [self->_installTask setInstallerDownload];
 }
 
 - (void)setProfile:(id)arg1 {
-    return;
+    if ([self profile] != arg1) {
+        [self->_installTask setProfile:arg1];
+    }
 }
 
 - (void)setSelectedPackage:(id)arg1 forUser:(BOOL)arg2 {
-    return;
+    if (self->_selectedPackage != arg1) {
+        [self willChangeValueForKey:@"selectedPackage"];
+        [self->_selectedPackage release];
+        self->_selectedPackage = [arg1 retain];
+        [self didChangeValueForKey:@"selectedPackage"];
+        if (arg2) {
+            id prof = [arg1 packageobject];
+            [self setProfile:prof];
+        }
+    }
 }
 
 - (id)profileLanguages {
-    return self->_installTask;
+    return [self->_installTask profileLanguages];
 }
 
+#pragma mark - Details
+
 - (id)dependencyDetails {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = [self installTask];
-     *   r0 = [r0 retain];
-     *   r19 = r0;
-     *   r20 = [[r0 getDependencyDetails] retain];
-     *   [r19 release];
-     *   r0 = [r20 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return [self->_installTask getDependencyDetails];
 }
 
 - (id)installerDetails {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = [self installTask];
-     *   r0 = [r0 retain];
-     *   r19 = r0;
-     *   r20 = [[r0 getInstallerDetails] retain];
-     *   [r19 release];
-     *   r0 = [r20 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return [self->_installTask getInstallerDetails];
 }
 
 - (id)bottleDetails {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = [self installTask];
-     *   r0 = [r0 retain];
-     *   r19 = r0;
-     *   r20 = [[r0 getBottleDetails] retain];
-     *   [r19 release];
-     *   r0 = [r20 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return [self->_installTask getBottleDetails];
 }
 
 - (id)languageDetails {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = [self installTask];
-     *   r0 = [r0 retain];
-     *   r19 = r0;
-     *   r20 = [[r0 getLanguageDetails] retain];
-     *   [r19 release];
-     *   r0 = [r20 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return [self->_installTask getLanguageDetails];
 }
 
 - (id)miscDetails {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = [self installTask];
-     *   r0 = [r0 retain];
-     *   r19 = r0;
-     *   r20 = [[r0 getMiscDetails] retain];
-     *   [r19 release];
-     *   r0 = [r20 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return [self->_installTask getMiscDetails];
 }
 
 - (void)updateProfiles {
-    return;
+    [self->_installTask updateProfiles];
 }
 
 - (BOOL)isNewBottleNameValid:(id)arg1 {
-    return self->_installTask;
+    return [self->_installTask isNewBottleNameValid:arg1];
 }
 
 - (void)createNewBottle:(id)arg1 template:(id)arg2 {
-    return;
+    [self->_installTask createNewBottle:arg1 template:arg2];
 }
 
 - (void)setNewBottleName:(id)arg1 {
-    return;
+    [self->_installTask setNewBottleName:arg1];
 }
 
 - (void)addSourceMedia:(id)arg1 withLabel:(id)arg2 andDevice:(id)arg3 {
-    return;
+    [self->_installTask addSourceMedia:arg1 withLabel:arg2 andDevice:arg3];
 }
 
 - (void)addSourceMedia:(id)arg1 {
-    return;
+    NSString *displayName = [[NSFileManager defaultManager] displayNameAtPath:arg1];
+    [self addSourceMedia:arg1 withLabel:displayName andDevice:@""];
 }
 
 - (void)removeSourceMedia:(id)arg1 {
-    return;
+    [self->_installTask removeSourceMedia:arg1];
 }
 
 - (BOOL)volumeMatchesProfile:(id)arg1 {
-    return self->_installTask;
+    return [self->_installTask volumeMatchesProfile:arg1];
 }
 
 - (id)profiles {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   var_10 = r20;
-     *   decomp_var_8 = r19;
-     *   r31 = r31 + 0xffffffffffffffe0;
-     *   saved_fp = r29;
-     *   decomp_var_m8 = r30;
-     *   r19 = [[self->_installTask valueForKey:@"profiles"] retain];
-     *   if ((objc_opt_respondsToSelector() & 0x1) != 0x0) {
-     *   r0 = [r19 contentsDict];
-     *   r0 = [r0 retain];
-     *   }
-     *   else {
-     *   r0 = [r19 retain];
-     *   }
-     *   [r19 release];
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    id p = [self->_installTask valueForKey:@"profiles"];
+    if ([p respondsToSelector:@selector(contentsDict)]) {
+        return [p contentsDict];
+    }
+    return p;
 }
 
 - (id)profileForAppID:(id)arg1 {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r20 = [arg2 retain];
-     *   r0 = [self profiles];
-     *   r0 = [r0 retain];
-     *   r19 = r0;
-     *   r21 = [[r0 objectForKey:r20] retain];
-     *   [r20 release];
-     *   [r19 release];
-     *   r0 = [r21 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return [[self profiles] objectForKey:arg1];
 }
 
 - (id)nameForProfileWithAppID:(id)arg1 {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   var_20 = r22;
-     *   decomp_var_18 = r21;
-     *   r31 = r31 + 0xffffffffffffffd0;
-     *   var_10 = r20;
-     *   decomp_var_8 = r19;
-     *   saved_fp = r29;
-     *   decomp_var_m8 = r30;
-     *   r20 = self;
-     *   r0 = [arg2 retain];
-     *   r19 = r0;
-     *   if ([r0 isEqualToString:@"com.codeweavers.unknown"] != 0x0) {
-     *   r0 = [NSBundle mainBundle];
-     *   r0 = [r0 retain];
-     *   r20 = r0;
-     *   r21 = [[r0 localizedStringForKey:@"Unlisted application" value:@"" table:0x0] retain];
-     *   }
-     *   else {
-     *   r0 = [r20 profiles];
-     *   r0 = [r0 retain];
-     *   r20 = r0;
-     *   r0 = [r0 objectForKey:r19];
-     *   r0 = [r0 retain];
-     *   r22 = r0;
-     *   r21 = [[r0 valueForKey:@"name"] retain];
-     *   [r22 release];
-     *   ... (5 more lines)
-     */
-    return nil;
+    if ([arg1 isEqualToString:@"com.codeweavers.unknown"]) {
+        return [[NSBundle mainBundle] localizedStringForKey:@"Unlisted application" value:@"" table:nil];
+    }
+    id prof = [self profileForAppID:arg1];
+    return [prof valueForKey:@"name"];
 }
 
 - (id)addBottle:(id)arg1 {
-    return self->_installTask;
+    return [self->_installTask addBottle:arg1];
 }
 
 - (void)removeBottle:(id)arg1 {
-    return;
+    [self->_installTask removeBottle:arg1];
 }
 
 - (void)installedApplicationsReady:(id)arg1 {
-    return;
+    [self->_installTask installedApplicationsReady:arg1];
 }
 
 - (void)triggerBottleAnalysis {
-    return;
+    [self->_installTask triggerBottleAnalysis];
 }
 
 - (id)recommendedTemplate {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r20 = [[self templates] retain];
-     *   r19 = [[self->_installTask valueForKey:@"new_bottle_template"] retain];
-     *   r21 = [[r20 valueForKey:r19] retain];
-     *   [r19 release];
-     *   [r20 release];
-     *   r0 = [r21 autorelease];
-     *   return r0;
-     */
-    return nil;
+    NSDictionary *tmpls = [self templates];
+    id tmplKey = [self->_installTask valueForKey:@"new_bottle_template"];
+    return [tmpls valueForKey:tmplKey];
 }
 
 - (void)useAutorunFile:(id)arg1 {
-    return;
+    [self->_installTask useAutorunFile:arg1];
 }
 
 - (void)autoFillSettings {
-    return;
+    [self->_installTask autoFillSettings];
 }
 
 - (id)logFileName {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   var_20 = r22;
-     *   decomp_var_18 = r21;
-     *   r31 = r31 + 0xffffffffffffffd0;
-     *   var_10 = r20;
-     *   decomp_var_8 = r19;
-     *   saved_fp = r29;
-     *   decomp_var_m8 = r30;
-     *   r21 = self;
-     *   r19 = [[NSMutableArray arrayWithObject:@"Install"] retain];
-     *   r0 = [r21 bottleName];
-     *   r0 = [r0 retain];
-     *   r20 = r0;
-     *   [r0 release];
-     *   if (r20 != 0x0) {
-     *   r20 = [[r21 bottleName] retain];
-     *   [r19 addObject:r20];
-     *   [r20 release];
-     *   }
-     *   r0 = [r21 profile];
-     *   r0 = [r0 retain];
-     *   r20 = r0;
-     *   if (r0 != 0x0 && ([r21 creatingNewBottle] & 0x1) == 0x0) {
-     *   r21 = [[r20 valueForKey:@"name"] retain];
-     *   r22 = [[[CXSetupLib cxUtilsClass] sanitizedBottleName:r21] retain];
-     *   [r19 addObject:r22];
-     *   ... (8 more lines)
-     */
-    return nil;
+    NSMutableArray *parts = [NSMutableArray arrayWithObject:@"Install"];
+    NSString *bottleName = [self bottleName];
+    if (bottleName) {
+        [parts addObject:bottleName];
+    }
+    id prof = [self profile];
+    if (prof && ![self creatingNewBottle]) {
+        NSString *name = [prof valueForKey:@"name"];
+        NSString *sanitized = [[CXSetupLib cxUtilsClass] sanitizedBottleName:name];
+        if (sanitized) {
+            [parts addObject:sanitized];
+        }
+    }
+    return [parts componentsJoinedByString:@"-"];
 }
 
 - (id)newInstallEngine {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r31 = r31 - 0x60;
-     *   var_40 = r26;
-     *   decomp_var_38 = r25;
-     *   var_30 = r24;
-     *   decomp_var_28 = r23;
-     *   var_20 = r22;
-     *   decomp_var_18 = r21;
-     *   var_10 = r20;
-     *   decomp_var_8 = r19;
-     *   saved_fp = r29;
-     *   decomp_var_m8 = r30;
-     *   r19 = self;
-     *   r0 = [self logEnvironment];
-     *   r0 = [r0 retain];
-     *   r20 = r0;
-     *   if ([r0 length] != 0x0) {
-     *   [r20 release];
-     *   r21 = [[r19 logEnvironment] retain];
-     *   r22 = [[r19 environment] retain];
-     *   r20 = [[NSString stringWithFormat:@"%@ %@", r3, r4] retain];
-     *   [r22 release];
-     *   [r21 release];
-     *   }
-     *   else {
-     *   r0 = [r19 environment];
-     *   ... (46 more lines)
-     */
-    return nil;
+    NSString *env = nil;
+    if ([self.logEnvironment length] > 0) {
+        if ([self.environment length] > 0) {
+            env = [NSString stringWithFormat:@"%@ %@", self.logEnvironment, self.environment];
+        } else {
+            env = self.logEnvironment;
+        }
+    } else if ([self.environment length] > 0) {
+        env = self.environment;
+    }
+
+    NSString *logPath = [self->_logFileURL path];
+    if ([logPath length] == 0) logPath = nil;
+    NSString *channels = [self->_logChannels length] > 0 ? self->_logChannels : nil;
+
+    return [[[CXSetupLib cxAiEngineClass] alloc] initWithInstallTask:self->_installTask
+                                                            logFile:logPath
+                                                           channels:channels
+                                                                env:env];
 }
 
+#pragma mark - Delegates & Forwarding
+
 - (void)addDelegate:(id)arg1 {
-    return;
+    if (arg1 && ![self->_delegates containsObject:arg1]) {
+        [self->_delegates addObject:arg1];
+    }
 }
 
 - (void)removeDelegate:(id)arg1 {
-    return;
+    if (arg1) {
+        [self->_delegates removeObject:arg1];
+    }
 }
 
 - (void)forwardDelegateMethod:(SEL)arg1 {
-    return;
+    NSArray *dels = [self->_delegates copy];
+    for (id d in dels) {
+        if ([d respondsToSelector:arg1]) {
+            [d performSelector:arg1];
+        }
+    }
+    [dels release];
 }
 
 - (void)forwardDelegateMethod:(SEL)arg1 withObject:(id)arg2 {
-    return;
+    NSArray *dels = [self->_delegates copy];
+    for (id d in dels) {
+        if ([d respondsToSelector:arg1]) {
+            [d performSelector:arg1 withObject:arg2];
+        }
+    }
+    [dels release];
 }
 
 - (void)profileMediaAdded:(id)arg1 {
-    return;
+    [self forwardDelegateMethod:_cmd withObject:arg1];
 }
 
 - (void)profileMediaRemoved:(id)arg1 {
-    return;
+    [self forwardDelegateMethod:_cmd withObject:arg1];
 }
 
 - (void)profileChanged {
-    return;
+    [self forwardDelegateMethod:_cmd];
 }
 
 - (void)sourceChanged {
-    return;
+    [self forwardDelegateMethod:_cmd];
 }
 
 - (void)bottleCreateChanged {
-    return;
+    [self forwardDelegateMethod:_cmd];
 }
 
 - (void)bottleNewnameChanged {
-    return;
+    [self forwardDelegateMethod:_cmd];
 }
 
 - (void)bottleTemplateChanged {
-    return;
+    [self forwardDelegateMethod:_cmd];
 }
 
 - (void)bottleNameChanged {
-    return;
+    [self forwardDelegateMethod:_cmd];
 }
 
 - (void)categorizedBottle:(id)arg1 {
-    return;
+    [self forwardDelegateMethod:_cmd withObject:arg1];
 }
 
 - (void)categorizedAllBottles {
-    return;
+    [self forwardDelegateMethod:_cmd];
 }
 
 - (void)analyzedBottle:(id)arg1 {
-    return;
+    [self forwardDelegateMethod:_cmd withObject:arg1];
 }
+
+#pragma mark - Properties Accessors
 
 - (id)installTask {
     return self->_installTask;
@@ -636,7 +530,10 @@
 }
 
 - (void)setDelegates:(id)arg1 {
-    self->_delegates = arg1;
+    if (self->_delegates != arg1) {
+        [self->_delegates release];
+        self->_delegates = [arg1 retain];
+    }
 }
 
 - (id)environment {
@@ -644,7 +541,10 @@
 }
 
 - (void)setEnvironment:(id)arg1 {
-    return;
+    if (self->_environment != arg1) {
+        [self->_environment release];
+        self->_environment = [arg1 copy];
+    }
 }
 
 - (id)logChannels {
@@ -652,7 +552,10 @@
 }
 
 - (void)setLogChannels:(id)arg1 {
-    return;
+    if (self->_logChannels != arg1) {
+        [self->_logChannels release];
+        self->_logChannels = [arg1 copy];
+    }
 }
 
 - (id)logEnvironment {
@@ -660,7 +563,10 @@
 }
 
 - (void)setLogEnvironment:(id)arg1 {
-    return;
+    if (self->_logEnvironment != arg1) {
+        [self->_logEnvironment release];
+        self->_logEnvironment = [arg1 copy];
+    }
 }
 
 - (id)logFileURL {
@@ -668,7 +574,10 @@
 }
 
 - (void)setLogFileURL:(id)arg1 {
-    return;
+    if (self->_logFileURL != arg1) {
+        [self->_logFileURL release];
+        self->_logFileURL = [arg1 copy];
+    }
 }
 
 - (id)selectedPackage {
@@ -676,13 +585,80 @@
 }
 
 - (id)bottleCollection {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_bottleCollection);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    if (self->_bottleCollection) {
+        return self->_bottleCollection;
+    }
+    return [[CXSetupLib bottleCollectionClass] sharedCollection];
+}
+
+#pragma mark - Direct Dynamic Properties
+
+- (NSString *)bottleName {
+    return [self->_installTask valueForKey:@"bottlename"];
+}
+
+- (void)setBottleName:(NSString *)name {
+    [self->_installTask setValue:name forKey:@"bottlename"];
+}
+
+- (NSDictionary *)bottles {
+    return [self->_installTask valueForKey:@"bottles"] ?: [NSDictionary dictionary];
+}
+
+- (NSDictionary *)templates {
+    return [self->_installTask valueForKey:@"templates"] ?: [NSDictionary dictionary];
+}
+
+- (id)targetBottle {
+    return [self->_installTask valueForKey:@"target_bottle"];
+}
+
+- (NSString *)nameForNewBottle {
+    return [self->_installTask valueForKey:@"newBottleName"];
+}
+
+- (NSString *)downloadURL {
+    return [self->_installTask valueForKey:@"download_url"];
+}
+
+- (NSString *)steamID {
+    return [self->_installTask valueForKey:@"steamid"];
+}
+
+- (BOOL)installWithSteam {
+    return [[self->_installTask valueForKey:@"installWithSteam"] boolValue];
+}
+
+- (NSString *)installerDownloadSource {
+    return [self->_installTask valueForKey:@"installerDownloadSource"];
+}
+
+- (NSString *)installerSource {
+    return [self->_installTask valueForKey:@"installerSource"];
+}
+
+- (BOOL)isVirtual {
+    return [[self->_installTask valueForKey:@"isVirtual"] boolValue];
+}
+
+- (NSDictionary *)dependencyOverrides {
+    return [self->_installTask valueForKey:@"dependency_overrides"];
+}
+
+- (NSString *)installationNotes {
+    return [self->_installTask valueForKey:@"installationNotes"];
+}
+
+- (NSString *)postInstallURL {
+    return [self->_installTask valueForKey:@"post_install_url"];
+}
+
+- (id)profile {
+    return [self->_installTask valueForKey:@"profile"];
+}
+
+- (BOOL)is64bit {
+    return [[self->_installTask valueForKey:@"is64bit"] boolValue];
 }
 
 @end

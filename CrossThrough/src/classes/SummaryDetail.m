@@ -6,32 +6,32 @@
 @implementation SummaryDetail
 
 + (id)detailWithType:(NSInteger)arg1 label:(id)arg2 action:(SEL)arg3 {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r22 = [arg3 retain];
-     *   r0 = [[SummaryDetail alloc] init];
-     *   r21 = r0;
-     *   [r0 setType:arg2];
-     *   [r21 setLabel:r22];
-     *   [r22 release];
-     *   [r21 setAction:arg4];
-     *   r0 = [r21 autorelease];
-     *   return r0;
-     */
-    return nil;
+    SummaryDetail *detail = [[SummaryDetail alloc] init];
+    [detail setType:arg1];
+    [detail setLabel:arg2];
+    [detail setAction:arg3];
+    return [detail autorelease];
+}
+
+- (id)init {
+    self = [super init];
+    return self;
+}
+
+- (void)dealloc {
+    [self->_label release];
+    self->_label = nil;
+    [self->_image release];
+    self->_image = nil;
+    [super dealloc];
 }
 
 - (NSInteger)type {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = *(int32_t *)(int64_t *)&self->_type;
-     *   return r0;
-     */
-    return 0;
+    return self->_type;
 }
 
 - (void)setType:(NSInteger)arg1 {
-    return;
+    self->_type = arg1;
 }
 
 - (id)label {
@@ -39,7 +39,10 @@
 }
 
 - (void)setLabel:(id)arg1 {
-    return;
+    if (self->_label != arg1) {
+        [self->_label release];
+        self->_label = [arg1 copy];
+    }
 }
 
 - (SEL)action {
@@ -47,7 +50,7 @@
 }
 
 - (void)setAction:(SEL)arg1 {
-    return;
+    self->_action = arg1;
 }
 
 - (id)image {
@@ -55,7 +58,10 @@
 }
 
 - (void)setImage:(id)arg1 {
-    self->_image = arg1;
+    if (self->_image != arg1) {
+        [self->_image release];
+        self->_image = [arg1 retain];
+    }
 }
 
 @end

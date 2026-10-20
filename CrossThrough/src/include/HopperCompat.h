@@ -3,12 +3,17 @@
 #define HopperCompat_h
 
 #import <Cocoa/Cocoa.h>
+#import <CoreServices/CoreServices.h>
 #import <objc/runtime.h>
 #import <objc/message.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+// LaunchServices SPIs
+extern OSStatus LSRegisterURL(CFURLRef inURL, Boolean inUpdate);
+extern CFArrayRef LSCopyAllRoleHandlersForContentType(CFStringRef inContentType, LSRolesMask inRole);
 
 // Runtime helpers
 FOUNDATION_EXPORT void objc_storeStrong(id *location, id obj);
