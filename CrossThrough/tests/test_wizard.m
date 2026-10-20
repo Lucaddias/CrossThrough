@@ -1,4 +1,4 @@
-// test_wizard.m — Test wizard selection and bottle controllers
+// test_wizard.m — Comprehensive test suite for wizard, engine, and backend controllers
 #import <Cocoa/Cocoa.h>
 #import "CrossThrough.h"
 #import "PackageViewController.h"
@@ -10,6 +10,10 @@
 #import "InstallOptionsSheetController.h"
 #import "InstallSummaryDetailViewController.h"
 #import "SummaryDetail.h"
+#import "RosettaInstallationController.h"
+#import "SubmitRatingController.h"
+#import "CXServer.h"
+#import "CXServerCrossOver.h"
 
 int main(int argc, const char * argv[]) {
     @autoreleasepool {
@@ -38,6 +42,8 @@ int main(int argc, const char * argv[]) {
         PackageInstaller *installer = [pvc installer];
         assert(installer != nil);
         NSLog(@"[TEST] PackageInstaller successfully created: %@", installer);
+        assert([installer isUnknownPackage] == NO);
+        assert([[installer summaryDetails] count] > 0);
 
         InstallConfiguration *config = [installer installConfiguration];
         assert(config != nil);
@@ -76,8 +82,69 @@ int main(int argc, const char * argv[]) {
         NSLog(@"[TEST] InstallOptionsSheetController window loaded successfully.");
         [optsCtrl release];
 
+        NSLog(@"[TEST] Testing RosettaInstallationController...");
+        RosettaInstallationController *rosetta = [[RosettaInstallationController alloc] init];
+        assert(rosetta != nil);
+        NSWindow *rosettaWin = [rosetta window];
+        assert(rosettaWin != nil);
+        NSLog(@"[TEST] RosettaInstallationController window loaded: %@", rosettaWin);
+        [rosetta release];
+
+        NSLog(@"[TEST] Testing SubmitRatingController metadata and dependencies...");
+        NSSet *ratingDescKeys = [SubmitRatingController keyPathsForValuesAffectingRatingDescription];
+        assert([ratingDescKeys containsObject:@"rating"]);
+        NSSet *charLeftKeys = [SubmitRatingController keyPathsForValuesAffectingCharactersLeft];
+        assert([charLeftKeys containsObject:@"notes"]);
+        NSSet *canSubmitKeys = [SubmitRatingController keyPathsForValuesAffectingCanSubmit];
+        assert([canSubmitKeys containsObject:@"rating"]);
+        NSLog(@"[TEST] SubmitRatingController KVO dependencies validated.");
+
+        NSLog(@"[TEST] Testing CXServer class methods and instance...");
+        NSString *cellar = [CXServer getCellarID];
+        NSLog(@"[TEST] CXServer getCellarID: %@", cellar);
+        assert([cellar length] > 0);
+
+        NSString *appSupport = [CXServer getAppSupportDir];
+        NSLog(@"[TEST] CXServer getAppSupportDir: %@", appSupport);
+        assert([appSupport length] > 0);
+
+        NSString *caches = [CXServer getCachesDir];
+        NSLog(@"[TEST] CXServer getCachesDir: %@", caches);
+        assert([caches length] > 0);
+
+        NSString *defaultBottleDir = [CXServer getDefaultBottleDir];
+        NSLog(@"[TEST] CXServer getDefaultBottleDir: %@", defaultBottleDir);
+        assert([defaultBottleDir length] > 0);
+
+        NSString *bottleDir = [CXServer getBottleDir];
+        NSLog(@"[TEST] CXServer getBottleDir: %@", bottleDir);
+        assert([bottleDir length] > 0);
+
+        CXServer *server = [[CXServer alloc] init];
+        assert(server != nil);
+        NSLog(@"[TEST] CXServer instance created: %@", server);
+        [server release];
+
+        NSLog(@"[TEST] Testing CXServerCrossOver class methods and instance...");
+        CXServerCrossOver *cxServer = [[CXServerCrossOver alloc] init];
+        assert(cxServer != nil);
+        NSLog(@"[TEST] CXServerCrossOver instance created: %@", cxServer);
+
+        NSString *defaultPrograms = [CXServerCrossOver getDefaultProgramsFolder];
+        NSLog(@"[TEST] CXServerCrossOver getDefaultProgramsFolder: %@", defaultPrograms);
+        assert([defaultPrograms length] > 0);
+
+        NSString *programsFolder = [CXServerCrossOver getProgramsFolder];
+        NSLog(@"[TEST] CXServerCrossOver getProgramsFolder: %@", programsFolder);
+        assert([programsFolder length] > 0);
+
+        NSString *crossTieMod = [CXServerCrossOver crossTieModDateString];
+        NSLog(@"[TEST] CXServerCrossOver crossTieModDateString: %@", crossTieMod);
+
+        [cxServer release];
+
         [pvc release];
-        NSLog(@"[TEST] ALL WIZARD TESTS PASSED SUCCESSFULLY! ✅");
+        NSLog(@"[TEST] ALL WIZARD, ENGINE, AND BACKEND TESTS PASSED SUCCESSFULLY! ✅");
     }
     return 0;
 }

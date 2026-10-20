@@ -1206,7 +1206,7 @@
 - (void)runCXUpgrade {
     NSString *root = [(CXApplication *)NSApp crossOverRoot];
     NSString *upgradePath = [[root stringByAppendingPathComponent:@"lib"] stringByAppendingPathComponent:@"cxupgrade"];
-    NSMutableArray *args = [NSMutableArray arrayWithObject:@"--productid"];
+    NSMutableArray *args = [NSMutableArray arrayWithObjects:@"--productid", @"CrossOver", nil];
     NSString *firstRunVer = [[NSUserDefaults standardUserDefaults] stringForKey:@"FirstRunVersion"];
     if ([firstRunVer length] > 0) {
         [args addObject:@"--old-version"];
