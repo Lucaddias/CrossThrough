@@ -92,45 +92,27 @@
 }
 
 - (id)alreadyPurchasedToEmailSpacer {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_alreadyPurchasedToEmailSpacer);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return [objc_loadWeakRetained((id *)&self->_alreadyPurchasedToEmailSpacer) autorelease];
 }
 
 - (void)setAlreadyPurchasedToEmailSpacer:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_alreadyPurchasedToEmailSpacer, arg1);
 }
 
 - (id)referToStoreTextField {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_referToStoreTextField);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return [objc_loadWeakRetained((id *)&self->_referToStoreTextField) autorelease];
 }
 
 - (void)setReferToStoreTextField:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_referToStoreTextField, arg1);
 }
 
 - (id)forgotPasswordTextField {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_forgotPasswordTextField);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return [objc_loadWeakRetained((id *)&self->_forgotPasswordTextField) autorelease];
 }
 
 - (void)setForgotPasswordTextField:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_forgotPasswordTextField, arg1);
 }
 
 @end

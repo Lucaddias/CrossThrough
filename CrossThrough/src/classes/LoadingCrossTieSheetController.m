@@ -30,31 +30,19 @@
 }
 
 - (id)loadingLabel {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_loadingLabel);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return [objc_loadWeakRetained((id *)&self->_loadingLabel) autorelease];
 }
 
 - (void)setLoadingLabel:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_loadingLabel, arg1);
 }
 
 - (id)progressIndicator {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_progressIndicator);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return [objc_loadWeakRetained((id *)&self->_progressIndicator) autorelease];
 }
 
 - (void)setProgressIndicator:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_progressIndicator, arg1);
 }
 
 @end

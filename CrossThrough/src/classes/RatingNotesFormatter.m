@@ -57,16 +57,11 @@
 }
 
 - (NSInteger)maxLength {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = self->_maxLength;
-     *   return r0;
-     */
-    return 0;
+    return self->_maxLength;
 }
 
 - (void)setMaxLength:(NSInteger)arg1 {
-    return;
+    self->_maxLength = arg1;
 }
 
 @end

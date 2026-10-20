@@ -12,6 +12,9 @@
 @class RatingNotesFormatter;
 
 @interface RatingNotesFormatter : NSFormatter
+{
+    NSInteger _maxLength;
+}
 
 // Instance Methods
 - (id)stringForObjectValue:(id)arg1;

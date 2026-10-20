@@ -141,6 +141,10 @@ extern void _Py_Dealloc(PyObject *);
 + (id)bottleStatus:(id)arg1;
 @end
 
+@interface CXUtils : NSObject
++ (id)loggingPresets;
+@end
+
 @interface InstallTask : NSObject
 - (id)initWithDelegate:(id)arg1;
 @end

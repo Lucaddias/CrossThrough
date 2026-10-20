@@ -62,97 +62,71 @@
 }
 
 - (id)caption {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_caption);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return [objc_loadWeakRetained((id *)&self->_caption) autorelease];
 }
 
 - (void)setCaption:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_caption, arg1);
 }
 
 - (id)progressBar {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_progressBar);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return [objc_loadWeakRetained((id *)&self->_progressBar) autorelease];
 }
 
 - (void)setProgressBar:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_progressBar, arg1);
 }
 
 - (id)progressText {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_progressText);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return [objc_loadWeakRetained((id *)&self->_progressText) autorelease];
 }
 
 - (void)setProgressText:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_progressText, arg1);
 }
 
 - (id)path {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_getProperty(self, _cmd, sign_extend_64(*(int32_t *)ivar_offset(_path)), 0x1);
-     *   return r0;
-     */
-    return nil;
+    return [[self->_path retain] autorelease];
 }
 
 - (void)setPath:(id)arg1 {
-    return;
+    if (self->_path != arg1) {
+        [self->_path release];
+        self->_path = [arg1 copy];
+    }
 }
 
 - (id)urlSession {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_getProperty(self, _cmd, sign_extend_64(*(int32_t *)ivar_offset(_urlSession)), 0x1);
-     *   return r0;
-     */
-    return nil;
+    return [[self->_urlSession retain] autorelease];
 }
 
 - (void)setUrlSession:(id)arg1 {
-    return;
+    if (self->_urlSession != arg1) {
+        [self->_urlSession release];
+        self->_urlSession = [arg1 retain];
+    }
 }
 
 - (id)downloadTask {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_getProperty(self, _cmd, sign_extend_64(*(int32_t *)ivar_offset(_downloadTask)), 0x1);
-     *   return r0;
-     */
-    return nil;
+    return [[self->_downloadTask retain] autorelease];
 }
 
 - (void)setDownloadTask:(id)arg1 {
-    return;
+    if (self->_downloadTask != arg1) {
+        [self->_downloadTask release];
+        self->_downloadTask = [arg1 retain];
+    }
 }
 
 - (id)progressFormat {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_getProperty(self, _cmd, sign_extend_64(*(int32_t *)ivar_offset(_progressFormat)), 0x1);
-     *   return r0;
-     */
-    return nil;
+    return [[self->_progressFormat retain] autorelease];
 }
 
 - (void)setProgressFormat:(id)arg1 {
-    return;
+    if (self->_progressFormat != arg1) {
+        [self->_progressFormat release];
+        self->_progressFormat = [arg1 copy];
+    }
 }
 
 @end

@@ -42,101 +42,59 @@
 }
 
 - (id)registerButton {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_registerButton);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return [objc_loadWeakRetained((id *)&self->_registerButton) autorelease];
 }
 
 - (void)setRegisterButton:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_registerButton, arg1);
 }
 
 - (id)tryNowButton {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_tryNowButton);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return [objc_loadWeakRetained((id *)&self->_tryNowButton) autorelease];
 }
 
 - (void)setTryNowButton:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_tryNowButton, arg1);
 }
 
 - (id)buyButton {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_buyButton);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return [objc_loadWeakRetained((id *)&self->_buyButton) autorelease];
 }
 
 - (void)setBuyButton:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_buyButton, arg1);
 }
 
 - (id)quitButton {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_quitButton);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return [objc_loadWeakRetained((id *)&self->_quitButton) autorelease];
 }
 
 - (void)setQuitButton:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_quitButton, arg1);
 }
 
 - (id)registerToQuitSpacer {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_registerToQuitSpacer);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return [objc_loadWeakRetained((id *)&self->_registerToQuitSpacer) autorelease];
 }
 
 - (void)setRegisterToQuitSpacer:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_registerToQuitSpacer, arg1);
 }
 
 - (id)registerToTryNowSpacer {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_registerToTryNowSpacer);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return [objc_loadWeakRetained((id *)&self->_registerToTryNowSpacer) autorelease];
 }
 
 - (void)setRegisterToTryNowSpacer:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_registerToTryNowSpacer, arg1);
 }
 
 - (id)buyToRegisterSpacer {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_buyToRegisterSpacer);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return [objc_loadWeakRetained((id *)&self->_buyToRegisterSpacer) autorelease];
 }
 
 - (void)setBuyToRegisterSpacer:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_buyToRegisterSpacer, arg1);
 }
 
 @end

@@ -131,7 +131,10 @@
 }
 
 - (void)setBounceUtil:(id)arg1 {
-    return;
+    if (self->_bounceUtil != arg1) {
+        [self->_bounceUtil release];
+        self->_bounceUtil = [arg1 copy];
+    }
 }
 
 - (id)sourceBottle {
@@ -139,16 +142,14 @@
 }
 
 - (id)authorization {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_getProperty(self, _cmd, sign_extend_64(*(int32_t *)ivar_offset(_authorization)), 0x1);
-     *   return r0;
-     */
-    return nil;
+    return [[self->_authorization retain] autorelease];
 }
 
 - (void)setAuthorization:(id)arg1 {
-    return;
+    if (self->_authorization != arg1) {
+        [self->_authorization release];
+        self->_authorization = [arg1 retain];
+    }
 }
 
 - (BOOL)isWorking {

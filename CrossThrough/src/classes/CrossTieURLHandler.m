@@ -22,30 +22,22 @@
 }
 
 - (id)delegate {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained(self + 0x8);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return [objc_loadWeakRetained((id *)&self->_delegate) autorelease];
 }
 
 - (void)setDelegate:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_delegate, arg1);
 }
 
 - (id)downloadProgress {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_getProperty(self, _cmd, 0x10, 0x1);
-     *   return r0;
-     */
-    return nil;
+    return [[self->_downloadProgress retain] autorelease];
 }
 
 - (void)setDownloadProgress:(id)arg1 {
-    return;
+    if (self->_downloadProgress != arg1) {
+        [self->_downloadProgress release];
+        self->_downloadProgress = [arg1 retain];
+    }
 }
 
 @end

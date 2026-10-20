@@ -6,12 +6,7 @@
 @implementation AddDependenciesViewController
 
 + (id)keyPathsForValuesAffectingInstallConfiguration {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = [NSSet setWithObject:@"representedObject"];
-     *   return r0;
-     */
-    return nil;
+    return [NSSet setWithObject:@"representedObject"];
 }
 
 - (id)init {
@@ -27,12 +22,7 @@
 }
 
 - (id)installConfiguration {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = [self representedObject];
-     *   return r0;
-     */
-    return nil;
+    return [self representedObject];
 }
 
 - (void)loadView {
@@ -44,31 +34,19 @@
 }
 
 - (id)searchField {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_searchField);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return [objc_loadWeakRetained((id *)&self->_searchField) autorelease];
 }
 
 - (void)setSearchField:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_searchField, arg1);
 }
 
 - (id)arrayController {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_arrayController);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return [objc_loadWeakRetained((id *)&self->_arrayController) autorelease];
 }
 
 - (void)setArrayController:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_arrayController, arg1);
 }
 
 - (id)addableDependencies {
@@ -76,7 +54,10 @@
 }
 
 - (void)setAddableDependencies:(id)arg1 {
-    return;
+    if (self->_addableDependencies != arg1) {
+        [self->_addableDependencies release];
+        self->_addableDependencies = [arg1 copy];
+    }
 }
 
 @end

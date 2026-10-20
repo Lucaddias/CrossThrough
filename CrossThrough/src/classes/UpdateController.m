@@ -38,72 +38,46 @@
 }
 
 - (id)messageTextField {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_messageTextField);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return [objc_loadWeakRetained((id *)&self->_messageTextField) autorelease];
 }
 
 - (void)setMessageTextField:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_messageTextField, arg1);
 }
 
 - (id)bottleTableScrollView {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_bottleTableScrollView);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return [objc_loadWeakRetained((id *)&self->_bottleTableScrollView) autorelease];
 }
 
 - (void)setBottleTableScrollView:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_bottleTableScrollView, arg1);
 }
 
 - (id)messageToTableSpacing {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_messageToTableSpacing);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return [objc_loadWeakRetained((id *)&self->_messageToTableSpacing) autorelease];
 }
 
 - (void)setMessageToTableSpacing:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_messageToTableSpacing, arg1);
 }
 
 - (id)tableToUpgradingSpacing {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_tableToUpgradingSpacing);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return [objc_loadWeakRetained((id *)&self->_tableToUpgradingSpacing) autorelease];
 }
 
 - (void)setTableToUpgradingSpacing:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_tableToUpgradingSpacing, arg1);
 }
 
 - (id)managedBottlesToUpgrade {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_getProperty(self, _cmd, sign_extend_64(*(int32_t *)ivar_offset(_managedBottlesToUpgrade)), 0x1);
-     *   return r0;
-     */
-    return nil;
+    return [[self->_managedBottlesToUpgrade retain] autorelease];
 }
 
 - (void)setManagedBottlesToUpgrade:(id)arg1 {
-    return;
+    if (self->_managedBottlesToUpgrade != arg1) {
+        [self->_managedBottlesToUpgrade release];
+        self->_managedBottlesToUpgrade = [arg1 retain];
+    }
 }
 
 - (BOOL)upgradeInProgress {

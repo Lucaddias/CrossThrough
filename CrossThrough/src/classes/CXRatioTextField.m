@@ -63,16 +63,11 @@
 }
 
 - (CGFloat)maxAspectRatio {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = self;
-     *   return r0;
-     */
-    return 0.0;
+    return self->_maxAspectRatio;
 }
 
 - (void)setMaxAspectRatio:(CGFloat)arg1 {
-    return;
+    self->_maxAspectRatio = arg1;
 }
 
 @end

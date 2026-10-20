@@ -131,16 +131,14 @@
 }
 
 - (id)theConnection {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_getProperty(self, _cmd, 0x10, 0x1);
-     *   return r0;
-     */
-    return nil;
+    return [[self->_theConnection retain] autorelease];
 }
 
 - (void)setTheConnection:(id)arg1 {
-    return;
+    if (self->_theConnection != arg1) {
+        [self->_theConnection release];
+        self->_theConnection = [arg1 retain];
+    }
 }
 
 @end

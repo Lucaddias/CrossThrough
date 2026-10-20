@@ -18,16 +18,11 @@
 }
 
 - (NSInteger)lifeCounter {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = *(int32_t *)(int64_t *)&self->lifeCounter;
-     *   return r0;
-     */
-    return 0;
+    return self->lifeCounter;
 }
 
 - (void)setLifeCounter:(NSInteger)arg1 {
-    return;
+    self->lifeCounter = arg1;
 }
 
 - (id)socketPath {

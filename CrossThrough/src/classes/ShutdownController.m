@@ -14,13 +14,7 @@
 }
 
 - (id)bottleCollection {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = [CXSetupLib bottleCollectionClass];
-     *   r0 = [r0 sharedCollection];
-     *   return r0;
-     */
-    return nil;
+    return [[CXSetupLib bottleCollectionClass] sharedCollection];
 }
 
 - (void)cancelShutdown:(id)arg1 {
@@ -48,16 +42,14 @@
 }
 
 - (id)quitBottleSemaphore {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_getProperty(self, _cmd, sign_extend_64(*(int32_t *)ivar_offset(_quitBottleSemaphore)), 0x1);
-     *   return r0;
-     */
-    return nil;
+    return [[self->_quitBottleSemaphore retain] autorelease];
 }
 
 - (void)setQuitBottleSemaphore:(id)arg1 {
-    return;
+    if (self->_quitBottleSemaphore != arg1) {
+        [self->_quitBottleSemaphore release];
+        self->_quitBottleSemaphore = [arg1 retain];
+    }
 }
 
 - (BOOL)cancelingShutdown {
@@ -77,42 +69,36 @@
 }
 
 - (id)bottleList {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_getProperty(self, _cmd, sign_extend_64(*(int32_t *)ivar_offset(_bottleList)), 0x1);
-     *   return r0;
-     */
-    return nil;
+    return [[self->_bottleList retain] autorelease];
 }
 
 - (void)setBottleList:(id)arg1 {
-    return;
+    if (self->_bottleList != arg1) {
+        [self->_bottleList release];
+        self->_bottleList = [arg1 retain];
+    }
 }
 
 - (id)canRunFilterPredicate {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_getProperty(self, _cmd, sign_extend_64(*(int32_t *)ivar_offset(_canRunFilterPredicate)), 0x1);
-     *   return r0;
-     */
-    return nil;
+    return [[self->_canRunFilterPredicate retain] autorelease];
 }
 
 - (void)setCanRunFilterPredicate:(id)arg1 {
-    return;
+    if (self->_canRunFilterPredicate != arg1) {
+        [self->_canRunFilterPredicate release];
+        self->_canRunFilterPredicate = [arg1 retain];
+    }
 }
 
 - (id)shutdownCallbackObject {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_getProperty(self, _cmd, sign_extend_64(*(int32_t *)ivar_offset(_shutdownCallbackObject)), 0x1);
-     *   return r0;
-     */
-    return nil;
+    return [[self->_shutdownCallbackObject retain] autorelease];
 }
 
 - (void)setShutdownCallbackObject:(id)arg1 {
-    return;
+    if (self->_shutdownCallbackObject != arg1) {
+        [self->_shutdownCallbackObject release];
+        self->_shutdownCallbackObject = [arg1 retain];
+    }
 }
 
 - (SEL)shutdownCallbackSelector {
@@ -120,7 +106,7 @@
 }
 
 - (void)setShutdownCallbackSelector:(SEL)arg1 {
-    return;
+    self->_shutdownCallbackSelector = arg1;
 }
 
 @end

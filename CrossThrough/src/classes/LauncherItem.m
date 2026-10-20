@@ -84,7 +84,10 @@
 }
 
 - (void)setName:(id)arg1 {
-    return;
+    if (self->_name != arg1) {
+        [self->_name release];
+        self->_name = [arg1 copy];
+    }
 }
 
 @end

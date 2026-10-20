@@ -148,42 +148,36 @@
 }
 
 - (id)channelCombos {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_getProperty(self, _cmd, sign_extend_64(*(int32_t *)ivar_offset(_channelCombos)), 0x1);
-     *   return r0;
-     */
-    return nil;
+    return [[self->_channelCombos retain] autorelease];
 }
 
 - (void)setChannelCombos:(id)arg1 {
-    return;
+    if (self->_channelCombos != arg1) {
+        [self->_channelCombos release];
+        self->_channelCombos = [arg1 retain];
+    }
 }
 
 - (id)logChannels {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_getProperty(self, _cmd, sign_extend_64(*(int32_t *)ivar_offset(_logChannels)), 0x1);
-     *   return r0;
-     */
-    return nil;
+    return [[self->_logChannels retain] autorelease];
 }
 
 - (void)setLogChannels:(id)arg1 {
-    return;
+    if (self->_logChannels != arg1) {
+        [self->_logChannels release];
+        self->_logChannels = [arg1 copy];
+    }
 }
 
 - (id)logEnvironment {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_getProperty(self, _cmd, sign_extend_64(*(int32_t *)ivar_offset(_logEnvironment)), 0x1);
-     *   return r0;
-     */
-    return nil;
+    return [[self->_logEnvironment retain] autorelease];
 }
 
 - (void)setLogEnvironment:(id)arg1 {
-    return;
+    if (self->_logEnvironment != arg1) {
+        [self->_logEnvironment release];
+        self->_logEnvironment = [arg1 copy];
+    }
 }
 
 - (id)logFileName {
@@ -195,20 +189,21 @@
 }
 
 - (void)setLogFileURL:(id)arg1 {
-    return;
+    if (self->_logFileURL != arg1) {
+        [self->_logFileURL release];
+        self->_logFileURL = [arg1 copy];
+    }
 }
 
 - (id)logDirectoryURL {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_getProperty(self, _cmd, sign_extend_64(*(int32_t *)ivar_offset(_logDirectoryURL)), 0x1);
-     *   return r0;
-     */
-    return nil;
+    return [[self->_logDirectoryURL retain] autorelease];
 }
 
 - (void)setLogDirectoryURL:(id)arg1 {
-    return;
+    if (self->_logDirectoryURL != arg1) {
+        [self->_logDirectoryURL release];
+        self->_logDirectoryURL = [arg1 copy];
+    }
 }
 
 - (BOOL)logFileNameFromUser {
@@ -220,45 +215,27 @@
 }
 
 - (id)channelPresets {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_channelPresets);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return [objc_loadWeakRetained((id *)&self->_channelPresets) autorelease];
 }
 
 - (void)setChannelPresets:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_channelPresets, arg1);
 }
 
 - (id)recentChannelsDivider {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_recentChannelsDivider);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return [objc_loadWeakRetained((id *)&self->_recentChannelsDivider) autorelease];
 }
 
 - (void)setRecentChannelsDivider:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_recentChannelsDivider, arg1);
 }
 
 - (id)recentChannelsMenuItem {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_recentChannelsMenuItem);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return [objc_loadWeakRetained((id *)&self->_recentChannelsMenuItem) autorelease];
 }
 
 - (void)setRecentChannelsMenuItem:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_recentChannelsMenuItem, arg1);
 }
 
 @end

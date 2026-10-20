@@ -12,6 +12,9 @@
 @class CXDragView;
 
 @interface CXDragView : NSView
+{
+    id _delegate;
+}
 
 // Instance Methods
 - (NSUInteger)draggingEntered:(id)arg1;

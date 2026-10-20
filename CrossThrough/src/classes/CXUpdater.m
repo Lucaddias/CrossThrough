@@ -196,21 +196,15 @@
 }
 
 - (id)delegate {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained(self + 0x20);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return [objc_loadWeakRetained((id *)&self->_delegate) autorelease];
 }
 
 - (void)setDelegate:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_delegate, arg1);
 }
 
 - (void)setUpdateCheckInterval:(CGFloat)arg1 {
-    return;
+    self->_updateCheckInterval = arg1;
 }
 
 @end

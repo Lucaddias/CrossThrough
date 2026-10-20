@@ -77,7 +77,10 @@
 }
 
 - (void)setUrl:(id)arg1 {
-    return;
+    if (self->_url != arg1) {
+        [self->_url release];
+        self->_url = [arg1 copy];
+    }
 }
 
 @end

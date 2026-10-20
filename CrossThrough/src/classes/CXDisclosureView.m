@@ -80,13 +80,7 @@
 }
 
 - (id)detailView {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_detailView);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return [objc_loadWeakRetained((id *)&self->_detailView) autorelease];
 }
 
 - (id)autosaveName {

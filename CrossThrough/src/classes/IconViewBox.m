@@ -202,31 +202,19 @@
 }
 
 - (id)auxField {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_auxField);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return [objc_loadWeakRetained((id *)&self->_auxField) autorelease];
 }
 
 - (void)setAuxField:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_auxField, arg1);
 }
 
 - (id)item {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_item);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return [objc_loadWeakRetained((id *)&self->_item) autorelease];
 }
 
 - (void)setItem:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_item, arg1);
 }
 
 @end

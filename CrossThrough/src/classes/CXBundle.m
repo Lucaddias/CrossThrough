@@ -130,7 +130,7 @@
 }
 
 - (void)setCfBundle:(void *)arg1 {
-    return;
+    self->_cfBundle = arg1;
 }
 
 @end

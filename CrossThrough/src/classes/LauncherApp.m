@@ -64,7 +64,10 @@
 }
 
 - (void)setUrl:(id)arg1 {
-    return;
+    if (self->_url != arg1) {
+        [self->_url release];
+        self->_url = [arg1 copy];
+    }
 }
 
 - (id)bundleID {
@@ -72,7 +75,10 @@
 }
 
 - (void)setBundleID:(id)arg1 {
-    return;
+    if (self->_bundleID != arg1) {
+        [self->_bundleID release];
+        self->_bundleID = [arg1 copy];
+    }
 }
 
 - (NSUInteger)helperVersion {
@@ -80,7 +86,7 @@
 }
 
 - (void)setHelperVersion:(NSUInteger)arg1 {
-    return;
+    self->_helperVersion = arg1;
 }
 
 @end

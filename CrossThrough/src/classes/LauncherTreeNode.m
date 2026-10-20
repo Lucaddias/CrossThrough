@@ -165,7 +165,10 @@
 }
 
 - (void)setName:(id)arg1 {
-    return;
+    if (self->_name != arg1) {
+        [self->_name release];
+        self->_name = [arg1 copy];
+    }
 }
 
 - (id)icon {
@@ -173,7 +176,10 @@
 }
 
 - (void)setIcon:(id)arg1 {
-    return;
+    if (self->_icon != arg1) {
+        [self->_icon release];
+        self->_icon = [arg1 copy];
+    }
 }
 
 - (id)bottle {
@@ -189,7 +195,10 @@
 }
 
 - (void)setTooltip:(id)arg1 {
-    return;
+    if (self->_tooltip != arg1) {
+        [self->_tooltip release];
+        self->_tooltip = [arg1 copy];
+    }
 }
 
 - (NSInteger)sortOrder {
@@ -202,7 +211,7 @@
 }
 
 - (void)setSortOrder:(NSInteger)arg1 {
-    return;
+    self->_sortOrder = arg1;
 }
 
 - (BOOL)showBottleName {

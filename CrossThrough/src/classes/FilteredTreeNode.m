@@ -208,17 +208,11 @@
 }
 
 - (id)parent {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_parent);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return [objc_loadWeakRetained((id *)&self->_parent) autorelease];
 }
 
 - (void)setParent:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_parent, arg1);
 }
 
 @end

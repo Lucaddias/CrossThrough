@@ -26,16 +26,14 @@
 }
 
 - (id)delegate {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_getProperty(self, _cmd, sign_extend_64(*(int32_t *)ivar_offset(_delegate)), 0x1);
-     *   return r0;
-     */
-    return nil;
+    return [[self->_delegate retain] autorelease];
 }
 
 - (void)setDelegate:(id)arg1 {
-    return;
+    if (self->_delegate != arg1) {
+        [self->_delegate release];
+        self->_delegate = [arg1 retain];
+    }
 }
 
 @end

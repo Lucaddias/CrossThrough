@@ -18,7 +18,10 @@
 }
 
 - (void)setExpirationText:(id)arg1 {
-    return;
+    if (self->_expirationText != arg1) {
+        [self->_expirationText release];
+        self->_expirationText = [arg1 copy];
+    }
 }
 
 @end

@@ -249,7 +249,10 @@
 }
 
 - (void)setLogin:(id)arg1 {
-    return;
+    if (self->_login != arg1) {
+        [self->_login release];
+        self->_login = [arg1 copy];
+    }
 }
 
 - (id)login2 {
@@ -257,7 +260,10 @@
 }
 
 - (void)setLogin2:(id)arg1 {
-    return;
+    if (self->_login2 != arg1) {
+        [self->_login2 release];
+        self->_login2 = [arg1 copy];
+    }
 }
 
 - (id)loginErrorText {
@@ -265,7 +271,10 @@
 }
 
 - (void)setLoginErrorText:(id)arg1 {
-    return;
+    if (self->_loginErrorText != arg1) {
+        [self->_loginErrorText release];
+        self->_loginErrorText = [arg1 copy];
+    }
 }
 
 - (id)password {
@@ -273,7 +282,10 @@
 }
 
 - (void)setPassword:(id)arg1 {
-    return;
+    if (self->_password != arg1) {
+        [self->_password release];
+        self->_password = [arg1 copy];
+    }
 }
 
 - (id)password2 {
@@ -281,7 +293,10 @@
 }
 
 - (void)setPassword2:(id)arg1 {
-    return;
+    if (self->_password2 != arg1) {
+        [self->_password2 release];
+        self->_password2 = [arg1 copy];
+    }
 }
 
 - (id)passwordErrorText {
@@ -289,33 +304,26 @@
 }
 
 - (void)setPasswordErrorText:(id)arg1 {
-    return;
+    if (self->_passwordErrorText != arg1) {
+        [self->_passwordErrorText release];
+        self->_passwordErrorText = [arg1 copy];
+    }
 }
 
 - (NSInteger)registrationWorkInProgress {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = *(int32_t *)(int64_t *)&self->_registrationWorkInProgress;
-     *   return r0;
-     */
-    return 0;
+    return self->_registrationWorkInProgress;
 }
 
 - (void)setRegistrationWorkInProgress:(NSInteger)arg1 {
-    return;
+    self->_registrationWorkInProgress = arg1;
 }
 
 - (NSInteger)regMode {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = *(int32_t *)(int64_t *)&self->_regMode;
-     *   return r0;
-     */
-    return 0;
+    return self->_regMode;
 }
 
 - (void)setRegMode:(NSInteger)arg1 {
-    return;
+    self->_regMode = arg1;
 }
 
 - (id)globalRegModeCaption {
@@ -323,7 +331,10 @@
 }
 
 - (void)setGlobalRegModeCaption:(id)arg1 {
-    return;
+    if (self->_globalRegModeCaption != arg1) {
+        [self->_globalRegModeCaption release];
+        self->_globalRegModeCaption = [arg1 copy];
+    }
 }
 
 - (id)accountName {
@@ -331,7 +342,10 @@
 }
 
 - (void)setAccountName:(id)arg1 {
-    return;
+    if (self->_accountName != arg1) {
+        [self->_accountName release];
+        self->_accountName = [arg1 copy];
+    }
 }
 
 - (id)serialCode {
@@ -339,7 +353,10 @@
 }
 
 - (void)setSerialCode:(id)arg1 {
-    return;
+    if (self->_serialCode != arg1) {
+        [self->_serialCode release];
+        self->_serialCode = [arg1 copy];
+    }
 }
 
 - (id)serialCodeErrorText {
@@ -347,7 +364,10 @@
 }
 
 - (void)setSerialCodeErrorText:(id)arg1 {
-    return;
+    if (self->_serialCodeErrorText != arg1) {
+        [self->_serialCodeErrorText release];
+        self->_serialCodeErrorText = [arg1 copy];
+    }
 }
 
 - (void (^)(void))completionHandler {
@@ -355,7 +375,10 @@
 }
 
 - (void)setCompletionHandler:(id)arg1 {
-    return;
+    if (self->_completionHandler != arg1) {
+        [self->_completionHandler release];
+        self->_completionHandler = [arg1 copy];
+    }
 }
 
 @end

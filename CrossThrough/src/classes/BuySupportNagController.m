@@ -284,59 +284,35 @@
 }
 
 - (id)notEntitledLabel {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_notEntitledLabel);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return [objc_loadWeakRetained((id *)&self->_notEntitledLabel) autorelease];
 }
 
 - (void)setNotEntitledLabel:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_notEntitledLabel, arg1);
 }
 
 - (id)refreshRegistrationButton {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_refreshRegistrationButton);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return [objc_loadWeakRetained((id *)&self->_refreshRegistrationButton) autorelease];
 }
 
 - (void)setRefreshRegistrationButton:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_refreshRegistrationButton, arg1);
 }
 
 - (id)buySupportExtensionButton {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_buySupportExtensionButton);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return [objc_loadWeakRetained((id *)&self->_buySupportExtensionButton) autorelease];
 }
 
 - (void)setBuySupportExtensionButton:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_buySupportExtensionButton, arg1);
 }
 
 - (id)releaseNotesView {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_releaseNotesView);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return [objc_loadWeakRetained((id *)&self->_releaseNotesView) autorelease];
 }
 
 - (void)setReleaseNotesView:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_releaseNotesView, arg1);
 }
 
 - (BOOL)registrationRefreshEnough {
@@ -348,45 +324,27 @@
 }
 
 - (id)refreshRegistrationToBuySupportSpacer {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_refreshRegistrationToBuySupportSpacer);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return [objc_loadWeakRetained((id *)&self->_refreshRegistrationToBuySupportSpacer) autorelease];
 }
 
 - (void)setRefreshRegistrationToBuySupportSpacer:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_refreshRegistrationToBuySupportSpacer, arg1);
 }
 
 - (id)notEntitledLabelToReleaseNotesBoxSpacer {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_notEntitledLabelToReleaseNotesBoxSpacer);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return [objc_loadWeakRetained((id *)&self->_notEntitledLabelToReleaseNotesBoxSpacer) autorelease];
 }
 
 - (void)setNotEntitledLabelToReleaseNotesBoxSpacer:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_notEntitledLabelToReleaseNotesBoxSpacer, arg1);
 }
 
 - (id)notEntitledLabelToDescriptionLabelSpacer {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_notEntitledLabelToDescriptionLabelSpacer);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return [objc_loadWeakRetained((id *)&self->_notEntitledLabelToDescriptionLabelSpacer) autorelease];
 }
 
 - (void)setNotEntitledLabelToDescriptionLabelSpacer:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_notEntitledLabelToDescriptionLabelSpacer, arg1);
 }
 
 - (id)updateItem {
