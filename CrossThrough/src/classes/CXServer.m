@@ -166,10 +166,13 @@ static void _observeProxyChange(SCDynamicStoreRef store, CFArrayRef changedKeys,
 
 - (void)demoCheck {
     if ([[CXApplication sharedApplication] isDemo]) {
-        NSInteger days = [[CXApplication sharedApplication] daysLeft];
-        if (days <= 0) {
-            [self registerDemo:self];
-        }
+        DemoNagController *nag = [[DemoNagController alloc] init];
+        [nag beginWindowWithCompletionHandler:^{
+            [self continueFromDemoCheck];
+        }];
+        [nag release];
+    } else {
+        [self continueFromDemoCheck];
     }
 }
 
@@ -185,10 +188,15 @@ static void _observeProxyChange(SCDynamicStoreRef store, CFArrayRef changedKeys,
     self->menusEnabled = arg1;
 }
 
+// Releases everything queued behind startAppOp (main window, open-file and
+// URL requests) once the demo check has passed.
 - (void)continueFromDemoCheck {
-    if (self->startAppOp) {
-        // Gates operations waiting for app initialization
-    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[helperServer defaultHelperServer] setIsReady];
+        [[self startAppOp] start];
+    });
+    [self updateRecentItemsMenu];
+    [self setMenusEnabled:YES];
 }
 
 - (id)startAppOp {

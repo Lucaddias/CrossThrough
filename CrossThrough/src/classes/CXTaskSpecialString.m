@@ -6,61 +6,43 @@
 @implementation CXTaskSpecialString
 
 - (id)initWithString:(id)arg1 {
-    self = [super init];
-    if (self) {
-        // Initialized
-    }
+    self->realString = [arg1 retain];
     return self;
 }
 
 - (id)copy {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = [self copyWithZone:0x0];
-     *   return r0;
-     */
-    return nil;
+    return [self copyWithZone:NULL];
 }
 
 - (id)mutableCopy {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = [self mutableCopyWithZone:0x0];
-     *   return r0;
-     */
-    return nil;
+    return [self mutableCopyWithZone:NULL];
 }
 
 - (id)copyWithZone:(void *)arg1 {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r19 = [self->realString copyWithZone:arg2];
-     *   r20 = [[CXTaskSpecialString alloc] initWithString:r19];
-     *   [r19 release];
-     *   r0 = r20;
-     *   return r0;
-     */
-    return nil;
+    NSString *string = [self->realString copyWithZone:(NSZone *)arg1];
+    CXTaskSpecialString *copy = [[CXTaskSpecialString alloc] initWithString:string];
+    [string release];
+    return copy;
 }
 
 - (id)mutableCopyWithZone:(void *)arg1 {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r19 = [self->realString mutableCopyWithZone:arg2];
-     *   r20 = [[CXTaskSpecialString alloc] initWithString:r19];
-     *   [r19 release];
-     *   r0 = r20;
-     *   return r0;
-     */
-    return nil;
+    NSMutableString *string = [self->realString mutableCopyWithZone:(NSZone *)arg1];
+    CXTaskSpecialString *copy = [[CXTaskSpecialString alloc] initWithString:string];
+    [string release];
+    return copy;
 }
 
-- (id)fileSystemRepresentation {
-    return self->realString;
+- (const char *)fileSystemRepresentation {
+    return [self->realString UTF8String];
 }
 
 - (id)forwardingTargetForSelector:(SEL)arg1 {
     return self->realString;
+}
+
+- (void)dealloc {
+    [self->realString release];
+    [super dealloc];
 }
 
 @end

@@ -158,6 +158,10 @@ extern void _Py_Dealloc(PyObject *);
 - (id)initWithDelegate:(id)arg1;
 @end
 
+@interface CDDetector : NSObject
++ (id)findMatchingProfilesForVolume:(id)arg1 inProfiles:(id)arg2;
+@end
+
 // Rows of a bottle's installed-software list.
 @protocol CXInstalledApplication <NSObject>
 - (id)canUninstall;

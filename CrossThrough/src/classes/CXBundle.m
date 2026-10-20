@@ -3,118 +3,84 @@
 #import "CrossThrough.h"
 #import "HopperCompat.h"
 
+// Private CoreFoundation calls CrossOver makes when available, so a helper
+// app rewritten on disk is not read from a stale bundle cache.
+extern void _CFBundleFlushCachesForURL(CFURLRef url) __attribute__((weak_import));
+extern void _CFBundleFlushBundleCaches(CFBundleRef bundle) __attribute__((weak_import));
+
+
 @implementation CXBundle
 
 + (id)bundleWithURL:(id)arg1 {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r20 = [arg2 retain];
-     *   r19 = [[self alloc] initWithURL:r20];
-     *   [r20 release];
-     *   r0 = [r19 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return [[[self alloc] initWithURL:arg1] autorelease];
 }
 
 - (id)initWithURL:(id)arg1 {
     self = [super init];
-    if (self) {
-        // Initialized
+    if (!self) {
+        return nil;
+    }
+    [self setUrl:arg1];
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSURL *infoPlist = [[arg1 URLByAppendingPathComponent:@"Contents" isDirectory:YES] URLByAppendingPathComponent:@"Info.plist" isDirectory:NO];
+    BOOL isDirectory = NO;
+    if ([fileManager fileExistsAtPath:[infoPlist path] isDirectory:&isDirectory] && !isDirectory &&
+        [fileManager isReadableFileAtPath:[infoPlist path]]) {
+        if (_CFBundleFlushCachesForURL) {
+            _CFBundleFlushCachesForURL((CFURLRef)arg1);
+        }
+        [self setCfBundle:CFBundleCreate(NULL, (CFURLRef)arg1)];
+        if ([self cfBundle] && _CFBundleFlushBundleCaches) {
+            _CFBundleFlushBundleCaches([self cfBundle]);
+        }
+    }
+    if (![self cfBundle]) {
+        [self release];
+        return nil;
     }
     return self;
 }
 
 - (void)dealloc {
-    return;
+    if ([self cfBundle]) {
+        CFRelease([self cfBundle]);
+    }
+    [self->_url release];
+    [super dealloc];
 }
 
 - (id)objectForInfoDictionaryKey:(id)arg1 {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r20 = [arg2 retain];
-     *   r19 = [CFBundleGetValueForInfoDictionaryKey([self cfBundle], r20) retain];
-     *   [r20 release];
-     *   r0 = [r19 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return [[(id)CFBundleGetValueForInfoDictionaryKey([self cfBundle], (CFStringRef)arg1) retain] autorelease];
 }
 
 - (id)bundleIdentifier {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = [self cfBundle];
-     *   r0 = CFBundleGetIdentifier(r0);
-     *   return r0;
-     */
-    return nil;
+    return (NSString *)CFBundleGetIdentifier([self cfBundle]);
 }
 
 - (id)executablePath {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = [self cfBundle];
-     *   r0 = CFBundleCopyExecutableURL(r0);
-     *   r19 = r0;
-     *   r0 = [r0 path];
-     *   r0 = [r0 retain];
-     *   r20 = r0;
-     *   r21 = [r0 copy];
-     *   [r20 release];
-     *   [r19 release];
-     *   r0 = [r21 autorelease];
-     *   return r0;
-     */
-    return nil;
+    NSURL *executableURL = (NSURL *)CFBundleCopyExecutableURL([self cfBundle]);
+    NSString *path = [[[executableURL path] copy] autorelease];
+    [executableURL release];
+    return path;
 }
 
 - (NSUInteger)helperVersion {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = [self cfBundle];
-     *   r0 = CFBundleGetValueForInfoDictionaryKey(r0, @"CXHelperAppVersion");
-     *   r0 = [r0 retain];
-     *   r19 = r0;
-     *   r20 = [r0 unsignedIntValue];
-     *   [r19 release];
-     *   r0 = r20;
-     *   return r0;
-     */
-    return 0;
+    return [(id)CFBundleGetValueForInfoDictionaryKey([self cfBundle], CFSTR("CXHelperAppVersion")) unsignedIntValue];
 }
 
 - (id)icon {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   var_30 = r24;
-     *   decomp_var_28 = r23;
-     *   r31 = r31 + 0xffffffffffffffc0;
-     *   var_20 = r22;
-     *   decomp_var_18 = r21;
-     *   var_10 = r20;
-     *   decomp_var_8 = r19;
-     *   saved_fp = r29;
-     *   decomp_var_m8 = r30;
-     *   r21 = self;
-     *   r0 = [self objectForInfoDictionaryKey:@"CFBundleIconFile"];
-     *   r0 = [r0 retain];
-     *   r19 = r0;
-     *   if (r0 != 0x0) {
-     *   r0 = [r21 cfBundle];
-     *   r0 = CFBundleCopyResourceURL(r0, r19, @"icns", 0x0);
-     *   r20 = r0;
-     *   if (r0 != 0x0) {
-     *   r0 = [NSImage alloc];
-     *   r0 = [r0 initWithContentsOfURL:r20];
-     *   r22 = r0;
-     *   if (r0 == 0x0) {
-     *   r23 = [[NSWorkspace sharedWorkspace] retain];
-     *   r0 = [r21 url];
-     *   r0 = [r0 retain];
-     *   ... (46 more lines)
-     */
-    return nil;
+    NSString *iconFile = [self objectForInfoDictionaryKey:@"CFBundleIconFile"];
+    if (iconFile) {
+        NSURL *iconURL = (NSURL *)CFBundleCopyResourceURL([self cfBundle], (CFStringRef)iconFile, CFSTR("icns"), NULL);
+        if (iconURL) {
+            NSImage *image = [[NSImage alloc] initWithContentsOfURL:iconURL];
+            [iconURL release];
+            if (image) {
+                return [image autorelease];
+            }
+        }
+    }
+    return [[NSWorkspace sharedWorkspace] iconForFile:[[self url] path]];
 }
 
 - (id)url {
@@ -122,14 +88,17 @@
 }
 
 - (void)setUrl:(id)arg1 {
-    self->_url = arg1;
+    if (self->_url != arg1) {
+        [self->_url release];
+        self->_url = [arg1 retain];
+    }
 }
 
-- (id *)cfBundle {
+- (CFBundleRef)cfBundle {
     return self->_cfBundle;
 }
 
-- (void)setCfBundle:(void *)arg1 {
+- (void)setCfBundle:(CFBundleRef)arg1 {
     self->_cfBundle = arg1;
 }
 
