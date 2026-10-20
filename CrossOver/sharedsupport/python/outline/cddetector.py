@@ -11,7 +11,13 @@ import cxproduct
 class CDDetector(cxobjc.Proxy):
     pass
 
-get_cd_profiles = <function get_cd_profiles>()
+@cxobjc.method(CDDetector, 'findMatchingProfilesForVolume_inProfiles_')
+def get_cd_profiles(root_path, profiles):
+    # globals: cxproduct, get_cd_profiles_for_all_products
+    # attributes: get_config_boolean, copy, is_for_current_product, is_ranked, pop
+    # strings: 'OfficeSetup', 'ShowUntestedApps'
+    ...
+
 def get_cd_profiles_for_all_products(root_path, profiles):
     # globals: globtree, re, cxlog
     # attributes: userdata, FileContentGlobTree, values, cd_profile, globs, patterns, add_content_glob, glob, setdefault, endswith, matches, appid, error, warn, debug_str

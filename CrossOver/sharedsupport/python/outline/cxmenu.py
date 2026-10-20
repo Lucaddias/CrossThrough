@@ -50,9 +50,25 @@ def set_menuroot(bottlename, new_root, update=True):
     # strings: 'Bottle', 'MenuRoot', 'MenuMode', '', 'install', '--removeall', '--install', '--bottle'
     ...
 
-local_start_menu_path = <function local_start_menu_path>()
-local_desktop_path = <function local_desktop_path>()
-create_custom_shortcut = <function create_custom_shortcut>()
+@cxobjc.method(CXMenu, 'localStartMenuPath')
+def local_start_menu_path():
+    # globals: _
+    # strings: 'Start Menu'
+    ...
+
+@cxobjc.method(CXMenu, 'localDesktopPath')
+def local_desktop_path():
+    # globals: _
+    # strings: 'Desktop'
+    ...
+
+@cxobjc.method(CXMenu, 'createShortcutForBottle_command_name_folder_localDesktopPath_andStartMenuPath_')
+def create_custom_shortcut(bottle, command, name, folder, local_desktop, local_startmenu, background=True):
+    # globals: cxutils, len, range, os, bottlequery
+    # attributes: string_to_unicode, startswith, endswith, cmdlinetoargv, pop, path, isabs, exists, get_windows_path, join, CX_ROOT, argvtocmdline, extend, dirname, run
+    # strings: '--desktop', '--startmenu', '/', '', 'bin', 'wine', '--bottle', '--wl-app', 'cxmklnk', '--', '.lnk', '--target', '--args', '--workdir'
+    ...
+
 class MenuItem:
     """A single menu shortcut."""
     def __init__(self, parent, section):

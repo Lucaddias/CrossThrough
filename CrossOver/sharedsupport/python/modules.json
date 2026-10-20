@@ -63,7 +63,9 @@
    "code_objects": 20,
    "doc": null,
    "file": "lib/python/bottlecollection.pyc",
-   "functions": [],
+   "functions": [
+    "sharedCollection"
+   ],
    "imported_by": [
     "libcxsetup"
    ],
@@ -98,12 +100,18 @@
    "file": "lib/python/bottlemanagement.pyc",
    "functions": [
     "_bottle_tool",
+    "create_bottle",
+    "copy_bottle",
     "publish_bottle",
+    "restore_bottle",
     "rename_bottle",
     "delete_bottle",
     "set_default_bottle",
     "package_bottle",
+    "archive_bottle",
     "_get_template_key",
+    "get_template_name",
+    "template_list",
     "is_running",
     "quit_bottle",
     "get_up_to_date",
@@ -158,6 +166,8 @@
    "functions": [
     "_validate_wineprefix",
     "get_bottle_list",
+    "unique_bottle_name",
+    "is_valid_new_bottle_name",
     "get_default_bottle",
     "get_prefix_for_bottle",
     "get_native_paths",
@@ -458,7 +468,15 @@
    "code_objects": 28,
    "doc": "Handles refreshing and reading the C4 profile information.",
    "file": "lib/python/c4profilesmanager.pyc",
-   "functions": [],
+   "functions": [
+    "profilesSet",
+    "dropin_C4PFile",
+    "taste_c4p",
+    "prepare_temp_c4p",
+    "getOnlineFilePath",
+    "update_online_profiles",
+    "get_matching_profiles"
+   ],
    "imported_by": [
     "appdetector",
     "bottlewrapper",
@@ -517,6 +535,7 @@
    "doc": null,
    "file": "lib/python/cddetector.pyc",
    "functions": [
+    "get_cd_profiles",
     "get_cd_profiles_for_all_products"
    ],
    "imported_by": [
@@ -1448,7 +1467,10 @@
     "config_path",
     "run_cxmenu",
     "get_menuroot",
-    "set_menuroot"
+    "set_menuroot",
+    "local_start_menu_path",
+    "local_desktop_path",
+    "create_custom_shortcut"
    ],
    "imported_by": [
     "bottlewrapper",
@@ -1900,11 +1922,15 @@
     "sanitize_windows_filename",
     "allow_bottlename_char",
     "is_valid_bottlename",
+    "sanitize_bottlename",
     "path_to_uri",
     "uri_to_path",
     "html_escape",
     "html_to_text",
+    "cmdlinetoargv",
     "argvtocmdline",
+    "basename",
+    "dirname",
     "abspath",
     "expand_octal_chars",
     "expand_unix_string",
@@ -1915,9 +1941,12 @@
     "version_as_tuple",
     "get_user_languages",
     "get_preferred_languages",
+    "get_language_value",
     "setup_textdomain",
     "_translator",
     "cxgettext",
+    "installer_logging_preset",
+    "logging_presets",
     "run",
     "system",
     "launch_url",
@@ -2063,11 +2092,19 @@
    "doc": null,
    "file": "lib/python/demoutils.pyc",
    "functions": [
+    "demo_status",
     "can_register_as_current_user",
+    "serial_reg_url",
+    "reg_license_url",
     "json_format_start",
     "json_format",
     "json_format_end",
+    "create_account_request_body_for_email_name_password_with_serial_code",
+    "checkSerialCodeRegistrationResponse",
+    "splitLicenseAndSigFromBuffer",
+    "lastResort",
     "lastResortErroneous",
+    "checkLicenseDownload",
     "create_acct_apply_scode",
     "download_and_split_license_file",
     "register"
@@ -2344,7 +2381,8 @@
    "doc": null,
    "file": "lib/python/installtask.pyc",
    "functions": [
-    "_do_nothing"
+    "_do_nothing",
+    "get_missing_dependencies"
    ],
    "imported_by": [
     "libcxsetup"
@@ -2610,7 +2648,9 @@
    "file": "lib/python/systeminfo.pyc",
    "functions": [
     "get_bottle_information",
-    "get_system_information"
+    "get_system_information",
+    "system_info_string",
+    "_system_info_string_for_bottle"
    ],
    "imported_by": [
     "cxaiengine",
@@ -2655,7 +2695,9 @@
    "file": "lib/python/webutils.pyc",
    "functions": [
     "get_version",
-    "get_token"
+    "get_token",
+    "create_token",
+    "update_compatdb"
    ],
    "imported_by": [
     "libcxsetup",

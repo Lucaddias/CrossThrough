@@ -37,8 +37,19 @@ def get_bottle_list():
     # strings: ':'
     ...
 
-unique_bottle_name = <function unique_bottle_name>()
-is_valid_new_bottle_name = <function is_valid_new_bottle_name>()
+@cxobjc.method(BottleQuery, 'uniqueBottleName_')
+def unique_bottle_name(inBasename):
+    # globals: get_bottle_list, reserved_names, os, cxproduct, str
+    # attributes: lower, path, join, get_bottle_path, split, exists
+    # strings: ':', '-'
+    ...
+
+@cxobjc.method(BottleQuery, 'isValidNewBottleName_')
+def is_valid_new_bottle_name(new_bottle_name):
+    # globals: reserved_names, unique_bottle_name, cxutils
+    # attributes: lower, sanitize_bottlename
+    ...
+
 def get_default_bottle():
     # globals: cxproduct, os, cxutils
     # attributes: get_bottle_path, get_managed_bottle_path, split, path, exists, join, string_to_unicode, basename, realpath

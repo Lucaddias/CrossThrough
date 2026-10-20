@@ -18,25 +18,89 @@ class BottleCollection(cxobjc.Proxy):
         # attributes: Proxy, nsobject_init, __init__
         ...
 
-    refresh = <function BottleCollection.refresh>()
-    reset = <function BottleCollection.reset>()
+    @cxobjc.namedSelector(b'refresh')
+    def refresh(self):
+        # globals: bottlequery
+        # attributes: get_bottle_list, bottles, name, is_renaming, removeBottle, remove, changeablename, ignored_bottles, addBottle, changeDelegates, bottleCollectionChanged
+        ...
+
+    @cxobjc.namedSelector(b'reset')
+    def reset(self):
+        # attributes: bottle_names, removeBottle, refresh
+        ...
+
     def has_32_bit_bottle(self):
         # attributes: bottleList, arch
         # strings: 'win32'
         ...
 
     has32BitBottle = cxobjc.object_property(read_only=True, typestr=cxobjc.BOOL, getter=has_32_bit_bottle, depends_on=['bottleList'])
-    add_ignored_bottle = <function BottleCollection.add_ignored_bottle>()
-    remove_ignored_bottle = <function BottleCollection.remove_ignored_bottle>()
-    refreshDefaultBottle = <function BottleCollection.refreshDefaultBottle>()
-    bottle_with_name = <function BottleCollection.bottle_with_name>()
-    bottle_names = <function BottleCollection.bottle_names>()
-    bottles = <function BottleCollection.bottles>()
-    addBottle = <function BottleCollection.addBottle>()
-    removeBottle = <function BottleCollection.removeBottle>()
-    addChangeDelegate = <function BottleCollection.addChangeDelegate>()
-    removeChangeDelegate = <function BottleCollection.removeChangeDelegate>()
-    addBottleChangeDelegate = <function BottleCollection.addBottleChangeDelegate>()
-    removeBottleChangeDelegate = <function BottleCollection.removeBottleChangeDelegate>()
+    @cxobjc.python_method
+    def add_ignored_bottle(self, new_name):
+        # attributes: ignored_bottles, append
+        ...
 
-sharedCollection = <function sharedCollection>()
+    @cxobjc.python_method
+    def remove_ignored_bottle(self, new_name):
+        # attributes: ignored_bottles, remove
+        ...
+
+    @cxobjc.namedSelector(b'refreshDefaultBottle')
+    def refreshDefaultBottle(self):
+        # globals: bottlequery
+        # attributes: get_default_bottle, bottleList, name, is_default
+        ...
+
+    @cxobjc.namedSelector(b'bottleWithName:')
+    def bottle_with_name(self, bottle_name):
+        # attributes: bottleList, name
+        ...
+
+    @cxobjc.python_method
+    def bottle_names(self):
+        # attributes: bottleList, name
+        ...
+
+    @cxobjc.python_method
+    def bottles(self):
+        # globals: list
+        # attributes: bottleList
+        ...
+
+    @cxobjc.python_method
+    def addBottle(self, bottle_name):
+        # globals: distversion, bottlewrapper
+        # attributes: bottles, name, IS_MACOSX, BottleWrapper, alloc, initWithName_, bottleList, append, add_menu_observers, bottleChangeDelegates, add_change_delegate, refreshDefaultBottle
+        ...
+
+    @cxobjc.python_method
+    def removeBottle(self, bottle_name):
+        # attributes: bottle_with_name, bottleList, remove, remove_change_delegate, remove_observers, refreshDefaultBottle
+        ...
+
+    @cxobjc.namedSelector(b'addChangeDelegate:')
+    def addChangeDelegate(self, inDelegate):
+        # attributes: changeDelegates, append
+        ...
+
+    @cxobjc.python_method
+    def removeChangeDelegate(self, inDelegate):
+        # attributes: changeDelegates, remove
+        ...
+
+    @cxobjc.python_method
+    def addBottleChangeDelegate(self, inDelegate):
+        # attributes: bottleChangeDelegates, append, bottles, add_change_delegate
+        ...
+
+    @cxobjc.python_method
+    def removeBottleChangeDelegate(self, inDelegate):
+        # attributes: bottleChangeDelegates, remove, bottles, remove_change_delegate
+        ...
+
+
+@cxobjc.method(BottleCollection, 'sharedCollection')
+def sharedCollection():
+    # globals: sharedBottleCollection, NameError, distversion, BottleCollection
+    # attributes: IS_MACOSX, alloc, init
+    ...

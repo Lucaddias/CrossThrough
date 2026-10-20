@@ -43,7 +43,12 @@ class _UrlGetterDelegate(Foundation.NSObject):
 
 
 class UrlGetter(cxurlget_base.UrlGetterBase):
-    make_cookie_storage = <function UrlGetter.make_cookie_storage>()
+    @classmethod
+    def make_cookie_storage(cls):
+        # globals: Foundation
+        # attributes: NSURLSessionConfiguration, ephemeralSessionConfiguration, HTTPCookieStorage
+        ...
+
     def __init__(self, *args, **kwargs):
         # globals: cxurlget_base
         # attributes: UrlGetterBase, __init__

@@ -548,8 +548,11 @@ def outline(code, opnames, indent='', in_class=False):
                 self_or_null, fn = pop(2)
                 if fn.text == 'NULL':  # [callable, NULL] order from LOAD_GLOBAL/LOAD_ATTR
                     fn, self_or_null = self_or_null, fn
-                if self_or_null.text not in ('NULL',) and not fn.text.endswith(')'):
-                    pass
+                if i.arg == 0 and not kwn and fn.code is not None and self_or_null.text != 'NULL':
+                    # 3.13 decorators: [decorator, function] then CALL 0, the function
+                    # sitting in the self_or_null slot
+                    fn.deco.append(self_or_null.text); stack.append(fn)
+                    continue
                 pos = args[:len(args) - len(kwn)]
                 kws = args[len(args) - len(kwn):]
                 if fn.text == '__build_class__':

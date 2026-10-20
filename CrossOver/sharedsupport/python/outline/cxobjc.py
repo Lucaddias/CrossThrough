@@ -42,7 +42,35 @@ class Proxy(CXMacObject):
     """Serves as a base class for defining proxies so one can call Python
 functions from Objective-C code using PyObjC.
 """
-    add_thunk = <function Proxy.add_thunk>()()
+    @python_method
+    @classmethod
+    def add_thunk(cls, meth, func):
+        """Dynamically adds a class method wrapper for the specified function.
+
+This makes it possible to declare class methods that act as a wrapper
+for regular functions right next to the function declaration, that is
+outside of the class declaration. For instance:
+
+class MyClass(cxobj.Proxy):
+    pass
+
+def function_one(arg):
+    pass
+
+MyClass.add_thunk('functionOne_', function_one)
+
+def function_two():
+    pass
+
+MyClass.add_thunk('functionTwo', function_two)
+
+# Then the following calls are valid:
+# MyClass.functionOne_(my_arg)
+# MyClass.functionTwo()
+"""
+        # globals: setattr, thunk
+        ...
+
     def nsobject_init(self):
         """Calls the init() method of NSObject. Classes that need an Objective C
 init method should implement it like so:

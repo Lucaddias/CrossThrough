@@ -62,7 +62,13 @@ The properties are stored in the properties dictionary.
         # strings: 'LD_LIBRARY_PATH', ':', 'running cxdiag* with ', '=', '32', '', '64'
         ...
 
-    _has_tools = <function CXDiag._has_tools>()
+    @classmethod
+    def _has_tools(cls, tools):
+        # globals: cxwhich, os
+        # attributes: which, environ
+        # strings: 'PATH'
+        ...
+
     def _check_pkgdeb(self):
         # globals: CXDiag, _
         # attributes: _has_tools, warnings

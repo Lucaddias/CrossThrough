@@ -20,8 +20,24 @@ def _bottle_tool():
     # strings: 'bin', 'cxbottle'
     ...
 
-create_bottle = <function create_bottle>()
-copy_bottle = <function copy_bottle>()
+@cxobjc.method(BottleManagement, 'createBottle_fromTemplate_')
+def create_bottle(bottlename, template='win10_64', env=None, appid=None):
+    """Creates the specified bottle and returns a (success, err_msg) tuple.
+    """
+    # globals: _bottle_tool, cxutils
+    # attributes: append, run, GRAB
+    # strings: '--bottle', '--create', '--template', '--install', 'EnvironmentVariables:CX_BOTTLE_CREATOR_APPID=%s', '--param'
+    ...
+
+@cxobjc.method(BottleManagement, 'duplicateBottle_fromBottle_')
+def copy_bottle(bottlename, bottleToCopy):
+    """Copies the specified bottle and returns a (success, err_msg) tuple.
+    """
+    # globals: _bottle_tool, cxutils
+    # attributes: run, GRAB
+    # strings: '--bottle', '--copy', '--install'
+    ...
+
 def publish_bottle(bottlename, bottleToCopy):
     """Publishes the specified bottle and returns a (success, err_msg) tuple.
     """
@@ -30,7 +46,16 @@ def publish_bottle(bottlename, bottleToCopy):
     # strings: 'bin', 'cxsu', '--ignore-home', '--bottle', '--copy', '--install', '--scope', 'managed'
     ...
 
-restore_bottle = <function restore_bottle>()
+@cxobjc.method(BottleManagement, 'restoreBottle_fromArchive_')
+def restore_bottle(bottlename, archiveFile):
+    """Restores the specified archive to the specified bottle name and
+returns a (success, err_msg) tuple.
+"""
+    # globals: _bottle_tool, distversion, os, cxutils
+    # attributes: IS_MACOSX, environ, copy, run, GRAB
+    # strings: '--bottle', '--restore', '--install', 'LANG', 'LC_CTYPE', 'LC_ALL', 'UTF-8'
+    ...
+
 def rename_bottle(bottlename, newBottleName):
     """Renames the specified bottle and returns a (success, err_msg) tuple."""
     # globals: bottlequery, os, _bottle_tool, cxutils
@@ -61,7 +86,16 @@ def package_bottle(bottlename, packagetype, release, productid, packager, outdir
     # strings: '--%s', '--release', '--bottle', '--productid', '--packager'
     ...
 
-archive_bottle = <function archive_bottle>()
+@cxobjc.method(BottleManagement, 'archiveBottle_toPath_')
+def archive_bottle(bottlename, inArchivePath):
+    """Archives the bottle to the specified file and returns a
+(success, err_msg) tuple.
+"""
+    # globals: _bottle_tool, distversion, os, cxutils
+    # attributes: IS_MACOSX, environ, copy, run, GRAB
+    # strings: '--bottle', '--tar', 'LANG', 'LC_CTYPE', 'LC_ALL', 'UTF-8'
+    ...
+
 _TEMPLATE_PROPERTIES = {'win98': (0, _('Windows 98 (deprecated)')), 'win2000': (1, _('Windows 2000 (deprecated)')), 'winxp': (2, _('Windows XP 32-bit (deprecated)')), 'winxp_64': (3, _('Windows XP')), 'winvista': (4, _('Windows Vista 32-bit (deprecated)')), 'winvista_64': (5, _('Windows Vista')), 'win7': (6, _('Windows 7 32-bit (deprecated)')), 'win7_64': (7, _('Windows 7')), 'win8': (8, _('Windows 8 32-bit (deprecated)')), 'win8_64': (9, _('Windows 8')), 'win10': (10, _('Windows 10 32-bit (deprecated)')), 'win10_64': (11, _('Windows 10')), 'win11_64': (12, _('Windows 11'))}
 def _get_template_key(template):
     # globals: _TEMPLATE_PROPERTIES
@@ -69,8 +103,19 @@ def _get_template_key(template):
     # strings: 'Unknown'
     ...
 
-get_template_name = <function get_template_name>()
-template_list = <function template_list>()
+@cxobjc.method(BottleManagement, 'displayNameForTemplate_')
+def get_template_name(template):
+    # globals: _TEMPLATE_PROPERTIES
+    # strings: 'Unknown'
+    ...
+
+@cxobjc.method(BottleManagement, 'templates')
+def template_list():
+    # globals: os, cxutils, cxproduct, sorted, _get_template_key
+    # attributes: path, join, CX_ROOT, listdir, endswith, get_config_boolean, exists, append
+    # strings: 'share', 'crossover', 'bottle_templates', '_64', 'OfficeSetup', 'Enable32BitBottles', 'setup'
+    ...
+
 def is_running(bottlename):
     # globals: os, cxutils
     # attributes: path, join, CX_ROOT, system

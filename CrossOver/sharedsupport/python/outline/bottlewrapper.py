@@ -91,19 +91,64 @@ class BottleWrapper(cxobjc.Proxy):
         # attributes: Proxy, nsobject_init, __init__
         ...
 
-    bottle_changed = <function BottleWrapper.bottle_changed>()
-    config_changed = <function BottleWrapper.config_changed>()
-    set_menu_changed_time = <function BottleWrapper.set_menu_changed_time>()
-    menu_changed = <function BottleWrapper.menu_changed>()
-    add_menu_observers = <function BottleWrapper.add_menu_observers>()
+    @cxobjc.python_method
+    def bottle_changed(self):
+        # attributes: callback
+        # strings: 'bottleChanged'
+        ...
+
+    @cxobjc.python_method
+    def config_changed(self, *_args):
+        """Called when the bottle config has changed.
+This means that all bottle information has to be
+reloaded from the main thread."""
+        # globals: pyop
+        # attributes: STATUS_DELETING, status_overrides, STATUS_RENAMING, perform_on_main_thread, reload_info
+        ...
+
+    @cxobjc.python_method
+    def set_menu_changed_time(self):
+        # globals: time
+        # attributes: time, menuChangedTime
+        ...
+
+    @cxobjc.python_method
+    def menu_changed(self):
+        """Called when the bottle menu has changed.
+This means that all bottle information and launchers have to
+be reloaded from the main thread."""
+        # globals: pyop
+        # attributes: STATUS_DELETING, status_overrides, STATUS_RENAMING, perform_on_main_thread, set_menu_changed_time, reload_info
+        ...
+
+    @cxobjc.namedSelector(b'addMenuObservers')
+    def add_menu_observers(self):
+        # globals: AddMenuObserversOperation, menu_observer_queue
+        # attributes: enqueue
+        ...
+
     def add_menu_observers_main(self):
         """This can be really slow so this should not be performed on the main thread."""
         # attributes: menu, add_observers, menu_changed
         ...
 
-    remove_menu_observers = <function BottleWrapper.remove_menu_observers>()
-    get_config_value = <function BottleWrapper.get_config_value>()
-    set_config_value = <function BottleWrapper.set_config_value>()
+    @cxobjc.namedSelector(b'removeMenuObservers')
+    def remove_menu_observers(self):
+        # attributes: menu, remove_observers, menu_changed
+        ...
+
+    @cxobjc.python_method
+    def get_config_value(self, section, name, default):
+        # attributes: config, get
+        ...
+
+    @cxobjc.python_method
+    def set_config_value(self, section, name, value):
+        # globals: cxlog
+        # attributes: config, get_save_config, warn, to_str, name, lock_file, save_and_unlock_file
+        # strings: 'Unable to set a config value in bottle %s'
+        ...
+
     def unset_config_value(self, section, name):
         # globals: cxlog
         # attributes: config, get_save_config, warn, to_str, name, lock_file, save_and_unlock_file
@@ -120,85 +165,438 @@ class BottleWrapper(cxobjc.Proxy):
         # attributes: operations, resume, remove_status_override, STATUS_SUSPENDED
         ...
 
-    initialize = <function BottleWrapper.initialize>()
-    remove_observers = <function BottleWrapper.remove_observers>()
-    load_basic_info = <function BottleWrapper.load_basic_info>()
-    reload_info = <function BottleWrapper.reload_info>()
-    refresh_up_to_date = <function BottleWrapper.refresh_up_to_date>()
-    set_is_default = <function BottleWrapper.set_is_default>()
-    add_config_observer = <function BottleWrapper.add_config_observer>()
-    remove_config_observer = <function BottleWrapper.remove_config_observer>()
-    add_windows_version_observer = <function BottleWrapper.add_windows_version_observer>()
-    remove_windows_version_observer = <function BottleWrapper.remove_windows_version_observer>()
-    on_windows_version_changed = <function BottleWrapper.on_windows_version_changed>()
-    is_macos_version = <function BottleWrapper.is_macos_version>()()
-    is_apple_silicon = <function BottleWrapper.is_apple_silicon>()()
-    load_graphics_backend_info = <function BottleWrapper.load_graphics_backend_info>()
-    set_graphics_backend_auto = <function BottleWrapper.set_graphics_backend_auto>()
-    set_graphics_backend_d3dmetal = <function BottleWrapper.set_graphics_backend_d3dmetal>()
-    set_graphics_backend_dxmt = <function BottleWrapper.set_graphics_backend_dxmt>()
-    set_graphics_backend_dxvk = <function BottleWrapper.set_graphics_backend_dxvk>()
-    set_graphics_backend_wine = <function BottleWrapper.set_graphics_backend_wine>()
-    is_d3dmetal_enabled = <function BottleWrapper.is_d3dmetal_enabled>()
+    @cxobjc.python_method
+    def initialize(self):
+        # globals: bottlequery, os, cxmenu
+        # attributes: reset_cache, name, remove_config_observer, get_prefix_for_bottle, wine_prefix, get_config, config, add_config_observer, load_basic_info, path, join, system_drive, get_default_bottle, is_default, MenuPrefs, is_managed, menu, add_windows_version_observer
+        # strings: 'drive_c'
+        ...
+
+    @cxobjc.namedSelector(b'removeObservers')
+    def remove_observers(self):
+        # attributes: remove_windows_version_observer, remove_config_observer, remove_menu_observers
+        ...
+
+    @cxobjc.namedSelector(b'loadBasicInfo')
+    def load_basic_info(self):
+        """This function loads the bottle's basic properties.
+On the Mac, this function MUST be called in the main thread because
+it modifies properties which are bound to the UI.
+"""
+        # attributes: wine_prefix, get_config_value, arch, current_description, is_managed, template, split, windows_version, get_appid, appid, refresh_up_to_date, load_graphics_backend_info, load_vulkan_backend_info, load_is_msync_enabled, load_is_preview_enabled, bottle_changed
+        # strings: 'Bottle', 'WineArch', 'win32', 'Description', '', 'Updater', 'Template', 'win98', 'WindowsVersion', '_'
+        ...
+
+    @cxobjc.namedSelector(b'reloadInfo')
+    def reload_info(self):
+        # attributes: load_basic_info, installed_packages_ready, load_application_info, control_panel_ready, load_control_panel_info, is_high_resolution_enabled_ready, load_high_resolution_info
+        ...
+
+    @cxobjc.namedSelector(b'refreshUpToDate')
+    def refresh_up_to_date(self):
+        """On the Mac, this function MUST be called in the main thread because
+it modifies properties which are bound to the UI.
+"""
+        # globals: bottlemanagement, BottleWrapper
+        # attributes: is_managed, get_up_to_date, name, up_to_date, add_status_override, STATUS_UPGRADE, remove_all_status_overrides
+        # strings: 'managed'
+        ...
+
+    @cxobjc.namedSelector(b'setIsDefault:completionHandler:')
+    def set_is_default(self, state, callback=None):
+        # globals: SetIsDefaultOperation, pyop
+        # attributes: sharedOperationQueue, enqueue
+        ...
+
+    @cxobjc.python_method
+    def add_config_observer(self):
+        # globals: cxconfig
+        # attributes: config, add_observer, RELOADED, config_changed, _config_changed_observer
+        ...
+
+    @cxobjc.python_method
+    def remove_config_observer(self):
+        # globals: cxconfig
+        # attributes: config, remove_observer, RELOADED, _config_changed_observer
+        ...
+
+    @cxobjc.python_method
+    def add_windows_version_observer(self):
+        # globals: os, cxfsnotifier, open
+        # attributes: remove_windows_version_observer, path, join, wine_prefix, add_observer, on_windows_version_changed, _windows_version_observer, exists
+        # strings: '.version', 'w', 'ascii'
+        ...
+
+    @cxobjc.python_method
+    def remove_windows_version_observer(self):
+        # globals: cxfsnotifier
+        # attributes: _windows_version_observer, items, remove_observer
+        ...
+
+    @cxobjc.python_method
+    def on_windows_version_changed(self, _event=None, _path=None, _data=None):
+        # globals: bottlequery, IOError, cxlog, str
+        # attributes: STATUS_DELETING, status_overrides, STATUS_RENAMING, get_windows_version, name, windows_version, set_config_value, config_changed, log
+        # strings: 'Bottle', 'WindowsVersion', 'Error while updating windows version in bottle ', ': '
+        ...
+
+    @staticmethod
+    @cxobjc.python_method
+    def is_macos_version(version):
+        # globals: platform, distversion, int
+        # attributes: mac_ver, split, IS_MACOSX
+        # strings: '.'
+        ...
+
+    @staticmethod
+    @cxobjc.python_method
+    def is_apple_silicon():
+        # globals: platform
+        # attributes: machine, CDLL, util, find_library, c_int, sysctlbyname, byref, c_size_t, value
+        # strings: 'arm', 'c'
+        ...
+
+    @cxobjc.python_method
+    def load_graphics_backend_info(self):
+        # globals: BottleWrapper
+        # attributes: is_macos_version, is_apple_silicon, is_d3dmetal_available, is_dxmt_available, get_config_value, STATUS_GRAPHICS_BACKEND_D3DMETAL, graphics_backend_state, STATUS_GRAPHICS_BACKEND_DXMT, STATUS_GRAPHICS_BACKEND_DXVK, STATUS_GRAPHICS_BACKEND_WINE, STATUS_GRAPHICS_BACKEND_AUTO, load_is_dlss_enabled
+        # strings: 'EnvironmentVariables', 'CX_GRAPHICS_BACKEND', '', 'd3dmetal', 'dxmt', 'dxvk', 'wined3d'
+        ...
+
+    @cxobjc.namedSelector(b'setGraphicsBackendAuto')
+    def set_graphics_backend_auto(self):
+        # attributes: set_config_value, load_graphics_backend_info, bottle_changed
+        # strings: 'EnvironmentVariables', 'CX_GRAPHICS_BACKEND', ''
+        ...
+
+    @cxobjc.namedSelector(b'setGraphicsBackendD3DMetal')
+    def set_graphics_backend_d3dmetal(self):
+        # attributes: set_config_value, load_graphics_backend_info, bottle_changed
+        # strings: 'EnvironmentVariables', 'CX_GRAPHICS_BACKEND', 'd3dmetal'
+        ...
+
+    @cxobjc.namedSelector(b'setGraphicsBackendDXMT')
+    def set_graphics_backend_dxmt(self):
+        # attributes: set_config_value, load_graphics_backend_info, bottle_changed
+        # strings: 'EnvironmentVariables', 'CX_GRAPHICS_BACKEND', 'dxmt'
+        ...
+
+    @cxobjc.namedSelector(b'setGraphicsBackendDXVK')
+    def set_graphics_backend_dxvk(self):
+        # attributes: set_config_value, load_graphics_backend_info, bottle_changed
+        # strings: 'EnvironmentVariables', 'CX_GRAPHICS_BACKEND', 'dxvk'
+        ...
+
+    @cxobjc.namedSelector(b'setGraphicsBackendWine')
+    def set_graphics_backend_wine(self):
+        # attributes: set_config_value, load_graphics_backend_info, bottle_changed
+        # strings: 'EnvironmentVariables', 'CX_GRAPHICS_BACKEND', 'wined3d'
+        ...
+
+    @cxobjc.python_method
+    def is_d3dmetal_enabled(self):
+        # globals: BottleWrapper
+        # attributes: graphics_backend_state, STATUS_GRAPHICS_BACKEND_D3DMETAL
+        ...
+
     isD3DMetalEnabled = cxobjc.object_property(read_only=True, typestr=cxobjc.BOOL, getter=is_d3dmetal_enabled, depends_on=['graphics_backend_state'])
-    is_dxmt_enabled = <function BottleWrapper.is_dxmt_enabled>()
+    @cxobjc.python_method
+    def is_dxmt_enabled(self):
+        # globals: BottleWrapper
+        # attributes: graphics_backend_state, STATUS_GRAPHICS_BACKEND_DXMT
+        ...
+
     isDXMTEnabled = cxobjc.object_property(read_only=True, typestr=cxobjc.BOOL, getter=is_dxmt_enabled, depends_on=['graphics_backend_state'])
-    is_dxvk_enabled = <function BottleWrapper.is_dxvk_enabled>()
+    @cxobjc.python_method
+    def is_dxvk_enabled(self):
+        # globals: BottleWrapper
+        # attributes: graphics_backend_state, STATUS_GRAPHICS_BACKEND_DXVK
+        ...
+
     isDXVKEnabled = cxobjc.object_property(read_only=True, typestr=cxobjc.BOOL, getter=is_dxvk_enabled, depends_on=['graphics_backend_state'])
-    is_wined3d_enabled = <function BottleWrapper.is_wined3d_enabled>()
+    @cxobjc.python_method
+    def is_wined3d_enabled(self):
+        # globals: BottleWrapper
+        # attributes: graphics_backend_state, STATUS_GRAPHICS_BACKEND_WINE
+        ...
+
     isWineD3DEnabled = cxobjc.object_property(read_only=True, typestr=cxobjc.BOOL, getter=is_wined3d_enabled, depends_on=['graphics_backend_state'])
-    load_vulkan_backend_info = <function BottleWrapper.load_vulkan_backend_info>()
-    set_vulkan_backend_moltenvk = <function BottleWrapper.set_vulkan_backend_moltenvk>()
-    set_vulkan_backend_mtlvk = <function BottleWrapper.set_vulkan_backend_mtlvk>()
-    is_moltenvk_enabled = <function BottleWrapper.is_moltenvk_enabled>()
+    @cxobjc.python_method
+    def load_vulkan_backend_info(self):
+        # globals: BottleWrapper, distversion
+        # attributes: STATUS_VULKAN_BACKEND_UNKNOWN, vulkan_backend_state, IS_MACOSX, is_moltenvk_available, is_macos_version, is_apple_silicon, is_mtlvk_available, get_config_value, STATUS_VULKAN_BACKEND_MTLVK, STATUS_VULKAN_BACKEND_MOLTENVK
+        # strings: 'EnvironmentVariables', 'CX_LIBVULKAN', '', 'libvulkan.dylib'
+        ...
+
+    @cxobjc.namedSelector(b'setVulkanBackendMoltenVK')
+    def set_vulkan_backend_moltenvk(self):
+        # attributes: set_config_value, load_vulkan_backend_info, bottle_changed
+        # strings: 'EnvironmentVariables', 'CX_LIBVULKAN', 'libMoltenVK.dylib'
+        ...
+
+    @cxobjc.namedSelector(b'setVulkanBackendMTLVK')
+    def set_vulkan_backend_mtlvk(self):
+        # attributes: set_config_value, load_vulkan_backend_info, bottle_changed
+        # strings: 'EnvironmentVariables', 'CX_LIBVULKAN', 'libvulkan.dylib'
+        ...
+
+    @cxobjc.python_method
+    def is_moltenvk_enabled(self):
+        # globals: BottleWrapper
+        # attributes: vulkan_backend_state, STATUS_VULKAN_BACKEND_MOLTENVK
+        ...
+
     isMoltenVKEnabled = cxobjc.object_property(read_only=True, typestr=cxobjc.BOOL, getter=is_moltenvk_enabled, depends_on=['vulkan_backend_state'])
-    is_mtlvk_enabled = <function BottleWrapper.is_mtlvk_enabled>()
+    @cxobjc.python_method
+    def is_mtlvk_enabled(self):
+        # globals: BottleWrapper
+        # attributes: vulkan_backend_state, STATUS_VULKAN_BACKEND_MTLVK
+        ...
+
     isMTLVKEnabled = cxobjc.object_property(read_only=True, typestr=cxobjc.BOOL, getter=is_mtlvk_enabled, depends_on=['vulkan_backend_state'])
-    load_is_dlss_enabled = <function BottleWrapper.load_is_dlss_enabled>()
-    enable_dlss = <function BottleWrapper.enable_dlss>()
-    disable_dlss = <function BottleWrapper.disable_dlss>()
-    is_dlss_enabled = <function BottleWrapper.is_dlss_enabled>()
+    @cxobjc.python_method
+    def load_is_dlss_enabled(self):
+        # globals: BottleWrapper
+        # attributes: STATUS_DLSS_UNKNOWN, is_dlss_enabled_state, graphics_backend_state, STATUS_GRAPHICS_BACKEND_AUTO, STATUS_GRAPHICS_BACKEND_D3DMETAL, STATUS_GRAPHICS_BACKEND_DXMT, STATUS_DLSS_UNAVAILABLE, is_macos_version, is_apple_silicon, is_d3dmetal_enabled, get_config_value, set_config_value, STATUS_DLSS_ENABLED, STATUS_DLSS_DISABLED
+        # strings: 'EnvironmentVariables', 'D3DM_ENABLE_METALFX', '0', 'DXMT_ENABLE_NVEXT', '1'
+        ...
+
+    @cxobjc.namedSelector(b'enableDLSS')
+    def enable_dlss(self):
+        # globals: BottleWrapper
+        # attributes: set_config_value, is_macos_version, STATUS_DLSS_ENABLED, is_dlss_enabled_state, bottle_changed
+        # strings: 'EnvironmentVariables', 'D3DM_ENABLE_METALFX', '1', '0', 'DXMT_ENABLE_NVEXT'
+        ...
+
+    @cxobjc.namedSelector(b'disableDLSS')
+    def disable_dlss(self):
+        # globals: BottleWrapper
+        # attributes: set_config_value, STATUS_DLSS_DISABLED, is_dlss_enabled_state, bottle_changed
+        # strings: 'EnvironmentVariables', 'D3DM_ENABLE_METALFX', '0', 'DXMT_ENABLE_NVEXT'
+        ...
+
+    @cxobjc.python_method
+    def is_dlss_enabled(self):
+        # globals: BottleWrapper
+        # attributes: is_dlss_enabled_state, STATUS_DLSS_ENABLED
+        ...
+
     isDLSSEnabled = cxobjc.object_property(read_only=True, typestr=cxobjc.BOOL, getter=is_dlss_enabled, depends_on=['is_dlss_enabled_state'])
-    is_dlss_available = <function BottleWrapper.is_dlss_available>()
+    @cxobjc.python_method
+    def is_dlss_available(self):
+        # globals: BottleWrapper
+        # attributes: is_dlss_enabled_state, STATUS_DLSS_UNAVAILABLE
+        ...
+
     isDLSSAvailable = cxobjc.object_property(read_only=True, typestr=cxobjc.BOOL, getter=is_dlss_available, depends_on=['is_dlss_enabled_state'])
-    get_logpixels = <function BottleWrapper.get_logpixels>()
-    load_high_resolution_info = <function BottleWrapper.load_high_resolution_info>()
+    @cxobjc.python_method
+    def get_logpixels(self):
+        # globals: bottlequery
+        # attributes: get_registry_key, name, get, NotFoundError
+        # strings: 'HKEY_CURRENT_USER\\Control Panel\\Desktop', 'HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Hardware Profiles\\Current\\Software\\Fonts', 'logpixels'
+        ...
+
+    @cxobjc.namedSelector(b'loadHighResolutionInfo')
+    def load_high_resolution_info(self):
+        # globals: LoadHighResolutionInfoOperation, pyop
+        # attributes: is_high_resolution_enabled_ready, is_high_resolution_enabled_loading, sharedOperationQueue, enqueue
+        ...
+
     def enableHighResolution(self):
         # attributes: enable_high_resolution
         ...
 
-    enable_high_resolution = <function BottleWrapper.enable_high_resolution>()
-    disable_high_resolution = <function BottleWrapper.disable_high_resolution>()
-    is_high_resolution_enabled = <function BottleWrapper.is_high_resolution_enabled>()
+    @cxobjc.python_method
+    def enable_high_resolution(self, logpixels):
+        # globals: SetHighResolutionEnabledStateOperation, pyop
+        # attributes: sharedOperationQueue, enqueue
+        ...
+
+    @cxobjc.namedSelector(b'disableHighResolution')
+    def disable_high_resolution(self):
+        # globals: SetHighResolutionEnabledStateOperation, pyop
+        # attributes: sharedOperationQueue, enqueue
+        ...
+
+    @cxobjc.python_method
+    def is_high_resolution_enabled(self):
+        # globals: BottleWrapper
+        # attributes: is_high_resolution_enabled_state, STATUS_HIGHRES_ENABLED
+        ...
+
     isHighResolutionEnabled = cxobjc.object_property(read_only=True, typestr=cxobjc.BOOL, getter=is_high_resolution_enabled, depends_on=['is_high_resolution_enabled_state'])
-    load_is_msync_enabled = <function BottleWrapper.load_is_msync_enabled>()
-    _enable_msync = <function BottleWrapper._enable_msync>()
-    enable_msync = <function BottleWrapper.enable_msync>()
-    _disable_msync = <function BottleWrapper._disable_msync>()
-    disable_msync = <function BottleWrapper.disable_msync>()
-    is_msync_enabled = <function BottleWrapper.is_msync_enabled>()
+    @cxobjc.python_method
+    def load_is_msync_enabled(self):
+        # globals: BottleWrapper, distversion
+        # attributes: STATUS_MSYNC_UNKNOWN, is_msync_enabled_state, IS_MACOSX, STATUS_MSYNC_UNAVAILABLE, get_config_value, STATUS_MSYNC_ENABLED, STATUS_MSYNC_DISABLED
+        # strings: 'EnvironmentVariables', 'WINEMSYNC', '0'
+        ...
+
+    @cxobjc.python_method
+    def _enable_msync(self):
+        # globals: BottleWrapper
+        # attributes: set_config_value, STATUS_MSYNC_ENABLED, is_msync_enabled_state, bottle_changed
+        # strings: 'EnvironmentVariables', 'WINEMSYNC', '1'
+        ...
+
+    @cxobjc.namedSelector(b'enableMSync')
+    def enable_msync(self):
+        # attributes: suspend, quit
+        def quit_callback():
+            # attributes: _enable_msync, resume
+            ...
+
+        ...
+
+    @cxobjc.python_method
+    def _disable_msync(self):
+        # globals: BottleWrapper
+        # attributes: set_config_value, STATUS_MSYNC_DISABLED, is_msync_enabled_state, bottle_changed
+        # strings: 'EnvironmentVariables', 'WINEMSYNC', '0'
+        ...
+
+    @cxobjc.namedSelector(b'disableMSync')
+    def disable_msync(self):
+        # attributes: suspend, quit
+        def quit_callback():
+            # attributes: _disable_msync, resume
+            ...
+
+        ...
+
+    @cxobjc.python_method
+    def is_msync_enabled(self):
+        # globals: BottleWrapper
+        # attributes: is_msync_enabled_state, STATUS_MSYNC_ENABLED
+        ...
+
     isMSyncEnabled = cxobjc.object_property(read_only=True, typestr=cxobjc.BOOL, getter=is_msync_enabled, depends_on=['is_msync_enabled_state'])
-    load_is_preview_enabled = <function BottleWrapper.load_is_preview_enabled>()
-    enable_preview = <function BottleWrapper.enable_preview>()
-    disable_preview = <function BottleWrapper.disable_preview>()
-    is_preview_enabled = <function BottleWrapper.is_preview_enabled>()
+    @cxobjc.python_method
+    def load_is_preview_enabled(self):
+        # globals: BottleWrapper, distversion
+        # attributes: STATUS_PREVIEW_UNKNOWN, is_preview_enabled_state, IS_PREVIEW, STATUS_PREVIEW_UNAVAILABLE, get_config_value, STATUS_PREVIEW_ENABLED, remove_all_status_overrides, STATUS_DISABLED, STATUS_PREVIEW_DISABLED, add_status_override
+        # strings: 'Bottle', 'Preview', '0'
+        ...
+
+    @cxobjc.namedSelector(b'enablePreview')
+    def enable_preview(self):
+        # globals: BottleWrapper
+        # attributes: set_config_value, STATUS_PREVIEW_ENABLED, is_preview_enabled_state, remove_all_status_overrides, STATUS_DISABLED, config_changed
+        # strings: 'Bottle', 'Preview', '1'
+        ...
+
+    @cxobjc.namedSelector(b'disablePreview')
+    def disable_preview(self):
+        # globals: BottleWrapper
+        # attributes: set_config_value, STATUS_PREVIEW_DISABLED, is_preview_enabled_state, add_status_override, STATUS_DISABLED, config_changed
+        # strings: 'Bottle', 'Preview', '0'
+        ...
+
+    @cxobjc.python_method
+    def is_preview_enabled(self):
+        # globals: BottleWrapper
+        # attributes: is_preview_enabled_state, STATUS_PREVIEW_ENABLED
+        ...
+
     isPreviewEnabled = cxobjc.object_property(read_only=True, typestr=cxobjc.BOOL, getter=is_preview_enabled, depends_on=['is_preview_enabled_state'])
-    disable_rating_nag = <function BottleWrapper.disable_rating_nag>()
-    should_nag_for_ratings = <function BottleWrapper.should_nag_for_ratings>()
+    @cxobjc.namedSelector(b'disableRatingNag')
+    def disable_rating_nag(self):
+        # attributes: set_config_value, bottle_changed
+        # strings: 'Bottle', 'AskForRatings', '0'
+        ...
+
+    @cxobjc.python_method
+    def should_nag_for_ratings(self):
+        # globals: distversion, int, time, ValueError
+        # attributes: get_config_value, IS_PREVIEW, time, set_config_value
+        # strings: 'Bottle', 'AskForRatings', '1', 'RatingHookDate', '0', '%d'
+        ...
+
     shouldNagForRatings = cxobjc.object_property(read_only=True, typestr=cxobjc.BOOL, getter=should_nag_for_ratings, depends_on=['config'])
-    load_control_panel_info = <function BottleWrapper.load_control_panel_info>()
-    launch_control_panel_applet = <function BottleWrapper.launch_control_panel_applet>()
-    load_application_info = <function BottleWrapper.load_application_info>()
-    file_is_in_bottle = <function BottleWrapper.file_is_in_bottle>()
-    write_description = <function BottleWrapper.write_description>()
-    wait_for_shutdown = <function BottleWrapper.wait_for_shutdown>()
-    delete = <function BottleWrapper.delete>()
-    rename = <function BottleWrapper.rename>()
-    add_change_delegate = <function BottleWrapper.add_change_delegate>()
-    remove_change_delegate = <function BottleWrapper.remove_change_delegate>()
-    add_status_override = <function BottleWrapper.add_status_override>()
-    remove_all_status_overrides = <function BottleWrapper.remove_all_status_overrides>()
-    remove_status_override = <function BottleWrapper.remove_status_override>()
+    @cxobjc.namedSelector(b'loadControlPanelInfo')
+    def load_control_panel_info(self):
+        # globals: LoadControlPanelInfoOperation, pyop
+        # attributes: control_panel_ready, control_panel_loading, sharedOperationQueue, enqueue
+        ...
+
+    @cxobjc.namedSelector(b'launchControlPanelApplet:')
+    def launch_control_panel_applet(self, applet):
+        # globals: os, cxutils, __import__
+        # attributes: path, join, CX_ROOT, lower, endswith, name, append, start, run
+        # strings: 'bin', 'wine', '.exe', '--bottle', '--wl-app', 'wineboot.exe', '--restart', '.cpl', 'rundll32', 'shell32.dll,Control_RunDLL'
+        ...
+
+    @cxobjc.namedSelector(b'loadApplicationInfo')
+    def load_application_info(self):
+        # globals: LoadApplicationInfoOperation, pyop
+        # attributes: installed_packages_ready, installed_packages_loading, sharedOperationQueue, enqueue
+        ...
+
+    @cxobjc.namedSelector(b'fileIsInBottle:')
+    def file_is_in_bottle(self, filename):
+        # globals: os
+        # attributes: path, abspath, realpath, system_drive, startswith
+        ...
+
+    @cxobjc.namedSelector(b'writeDescription')
+    def write_description(self):
+        # attributes: get_config_value, current_description, set_config_value
+        # strings: 'Bottle', 'Description', ''
+        ...
+
+    @cxobjc.python_method
+    def wait_for_shutdown(self):
+        """Wait a bit for for the bottle to truly shut down after calling quit"""
+        # globals: range, bottlemanagement, time
+        # attributes: can_force_quit, is_running, name, sleep
+        ...
+
+    @cxobjc.namedSelector(b'delete:')
+    def delete(self, callback=None):
+        # attributes: suspend, quit
+        def quit_callback():
+            # globals: DeleteBottleOperation, pyop
+            # attributes: sharedOperationQueue, enqueue
+            ...
+
+        ...
+
+    @cxobjc.namedSelector(b'rename:completionHandler:')
+    def rename(self, new_name, callback=None):
+        # attributes: suspend, quit
+        def quit_callback():
+            # globals: RenameBottleOperation, pyop
+            # attributes: sharedOperationQueue, enqueue
+            ...
+
+        ...
+
+    @cxobjc.namedSelector(b'addChangeDelegate:')
+    def add_change_delegate(self, delegate):
+        # attributes: _change_delegates, append
+        ...
+
+    @cxobjc.namedSelector(b'removeChangeDelegate:')
+    def remove_change_delegate(self, delegate):
+        # attributes: _change_delegates, remove
+        ...
+
+    @cxobjc.namedSelector(b'addStatusOverride:')
+    def add_status_override(self, status):
+        # attributes: status_overrides, append, status, bottle_changed
+        ...
+
+    @cxobjc.namedSelector(b'removeAllStatusOverrides:')
+    def remove_all_status_overrides(self, status):
+        # attributes: status_overrides, remove_status_override
+        ...
+
+    @cxobjc.namedSelector(b'removeStatusOverride:')
+    def remove_status_override(self, status):
+        # globals: len, BottleWrapper
+        # attributes: status_overrides, remove, status, installed_packages_ready, control_panel_ready, STATUS_INIT, STATUS_READY, bottle_changed
+        ...
+
     def get_can_run_commands(self):
         # attributes: up_to_date, is_managed, is_busy, is_disabled
         ...
@@ -292,8 +690,18 @@ won't necessarily be set yet."""
 
     needs_upgrade = property(get_needs_upgrade)
     needsUpgrade = cxobjc.object_property(read_only=True, typestr=cxobjc.BOOL, getter=get_needs_upgrade, depends_on=['up_to_date', 'is_managed'])
-    quit = <function BottleWrapper.quit>()
-    force_quit = <function BottleWrapper.force_quit>()
+    @cxobjc.namedSelector(b'quit:')
+    def quit(self, callback=None):
+        # globals: QuitBottleOperation, pyop
+        # attributes: sharedOperationQueue, enqueue
+        ...
+
+    @cxobjc.namedSelector(b'forceQuit:')
+    def force_quit(self, callback=None):
+        # globals: ForceQuitBottleOperation, pyop
+        # attributes: sharedOperationQueue, enqueue
+        ...
+
     def get_display_name(self):
         # globals: _
         # attributes: is_default, name
@@ -302,7 +710,13 @@ won't necessarily be set yet."""
 
     display_name = property(get_display_name)
     displayName = cxobjc.object_property(read_only=True, getter=get_display_name, depends_on=['name', 'is_default'])
-    get_windows_version_display_name = <function BottleWrapper.get_windows_version_display_name>()
+    @cxobjc.python_method
+    def get_windows_version_display_name(self):
+        # globals: bottlequery, _
+        # attributes: get_windows_version_name, windows_version, arch
+        # strings: 'win32', '%(version)s 32-bit (deprecated)', 'version'
+        ...
+
     windows_version_display_name = property(get_windows_version_display_name)
     windowsVersionDisplayName = cxobjc.object_property(read_only=True, getter=get_windows_version_display_name, depends_on=['windows_version', 'arch'])
     def get_appid(self):
@@ -317,12 +731,26 @@ won't necessarily be set yet."""
         ...
 
     profile = property(get_profile)
-    get_missing_dependencies_profile = <function BottleWrapper.get_missing_dependencies_profile>()
+    @cxobjc.namedSelector(b'getMissingDependenciesProfile')
+    def get_missing_dependencies_profile(self):
+        # attributes: profile, copy, app_profile, flags, add, steamid
+        # strings: 'virtual'
+        ...
+
     def bottleName(self):
         # attributes: name
         ...
 
-    callback = <function BottleWrapper.callback>()
+    @cxobjc.python_method
+    def callback(self, name, *args):
+        """Perform a callback in the main UI"""
+        # globals: getattr
+        # attributes: _change_delegates
+        def do_nothing(*_args, **_kwargs):
+            ...
+
+        ...
+
 
 class BottleWrapperOperation(pyop.PythonOperation):
     def __init__(self, bottle):

@@ -239,17 +239,104 @@ The GUI (especially the Mac one) does not have to provide an object that
 derives from this class, but it must implement all of the methods defined
 here.
 """
-    profileChanged = <function InstallTaskDelegate.profileChanged>()
-    sourceChanged = <function InstallTaskDelegate.sourceChanged>()
-    categorizedBottle_ = <function InstallTaskDelegate.categorizedBottle_>()
-    categorizedAllBottles = <function InstallTaskDelegate.categorizedAllBottles>()
-    analyzedBottle_ = <function InstallTaskDelegate.analyzedBottle_>()
-    bottleCreateChanged = <function InstallTaskDelegate.bottleCreateChanged>()
-    bottleNewnameChanged = <function InstallTaskDelegate.bottleNewnameChanged>()
-    bottleTemplateChanged = <function InstallTaskDelegate.bottleTemplateChanged>()
-    bottleNameChanged = <function InstallTaskDelegate.bottleNameChanged>()
-    profileMediaAdded_ = <function InstallTaskDelegate.profileMediaAdded_>()
-    profileMediaRemoved_ = <function InstallTaskDelegate.profileMediaRemoved_>()
+    @cxobjc.delegate
+    def profileChanged(self):
+        """Notifies the GUI that the profile selected for installation has
+changed.
+"""
+        ...
+
+    @cxobjc.delegate
+    def sourceChanged(self):
+        """Notifies the GUI that the media selected for the installation has
+changed.
+"""
+        ...
+
+    @cxobjc.delegate
+    def categorizedBottle_(self, target_bottle):
+        """Notifies the GUI that the specified bottle's category is now
+available, where target_bottle is either a TargetBottle or a
+TargetTemplate object.
+
+This may be used to implement a GUI that shows the bottles right away
+and then updates a field as their categories become known.
+"""
+        ...
+
+    @cxobjc.delegate
+    def categorizedAllBottles(self):
+        """Notifies the GUI that all the bottles have been assigned a
+category.
+
+It also means that the bottle picking, if any, is done.
+This can be used to implement a GUI which only shows list of bottles
+one can install into once all their categories are known.
+"""
+        ...
+
+    @cxobjc.delegate
+    def analyzedBottle_(self, target_bottle):
+        """Notifies the GUI that the specified bottle has been fully analyzed.
+
+This means we have determined everything there is to know in order to
+perform the installation into this bottle. So once one has received
+this notification one can query the list of dependencies that will
+need to be installed, and the list issues (such as dependency loops,
+etc).
+Note that the order of the analyzedBottle_() and categorizedBottle_()
+notifications is undefined. However, once a bottle has been analyzed
+its category can be computed and it is ready for installation (if
+compatible).
+"""
+        ...
+
+    @cxobjc.delegate
+    def bottleCreateChanged(self):
+        """Notifies the GUI that the flag specifying whether to install in a
+new bottle or in an existing one has changed.
+"""
+        ...
+
+    @cxobjc.delegate
+    def bottleNewnameChanged(self):
+        """Notifies the GUI that the new bottle name has been modified.
+FIXME: Specify if one can receive such notifications when not
+installing in a new bottle.
+"""
+        ...
+
+    @cxobjc.delegate
+    def bottleTemplateChanged(self):
+        """Notifies the GUI that the new bottle template has been modified.
+FIXME: Specify if one can receive such notifications when not
+installing in a new bottle.
+"""
+        ...
+
+    @cxobjc.delegate
+    def bottleNameChanged(self):
+        """Notifies the GUI that the name of the bottle to install into has
+been modified.
+FIXME: Specify if one can receive such notifications when
+installing in a new bottle.
+"""
+        ...
+
+    @cxobjc.delegate
+    def profileMediaAdded_(self, filename):
+        """Notifies the GUI that a non-mountpoint source was found for the
+selected profile and added to profile_medias.
+"""
+        ...
+
+    @cxobjc.delegate
+    def profileMediaRemoved_(self, filename):
+        """Notifies the GUI that a non-mountpoint source in profile_medias was
+removed because it no longer applies to the selected profile.
+"""
+        ...
+
 
 _NULL_DELEGATE = InstallTaskDelegate()
 def _do_nothing(*_args, **_kwargs):
@@ -267,8 +354,17 @@ run-time, e.g. bottle compatibility.
         # strings: ''
         ...
 
-    _getprofiles = <function InstallTask._getprofiles>()
-    _setprofiles = <function InstallTask._setprofiles>()
+    @cxobjc.python_method
+    def _getprofiles(self):
+        # globals: c4profilesmanager
+        # attributes: _profiles, C4ProfilesSet, all_profiles
+        ...
+
+    @cxobjc.python_method
+    def _setprofiles(self, value):
+        # attributes: _profiles, _profile, appid, profiles, _setprofile, _profile_requested, profile
+        ...
+
     profiles = property(_getprofiles, _setprofiles)
     def initWithDelegate_(self, delegate):
         # globals: cxobjc
@@ -279,36 +375,122 @@ run-time, e.g. bottle compatibility.
         # attributes: initWithDelegate_
         ...
 
-    set_delegate = <function InstallTask.set_delegate>()
-    _queue_delegate_call = <function InstallTask._queue_delegate_call>()
-    _flush_delegate_calls = <function InstallTask._flush_delegate_calls>()
-    select_profile_from_source = <function InstallTask.select_profile_from_source>()
-    auto_fill_settings = <function InstallTask.auto_fill_settings>()
-    volume_matches_profile = <function InstallTask.volume_matches_profile>()
-    _get_condition_languages = <function InstallTask._get_condition_languages>()
-    _scan_url_locales = <function InstallTask._scan_url_locales>()()
-    profile_languages = <function InstallTask.profile_languages>()
+    @cxobjc.namedSelector(b'setDelegate:')
+    def set_delegate(self, delegate):
+        # globals: _NULL_DELEGATE
+        # attributes: _delegate
+        ...
+
+    @cxobjc.python_method
+    def _queue_delegate_call(self, methodname, arg1=None):
+        # attributes: _queued_delegate_calls, append
+        ...
+
+    @cxobjc.python_method
+    def _flush_delegate_calls(self):
+        # globals: InstallTaskDelegate, getattr, _do_nothing
+        # attributes: _queued_delegate_calls, __dict__, __code__, co_argcount, _delegate
+        ...
+
+    @cxobjc.python_method
+    def select_profile_from_source(self):
+        # globals: len, next, iter
+        # attributes: installerSource, _installer_source_requested, _profile_requested, source_medias, profile_ids, _setprofile, values
+        ...
+
+    @cxobjc.namedSelector(b'autoFillSettings')
+    def auto_fill_settings(self):
+        # globals: len, next, iter
+        # attributes: _profile_requested, _installer_source_requested, source_medias, values, profile_ids, _setprofile, select_profile_from_source
+        ...
+
+    @cxobjc.namedSelector(b'volumeMatchesProfile:')
+    def volume_matches_profile(self, volume):
+        # attributes: profile, source_medias, appid, profile_ids
+        ...
+
+    @cxobjc.python_method
+    def _get_condition_languages(self, condition, result=None):
+        # globals: set, isinstance, c4profiles
+        # attributes: C4ConditionUnary, _get_condition_languages, child, C4ConditionNary, children, C4ConditionCompare, C4ConditionMatch, name, add, value
+        # strings: 'locale'
+        ...
+
+    @staticmethod
+    @cxobjc.python_method
+    def _scan_url_locales(urls, default_locales, nondefault_locales):
+        # attributes: items, add
+        # strings: ''
+        ...
+
+    @cxobjc.python_method
+    def profile_languages(self, profile=None):
+        """Returns the set of languages that should be presented to the user for a profile"""
+        # globals: set
+        # attributes: _profile, installer_profiles, update, _get_condition_languages, use_if, app_profile, download_urls, _scan_url_locales, download_urls_64bit, download_page_urls, add
+        # strings: ''
+        ...
+
     def profileLanguages(self):
         # globals: list
         # attributes: profile_languages
         ...
 
-    _getprofile = <function InstallTask._getprofile>()
-    _setprofile = <function InstallTask._setprofile>()
+    @cxobjc.python_method
+    def _getprofile(self):
+        # attributes: _profile
+        ...
+
+    @cxobjc.python_method
+    def _setprofile(self, profile, requested=True):
+        # globals: cxutils, len, next, iter, set, downloaddetector, c4profilesmanager, cxaiemedia, list
+        # attributes: _profile, appid, dependency_overrides, _profile_requested, profile_languages, get_preferred_languages, installerLocale, realInstallerLocale, _userInstallerLocale, installerDownloadSource, installWithSteam, _clear_installer_source, profile_medias, find_installers, download_search_paths, C4ProfilesSet, from_profile, _queue_delegate_call, _installer_source_requested, get_builtin_installer, source_medias, values, profile_ids, path, _get_download_url, set_installer_source, steamid, set_installer_download, set_installer_steam, _trigger_bottle_analysis, _flush_delegate_calls
+        # strings: '', 'profileMediaRemoved_', 'profileMediaAdded_', 'profileChanged'
+        ...
+
     profile = property(_getprofile, _setprofile)
     def setProfile_(self, profile):
         # attributes: profile
         ...
 
-    update_profiles = <function InstallTask.update_profiles>()
-    use_autorun_file = <function InstallTask.use_autorun_file>()
-    _is_virtual = <function InstallTask._is_virtual>()
+    @cxobjc.namedSelector(b'updateProfiles')
+    def update_profiles(self):
+        # attributes: _profiles, _profile, appid, profiles, _setprofile, _profile_requested, profile
+        ...
+
+    @cxobjc.namedSelector(b'useAutorunFile:')
+    def use_autorun_file(self, c4pfile):
+        # attributes: _profile_requested, get_autorun_id, profiles, _setprofile
+        ...
+
+    @cxobjc.python_method
+    def _is_virtual(self):
+        # attributes: _profile, app_profile, flags
+        # strings: 'virtual'
+        ...
+
     virtual = property(_is_virtual)
-    _get_display_name = <function InstallTask._get_display_name>()
+    @cxobjc.python_method
+    def _get_display_name(self):
+        # attributes: _profile, name
+        ...
+
     displayName = property(_get_display_name)
-    SetLocale = <function InstallTask.SetLocale>()
-    AddDependencyOverrides = <function InstallTask.AddDependencyOverrides>()
-    RemoveDependencyOverrides = <function InstallTask.RemoveDependencyOverrides>()
+    @cxobjc.namedSelector(b'setLocale:')
+    def SetLocale(self, locale):
+        # attributes: installerLocale, realInstallerLocale, installerDownloadSource, installerSource, set_installer_download, _profile, _trigger_bottle_analysis, _flush_delegate_calls
+        ...
+
+    @cxobjc.namedSelector(b'addDependencyOverrides:ofType:')
+    def AddDependencyOverrides(self, appids, override_type=OVERRIDE_INCLUDE):
+        # attributes: dependency_overrides, _trigger_bottle_analysis, _flush_delegate_calls
+        ...
+
+    @cxobjc.namedSelector(b'removeDependencyOverrides:')
+    def RemoveDependencyOverrides(self, appids):
+        # attributes: dependency_overrides, _trigger_bottle_analysis, _flush_delegate_calls
+        ...
+
     def ClearDependencyOverrides(self):
         # attributes: dependency_overrides, _trigger_bottle_analysis, _flush_delegate_calls
         ...
@@ -319,29 +501,74 @@ run-time, e.g. bottle compatibility.
         # strings: 'virtual'
         ...
 
-    add_source_media = <function InstallTask.add_source_media>()
-    remove_source_media = <function InstallTask.remove_source_media>()
-    download_search_paths = <function InstallTask.download_search_paths>()()
-    set_installer_source = <function InstallTask.set_installer_source>()
+    @cxobjc.namedSelector(b'addSourceMedia:withLabel:andDevice:')
+    def add_source_media(self, mountpoint, label='', device=''):
+        # globals: SourceMedia
+        # attributes: source_medias
+        ...
+
+    @cxobjc.namedSelector(b'removeSourceMedia:')
+    def remove_source_media(self, mountpoint):
+        # attributes: source_medias, installerSource, _clear_installer_source
+        ...
+
+    @staticmethod
+    @cxobjc.python_method
+    def download_search_paths():
+        # globals: distversion, os, cxutils
+        # attributes: IS_MACOSX, environ, get, get_download_dir, get_desktop_dir
+        # strings: 'HOME', '/'
+        ...
+
+    @cxobjc.python_method
+    def set_installer_source(self, inSource, requested=True, flush_delegate=True):
+        # attributes: installerSource, add_source_media, installerDownloadSource, installWithSteam, _installer_source_requested, select_profile_from_source, _queue_delegate_call, _trigger_bottle_analysis, _flush_delegate_calls
+        # strings: 'sourceChanged'
+        ...
+
     def setInstallerSource_Requested_(self, inSource, inRequested):
         # attributes: set_installer_source
         ...
 
-    set_installer_download = <function InstallTask.set_installer_download>()
+    @cxobjc.python_method
+    def set_installer_download(self, requested=True, flush_delegate=True):
+        # attributes: _get_download_url, installerDownloadSource, _clear_installer_source, installerSource, installWithSteam, _installer_source_requested, _queue_delegate_call, _trigger_bottle_analysis, _flush_delegate_calls
+        # strings: 'sourceChanged'
+        ...
+
     def setInstallerDownload(self):
         # attributes: set_installer_download
         ...
 
-    set_installer_steam = <function InstallTask.set_installer_steam>()
+    @cxobjc.python_method
+    def set_installer_steam(self, requested=True, flush_delegate=True):
+        # attributes: _profile, app_profile, steamid, installerSource, _installer_source_requested, installWithSteam, installerDownloadSource, _queue_delegate_call, _trigger_bottle_analysis, _flush_delegate_calls
+        # strings: 'steam://install/%s', 'sourceChanged'
+        ...
+
     def setInstallerSteam(self):
         # attributes: set_installer_steam
         ...
 
-    _get_download_url = <function InstallTask._get_download_url>()
+    @cxobjc.python_method
+    def _get_download_url(self):
+        # attributes: _profile, app_profile, download_urls, download_urls_64bit, is64bit, installerLocale
+        # strings: ''
+        ...
+
     download_url = property(_get_download_url)
-    _get_steamid = <function InstallTask._get_steamid>()
+    @cxobjc.python_method
+    def _get_steamid(self):
+        # attributes: _profile, app_profile, steamid
+        ...
+
     steamid = property(_get_steamid)
-    _clear_installer_source = <function InstallTask._clear_installer_source>()
+    @cxobjc.python_method
+    def _clear_installer_source(self, flush_delegate=False):
+        # attributes: installerSource, installerDownloadSource, _installer_source_requested, installWithSteam, _queue_delegate_call, _trigger_bottle_analysis, _flush_delegate_calls
+        # strings: 'sourceChanged'
+        ...
+
     def _has_installer_source(self):
         # attributes: installerSource, installerDownloadSource, virtual, installWithSteam
         ...
@@ -405,25 +632,146 @@ all bottles have been assigned a category.
         # strings: 'component', 'application'
         ...
 
-    _trigger_bottle_analysis = <function InstallTask._trigger_bottle_analysis>()
-    _categorize_list = <function InstallTask._categorize_list>()
-    _categorize_bottles = <function InstallTask._categorize_bottles>()
-    add_bottle = <function InstallTask.add_bottle>()
-    installed_applications_ready = <function InstallTask.installed_applications_ready>()
-    trigger_bottle_analysis = <function InstallTask.trigger_bottle_analysis>()
-    remove_bottle_by_name = <function InstallTask.remove_bottle_by_name>()
-    remove_bottle = <function InstallTask.remove_bottle>()
-    is_new_bottle_name_valid = <function InstallTask.is_new_bottle_name_valid>()
-    _set_target_bottle = <function InstallTask._set_target_bottle>()
-    _get_target_bottle = <function InstallTask._get_target_bottle>()
+    @cxobjc.python_method
+    def _trigger_bottle_analysis(self):
+        """Triggers a bottle analysis to:
+- determine which ones are compatible or incompatible with the
+  selected profile and installation source,
+- determine which ones to recommend installation into (if any),
+- pick a bottle if possible,
+- and acquire all the data we need to start the installation.
+"""
+        # attributes: _profile, _categorize_bottles, _unpick_bottle, templates, values, _queue_delegate_call, bottles
+        # strings: 'categorizedBottle_', 'categorizedAllBottles'
+        ...
+
+    @cxobjc.python_method
+    def _categorize_list(self, target_iter):
+        """This is a helper for _categorize_bottles()."""
+        # globals: CAT_NONE
+        # attributes: analyzed, analyze, _queue_delegate_call, has_category, get_category
+        # strings: 'analyzedBottle_', 'categorizedBottle_'
+        ...
+
+    @cxobjc.python_method
+    def _categorize_bottles(self):
+        """This goes through all the bottles and templates trying to determine
+their category. If it was successful it then calls _pick_bottle() and
+notifies the GUI.
+"""
+        # attributes: _categorize_list, templates, values, bottles, _pick_bottle, _queue_delegate_call
+        # strings: 'categorizedAllBottles'
+        ...
+
+    @cxobjc.namedSelector(b'addBottle:')
+    def add_bottle(self, bottle):
+        """Notifies InstallTask that a new bottle was detected.
+
+The caller MUST then schedule the detection of that bottle's installed
+applications and, when that's done, it MUST notify InstallTask through
+installed_applications_ready(). The one exception is if the bottle
+disappears before then and in that case it MUST notify InstallTask
+through remove_bottle().
+
+This MUST be called in the main thread.
+"""
+        # globals: TargetBottle
+        # attributes: bottles, name
+        ...
+
+    @cxobjc.namedSelector(b'installedApplicationsReady:')
+    def installed_applications_ready(self, bottle):
+        """Notifies InstallTask that the specified bottle's installed
+applications list is now available.
+
+This MUST be called in the main thread.
+"""
+        # attributes: bottles, get, name, installed_packages_ready, trigger_bottle_analysis
+        ...
+
+    @cxobjc.namedSelector(b'triggerBottleAnalysis')
+    def trigger_bottle_analysis(self):
+        """Notifies InstallTask that the bottles may
+have changed while notifying installed_applications_ready
+was disabled.
+
+This MUST be called in the main thread.
+"""
+        # attributes: _trigger_bottle_analysis, _flush_delegate_calls
+        ...
+
+    @cxobjc.python_method
+    def remove_bottle_by_name(self, bottlename):
+        """Notifies InstallTask that the specified bottle has been removed.
+
+This may be called _instead of_ installed_applications_ready() if the
+removal happened before the installed application detection could
+complete. In this case installed_applications_ready() must not be
+called for that bottle.
+
+It is also a bug to call remove_bottle_by_name() twice or to call it on
+unregistered bottles.
+
+This MUST be called in the main thread.
+"""
+        # attributes: bottles, targetBottle, bottlename, _take_bottle_snapshot, _send_bottle_change_notifications, trigger_bottle_analysis
+        ...
+
+    @cxobjc.namedSelector(b'removeBottle:')
+    def remove_bottle(self, bottle):
+        """Use remove_bottle_by_name instead."""
+        # attributes: remove_bottle_by_name, name
+        ...
+
+    @cxobjc.namedSelector(b'isNewBottleNameValid:')
+    def is_new_bottle_name_valid(self, new_bottle_name):
+        """Returns True if the new bottle name is valid and False otherwise.
+
+In particular this checks for that it does not match an existing
+bottle name, file or directory.
+This MUST be called in the main thread.
+"""
+        # globals: bottlequery
+        # attributes: is_valid_new_bottle_name
+        ...
+
+    @cxobjc.python_method
+    def _set_target_bottle(self, target_bottle):
+        # globals: isinstance, TargetTemplate, ValueError
+        # attributes: templates, template, bottles, bottlename, targetBottle, is64bit, _target_bottle_requested, installerDownloadSource, set_installer_download, _queue_delegate_call, _flush_delegate_calls
+        # strings: 'bottleCreateChanged', 'bottleTemplateChanged', 'bottleNameChanged'
+        ...
+
+    @cxobjc.python_method
+    def _get_target_bottle(self):
+        """Returns the TargetBottle object for the bottle selected for
+installation. This object can then be used to get all the details about
+that bottle: its category, the dependencies to install, and potential
+issues.
+
+Note also that this works equally well for existing bottles and new
+bottles.
+"""
+        # attributes: targetBottle
+        ...
+
     target_bottle = property(_get_target_bottle, _set_target_bottle)
     def _get_new_bottle_name(self):
         # attributes: newBottleName
         ...
 
-    _set_new_bottle_name = <function InstallTask._set_new_bottle_name>()
+    @cxobjc.namedSelector(b'setNewBottleName:')
+    def _set_new_bottle_name(self, new_bottle_name):
+        # attributes: newBottleName, _new_bottle_name_requested, _queue_delegate_call, _flush_delegate_calls
+        # strings: 'bottleNewnameChanged'
+        ...
+
     new_bottle_name = property(_get_new_bottle_name, _set_new_bottle_name)
-    set_create_new_bottle = <function InstallTask.set_create_new_bottle>()
+    @cxobjc.python_method
+    def set_create_new_bottle(self, newbottlename, template):
+        # attributes: new_bottle_name, target_template, templates, target_bottle
+        ...
+
     def createNewBottle_template_(self, newbottlename, template):
         # attributes: set_create_new_bottle
         ...
@@ -434,9 +782,22 @@ all bottles have been assigned a category.
         ...
 
     create_new_bottle = property(GetCreateNewBottle)
-    _get_existing_bottle_name = <function InstallTask._get_existing_bottle_name>()
-    _get_bottle_name = <function InstallTask._get_bottle_name>()
-    _set_bottle_name = <function InstallTask._set_bottle_name>()
+    @cxobjc.python_method
+    def _get_existing_bottle_name(self):
+        # attributes: targetBottle, bottlename
+        ...
+
+    @cxobjc.python_method
+    def _get_bottle_name(self):
+        # globals: isinstance, TargetTemplate
+        # attributes: targetBottle, newBottleName, bottlename
+        ...
+
+    @cxobjc.python_method
+    def _set_bottle_name(self, name):
+        # attributes: bottles, target_bottle
+        ...
+
     bottlename = property(_get_bottle_name, _set_bottle_name)
     def _gettarget_template(self):
         # attributes: targetBottle, template
@@ -454,7 +815,13 @@ profile, locale and bottle type combination."""
         # attributes: targetBottle, _profile, app_profile, preferred_bottle_type, templates, profiles, unknown_profile, analyzed, template, installprofile, copy
         ...
 
-    get_profile_names = <function InstallTask.get_profile_names>()
+    @cxobjc.python_method
+    def get_profile_names(self, appids):
+        """Converts a list of profile ids into a list of human-readable
+profile names."""
+        # attributes: target_bottle, installers, append, parent, name
+        ...
+
     def _get_installation_notes(self):
         # attributes: get_installer_profile, installation_notes
         ...
@@ -466,18 +833,91 @@ profile, locale and bottle type combination."""
 
     post_install_url = property(_get_post_install_url)
     _RE_SINGLE = re.compile('^[a-zA-Z0-9:_-]*$', re.IGNORECASE)
-    _find_warning_in_mapping = <function InstallTask._find_warning_in_mapping>()
-    _filter_cxdiag_messages = <function InstallTask._filter_cxdiag_messages>()
-    _cxdiag_level_cmp = <function InstallTask._cxdiag_level_cmp>()()
-    _application_name = <function InstallTask._application_name>()
-    application_name = property(_application_name)
-    get_cxdiag_messages = <function InstallTask.get_cxdiag_messages>()
-    get_apply_cxfixes = <function InstallTask.get_apply_cxfixes>()
-    get_summary_string = <function InstallTask.get_summary_string>()
-    get_dependency_details = <function InstallTask.get_dependency_details>()
-    get_installer_details = <function InstallTask.get_installer_details>()
-    get_bottle_details = <function InstallTask.get_bottle_details>()
-    get_language_details = <function InstallTask.get_language_details>()
-    get_misc_details = <function InstallTask.get_misc_details>()
+    @cxobjc.python_method
+    def _find_warning_in_mapping(self, warning, mapping):
+        # globals: re
+        # attributes: _RE_SINGLE, match, compile, IGNORECASE
+        ...
 
-get_missing_dependencies = <function get_missing_dependencies>()
+    @cxobjc.python_method
+    def _filter_cxdiag_messages(self, messages, profile):
+        # globals: list, cxlog
+        # attributes: items, cxdiag_checks, lower, startswith, split, _find_warning_in_mapping, _replace, warn, to_str
+        # strings: 'required', 'recommended', 'apprequire:', 'apprecommend:', ':', 'suggested', 'ignore:', 'closed', 'unrecognized cxdiagcheck string: %s'
+        ...
+
+    @staticmethod
+    @cxobjc.python_method
+    def _cxdiag_level_cmp(a, b):
+        # globals: cxutils, ValueError
+        # attributes: cmp, index
+        ...
+
+    @cxobjc.python_method
+    def _application_name(self):
+        # attributes: _profile, is_unknown, displayName
+        ...
+
+    application_name = property(_application_name)
+    @cxobjc.python_method
+    def get_cxdiag_messages(self):
+        """Returns a dictionary of cxdiag messages that apply to the current
+profile."""
+        # globals: cxproduct, cxdiag, cxfixes, set
+        # attributes: is_wow64_install, CHECK_64BIT, CHECK_32BIT, is64bit, get, _get_existing_bottle_name, clear_errors, warnings, items, add_error, add_masked_errors, get_errors, _profile, target_bottle, analyzed, installers, values, _filter_cxdiag_messages, _cxdiag_level_cmp, copy
+        ...
+
+    @cxobjc.python_method
+    def get_apply_cxfixes(self):
+        """True if this task should apply necessary cxfixes, False otherwise."""
+        # attributes: apply_cxfixes
+        ...
+
+    @cxobjc.python_method
+    def get_summary_string(self):
+        # globals: OVERRIDE_EXCLUDE, OVERRIDE_INCLUDE
+        # attributes: profile, append, name, installerLocale, bottlename, installWithSteam, installerSource, installerDownloadSource, dependency_overrides, items, profiles, join
+        # strings: 'Installing: %s\n', 'Locale: %s\n', 'Bottle: %s\n', 'From Steam: %s\n', 'From file: %s\n', 'From download url: %s\n', 'Manually removed from install: %s\n', 'Manually added to install: %s\n', ''
+        ...
+
+    @cxobjc.namedSelector(b'getDependencyDetails')
+    def get_dependency_details(self):
+        # globals: distversion, cxfixes, len, _, OVERRIDE_INCLUDE, OVERRIDE_EXCLUDE, cxutils
+        # attributes: IS_MACOSX, get_cxdiag_messages, get_packages, apply_cxfixes, target_bottle, analyzed, installers, virtual, append, dependency_overrides, items, reasons, profiles, name, html_escape, join
+        # strings: 'notes', 'CrossOver will install dependencies only', 'CrossOver will make configuration changes only', 'CrossOver will also install additional dependencies', 'CrossOver will also install the following manually added items: %s', ', ', 'warnings', 'The following dependencies were manually excluded from the install: %s'
+        ...
+
+    @cxobjc.namedSelector(b'getInstallerDetails')
+    def get_installer_details(self):
+        # globals: _, cxutils
+        # attributes: virtual, installWithSteam, application_name, append, installerSource, html_escape, installerDownloadSource, profile, app_profile, download_page_url
+        # strings: 'notes', "CrossOver will install '%(application)s' via Steam", 'application', 'CrossOver will install this software via Steam', "CrossOver will install '%(application)s' from %(location)s", 'CrossOver will install this software from %(location)s', 'location', 'CrossOver will download the installer from %s', "You need to provide the installer file or disk in order to install '%(application)s' using CrossOver", 'You need to provide the installer file or disk in order to install this software using CrossOver', "You need to provide the installer file or disk in order to install this software using CrossOver. If you don't have ..., '<a href="', '">', '</a>', 'warnings'
+        ...
+
+    @cxobjc.namedSelector(b'getBottleDetails')
+    def get_bottle_details(self):
+        # globals: _, cxutils, bottlequery, cxproduct, bottlemanagement
+        # attributes: bottlename, application_name, append, target_bottle, analyzed, create_new_bottle, new_bottle_name, sanitize_bottlename, html_escape, unique_bottle_name, profile, app_profile, preferred_bottle_type, get_config_boolean, compatible, get_template_name, template, newBottleName, has_installer_source
+        # strings: 'warnings', "You need to select the bottle to install '%(application)s' into", 'application', 'You need to select the bottle to install this software into', 'errors', "Invalid bottle name '%s'", "There is already a bottle named '%s'", 'Microsoft Office', 'OfficeSetup', 'Enable32BitBottles', "'%s' needs to be installed in a 32-bit bottle. Please enable them through the preferences dialog.", 'notes', "CrossOver will install '%(application)s' into the '%(bottlename)s' bottle", "CrossOver will install '%(application)s' into the '%(bottlename)s' bottle. This bottle may be incompatible", "CrossOver will install this software into the '%(bottlename)s' bottle", 'bottlename', "CrossOver will install this software into the '%(bottlename)s' bottle. This bottle may be incompatible", "CrossOver will install '%(application)s' into a new %(template)s bottle named '%(name)s'", "CrossOver will install '%(application)s' into a new %(template)s bottle named '%(name)s'. This bottle may be incompa..., "CrossOver will install this software into a new %(template)s bottle named '%(name)s'", "CrossOver will install this software into a new %(template)s bottle named '%(name)s'. This bottle may be incompatible", "The install cannot continue until the '%s' bottle is scanned for dependencies. Please wait."
+        ...
+
+    @cxobjc.namedSelector(b'getLanguageDetails')
+    def get_language_details(self):
+        # globals: _, cxutils, c4profiles
+        # attributes: installerLocale, application_name, append, html_escape, LANGUAGES, get
+        # strings: 'notes', "CrossOver will install the %(language)s version of '%(application)s'"
+        ...
+
+    @cxobjc.namedSelector(b'getMiscDetails')
+    def get_misc_details(self):
+        # globals: _, cxutils, os, cxaiemedia, distversion
+        # attributes: target_bottle, analyzed, missing_profiles, join, append, html_escape, missing_media, get_profile_names, installerSource, installWithSteam, path, isdir, profile, get_installer_profile, locate_installer, IS_MACOSX, check_mmap_permissions, PERMISSIONS_NOREAD, PERMISSIONS_NOEXEC
+        # strings: ', ', 'errors', 'The install cannot continue because one or more profiles it depends on could not be found: %s', 'The install cannot continue because no installer could be found for the following dependencies: %s', "The installer file '%s' cannot be read.", 'warnings', "The installer file '%s' is on a noexec filesystem. This may cause the install to fail."
+        ...
+
+
+@cxobjc.method(InstallTask, 'getMissingDependencies_')
+def get_missing_dependencies(bottle):
+    # globals: InstallTask
+    # attributes: can_run_commands, installed_packages_ready, profile, app_profile, copy, steamid, add_bottle, name, bottlename, target_bottle, missing_dependencies
+    ...

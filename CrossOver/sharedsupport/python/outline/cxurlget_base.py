@@ -93,7 +93,15 @@ class UrlGetterBase:
     decoding_event = None
     decoding_exception = None
     blocksize = 4096
-    make_cookie_storage = <function UrlGetterBase.make_cookie_storage>()
+    @classmethod
+    def make_cookie_storage(cls):
+        """Creates an implementation-specific object for storing cookies,
+which can optionally be passed as the cookie_storage argument to
+__init__.
+"""
+        # globals: NotImplementedError
+        ...
+
     def _do_nothing(self, *args):
         ...
 

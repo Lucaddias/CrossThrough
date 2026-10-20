@@ -5,14 +5,14 @@ Os 50 módulos vêm só como bytecode CPython 3.13 (`.pyc` hash-based, flags 3).
 | Módulo | Docstring | Classes | Funções | Code objects | Instruções | Importa (internos) | Importa (externos) |
 |---|---|---|---|---|---|---|---|
 | [`appdetector`](outline/appdetector.py) | — | `InstalledApplication`, `AppDetector` | 5 | 16 | 1048 | `bottlequery`, `c4profilesmanager`, `cxglob`, `cxlog`, `cxobjc`, `cxutils`, `distversion` | — |
-| [`bottlecollection`](outline/bottlecollection.py) | — | `BottleCollection` | 0 | 20 | 636 | `bottlequery`, `bottlewrapper`, `cxobjc`, `distversion` | — |
-| [`bottlemanagement`](outline/bottlemanagement.py) | — | `BottleManagement` | 11 | 19 | 1066 | `bottlequery`, `cxlog`, `cxobjc`, `cxproduct`, `cxutils`, `distversion` | — |
-| [`bottlequery`](outline/bottlequery.py) | — | `BottleQuery`, `NotFoundError`, `AsyncManipResult`, `_BottleManipulator` | 32 | 59 | 4505 | `cxconfig`, `cxevent`, `cxlog`, `cxobjc`, `cxproduct`, `cxutils`, `distversion` | — |
+| [`bottlecollection`](outline/bottlecollection.py) | — | `BottleCollection` | 1 | 20 | 636 | `bottlequery`, `bottlewrapper`, `cxobjc`, `distversion` | — |
+| [`bottlemanagement`](outline/bottlemanagement.py) | — | `BottleManagement` | 17 | 19 | 1066 | `bottlequery`, `cxlog`, `cxobjc`, `cxproduct`, `cxutils`, `distversion` | — |
+| [`bottlequery`](outline/bottlequery.py) | — | `BottleQuery`, `NotFoundError`, `AsyncManipResult`, `_BottleManipulator` | 34 | 59 | 4505 | `cxconfig`, `cxevent`, `cxlog`, `cxobjc`, `cxproduct`, `cxutils`, `distversion` | — |
 | [`bottlewrapper`](outline/bottlewrapper.py) | — | `BottleWrapper`, `BottleWrapperOperation`, `AddMenuObserversOperation`, `LoadApplicationInfoOperation`, `LoadControlPanelInfoOperation`, `LoadHighResolutionInfoOperation`, `SetHighResolutionEnabledStateOperation`, `SetIsDefaultOperation` … (+4) | 0 | 167 | 5453 | `appdetector`, `bottlemanagement`, `bottlequery`, `c4profilesmanager`, `cxconfig`, `cxdiag`, `cxfsnotifier`, `cxlog`, `cxmenu`, `cxobjc`, `cxutils`, `distversion`, `pyop` | — |
 | [`c4parser`](outline/c4parser.py) | — | `_C4PHandler`, `C4PFile` | 0 | 77 | 4917 | `c4profiles`, `cxlog` | — |
 | [`c4profiles`](outline/c4profiles.py) | Defines classes to represent and manipulate the C4 profile information. | `C4Condition`, `C4ConditionUnary`, `C4ConditionNot`, `C4ConditionNary`, `C4ConditionAnd`, `C4ConditionOr`, `C4ConditionCompare`, `C4ConditionMatch` … (+18) | 15 | 149 | 6685 | `cxconfig`, `cxlog`, `cxproduct`, `cxurlget`, `cxutils`, `distversion`, `iso8601` | — |
-| [`c4profilesmanager`](outline/c4profilesmanager.py) | Handles refreshing and reading the C4 profile information. | `_C4PSource`, `C4Profiles`, `C4ProfilesSet` | 0 | 28 | 1508 | `c4parser`, `c4profiles`, `cddetector`, `cxlog`, `cxobjc`, `cxproduct`, `cxutils`, `distversion`, `downloaddetector`, `fileupdate` | — |
-| [`cddetector`](outline/cddetector.py) | — | `CDDetector` | 1 | 4 | 228 | `cxlog`, `cxobjc`, `cxproduct`, `globtree` | — |
+| [`c4profilesmanager`](outline/c4profilesmanager.py) | Handles refreshing and reading the C4 profile information. | `_C4PSource`, `C4Profiles`, `C4ProfilesSet` | 7 | 28 | 1508 | `c4parser`, `c4profiles`, `cddetector`, `cxlog`, `cxobjc`, `cxproduct`, `cxutils`, `distversion`, `downloaddetector`, `fileupdate` | — |
+| [`cddetector`](outline/cddetector.py) | — | `CDDetector` | 2 | 4 | 228 | `cxlog`, `cxobjc`, `cxproduct`, `globtree` | — |
 | [`cxaiebase`](outline/cxaiebase.py) | — | `AIETask`, `AIENop`, `AIETaskGroup`, `AIEScheduler` | 2 | 45 | 1408 | `cxlog`, `cxobjc` | — |
 | [`cxaiecore`](outline/cxaiecore.py) | — | `AIECore` | 1 | 58 | 4504 | `appdetector`, `bottlequery`, `cxaiebase`, `cxaiemedia`, `cxlog`, `cxutils`, `distversion`, `globtree` | — |
 | [`cxaiemedia`](outline/cxaiemedia.py) | — | `AIEInsertMedia`, `AIEReleaseMedia`, `AIEDownload`, `AIEScanMedia` | 9 | 48 | 2370 | `cxaiebase`, `cxhtmlutils`, `cxlog`, `cxproduct`, `cxurlget`, `cxutils`, `globtree` | — |
@@ -30,7 +30,7 @@ Os 50 módulos vêm só como bytecode CPython 3.13 (`.pyc` hash-based, flags 3).
 | [`cxglob`](outline/cxglob.py) | — | `FileGlobTree`, `RegistryGlobTree` | 1 | 14 | 527 | `bottlequery`, `c4profiles`, `cxutils`, `globtree` | — |
 | [`cxhtmlutils`](outline/cxhtmlutils.py) | — | — | 4 | 5 | 604 | `cxutils` | — |
 | [`cxlog`](outline/cxlog.py) | Handles logging and error reporting. | — | 16 | 17 | 574 | — | — |
-| [`cxmenu`](outline/cxmenu.py) | — | `Error`, `CXMenu`, `MenuItem`, `MenuPrefs` | 5 | 36 | 1522 | `bottlequery`, `cxconfig`, `cxfsnotifier`, `cxlog`, `cxobjc`, `cxobservable`, `cxutils` | — |
+| [`cxmenu`](outline/cxmenu.py) | — | `Error`, `CXMenu`, `MenuItem`, `MenuPrefs` | 8 | 36 | 1522 | `bottlequery`, `cxconfig`, `cxfsnotifier`, `cxlog`, `cxobjc`, `cxobservable`, `cxutils` | — |
 | [`cxobjc`](outline/cxobjc.py) | Helpers to simplify calling  Python functions from Objective-C code using | `CXMacObject`, `Proxy`, `_ObjCDecorator`, `CXMacObject` | 12 | 25 | 521 | — | `Foundation`, `objc` |
 | [`cxobservable`](outline/cxobservable.py) | Provides a framework for classes that have observable properties. | `Object` | 0 | 8 | 307 | — | — |
 | [`cxopt`](outline/cxopt.py) | — | `Parser` | 0 | 4 | 126 | — | — |
@@ -39,21 +39,21 @@ Os 50 módulos vêm só como bytecode CPython 3.13 (`.pyc` hash-based, flags 3).
 | [`cxurlget_base`](outline/cxurlget_base.py) | — | `StopDownload`, `UrlError`, `HttpError`, `UrlGetterBase` | 3 | 19 | 445 | `cxutils` | — |
 | [`cxurlget_nsurl`](outline/cxurlget_nsurl.py) | — | `_UrlGetterDelegate`, `UrlGetter` | 0 | 11 | 607 | `cxurlget_base` | `Foundation`, `objc` |
 | [`cxurlget_urllib`](outline/cxurlget_urllib.py) | — | `DownloadError`, `UrlGetter` | 2 | 14 | 1278 | `cxlog`, `cxurlget_base`, `proxyinfo` | — |
-| [`cxutils`](outline/cxutils.py) | — | `CXUtils`, `FileDigest`, `FLock` | 45 | 68 | 4341 | `cxlog`, `cxobjc`, `distversion` | `BaseDirectory`, `Foundation`, `xdg` |
+| [`cxutils`](outline/cxutils.py) | — | `CXUtils`, `FileDigest`, `FLock` | 52 | 68 | 4341 | `cxlog`, `cxobjc`, `distversion` | `BaseDirectory`, `Foundation`, `xdg` |
 | [`cxwhich`](outline/cxwhich.py) | — | — | 1 | 2 | 123 | — | — |
-| [`demoutils`](outline/demoutils.py) | — | `DemoUtils` | 8 | 18 | 1144 | `c4profilesmanager`, `cxconfig`, `cxlog`, `cxobjc`, `cxutils`, `distversion`, `fileupdate`, `proxyinfo` | — |
+| [`demoutils`](outline/demoutils.py) | — | `DemoUtils` | 16 | 18 | 1144 | `c4profilesmanager`, `cxconfig`, `cxlog`, `cxobjc`, `cxutils`, `distversion`, `fileupdate`, `proxyinfo` | — |
 | [`distversion`](outline/distversion.py) | — | — | 0 | 1 | 32 | — | — |
 | [`downloaddetector`](outline/downloaddetector.py) | — | `ConstGlobTree` | 3 | 7 | 218 | `globtree` | — |
 | [`fileupdate`](outline/fileupdate.py) | Updates a file, checking the signature if needed. | — | 5 | 6 | 714 | `cxlog`, `cxurlget`, `cxutils`, `cxwhich` | — |
 | [`globtree`](outline/globtree.py) | — | `GlobNode`, `GlobTree`, `FileGlobTree`, `FileContentGlobTree` | 1 | 20 | 1402 | `cxlog`, `cxutils` | — |
 | [`iconutils`](outline/iconutils.py) | — | `IconUtils` | 0 | 8 | 293 | `cxobjc`, `cxproduct`, `cxurlget`, `cxutils` | — |
-| [`installtask`](outline/installtask.py) | — | `SourceMedia`, `TargetBottle`, `TargetTemplate`, `InstallTaskDelegate`, `InstallTask` | 1 | 128 | 6669 | `bottlemanagement`, `bottlequery`, `c4profiles`, `c4profilesmanager`, `cxaiemedia`, `cxdiag`, `cxfixes`, `cxlog`, `cxobjc`, `cxproduct`, `cxutils`, `distversion`, `downloaddetector` | — |
+| [`installtask`](outline/installtask.py) | — | `SourceMedia`, `TargetBottle`, `TargetTemplate`, `InstallTaskDelegate`, `InstallTask` | 2 | 128 | 6669 | `bottlemanagement`, `bottlequery`, `c4profiles`, `c4profilesmanager`, `cxaiemedia`, `cxdiag`, `cxfixes`, `cxlog`, `cxobjc`, `cxproduct`, `cxutils`, `distversion`, `downloaddetector` | — |
 | [`iso8601`](outline/iso8601.py) | ISO 8601 date time string parsing | `ParseError`, `Utc`, `FixedOffset` | 2 | 14 | 319 | — | — |
 | [`proxyinfo`](outline/proxyinfo.py) | — | `DynamicProxyHandler` | 14 | 23 | 1082 | `cxlog`, `cxproduct`, `cxutils`, `distversion` | `PyKDE4`, `PyQt4`, `gi`, `libproxy` |
 | [`pyop`](outline/pyop.py) | — | `PythonOperation`, `PythonOperationQueue` | 3 | 21 | 659 | `cxlog` | `Foundation`, `PyObjCTools`, `gi` |
 | [`ratingutils`](outline/ratingutils.py) | — | `RatingUtils` | 1 | 7 | 498 | `cxlog`, `cxobjc`, `cxproduct`, `cxurlget`, `cxutils`, `distversion`, `proxyinfo`, `systeminfo`, `webutils` | — |
-| [`systeminfo`](outline/systeminfo.py) | — | `SystemInfo` | 2 | 7 | 511 | `cxdiag`, `cxobjc`, `cxutils`, `distversion` | `gi` |
-| [`webutils`](outline/webutils.py) | — | `WebUtils` | 2 | 6 | 281 | `cxlog`, `cxobjc`, `cxproduct`, `cxurlget`, `cxutils`, `distversion`, `fileupdate`, `proxyinfo` | — |
+| [`systeminfo`](outline/systeminfo.py) | — | `SystemInfo` | 4 | 7 | 511 | `cxdiag`, `cxobjc`, `cxutils`, `distversion` | `gi` |
+| [`webutils`](outline/webutils.py) | — | `WebUtils` | 4 | 6 | 281 | `cxlog`, `cxobjc`, `cxproduct`, `cxurlget`, `cxutils`, `distversion`, `fileupdate`, `proxyinfo` | — |
 
 ## Quem importa quem
 

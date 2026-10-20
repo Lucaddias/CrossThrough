@@ -170,12 +170,48 @@ import cxaiebase
 import cxobjc
 import systeminfo
 class Engine(cxaiebase.AIEScheduler):
-    start_logging = <function Engine.start_logging>()
-    log_system_info = <function Engine.log_system_info>()
-    _getlogfile = <function Engine._getlogfile>()
+    @cxobjc.python_method
+    def start_logging(self, logfile, channels, extra_env):
+        """Initializes the global environment block and sets up logging.
+
+This function never fails. Logging is there to help diagnosis in case
+things go wrong, not to cause things to go wrong.
+"""
+        # globals: os, cxutils, open, IOError, cxlog
+        # attributes: environ, copy, state, mkdirs, path, dirname, write, installtask, get_summary_string, close, log_system_info, log, strerror
+        # strings: 'environ', 'w', 'utf8', 'surrogateescape', '\n', 'CX_LOG', 'logfile', 'CX_ENV', 'CX_DEBUGMSG', '+wineboot,-cxassoc,-cxmenu', 'unable to open log file: '
+        ...
+
+    @cxobjc.python_method
+    def log_system_info(self):
+        # globals: open, systeminfo, IOError, cxlog
+        # attributes: state, get, system_info_string, write, close, log, strerror
+        # strings: 'logfile', 'a', 'utf8', 'unable to open log file: '
+        ...
+
+    @cxobjc.python_method
+    def _getlogfile(self):
+        """Returns the path to the installation log if any, and None
+otherwise.
+"""
+        # attributes: state, get
+        # strings: 'logfile'
+        ...
+
     logfile = property(_getlogfile)
-    _add_profile = <function Engine._add_profile>()
-    _set_depth = <function Engine._set_depth>()
+    @cxobjc.python_method
+    def _add_profile(self, appid, parent, parent_media):
+        # globals: cxlog, cxaiecore, set, cxaiemedia
+        # attributes: log, to_str, _aiecores, _results, add_dependency, parent_media, add, _installers, parent, app_profile, AIECore, _bottle_init, installtask, installWithSteam, steamid, download_urls, get_builtin_installer, appid, create_download_task, download, needs_download, local_installer_file_globs, _scan, append, pre_dependencies, state, flags, create_media_tasks, _add_profile, insert_media, update, _dummy_app, release_media, post_dependencies, _postdeps
+        # strings: 'Processing %s', 'com.codeweavers.c4.206', 'steam://install/%s', 'install_source', 'installer_file', 'virtual'
+        ...
+
+    @cxobjc.python_method
+    def _set_depth(self, aiecore, depth):
+        # globals: min, isinstance, cxaiecore
+        # attributes: depth, _parents_left, parents, AIECore, dependencies, _set_depth, prepare
+        ...
+
     def __init__(self, installtask, log_filename=None, log_channels=None, log_env=None):
         # globals: cxaiebase, appdetector, os, cxaiecore, cxaiemisc, set, len, cxlog, KeyError
         # attributes: AIEScheduler, __init__, installtask, state, profile, appid, profiles, GetCreateNewBottle, installed, fast_get_installed_applications, bottlename, target_bottle, installers, _installers, installerSource, path, isdir, AIECore, unknown_installer, copy, _dummy_app, create_media_tasks, done, insert_media, install_source, get_bottle_init_task, _bottle_init, _aiecores, _scan, _results, _postdeps, _add_profile, pop, installer, parent, parent_media, add, update, download, add_dependency, scan_media, parents, release_media, remove_dependency, dependencies, _parents_left, _set_depth, get_postinstall_task, values, start_logging, is_on, check, log_, get_sorted_tasks, to_str
@@ -187,5 +223,19 @@ class Engine(cxaiebase.AIEScheduler):
         # attributes: Proxy, nsobject_init, __init__
         ...
 
-    get_win_environ = <function Engine.get_win_environ>()
-    expand_win_string = <function Engine.expand_win_string>()
+    @cxobjc.python_method
+    def get_win_environ(self):
+        """Initializes the 'winenv' state variable and returns it."""
+        # globals: bottlequery, c4profiles
+        # attributes: state, get_win_environ, installtask, bottlename, ENVIRONMENT_VARIABLES
+        # strings: 'winenv'
+        ...
+
+    @cxobjc.python_method
+    def expand_win_string(self, string):
+        """Expands the references to the authorized Windows environment
+variables.
+"""
+        # globals: bottlequery
+        # attributes: expand_win_string, get_win_environ
+        ...

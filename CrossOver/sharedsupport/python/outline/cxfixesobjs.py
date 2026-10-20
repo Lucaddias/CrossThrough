@@ -164,7 +164,12 @@ class CXFix:
         # strings: 'distfixes'
         ...
 
-    _suffix = <function CXFix._suffix>()
+    @staticmethod
+    def _suffix(errid):
+        # attributes: endswith
+        # strings: '.amd64', 'amd64', '.arm64', 'arm64', ''
+        ...
+
     def validate(self):
         """Checks that all the mandatory fields have been set for this fix.
 
@@ -187,7 +192,14 @@ class CXFixes:
         # attributes: release, distributions, cxproducts, fixes, maskedby
         ...
 
-    _fallback_check = <function CXFixes._fallback_check>()
+    @classmethod
+    def _fallback_check(cls, objlabel, objmap, obj, keyfield, checked, errors):
+        """Checks for missing and looping fallbacks."""
+        # globals: set
+        # attributes: __dict__, fallback, add, append, update
+        # strings: ' introduces a loop in the fallbacks of the ', ' ', ' falls back to the nonexistent '
+        ...
+
     def validate(self):
         # globals: set, CXFixes
         # attributes: distributions, values, _fallback_check, cxproducts, maskedby, fixes, append, errid, add, cxlevels, keys, distfixes

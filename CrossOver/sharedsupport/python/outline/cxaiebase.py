@@ -219,10 +219,40 @@ scheduler.
         # attributes: _lock, release
         ...
 
-    add = <function AIEScheduler.add>()
-    done = <function AIEScheduler.done>()
-    add_runnable = <function AIEScheduler.add_runnable>()
-    remove_runnable = <function AIEScheduler.remove_runnable>()
+    @cxobjc.python_method
+    def add(self, task):
+        """Registers a new task to be run."""
+        # attributes: _tasks, add
+        ...
+
+    @cxobjc.python_method
+    def done(self, task):
+        """Tasks use this function to tell the scheduler they are done."""
+        # attributes: _runnable, discard, _tasks
+        ...
+
+    @cxobjc.python_method
+    def add_runnable(self, task):
+        """Moves the task to the set of runnable tasks.
+
+A task calls this function when all its dependencies have been
+fulfilled. Note that this does not mean that it can actually be run
+right away as it can impose other constraints through its can_run()
+method.
+"""
+        # attributes: _runnable, add
+        ...
+
+    @cxobjc.python_method
+    def remove_runnable(self, task):
+        """Removes a task from the set of runnable tasks.
+
+This can either be called by a task when a dependency is added to it,
+or by the scheduler itself when a runnable task is scheduled.
+"""
+        # attributes: _runnable, discard
+        ...
+
     def sortedRunnable(self):
         """A convenience method for objc. It returns the current
 Runnable set sorted by niceness.
@@ -248,19 +278,61 @@ complete.
         # strings: 'aie', 'No more runnable tasks'
         ...
 
-    schedule = <function AIEScheduler.schedule>()
-    all_done = <function AIEScheduler.all_done>()
+    @cxobjc.namedSelector(b'schedule:')
+    def schedule(self, task):
+        """This function MUST be called before starting to run a task. It
+tells the task that it is about to be run, removes it from the set of
+runnable tasks and returns True.
+
+If it turns out the task cannot be run, then returns False.
+"""
+        # globals: cxlog
+        # attributes: lock, _runnable, can_run, log_, niceness, to_str, unlock, remove_runnable, schedule
+        # strings: 'aie', '%d: %s cannot run', 'Scheduled %d: %s'
+        ...
+
+    @cxobjc.python_method
+    def all_done(self):
+        """Returns True if there is no more task to run."""
+        # globals: cxlog
+        # attributes: _tasks, log_
+        # strings: 'aie', 'All Done '
+        ...
+
     def allDone(self):
         # attributes: all_done
         ...
 
-    _sort_tasks = <function AIEScheduler._sort_tasks>()
-    get_sorted_tasks = <function AIEScheduler.get_sorted_tasks>()
-    dump_task = <function AIEScheduler.dump_task>()
+    @cxobjc.python_method
+    def _sort_tasks(self, task, tasks, seen):
+        # globals: sorted, task_sort_key
+        # attributes: add, dependencies, _sort_tasks, append
+        ...
+
+    @cxobjc.namedSelector(b'sortedTasks')
+    def get_sorted_tasks(self):
+        """Returns a list of the tasks roughly sorted in their execution order.
+        """
+        # globals: set
+        # attributes: lock, _tasks, parents, _sort_tasks, unlock
+        ...
+
+    @cxobjc.python_method
+    def dump_task(self, prefix, task, dumped):
+        # globals: TASK_DONE, TASK_RUNNING, cxlog
+        # attributes: status, append, _runnable, can_run, join, log_, to_str, add, dependencies, dump_task
+        # strings: 'done', 'running', 'runnable', 'cannot-run', 'dumped already', ' (', ', ', ')', '', 'aie', '| '
+        ...
+
     def dump_tasks(self):
         # globals: cxlog, len, set
         # attributes: log_, _tasks, add, parents, dump_task
         # strings: 'aie', '+-- Dumping %d tasks', '| ', '| There are some phantom tasks', '+-- %d tasks dumped'
         ...
 
-    check = <function AIEScheduler.check>()
+    @cxobjc.python_method
+    def check(self, label, dump=False):
+        # globals: _TASK_SCHEDULED, cxlog, STATUS_STR, len
+        # attributes: _tasks, dependencies, status, _runnable, log_, to_str, err, dump_tasks
+        # strings: 'aie', ': Found AIEScheduler bugs', 'in ', '', '%s (status=%s, deps=%d) is %srunnable'
+        ...

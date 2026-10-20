@@ -24,5 +24,14 @@ def get_system_information(bottle=None, include_cxdiag=False):
     # strings: 'Bottle', 'Product', 'Version', 'Install location', '%s-bit', 'P', 'Bitness', 'DESKTOP_SESSION', '', 'Desktop session', 'get_window_manager_name', 'Window manager', 'Locale', 'LANG', 'System Information', 'r', 'utf8', 'surrogateescape', '=', '"', ':', 'Warnings', 'Properties', 'Libraries'
     ...
 
-system_info_string = <function system_info_string>()
-_system_info_string_for_bottle = <function _system_info_string_for_bottle>()
+@cxobjc.method(SystemInfo, 'systemInformationString')
+def system_info_string(bottle=None):
+    # globals: get_system_information, isinstance, dict
+    # attributes: items
+    # strings: '', '%s:\n', ': ', '\n', '%s\n'
+    ...
+
+@cxobjc.method(SystemInfo, 'systemInformationStringForBottle_')
+def _system_info_string_for_bottle(bottle):
+    # globals: system_info_string
+    ...

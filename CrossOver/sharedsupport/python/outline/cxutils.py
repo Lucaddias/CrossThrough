@@ -189,7 +189,14 @@ def is_valid_bottlename(bottlename):
     # strings: '.'
     ...
 
-sanitize_bottlename = <function sanitize_bottlename>()
+@cxobjc.method(CXUtils, 'sanitizedBottleName_')
+def sanitize_bottlename(name_hint):
+    """Builds a valid and nice-looking bottle name based on the given hint."""
+    # globals: allow_bottlename_char, is_valid_bottlename, cxlog
+    # attributes: append, join, rstrip, err
+    # strings: '_', '.', ' ', '_ ', '', "sanitize_bottlename() generated an invalid bottle name: '%s'"
+    ...
+
 def path_to_uri(path):
     # globals: string_to_utf8, chr
     # attributes: append, join
@@ -228,15 +235,41 @@ text string."""
 
     ...
 
-cmdlinetoargv = <function cmdlinetoargv>()
+@cxobjc.method(CXUtils, 'cmdLineToArgv_')
+def cmdlinetoargv(string):
+    """Convert a windows-style quoted command line to an argument list. This is
+NOT equivalent to CommandLineToArgvW."""
+    # globals: len
+    # attributes: append, join
+    # strings: ' ', '', '\\', '\\"', '"'
+    ...
+
 def argvtocmdline(argv):
     """Convert an argument list to a windows-style quoted command line."""
     # attributes: replace, append, join
     # strings: '\\', '\\\\', '"', '\\"', ' ', '"%s"'
     ...
 
-basename = <function basename>()
-dirname = <function dirname>()
+@cxobjc.method(CXUtils, 'basename_')
+def basename(path):
+    """Get the base name of a Windows or Unix path.
+Note that Windows paths can mix forward and backward slashes.
+"""
+    # globals: max
+    # attributes: rfind
+    # strings: '/', '\\'
+    ...
+
+@cxobjc.method(CXUtils, 'dirname_')
+def dirname(path):
+    """Get the directory name of a Windows or Unix path.
+Note that Windows paths can mix forward and backward slashes.
+"""
+    # globals: max
+    # attributes: rfind, rstrip
+    # strings: '/', '\\', '/\\', ''
+    ...
+
 def abspath(path, cwd=None):
     # globals: os, uri_to_path
     # attributes: path, expanduser, realpath, join
@@ -323,7 +356,23 @@ matches to be established. For instance 'pt-br' gives ('pt-br', 'pt', '').
     # strings: 'en', '-', ''
     ...
 
-get_language_value = <function get_language_value>()
+@cxobjc.method(CXUtils, 'getLanguageValue_forLanguage_')
+def get_language_value(dictionary, language=None):
+    """Returns the appropriate value for the specified language from a
+dictionary mapping language names to values.
+
+The given dictionary should either contain a single '' key that is used
+for all languages, or only have locales as its keys for locale-specific
+values. However for compatibility with pre-10.0 releases, dictionaries
+containing both types of keys are supported too.
+Empty values are ignored.
+
+This function will always return a non-empty value if there is at least one
+in the dictionary.
+"""
+    # globals: get_preferred_languages, sorted
+    ...
+
 _LOCALE_PATH = None
 def setup_textdomain():
     # globals: _LOCALE_PATH, os, CX_ROOT, cxlog, hasattr, locale
@@ -344,8 +393,19 @@ def cxgettext(message):
     ...
 
 _ = cxgettext
-installer_logging_preset = <function installer_logging_preset>()
-logging_presets = <function logging_presets>()
+@cxobjc.method(CXUtils, 'installerLoggingPreset')
+def installer_logging_preset():
+    # globals: _
+    # strings: 'Install (very verbose)'
+    ...
+
+@cxobjc.method(CXUtils, 'loggingPresets')
+def logging_presets():
+    # globals: distversion, _
+    # attributes: IS_MACOSX, append
+    # strings: 'VKD3D_DEBUG=trace', 'VKD3D_SHADER_DEBUG=trace', 'MVK_CONFIG_LOG_LEVEL=4', '+relay', 'Relay (very verbose)', '+file', '+ntdll', 'File Access', '+font', 'Fonts', 'Game Controllers', '+d3d', 'Game Graphics', 'Keyboard Input', '+cursor', '+event', 'Mouse Input', 'Network Connections', 'Printing', 'Sound (verbose)', 'Window Behavior'
+    ...
+
 GRAB = 1
 NULL = 2
 def run(args, stdout=None, stderr=None, background=False, cwd=None, env=None, logprefix=''):

@@ -31,5 +31,16 @@ def get_token():
     # strings: 'CrossOver', 'Token'
     ...
 
-create_token = <function create_token>()
-update_compatdb = <function update_compatdb>()
+@cxobjc.method(WebUtils, 'createToken_password_')
+def create_token(login, password):
+    # globals: hashlib, cxutils, proxyinfo, cxurlget, json, cxproduct, cxlog
+    # attributes: md5, update, string_to_utf8, hexdigest, install_default_opener, fetch_content, loads, string_to_unicode, set_config_string, UrlError, log, reason
+    # strings: 'https://www.codeweavers.com/bin/rest/create_token', 'CrossOver', 'Token'
+    ...
+
+@cxobjc.method(WebUtils, 'updateCompatDB')
+def update_compatdb():
+    # globals: get_version, os, cxproduct, urlencode, fileupdate
+    # attributes: split, path, join, get_user_dir, update
+    # strings: '.', 'compatdb-', '.dat', 'https://www.codeweavers.com/bin/rest/compatdb', 'version', '?'
+    ...

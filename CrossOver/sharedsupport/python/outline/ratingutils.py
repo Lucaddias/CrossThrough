@@ -35,5 +35,16 @@ class RatingUtils(cxobjc.Proxy):
         # strings: ''
         ...
 
-    get_rating = <function RatingUtils.get_rating>()
-    set_rating = <function RatingUtils.set_rating>()
+    @cxobjc.namedSelector(b'fetchRating')
+    def get_rating(self):
+        # globals: webutils, proxyinfo, get_platform, cxlog, urlencode, cxurlget, json, cxutils, isinstance, dict, int
+        # attributes: login_required, connection_failed, get_token, token, install_default_opener, get_version, log, url, fetch_content, loads, string_to_unicode, get, notes, name, rating, HttpError, code, reason, UrlError, warn
+        # strings: 'Obtaining a rating with arguments:', 'token', '?', 'Obtained rating data:', 'rank_notes', 'name', 'medal_id'
+        ...
+
+    @cxobjc.namedSelector(b'setRating:Notes:')
+    def set_rating(self, rating, notes):
+        # globals: webutils, proxyinfo, get_platform, json, systeminfo, cxlog, cxurlget
+        # attributes: login_required, connection_failed, get_token, token, install_default_opener, get_version, dumps, get_system_information, log, fetch_content, url, HttpError, code, reason, warn, UrlError
+        # strings: '', 'Submitting a rating:', 'token'
+        ...

@@ -193,7 +193,11 @@ class AIEDownload(cxaiebase.AIETask):
         ...
 
     checksum = property(_getchecksum)
-    download_page_url = <function AIEDownload.download_page_url>()
+    @property
+    def download_page_url(self):
+        # attributes: aiecore, installer, parent, app_profile, download_page_url, url
+        ...
+
     def validate_installer(self, filename):
         """Checks whether the specified file is valid.
 
@@ -233,7 +237,12 @@ otherwise.
         # strings: 'aie', ': install_source = ', 'install_source', 'temp_install_source'
         ...
 
-    get_installers_dir = <function AIEDownload.get_installers_dir>()
+    @staticmethod
+    def get_installers_dir():
+        # globals: cxproduct, cxutils
+        # attributes: get_installer_dir, mkdirs
+        ...
+
     installers_dir = property(get_installers_dir)
     def _getsize(self):
         """This is -1 if the download has not started yet.

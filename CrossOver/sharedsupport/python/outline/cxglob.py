@@ -60,4 +60,12 @@ class RegistryGlobTree(globtree.GlobTree):
         # attributes: app_profile, installed_registry_globs, add_glob, key_glob
         ...
 
-    get = <function RegistryGlobTree.get>()
+    @staticmethod
+    def get(profiles):
+        """Returns a RegistryGlobTree() object for the specified C4ProfilesSet
+object.
+"""
+        # globals: RegistryGlobTree
+        # attributes: userdata, values, add_profile, setdefault
+        # strings: 'RegistryGlobTree'
+        ...

@@ -23,7 +23,28 @@ class IconUtils(cxobjc.Proxy):
         # attributes: Proxy, nsobject_init, __init__
         ...
 
-    get_icon_path = <function IconUtils.get_icon_path>()
-    fetch_icon_list = <function IconUtils.fetch_icon_list>()
-    urlgetter_failed = <function IconUtils.urlgetter_failed>()
-    fetch_icon = <function IconUtils.fetch_icon>()
+    @cxobjc.namedSelector(b'getIconPath:')
+    def get_icon_path(self, appid):
+        # globals: os, cxproduct
+        # attributes: icon_list, get, path, join, get_icons_dir
+        # strings: 'sha1'
+        ...
+
+    @cxobjc.namedSelector(b'fetchIconList')
+    def fetch_icon_list(self):
+        # globals: cxurlget, json, cxutils, Exception
+        # attributes: fetch_content, url, loads, string_to_unicode, icon_list, get
+        # strings: 'com.codeweavers.c4.%s', 'app_id', ''
+        ...
+
+    @cxobjc.python_method
+    def urlgetter_failed(self, _urlgetter, _exception):
+        # attributes: failed
+        ...
+
+    @cxobjc.namedSelector(b'fetchIcon:')
+    def fetch_icon(self, appid):
+        # globals: cxproduct, cxutils, os, tempfile, cxurlget, shutil
+        # attributes: icon_list, get_icons_dir, mkdirs, get_icon_path, path, exists, failed, mkstemp, fdopen, get, UrlGetter, urlgetter_failed, fetch, unlink, move
+        # strings: 'local.tmp.', 'wb', 'img_icon'
+        ...

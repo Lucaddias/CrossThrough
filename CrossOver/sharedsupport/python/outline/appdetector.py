@@ -53,9 +53,24 @@ platformconstructor.
         # attributes: Proxy, nsobject_init, __init__
         ...
 
-    platformconstructor = <function InstalledApplication.platformconstructor>()()
-    _getprofile = <function InstalledApplication._getprofile>()
-    _setprofile = <function InstalledApplication._setprofile>()
+    @cxobjc.python_method
+    @classmethod
+    def platformconstructor(cls, bottlename, profile=None, keyname=None):
+        # globals: distversion
+        # attributes: IS_MACOSX, alloc, initWithBottleName_profile_andKeyName_
+        ...
+
+    @cxobjc.python_method
+    def _getprofile(self):
+        # attributes: _profile
+        ...
+
+    @cxobjc.python_method
+    def _setprofile(self, profile):
+        """Associates a profile and updates the appid property accordingly."""
+        # attributes: _profile, appid
+        ...
+
     profile = property(_getprofile, _setprofile)
     def _getname(self):
         """Returns the installed application name.

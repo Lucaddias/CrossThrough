@@ -38,14 +38,26 @@ class DownloadError(Exception):
     pass
 
 class UrlGetter(cxurlget_base.UrlGetterBase):
-    make_cookie_storage = <function UrlGetter.make_cookie_storage>()
+    @classmethod
+    def make_cookie_storage(cls):
+        # globals: cookielib
+        # attributes: CookieJar
+        ...
+
     def __init__(self, *args, **kwargs):
         # globals: cxurlget_base, urllib2
         # attributes: pop, opener, UrlGetterBase, __init__, cookie_storage, HTTPCookieProcessor, add_handler, build_opener
         # strings: 'opener'
         ...
 
-    getfield = <function UrlGetter.getfield>()
+    @staticmethod
+    def getfield(headers, name, default=None):
+        """HTTPMessage.get() is unusable because when a header is duplicated
+it returns a comma-separated list of the values. This function returns
+the value of the first instance instead."""
+        # attributes: get_all, strip
+        ...
+
     def _gzip_decoding_thread(self, infile, outfile):
         # globals: gzip, Exception, cxlog, traceback
         # attributes: GzipFile, read, write, close, decoding_event, set, log, to_str, url, format_exc, decoding_exception

@@ -361,7 +361,14 @@ default url is returned.
         ...
 
     download_page_url = property(_get_download_page_url)
-    _get_platform = <function C4ApplicationProfile._get_platform>()
+    @staticmethod
+    def _get_platform():
+        """Ratings for Chrome OS are stored as "Android" for historical reasons."""
+        # globals: cxproduct, distversion
+        # attributes: is_crostini, PLATFORM
+        # strings: 'Android'
+        ...
+
     def _getmedal(self):
         """Returns the application medal for the current platform."""
         # globals: cxutils, C4ApplicationProfile, supported_list
@@ -954,8 +961,18 @@ revoke.
 class supported_list:
     _supported_list_read = False
     _supported_list = []
-    ids = <function supported_list.ids>()
-    parse_supported_list = <function supported_list.parse_supported_list>()
+    @classmethod
+    def ids(cls):
+        # attributes: _supported_list_read, parse_supported_list, _supported_list
+        ...
+
+    @classmethod
+    def parse_supported_list(cls):
+        # globals: os, cxutils, open, IOError
+        # attributes: path, join, CX_ROOT, strip, startswith, _supported_list, append, string_to_unicode, close
+        # strings: 'share/crossover/data', '.supported', 'rt', 'ascii', '', '#'
+        ...
+
 
 _REVOKELIST_FILE = None
 def get_revokelist_file():
