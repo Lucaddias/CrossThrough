@@ -1,9 +1,5 @@
 # CrossOver
 
-Estudo de engenharia reversa (curiosidade/interoperabilidade) do app **CrossOver for Mac** da CodeWeavers.
-
-> [!WARNING]
-> CrossOver é software proprietário da CodeWeavers. O pseudocódigo aqui é saída automática do Hopper e não é o código-fonte original. A parte Wine do CrossOver é open source e está disponível em <https://www.codeweavers.com/crossover/source>.
 
 ## Alvo
 
