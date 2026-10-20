@@ -71,10 +71,17 @@ static NSImage *_defIcon = nil;
     return [NSSet setWithObject:@"packageid"];
 }
 
+static id s_iconUtils = nil;
+
 + (void)updateIconList {
-    id iconUtils = [[CXSetupLib iconUtilsClass] alloc];
-    if ([iconUtils respondsToSelector:@selector(fetchIconList)]) {
-        [iconUtils fetchIconList];
+    if (!s_iconUtils) {
+        Class cls = [CXSetupLib iconUtilsClass];
+        if (cls) {
+            s_iconUtils = [[cls alloc] init];
+        }
+    }
+    if ([s_iconUtils respondsToSelector:@selector(fetchIconList)]) {
+        [s_iconUtils fetchIconList];
     }
 }
 
@@ -287,19 +294,51 @@ static NSImage *_defIcon = nil;
 }
 
 - (BOOL)isUnknown {
+    if (self->packageobject && [self->packageobject respondsToSelector:@selector(valueForKeyPath:)]) {
+        id val = [self->packageobject valueForKeyPath:@"is_unknown"];
+        if (val && [val respondsToSelector:@selector(boolValue)]) {
+            return [val boolValue];
+        }
+    }
     return [self->packageid isEqualToString:@"unknown"];
 }
 
 - (BOOL)isComponent {
+    if (self->packageobject && [self->packageobject respondsToSelector:@selector(valueForKeyPath:)]) {
+        id val = [self->packageobject valueForKeyPath:@"is_component"];
+        if (val && [val respondsToSelector:@selector(boolValue)]) {
+            return [val boolValue];
+        }
+    }
     return NO;
 }
 
 - (BOOL)isHighlighted {
+    if (self->packageobject && [self->packageobject respondsToSelector:@selector(valueForKeyPath:)]) {
+        id val = [self->packageobject valueForKeyPath:@"is_highlighted"];
+        if (val && [val respondsToSelector:@selector(boolValue)]) {
+            return [val boolValue];
+        }
+    }
     return NO;
 }
 
+- (BOOL)highlighted {
+    return [self isHighlighted];
+}
+
 - (BOOL)isRanked {
+    if (self->packageobject && [self->packageobject respondsToSelector:@selector(valueForKeyPath:)]) {
+        id val = [self->packageobject valueForKeyPath:@"is_ranked"];
+        if (val && [val respondsToSelector:@selector(boolValue)]) {
+            return [val boolValue];
+        }
+    }
     return YES;
+}
+
+- (BOOL)ranked {
+    return [self isRanked];
 }
 
 - (void)filterWithPredicate:(id)arg1 {
@@ -318,25 +357,30 @@ static NSImage *_defIcon = nil;
 }
 
 - (void)loadIcon {
-    if (self->_icon) return;
-    id iconUtils = [CXSetupLib iconUtilsClass];
-    if (iconUtils && self->packageid) {
-        id utilsInst = [[iconUtils alloc] init];
-        if ([utilsInst respondsToSelector:@selector(getIconPath:)]) {
-            NSString *iconPath = [utilsInst getIconPath:self->packageid];
+    if (self->_icon && self->_icon != [PackageTreeNode defaultIcon]) return;
+    if (!s_iconUtils) {
+        Class cls = [CXSetupLib iconUtilsClass];
+        if (cls) {
+            s_iconUtils = [[cls alloc] init];
+        }
+    }
+    if (s_iconUtils && self->packageid) {
+        if ([s_iconUtils respondsToSelector:@selector(fetchIcon:)]) {
+            [s_iconUtils fetchIcon:self->packageid];
+        }
+        if ([s_iconUtils respondsToSelector:@selector(getIconPath:)]) {
+            NSString *iconPath = [s_iconUtils getIconPath:self->packageid];
             if (iconPath && [[NSFileManager defaultManager] fileExistsAtPath:iconPath]) {
                 NSImage *img = [[NSImage alloc] initWithContentsOfFile:iconPath];
                 if (img) {
                     dispatch_async(dispatch_get_main_queue(), ^{
-                        self->_icon = img;
+                        [self setIcon:img];
+                        [img release];
                     });
                     return;
                 }
             }
         }
-    }
-    if (!self->_icon) {
-        self->_icon = [[PackageTreeNode defaultIcon] retain];
     }
 }
 
@@ -367,16 +411,19 @@ static NSImage *_defIcon = nil;
 }
 
 - (id)icon {
-    if (!self->_icon) {
+    if (!self->_icon || self->_icon == [PackageTreeNode defaultIcon]) {
         [self loadIcon];
     }
     return self->_icon ?: [PackageTreeNode defaultIcon];
 }
 
 - (void)setIcon:(id)arg1 {
+    [self willChangeValueForKey:@"icon"];
     if (self->_icon != arg1) {
+        [self->_icon release];
         self->_icon = [arg1 retain];
     }
+    [self didChangeValueForKey:@"icon"];
 }
 
 @end

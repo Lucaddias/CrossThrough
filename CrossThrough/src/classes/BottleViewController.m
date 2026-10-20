@@ -6,32 +6,99 @@
 @implementation BottleViewController
 
 + (id)keyPathsForValuesAffectingBottleDescription {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = [NSSet setWithObject:@"bottle.currentDescription"];
-     *   return r0;
-     */
-    return nil;
+    return [NSSet setWithObject:@"bottle.currentDescription"];
 }
 
 - (id)init {
     self = [super initWithNibName:@"BottleView" bundle:nil];
     if (self) {
-        // Initialized
+        self->_controlPanelLaunchers = [[NSMutableArray alloc] init];
     }
     return self;
 }
 
 - (void)dealloc {
-    return;
+    [super dealloc];
 }
 
 - (void)viewDidLoad {
-    return;
+    [super viewDidLoad];
+
+    IconCollectionViewController *icvc = [[IconCollectionViewController alloc] init];
+    [self setIconCollectionViewController:icvc];
+    [icvc setDelegate:self];
+
+    if (self->_iconCollectionView) {
+        NSView *v = [icvc view];
+        if (v) {
+            [v setFrame:[self->_iconCollectionView bounds]];
+            [v setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable];
+            [self->_iconCollectionView setSubviews:@[v]];
+        }
+    }
+
+    if (self->_controlPanelsLoadingSpinner) {
+        [self->_controlPanelsLoadingSpinner setUsesThreadedAnimation:YES];
+    }
+
+    if (!self->_controlPanelLaunchers) {
+        self->_controlPanelLaunchers = [[NSMutableArray alloc] init];
+    }
+}
+
+- (id)bottle {
+    return self->_bottle;
 }
 
 - (void)setBottle:(id)arg1 {
-    return;
+    if (self->_bottle != arg1) {
+        [self willChangeValueForKey:@"bottle"];
+        [self->_bottle release];
+        self->_bottle = [arg1 retain];
+        [self didChangeValueForKey:@"bottle"];
+
+        [self reloadLaunchers];
+        [self reloadControlPanels];
+    }
+}
+
+- (void)reloadLaunchers {
+    if (!self->_bottle) return;
+    NSArray *apps = nil;
+    if ([self->_bottle respondsToSelector:@selector(launchers)]) {
+        apps = [self->_bottle launchers];
+    }
+    if (self->_iconCollectionViewController) {
+        [self->_iconCollectionViewController setLaunchers:apps ?: @[]];
+    }
+    if (self->_noAppsFoundLabel) {
+        [self->_noAppsFoundLabel setHidden:([apps count] > 0)];
+    }
+}
+
+- (void)reloadControlPanels {
+    if (!self->_bottle) return;
+    if (self->_controlPanelsLoadingSpinner) {
+        [self->_controlPanelsLoadingSpinner startAnimation:self];
+    }
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSArray *cpls = nil;
+        if ([self->_bottle respondsToSelector:@selector(controlPanels)]) {
+            cpls = [self->_bottle controlPanels];
+        }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self->_controlPanelLaunchers removeAllObjects];
+            if (cpls) {
+                [self->_controlPanelLaunchers addObjectsFromArray:cpls];
+            }
+            if (self->_controlPanelsLoadingSpinner) {
+                [self->_controlPanelsLoadingSpinner stopAnimation:self];
+            }
+            if (self->_controlPanelsLoadingView) {
+                [self->_controlPanelsLoadingView setHidden:YES];
+            }
+        });
+    });
 }
 
 - (id)packageForBottle:(id)arg1 {
@@ -67,9 +134,6 @@
     return nil;
 }
 
-- (void)reloadLaunchers {
-    return;
-}
 
 - (void)updateDependencyButton {
     return;
@@ -132,9 +196,6 @@
     return;
 }
 
-- (void)reloadControlPanels {
-    return;
-}
 
 - (id)launcherNodesForLaunchers:(id)arg1 {
     /*
@@ -204,7 +265,9 @@
 }
 
 - (void)setBottleDescription:(id)arg1 {
-    return;
+    if (self->_bottle && [self->_bottle respondsToSelector:@selector(setCurrentDescription:)]) {
+        [self->_bottle setCurrentDescription:arg1 ?: @""];
+    }
 }
 
 - (void)iconCollectionViewControllerSelectionChanged:(id)arg1 {
@@ -393,16 +456,15 @@
     return NO;
 }
 
-- (id)bottle {
-    return self->_bottle;
-}
-
 - (id)observers {
     return self->_observers;
 }
 
 - (void)setObservers:(id)arg1 {
-    return;
+    if (self->_observers != arg1) {
+        [self->_observers release];
+        self->_observers = [arg1 copy];
+    }
 }
 
 - (id)package {
@@ -430,45 +492,27 @@
 }
 
 - (id)iconCollectionView {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_iconCollectionView);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return objc_loadWeakRetained((id *)&self->_iconCollectionView);
 }
 
 - (void)setIconCollectionView:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_iconCollectionView, arg1);
 }
 
 - (id)noAppsFoundLabel {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_noAppsFoundLabel);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return objc_loadWeakRetained((id *)&self->_noAppsFoundLabel);
 }
 
 - (void)setNoAppsFoundLabel:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_noAppsFoundLabel, arg1);
 }
 
 - (id)leaveRatingButton {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_leaveRatingButton);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return objc_loadWeakRetained((id *)&self->_leaveRatingButton);
 }
 
 - (void)setLeaveRatingButton:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_leaveRatingButton, arg1);
 }
 
 - (id)controlPanelLaunchers {
@@ -480,521 +524,299 @@
 }
 
 - (id)runWithOptionsButton {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_runWithOptionsButton);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return objc_loadWeakRetained((id *)&self->_runWithOptionsButton);
 }
 
 - (void)setRunWithOptionsButton:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_runWithOptionsButton, arg1);
 }
 
 - (id)runCommandButton {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_runCommandButton);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return objc_loadWeakRetained((id *)&self->_runCommandButton);
 }
 
 - (void)setRunCommandButton:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_runCommandButton, arg1);
 }
 
 - (id)installIntoBottleButton {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_installIntoBottleButton);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return objc_loadWeakRetained((id *)&self->_installIntoBottleButton);
 }
 
 - (void)setInstallIntoBottleButton:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_installIntoBottleButton, arg1);
 }
 
 - (id)openCDriveButton {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_openCDriveButton);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return objc_loadWeakRetained((id *)&self->_openCDriveButton);
 }
 
 - (void)setOpenCDriveButton:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_openCDriveButton, arg1);
 }
 
 - (id)quitButton {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_quitButton);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return objc_loadWeakRetained((id *)&self->_quitButton);
 }
 
 - (void)setQuitButton:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_quitButton, arg1);
 }
 
 - (id)deleteButton {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_deleteButton);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return objc_loadWeakRetained((id *)&self->_deleteButton);
 }
 
 - (void)setDeleteButton:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_deleteButton, arg1);
 }
 
 - (id)dependencyButton {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_dependencyButton);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return objc_loadWeakRetained((id *)&self->_dependencyButton);
 }
 
 - (void)setDependencyButton:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_dependencyButton, arg1);
 }
 
 - (id)graphicsOptionView {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_graphicsOptionView);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return objc_loadWeakRetained((id *)&self->_graphicsOptionView);
 }
 
 - (void)setGraphicsOptionView:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_graphicsOptionView, arg1);
 }
 
 - (id)graphicsLabel {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_graphicsLabel);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return objc_loadWeakRetained((id *)&self->_graphicsLabel);
 }
 
 - (void)setGraphicsLabel:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_graphicsLabel, arg1);
 }
 
 - (id)graphicsPopUpButton {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_graphicsPopUpButton);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return objc_loadWeakRetained((id *)&self->_graphicsPopUpButton);
 }
 
 - (void)setGraphicsPopUpButton:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_graphicsPopUpButton, arg1);
 }
 
 - (id)autoGraphicsMenuItem {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_autoGraphicsMenuItem);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return objc_loadWeakRetained((id *)&self->_autoGraphicsMenuItem);
 }
 
 - (void)setAutoGraphicsMenuItem:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_autoGraphicsMenuItem, arg1);
 }
 
 - (id)dxmtMenuItem {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_dxmtMenuItem);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return objc_loadWeakRetained((id *)&self->_dxmtMenuItem);
 }
 
 - (void)setDxmtMenuItem:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_dxmtMenuItem, arg1);
 }
 
 - (id)dxvkMenuItem {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_dxvkMenuItem);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return objc_loadWeakRetained((id *)&self->_dxvkMenuItem);
 }
 
 - (void)setDxvkMenuItem:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_dxvkMenuItem, arg1);
 }
 
 - (id)d3dMetalMenuItem {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_d3dMetalMenuItem);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return objc_loadWeakRetained((id *)&self->_d3dMetalMenuItem);
 }
 
 - (void)setD3dMetalMenuItem:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_d3dMetalMenuItem, arg1);
 }
 
 - (id)wined3dMenuItem {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_wined3dMenuItem);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return objc_loadWeakRetained((id *)&self->_wined3dMenuItem);
 }
 
 - (void)setWined3dMenuItem:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_wined3dMenuItem, arg1);
 }
 
 - (id)vulkanOptionView {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_vulkanOptionView);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return objc_loadWeakRetained((id *)&self->_vulkanOptionView);
 }
 
 - (void)setVulkanOptionView:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_vulkanOptionView, arg1);
 }
 
 - (id)vulkanLabel {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_vulkanLabel);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return objc_loadWeakRetained((id *)&self->_vulkanLabel);
 }
 
 - (void)setVulkanLabel:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_vulkanLabel, arg1);
 }
 
 - (id)vulkanPopUpButton {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_vulkanPopUpButton);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return objc_loadWeakRetained((id *)&self->_vulkanPopUpButton);
 }
 
 - (void)setVulkanPopUpButton:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_vulkanPopUpButton, arg1);
 }
 
 - (id)moltenvkMenuItem {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_moltenvkMenuItem);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return objc_loadWeakRetained((id *)&self->_moltenvkMenuItem);
 }
 
 - (void)setMoltenvkMenuItem:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_moltenvkMenuItem, arg1);
 }
 
 - (id)mtlvkMenuItem {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_mtlvkMenuItem);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return objc_loadWeakRetained((id *)&self->_mtlvkMenuItem);
 }
 
 - (void)setMtlvkMenuItem:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_mtlvkMenuItem, arg1);
 }
 
 - (id)msyncLabel {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_msyncLabel);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return objc_loadWeakRetained((id *)&self->_msyncLabel);
 }
 
 - (void)setMsyncLabel:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_msyncLabel, arg1);
 }
 
 - (id)msyncSwitch {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_msyncSwitch);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return objc_loadWeakRetained((id *)&self->_msyncSwitch);
 }
 
 - (void)setMsyncSwitch:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_msyncSwitch, arg1);
 }
 
 - (id)msyncView {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_msyncView);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return objc_loadWeakRetained((id *)&self->_msyncView);
 }
 
 - (void)setMsyncView:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_msyncView, arg1);
 }
 
 - (id)dlssLabel {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_dlssLabel);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return objc_loadWeakRetained((id *)&self->_dlssLabel);
 }
 
 - (void)setDlssLabel:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_dlssLabel, arg1);
 }
 
 - (id)dlssSwitch {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_dlssSwitch);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return objc_loadWeakRetained((id *)&self->_dlssSwitch);
 }
 
 - (void)setDlssSwitch:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_dlssSwitch, arg1);
 }
 
 - (id)dlssView {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_dlssView);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return objc_loadWeakRetained((id *)&self->_dlssView);
 }
 
 - (void)setDlssView:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_dlssView, arg1);
 }
 
 - (id)highResolutionLabel {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_highResolutionLabel);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return objc_loadWeakRetained((id *)&self->_highResolutionLabel);
 }
 
 - (void)setHighResolutionLabel:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_highResolutionLabel, arg1);
 }
 
 - (id)highResolutionSwitch {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_highResolutionSwitch);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return objc_loadWeakRetained((id *)&self->_highResolutionSwitch);
 }
 
 - (void)setHighResolutionSwitch:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_highResolutionSwitch, arg1);
 }
 
 - (id)highResolutionView {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_highResolutionView);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return objc_loadWeakRetained((id *)&self->_highResolutionView);
 }
 
 - (void)setHighResolutionView:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_highResolutionView, arg1);
 }
 
 - (id)previewLabel {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_previewLabel);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return objc_loadWeakRetained((id *)&self->_previewLabel);
 }
 
 - (void)setPreviewLabel:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_previewLabel, arg1);
 }
 
 - (id)previewSwitch {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_previewSwitch);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return objc_loadWeakRetained((id *)&self->_previewSwitch);
 }
 
 - (void)setPreviewSwitch:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_previewSwitch, arg1);
 }
 
 - (id)previewView {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_previewView);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return objc_loadWeakRetained((id *)&self->_previewView);
 }
 
 - (void)setPreviewView:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_previewView, arg1);
 }
 
 - (id)controlPanelsSection {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_controlPanelsSection);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return objc_loadWeakRetained((id *)&self->_controlPanelsSection);
 }
 
 - (void)setControlPanelsSection:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_controlPanelsSection, arg1);
 }
 
 - (id)controlPanelsLoadingView {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_controlPanelsLoadingView);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return objc_loadWeakRetained((id *)&self->_controlPanelsLoadingView);
 }
 
 - (void)setControlPanelsLoadingView:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_controlPanelsLoadingView, arg1);
 }
 
 - (id)controlPanelsLoadingSpinner {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_controlPanelsLoadingSpinner);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return objc_loadWeakRetained((id *)&self->_controlPanelsLoadingSpinner);
 }
 
 - (void)setControlPanelsLoadingSpinner:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_controlPanelsLoadingSpinner, arg1);
 }
 
 - (id)installedSoftwareTableView {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_installedSoftwareTableView);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return objc_loadWeakRetained((id *)&self->_installedSoftwareTableView);
 }
 
 - (void)setInstalledSoftwareTableView:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_installedSoftwareTableView, arg1);
 }
 
 - (id)installedSoftware {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_installedSoftware);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return objc_loadWeakRetained((id *)&self->_installedSoftware);
 }
 
 - (void)setInstalledSoftware:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_installedSoftware, arg1);
 }
 
 @end

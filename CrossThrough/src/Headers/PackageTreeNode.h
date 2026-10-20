@@ -88,7 +88,9 @@
 - (BOOL)isUnknown;
 - (BOOL)isComponent;
 - (BOOL)isHighlighted;
+- (BOOL)highlighted;
 - (BOOL)isRanked;
+- (BOOL)ranked;
 - (void)filterWithPredicate:(id)arg1;
 - (void)filterWithPredicate:(id)arg1 keepEmptyCategories:(BOOL)arg2;
 - (void)observeValueForKeyPath:(id)arg1 ofObject:(id)arg2 change:(id)arg3 context:(void *)arg4;

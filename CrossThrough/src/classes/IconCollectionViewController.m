@@ -6,15 +6,23 @@
 @implementation IconCollectionViewController
 
 - (id)init {
-    self = [super init];
+    self = [super initWithNibName:@"IconCollectionView" bundle:nil];
     if (self) {
-        // Initialized
+        self->_launchers = [[NSArray alloc] init];
     }
     return self;
 }
 
 - (void)viewDidLoad {
-    return;
+    [super viewDidLoad];
+    if (self->_collectionView) {
+        [self->_collectionView registerClass:[IconViewItem class] forItemWithIdentifier:@"IconViewItem"];
+        [self->_collectionView setDelegate:self];
+        [self->_collectionView setDataSource:(id<NSCollectionViewDataSource>)self];
+        if (self->_contextualMenu) {
+            [self->_collectionView setMenu:self->_contextualMenu];
+        }
+    }
 }
 
 - (id)margins {
@@ -136,9 +144,6 @@
     return nil;
 }
 
-- (void)setLaunchers:(id)arg1 {
-    return;
-}
 
 - (void)openLauncherTreeNode:(id)arg1 fromRect:(NSRect)arg2 view:(id)arg3 {
     return;
@@ -264,52 +269,19 @@
 }
 
 - (NSInteger)collectionView:(id)arg1 numberOfItemsInSection:(NSInteger)arg2 {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = [self launchers];
-     *   r0 = [r0 retain];
-     *   r19 = r0;
-     *   r20 = [r0 count];
-     *   [r19 release];
-     *   r0 = r20;
-     *   return r0;
-     */
-    return 0;
+    return [self->_launchers count];
 }
 
 - (id)collectionView:(id)arg1 itemForRepresentedObjectAtIndexPath:(id)arg2 {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r21 = [arg3 retain];
-     *   r19 = [[arg2 makeItemWithIdentifier:@"IconViewItem" forIndexPath:r21] retain];
-     *   r20 = [[self launchers] retain];
-     *   r22 = [r21 item];
-     *   [r21 release];
-     *   r21 = [[r20 objectAtIndexedSubscript:r22] retain];
-     *   [r19 setRepresentedObject:r21];
-     *   [r21 release];
-     *   [r20 release];
-     *   r0 = [r19 autorelease];
-     *   return r0;
-     */
-    return nil;
+    NSCollectionViewItem *item = [arg1 makeItemWithIdentifier:@"IconViewItem" forIndexPath:arg2];
+    NSInteger idx = [(NSIndexPath *)arg2 item];
+    if (idx >= 0 && idx < [self->_launchers count]) {
+        [item setRepresentedObject:[self->_launchers objectAtIndex:idx]];
+    }
+    return item;
 }
 
 - (id)collectionView:(id)arg1 pasteboardWriterForItemAtIndexPath:(id)arg2 {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = [arg2 itemAtIndexPath:arg3];
-     *   r0 = [r0 retain];
-     *   r19 = r0;
-     *   r0 = [r0 representedObject];
-     *   r0 = [r0 retain];
-     *   r20 = r0;
-     *   r21 = [[r0 pasteboardWriter] retain];
-     *   [r20 release];
-     *   [r19 release];
-     *   r0 = [r21 autorelease];
-     *   return r0;
-     */
     return nil;
 }
 
@@ -334,49 +306,41 @@
 }
 
 - (id)delegate {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_delegate);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return objc_loadWeakRetained((id *)&self->_delegate);
 }
 
 - (void)setDelegate:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_delegate, arg1);
 }
 
 - (id)launchers {
     return self->_launchers;
 }
 
+- (void)setLaunchers:(id)arg1 {
+    if (self->_launchers != arg1) {
+        [self->_launchers release];
+        self->_launchers = [arg1 copy];
+    }
+    if (self->_collectionView) {
+        [self->_collectionView reloadData];
+    }
+}
+
 - (id)collectionView {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_collectionView);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return objc_loadWeakRetained((id *)&self->_collectionView);
 }
 
 - (void)setCollectionView:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_collectionView, arg1);
 }
 
 - (id)contextualMenu {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_contextualMenu);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return objc_loadWeakRetained((id *)&self->_contextualMenu);
 }
 
 - (void)setContextualMenu:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_contextualMenu, arg1);
 }
 
 @end

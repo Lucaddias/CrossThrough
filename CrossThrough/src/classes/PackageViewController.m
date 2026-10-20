@@ -55,16 +55,30 @@
         [self->_installUnlistedAppButton setAction:@selector(selectUnknownPackage:)];
     }
 
-    [self populatePackages];
+    NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"softwarePackage" ascending:YES selector:@selector(localizedStandardCompare:)];
+    [self setSortDescriptors:@[sort]];
+
+    if ([self->_packages count] == 0) {
+        [self populatePackages];
+    }
+    [self back];
 }
 
 - (void)viewDidAppear {
     [super viewDidAppear];
-    [self populatePackages];
+    if ([self->_packages count] == 0) {
+        [self populatePackages];
+    }
+    if (self->_searchField && [self.view window]) {
+        [[self.view window] makeFirstResponder:self->_searchField];
+    }
 }
 
 - (void)viewDidDisappear {
     [super viewDidDisappear];
+    if (self->_installerView && ![self->_installerView isHidden]) {
+        [self back];
+    }
 }
 
 - (id)packageForCategory:(id)arg1 root:(id)arg2 cache:(id)arg3 {
@@ -100,23 +114,27 @@
             if (isCurrent) {
                 PackageTreeNode *node = [[PackageTreeNode alloc] initWithProfile:item];
                 if (node) {
-                    [result addObject:node];
+                    if ([node isUnknown]) {
+                        self->_unknownPackage = node;
+                    } else {
+                        [result addObject:node];
+                    }
                 }
             }
         }
     }
 
-    // Default popular applications fallback if dictionary is empty or still loading
+    // Default popular applications fallback if dictionary is empty
     if ([result count] == 0) {
         NSArray *popularApps = @[
-            @{ @"appid": @"com.blizzard.battlenet", @"name": @"Battle.net Desktop App", @"app_profile": @{ @"medal_rating": @5 } },
-            @{ @"appid": @"com.ea.app", @"name": @"EA App", @"app_profile": @{ @"medal_rating": @3 } },
-            @{ @"appid": @"com.epicgames.launcher", @"name": @"Epic Games Store", @"app_profile": @{ @"medal_rating": @5 } },
-            @{ @"appid": @"com.gog.galaxy", @"name": @"GOG Galaxy", @"app_profile": @{ @"medal_rating": @3 } },
-            @{ @"appid": @"com.quicken.classic", @"name": @"Quicken Classic", @"app_profile": @{ @"medal_rating": @5 } },
-            @{ @"appid": @"com.rockstargames.launcher", @"name": @"Rockstar Games Launcher", @"app_profile": @{ @"medal_rating": @5 } },
-            @{ @"appid": @"com.valvesoftware.steam", @"name": @"Steam", @"app_profile": @{ @"medal_rating": @4 } },
-            @{ @"appid": @"com.ubisoft.connect", @"name": @"Ubisoft Connect", @"app_profile": @{ @"medal_rating": @3 } }
+            @{ @"appid": @"com.blizzard.battlenet", @"name": @"Battle.net Desktop App", @"is_highlighted": @YES, @"is_ranked": @YES, @"app_profile": @{ @"medal_rating": @5 } },
+            @{ @"appid": @"com.ea.app", @"name": @"EA App", @"is_highlighted": @YES, @"is_ranked": @YES, @"app_profile": @{ @"medal_rating": @3 } },
+            @{ @"appid": @"com.epicgames.launcher", @"name": @"Epic Games Store", @"is_highlighted": @YES, @"is_ranked": @YES, @"app_profile": @{ @"medal_rating": @5 } },
+            @{ @"appid": @"com.gog.galaxy", @"name": @"GOG Galaxy", @"is_highlighted": @YES, @"is_ranked": @YES, @"app_profile": @{ @"medal_rating": @3 } },
+            @{ @"appid": @"com.quicken.classic", @"name": @"Quicken Classic", @"is_highlighted": @YES, @"is_ranked": @YES, @"app_profile": @{ @"medal_rating": @5 } },
+            @{ @"appid": @"com.rockstargames.launcher", @"name": @"Rockstar Games Launcher", @"is_highlighted": @YES, @"is_ranked": @YES, @"app_profile": @{ @"medal_rating": @5 } },
+            @{ @"appid": @"com.valvesoftware.steam", @"name": @"Steam", @"is_highlighted": @YES, @"is_ranked": @YES, @"app_profile": @{ @"medal_rating": @4 } },
+            @{ @"appid": @"com.ubisoft.connect", @"name": @"Ubisoft Connect", @"is_highlighted": @YES, @"is_ranked": @YES, @"app_profile": @{ @"medal_rating": @3 } }
         ];
 
         for (NSDictionary *appData in popularApps) {
@@ -128,13 +146,18 @@
     }
 
     [self setPackages:result];
+    printf("[PackageViewController] Populated %lu packages\n", (unsigned long)[result count]); fflush(stdout);
+    [PackageTreeNode updateIconList];
     [self updateVisiblePackages];
 }
 
 - (void)loadIcons {
-    for (PackageTreeNode *node in self->_visiblePackages) {
-        [node loadIcon];
-    }
+    NSArray *visible = [NSArray arrayWithArray:self->_visiblePackages];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        for (PackageTreeNode *node in visible) {
+            [node loadIcon];
+        }
+    });
 }
 
 - (void)setInstaller:(id)arg1 {
@@ -148,13 +171,45 @@
 }
 
 - (void)updateVisiblePackages {
-    NSString *searchQuery = self->_searchField ? [self->_searchField stringValue] : nil;
-    if (searchQuery && [searchQuery length] > 0) {
-        NSPredicate *pred = [NSPredicate predicateWithFormat:@"softwarePackage CONTAINS[cd] %@", searchQuery];
-        self->_visiblePackages = [[self->_packages filteredArrayUsingPredicate:pred] mutableCopy];
+    static NSPredicate *rankedPredicate = nil;
+    static NSPredicate *highlightedPredicate = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        rankedPredicate = [[NSPredicate predicateWithFormat:@"ranked != FALSE"] retain];
+        highlightedPredicate = [[NSPredicate predicateWithFormat:@"highlighted != FALSE"] retain];
+    });
+
+    NSArray *pkgs = self->_packages;
+    BOOL showUntested = [[NSUserDefaults standardUserDefaults] boolForKey:@"ShowUntestedApps"];
+    NSPredicate *filter = self->_filterPredicate;
+
+    if (showUntested) {
+        if (filter) {
+            [self setIsHighlighted:NO];
+            pkgs = [pkgs filteredArrayUsingPredicate:filter];
+        } else {
+            [self setIsHighlighted:YES];
+            pkgs = [pkgs filteredArrayUsingPredicate:highlightedPredicate];
+        }
     } else {
-        self->_visiblePackages = [self->_packages mutableCopy];
+        if (filter) {
+            [self setIsHighlighted:NO];
+            NSPredicate *compound = [NSCompoundPredicate andPredicateWithSubpredicates:@[rankedPredicate, filter]];
+            pkgs = [pkgs filteredArrayUsingPredicate:compound];
+        } else {
+            [self setIsHighlighted:YES];
+            NSPredicate *compound = [NSCompoundPredicate andPredicateWithSubpredicates:@[rankedPredicate, highlightedPredicate]];
+            pkgs = [pkgs filteredArrayUsingPredicate:compound];
+        }
     }
+
+    if (self->_sortDescriptors) {
+        pkgs = [pkgs sortedArrayUsingDescriptors:self->_sortDescriptors];
+    }
+
+    self->_visiblePackages = [pkgs mutableCopy];
+    printf("[PackageViewController] updateVisiblePackages: visible count=%lu, isHighlighted=%d\n", 
+           (unsigned long)[self->_visiblePackages count], self->_isHighlighted); fflush(stdout);
 
     if (self->_collectionView) {
         [self->_collectionView reloadData];
@@ -166,6 +221,48 @@
     if (self->_loading) {
         [self->_loading setHidden:YES];
     }
+
+    [self loadIcons];
+}
+
+- (void)search:(id)sender {
+    NSString *query = [[sender stringValue] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    if ([query length] > 0) {
+        NSMutableString *wildcard = [NSMutableString stringWithString:@"*"];
+        NSArray *words = [query componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+        for (NSString *w in words) {
+            if ([w length] > 0) {
+                NSString *esc = [w stringByReplacingOccurrencesOfString:@"*" withString:@"\\*"];
+                esc = [esc stringByReplacingOccurrencesOfString:@"?" withString:@"\\?"];
+                [wildcard appendString:esc];
+                [wildcard appendString:@"*"];
+            }
+        }
+        NSPredicate *tmpl = [NSPredicate predicateWithFormat:@"softwarePackage LIKE[cd] $SEARCH"];
+        NSPredicate *pred = [tmpl predicateWithSubstitutionVariables:@{@"SEARCH": wildcard}];
+        [self setFilterPredicate:pred];
+    } else {
+        [self setFilterPredicate:nil];
+    }
+    if (self->_collectionView) {
+        [self->_collectionView reloadData];
+        [self->_collectionView scrollPoint:NSZeroPoint];
+    }
+}
+
+- (void)back:(id)sender {
+    if (self->_packageView) [self->_packageView setHidden:NO];
+    if (self->_installerView) [self->_installerView setHidden:YES];
+    [self setPackageViewTitle:[[NSBundle mainBundle] localizedStringForKey:@"Install a Windows Application" value:@"Install a Windows Application" table:nil]];
+    if (self->_collectionView) [self->_collectionView deselectAll:nil];
+    if (self->_searchField && [self.view window]) {
+        [[self.view window] makeFirstResponder:self->_searchField];
+    }
+    [self setInstaller:nil];
+}
+
+- (void)back {
+    [self back:nil];
 }
 
 - (void)setSortDescriptors:(id)arg1 {
@@ -173,8 +270,11 @@
 }
 
 - (void)setFilterPredicate:(id)arg1 {
-    self->_filterPredicate = arg1;
-    [self updateVisiblePackages];
+    if (self->_filterPredicate != arg1) {
+        [self->_filterPredicate release];
+        self->_filterPredicate = [arg1 retain];
+        [self updateVisiblePackages];
+    }
 }
 
 - (void)updateSummaryDetails {
@@ -232,18 +332,6 @@
 - (void)observeValueForKeyPath:(id)arg1 ofObject:(id)arg2 change:(id)arg3 context:(void *)arg4 {
 }
 
-- (void)back:(id)arg1 {
-    [self back];
-}
-
-- (void)back {
-    if (self->_installerView) [self->_installerView setHidden:YES];
-    if (self->_packageView) [self->_packageView setHidden:NO];
-}
-
-- (void)search:(id)arg1 {
-    [self updateVisiblePackages];
-}
 
 - (void)install:(id)arg1 {
     [self openInstallerView];
@@ -359,7 +447,9 @@
 }
 
 - (void)setIsHighlighted:(BOOL)arg1 {
+    [self willChangeValueForKey:@"isHighlighted"];
     self->_isHighlighted = arg1;
+    [self didChangeValueForKey:@"isHighlighted"];
 }
 
 - (id)visiblePackages {
@@ -435,7 +525,12 @@
 }
 
 - (void)setPackageViewTitle:(id)arg1 {
-    self->_packageViewTitle = [arg1 copy];
+    [self willChangeValueForKey:@"packageViewTitle"];
+    if (self->_packageViewTitle != arg1) {
+        [self->_packageViewTitle release];
+        self->_packageViewTitle = [arg1 copy];
+    }
+    [self didChangeValueForKey:@"packageViewTitle"];
 }
 
 - (id)installerView {

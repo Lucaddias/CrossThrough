@@ -5,16 +5,40 @@
 
 @implementation IconViewItem
 
+- (id)init {
+    self = [super initWithNibName:@"IconViewItem" bundle:nil];
+    return self;
+}
+
 - (void)setRepresentedObject:(id)arg1 {
-    return;
+    [super setRepresentedObject:arg1];
+    if (!arg1) return;
+
+    NSImage *icon = [arg1 respondsToSelector:@selector(icon)] ? [arg1 icon] : nil;
+    if (icon && [self imageView]) {
+        [[self imageView] setImage:icon];
+    }
+    if ([self textField] && [arg1 respondsToSelector:@selector(softwarePackage)]) {
+        [[self textField] setStringValue:[arg1 softwarePackage] ?: @""];
+    }
 }
 
 - (void)setSelected:(BOOL)arg1 {
-    return;
+    [super setSelected:arg1];
+    NSView *v = [self view];
+    if ([v respondsToSelector:@selector(updateLabelTextColor)]) {
+        [v performSelector:@selector(updateLabelTextColor)];
+    }
+    [v setNeedsDisplay:YES];
 }
 
 - (void)setHighlightState:(NSInteger)arg1 {
-    return;
+    [super setHighlightState:arg1];
+    NSView *v = [self view];
+    if ([v respondsToSelector:@selector(updateLabelTextColor)]) {
+        [v performSelector:@selector(updateLabelTextColor)];
+    }
+    [v setNeedsDisplay:YES];
 }
 
 - (id)draggingImageComponents {

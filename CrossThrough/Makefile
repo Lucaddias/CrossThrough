@@ -66,7 +66,11 @@ app: $(TARGET)
 		/usr/libexec/PlistBuddy -c "Set :CFBundleExecutable CrossThrough" $(APP_BUNDLE)/Contents/Info.plist 2>/dev/null || true; \
 		/usr/libexec/PlistBuddy -c "Set :CFBundleIdentifier com.crossthrough.app" $(APP_BUNDLE)/Contents/Info.plist 2>/dev/null || true; \
 	fi
-	@echo "App bundle created at $(APP_BUNDLE)"
+	@xattr -cr $(APP_BUNDLE)/Contents/MacOS 2>/dev/null || true
+	@xattr -d com.apple.FinderInfo $(APP_BUNDLE) 2>/dev/null || true
+	@codesign -f -s - $(TARGET) 2>/dev/null || true
+	@codesign -f -s - $(APP_BUNDLE) 2>/dev/null || true
+	@echo "App bundle created and signed at $(APP_BUNDLE)"
 
 clean:
 	rm -rf build
