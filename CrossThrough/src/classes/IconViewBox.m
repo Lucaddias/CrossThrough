@@ -6,199 +6,123 @@
 @implementation IconViewBox
 
 - (void)dealloc {
-    return;
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    objc_destroyWeak((id *)&self->_auxField);
+    objc_destroyWeak((id *)&self->_item);
+    [super dealloc];
 }
 
 - (id)pathForIconHighlight {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = [self item];
-     *   r0 = [r0 retain];
-     *   r19 = r0;
-     *   r0 = [r0 imageView];
-     *   r0 = [r0 retain];
-     *   r20 = r0;
-     *   NSInsetRect([r0 frame], r1, r2);
-     *   [r20 release];
-     *   [r19 release];
-     *   r0 = [NSBezierPath bezierPathWithRoundedRect:r2 xRadius:r3 yRadius:r4];
-     *   return r0;
-     */
-    return nil;
+    NSRect rect = NSInsetRect([[[self item] imageView] frame], -4.0, -4.0);
+    return [NSBezierPath bezierPathWithRoundedRect:rect xRadius:18.0 yRadius:18.0];
 }
 
 - (id)pathForLabelHighlight {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = [self item];
-     *   r0 = [r0 retain];
-     *   r19 = r0;
-     *   r0 = [r0 textField];
-     *   r0 = [r0 retain];
-     *   r20 = r0;
-     *   [r0 frame];
-     *   [r20 release];
-     *   [r19 release];
-     *   r0 = [NSBezierPath bezierPathWithRoundedRect:r2 xRadius:r3 yRadius:r4];
-     *   return r0;
-     */
-    return nil;
+    NSRect rect = [[[self item] textField] frame];
+    rect.origin.y -= 2.0;
+    rect.size.height += 2.0;
+    return [NSBezierPath bezierPathWithRoundedRect:rect xRadius:4.0 yRadius:4.0];
 }
 
 - (id)menuForEvent:(id)arg1 {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r31 = r31 - 0x40;
-     *   var_20 = r22;
-     *   decomp_var_18 = r21;
-     *   var_10 = r20;
-     *   decomp_var_8 = r19;
-     *   saved_fp = r29;
-     *   decomp_var_m8 = r30;
-     *   r20 = self;
-     *   r19 = [arg2 retain];
-     *   var_30 = r20;
-     *   r0 = [[&var_30 super] menuForEvent:r19];
-     *   r0 = [r0 retain];
-     *   r21 = r0;
-     *   if (r0 == 0x0) {
-     *   r0 = [r20 item];
-     *   r0 = [r0 retain];
-     *   r20 = r0;
-     *   r0 = [r0 collectionView];
-     *   r0 = [r0 retain];
-     *   r22 = r0;
-     *   r21 = [[r0 menuForEvent:r19] retain];
-     *   [r22 release];
-     *   [r20 release];
-     *   }
-     *   [r19 release];
-     *   ... (2 more lines)
-     */
-    return nil;
+    NSMenu *menu = [super menuForEvent:arg1];
+    if (!menu) {
+        menu = [[[self item] collectionView] menuForEvent:arg1];
+    }
+    return menu;
 }
 
 - (id)hitTest:(NSPoint)arg1 {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   {r2:r3} = arg2;
-     *   r31 = r31 - 0x60;
-     *   var_40 = r26;
-     *   decomp_var_38 = r25;
-     *   var_30 = r24;
-     *   decomp_var_28 = r23;
-     *   var_20 = r22;
-     *   decomp_var_18 = r21;
-     *   var_10 = r20;
-     *   decomp_var_8 = r19;
-     *   saved_fp = r29;
-     *   decomp_var_m8 = r30;
-     *   r22 = self;
-     *   var_50 = self;
-     *   r0 = [[&var_50 super] hitTest:r2];
-     *   r19 = [r0 retain];
-     *   r0 = [r22 item];
-     *   r0 = [r0 retain];
-     *   r20 = r0;
-     *   r21 = [[r0 textField] retain];
-     *   r0 = r19;
-     *   if (r19 != r21) {
-     *   r0 = [r22 item];
-     *   r0 = [r0 retain];
-     *   r23 = r0;
-     *   ... (50 more lines)
-     */
+    NSView *hit = [super hitTest:arg1];
+    if (hit == [[self item] textField] || hit == [[self item] imageView]) {
+        return hit;
+    }
+    if (![[self auxField] isHidden] && hit == [self auxField]) {
+        return hit;
+    }
     return nil;
 }
 
 - (BOOL)isHighlighted {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   var_30 = r24;
-     *   decomp_var_28 = r23;
-     *   r31 = r31 + 0xffffffffffffffc0;
-     *   var_20 = r22;
-     *   decomp_var_18 = r21;
-     *   var_10 = r20;
-     *   decomp_var_8 = r19;
-     *   saved_fp = r29;
-     *   decomp_var_m8 = r30;
-     *   r22 = self;
-     *   r0 = [self item];
-     *   r0 = [r0 retain];
-     *   r19 = r0;
-     *   r0 = [r0 isSelected];
-     *   r21 = r0;
-     *   if (r0 != 0x0) {
-     *   r0 = [r22 item];
-     *   r0 = [r0 retain];
-     *   r20 = r0;
-     *   if ([r0 highlightState] == 0x2) {
-     *   r0 = [r22 item];
-     *   r0 = [r0 retain];
-     *   r23 = r0;
-     *   if ([r0 highlightState] == 0x1) {
-     *   r22 = 0x1;
-     *   ... (29 more lines)
-     */
-    return NO;
+    IconViewItem *item = [self item];
+    if ([item isSelected] && [item highlightState] != NSCollectionViewItemHighlightForDeselection) {
+        return YES;
+    }
+    return [item highlightState] == NSCollectionViewItemHighlightForSelection;
 }
 
 - (void)drawRect:(NSRect)arg1 {
-    return;
+    if (![self isHighlighted]) {
+        return;
+    }
+    NSBezierPath *iconPath = [self pathForIconHighlight];
+    if (NSIntersectsRect(NSInsetRect([iconPath bounds], -4.0, -4.0), arg1)) {
+        [NSGraphicsContext saveGraphicsState];
+        NSColor *tint = [self hasDarkModeApppearance] ? [[NSColor whiteColor] colorWithAlphaComponent:0.15]
+                                                      : [[NSColor blackColor] colorWithAlphaComponent:0.1];
+        [tint set];
+        [iconPath fill];
+        [NSGraphicsContext restoreGraphicsState];
+    }
+    NSBezierPath *labelPath = [self pathForLabelHighlight];
+    if (NSIntersectsRect([labelPath bounds], arg1)) {
+        [NSGraphicsContext saveGraphicsState];
+        if ([[self window] isKeyWindow] && [(IconCollectionView *)[[self item] collectionView] isFirstResponder]) {
+            [[NSColor alternateSelectedControlColor] set];
+        } else {
+            [[NSColor secondarySelectedControlColor] set];
+        }
+        [labelPath fill];
+        [NSGraphicsContext restoreGraphicsState];
+    }
 }
 
 - (void)updateLabelTextColor {
-    return;
+    NSColor *color;
+    if ([[self window] isKeyWindow] && [self isHighlighted] &&
+        [(IconCollectionView *)[[self item] collectionView] isFirstResponder]) {
+        color = [NSColor alternateSelectedControlTextColor];
+    } else {
+        color = [NSColor controlTextColor];
+    }
+    [[[self item] textField] setTextColor:color];
 }
 
 - (void)viewDidMoveToWindow {
-    return;
+    if ([self window]) {
+        NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
+        [center addObserver:self selector:@selector(keyStatusDidChange) name:NSWindowDidBecomeKeyNotification object:[self window]];
+        [center addObserver:self selector:@selector(keyStatusDidChange) name:NSWindowDidResignKeyNotification object:[self window]];
+    }
 }
 
 - (void)viewWillMoveToWindow:(id)arg1 {
-    return;
+    if ([self window] != arg1) {
+        NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
+        [center removeObserver:self name:NSWindowDidBecomeKeyNotification object:[self window]];
+        [center removeObserver:self name:NSWindowDidResignKeyNotification object:[self window]];
+    }
 }
 
 - (BOOL)hasDarkModeApppearance {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r31 = r31 - 0x50;
-     *   var_20 = r22;
-     *   decomp_var_18 = r21;
-     *   var_10 = r20;
-     *   decomp_var_8 = r19;
-     *   saved_fp = r29;
-     *   decomp_var_m8 = r30;
-     *   var_28 = **___stack_chk_guard;
-     *   r19 = [[self effectiveAppearance] retain];
-     *   r8 = *_NSAppearanceNameAqua;
-     *   r9 = *_NSAppearanceNameDarkAqua;
-     *   r8 = *r8;
-     *   r20 = *r9;
-     *   var_38 = r8;
-     *   r0 = [NSArray arrayWithObjects:&var_38 count:0x2];
-     *   r21 = [r0 retain];
-     *   r22 = [[r19 bestMatchFromAppearancesWithNames:r21] retain];
-     *   [r21 release];
-     *   [r19 release];
-     *   r19 = [r22 isEqualToString:r20];
-     *   r0 = [r22 release];
-     *   if (**___stack_chk_guard != var_28) {
-     *   __stack_chk_fail();
-     *   }
-     *   r0 = r19;
-     *   ... (1 more lines)
-     */
-    return NO;
+    NSAppearanceName match = [[self effectiveAppearance] bestMatchFromAppearancesWithNames:@[NSAppearanceNameAqua, NSAppearanceNameDarkAqua]];
+    return [match isEqualToString:NSAppearanceNameDarkAqua];
 }
 
 - (void)keyStatusDidChange {
-    return;
+    [self updateLabelTextColor];
+    [self setNeedsDisplay:YES];
 }
 
 - (void)rightMouseDown:(id)arg1 {
-    return;
+    IconViewItem *item = [self item];
+    if (![item isSelected]) {
+        NSCollectionView *collectionView = [item collectionView];
+        [collectionView deselectAll:self];
+        NSIndexPath *indexPath = [collectionView indexPathForItem:item];
+        [collectionView selectItemsAtIndexPaths:[NSSet setWithObject:indexPath] scrollPosition:NSCollectionViewScrollPositionNone];
+    }
+    [[self nextResponder] rightMouseDown:arg1];
 }
 
 - (id)auxField {

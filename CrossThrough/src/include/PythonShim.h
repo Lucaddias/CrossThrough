@@ -63,6 +63,7 @@ extern void _Py_Dealloc(PyObject *);
 - (void)removeAllStatusOverrides:(id)arg1;
 - (id)fileIsInBottle:(id)arg1;
 - (BOOL)isCanRunCommands;
+- (void)launchControlPanelApplet:(id)arg1;
 - (BOOL)isCanInstall;
 - (BOOL)isCanRename;
 - (BOOL)isCanForceQuit;
@@ -111,6 +112,13 @@ extern void _Py_Dealloc(PyObject *);
 - (void)quit:(id)arg1;
 - (void)forceQuit:(id)arg1;
 - (id)getMissingDependenciesProfile;
+- (BOOL)isIsControlPanelReady;
+- (id)controlPanelTable;
+- (void)loadControlPanelInfo;
+- (id)currentDescription;
+- (void)setCurrentDescription:(id)arg1;
+- (void)writeDescription;
+- (BOOL)isIsWineD3DEnabled;
 @end
 
 @interface BottleCollection : NSObject
@@ -146,7 +154,14 @@ extern void _Py_Dealloc(PyObject *);
 @end
 
 @interface InstallTask : NSObject
++ (id)getMissingDependencies:(id)arg1;
 - (id)initWithDelegate:(id)arg1;
+@end
+
+// Rows of a bottle's installed-software list.
+@protocol CXInstalledApplication <NSObject>
+- (id)canUninstall;
+- (void)uninstall;
 @end
 
 #endif /* PythonShim_h */

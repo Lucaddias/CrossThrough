@@ -6,61 +6,65 @@
 @implementation LauncherControlPanel
 
 + (id)launcherWithControlPanel:(id)arg1 bottle:(id)arg2 {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r21 = [arg3 retain];
-     *   r19 = [arg2 retain];
-     *   r20 = [[self alloc] initWithControlPanel:r19 bottle:r21];
-     *   [r21 release];
-     *   [r19 release];
-     *   r0 = [r20 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return [[[self alloc] initWithControlPanel:arg1 bottle:arg2] autorelease];
 }
 
 - (id)initWithControlPanel:(id)arg1 bottle:(id)arg2 {
-    self = [super init];
+    self = [super initWithName:[arg1 valueForKey:@"name"]];
     if (self) {
-        // Initialized
+        self->_controlPanel = [arg1 retain];
+        NSString *iconPath = [arg1 valueForKey:@"icon"];
+        NSImage *icon = nil;
+        if ([iconPath length] != 0) {
+            icon = [[[NSImage alloc] initWithContentsOfFile:iconPath] autorelease];
+        }
+        if (![icon isValid]) {
+            icon = [[[NSImage imageNamed:@"exeIcon.icns"] copy] autorelease];
+        }
+        [self setIcon:icon];
+        [self setBottle:arg2];
     }
     return self;
 }
 
+- (void)dealloc {
+    [self->_controlPanel release];
+    [super dealloc];
+}
+
 - (id)copyWithZone:(void *)arg1 {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   var_20 = self;
-     *   r0 = [[&var_20 super] copyWithZone:arg2];
-     *   r20 = r0;
-     *   r8 = sign_extend_64(*(int32_t *)ivar_offset(_controlPanel));
-     *   objc_storeStrong(r0 + r8, *(self + r8));
-     *   r0 = r20;
-     *   return r0;
-     */
-    return nil;
+    LauncherControlPanel *copy = [super copyWithZone:arg1];
+    if (copy->_controlPanel != self->_controlPanel) {
+        [copy->_controlPanel release];
+        copy->_controlPanel = [self->_controlPanel retain];
+    }
+    return copy;
 }
 
 - (id)tooltip {
-    return self->_controlPanel;
+    return [self->_controlPanel valueForKey:@"description"];
 }
 
 - (void)launchWithErrorHandler:(id)arg1 {
-    return;
+    void (^errorHandler)(NSError *) = arg1;
+    if ([[self bottle] isCanRunCommands]) {
+        [self retain];
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
+            [[self bottle] launchControlPanelApplet:[self->_controlPanel valueForKey:@"exe"]];
+            [self release];
+        });
+    } else if (errorHandler) {
+        NSString *format = [[NSBundle mainBundle] localizedStringForKey:@"The control panel '%1$@' can't be launched because the bottle '%2$@' is unable to run commands at this time." value:@"" table:nil];
+        NSString *message = [NSString stringWithFormat:format, [self name], [[self bottle] name]];
+        NSError *error = [NSError errorWithDomain:@"com.codeweavers.CrossOver.LauncherItem"
+                                             code:1
+                                         userInfo:@{NSLocalizedDescriptionKey: message}];
+        errorHandler(error);
+    }
 }
 
 - (id)description {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   var_30 = self;
-     *   r0 = [[&var_30 super] description];
-     *   r21 = [r0 retain];
-     *   r19 = [[NSString stringWithFormat:@"%@ control panel %@", r3, r4] retain];
-     *   [r21 release];
-     *   r0 = [r19 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return [NSString stringWithFormat:@"%@ control panel %@", [super description], self->_controlPanel];
 }
 
 @end

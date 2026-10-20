@@ -3,6 +3,13 @@
 #import "CrossThrough.h"
 #import "HopperCompat.h"
 
+static void *_BottleViewControllerKVCContext = &_BottleViewControllerKVCContext;
+
+static CXServerCrossOver *BottleViewControllerServer(void) {
+    return (CXServerCrossOver *)[(CXApplication *)NSApp CXServer];
+}
+
+
 @implementation BottleViewController
 
 + (id)keyPathsForValuesAffectingBottleDescription {
@@ -12,12 +19,28 @@
 - (id)init {
     self = [super initWithNibName:@"BottleView" bundle:nil];
     if (self) {
-        self->_controlPanelLaunchers = [[NSMutableArray alloc] init];
+        [self setObservers:@[@"canForceQuit", @"canRunCommands", @"isActive", @"isBusy",
+                             @"isDefault", @"isControlPanelReady", @"isHighResolutionEnabledReady",
+                             @"isD3DMetalEnabled", @"isDLSSEnabled", @"isDXMTEnabled", @"isDXVKEnabled",
+                             @"isWineD3DEnabled", @"isMoltenVKEnabled", @"isMTLVKEnabled",
+                             @"isMSyncEnabled", @"isPreviewEnabled"]];
     }
     return self;
 }
 
 - (void)dealloc {
+    if ([self isViewLoaded]) {
+        [BottleViewControllerServer() removeObserver:self forKeyPath:@"launchers"];
+    }
+    for (NSString *keyPath in [self observers]) {
+        [self->_bottle removeObserver:self forKeyPath:keyPath];
+    }
+    [[self iconCollectionView] setDelegate:nil];
+    [self->_bottle release];
+    [self->_observers release];
+    [self->_package release];
+    [self->_iconCollectionViewController release];
+    [self->_controlPanelLaunchers release];
     [super dealloc];
 }
 
@@ -26,24 +49,42 @@
 
     IconCollectionViewController *icvc = [[IconCollectionViewController alloc] init];
     [self setIconCollectionViewController:icvc];
-    [icvc setDelegate:self];
+    [icvc release];
 
-    if (self->_iconCollectionView) {
-        NSView *v = [icvc view];
-        if (v) {
-            [v setFrame:[self->_iconCollectionView bounds]];
-            [v setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable];
-            [self->_iconCollectionView setSubviews:@[v]];
-        }
-    }
+    NSView *iconView = [[self iconCollectionViewController] view];
+    [[self iconCollectionView] setSubviews:@[iconView]];
+    NSDictionary *views = NSDictionaryOfVariableBindings(iconView);
+    [[self iconCollectionView] addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[iconView]|" options:0 metrics:nil views:views]];
+    [[self iconCollectionView] addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[iconView]|" options:0 metrics:nil views:views]];
+    [[self iconCollectionViewController] setMargins:NSEdgeInsetsMake(0.0, 40.0, 0.0, 0.0)];
+    [[self iconCollectionViewController] setDelegate:self];
 
-    if (self->_controlPanelsLoadingSpinner) {
-        [self->_controlPanelsLoadingSpinner setUsesThreadedAnimation:YES];
-    }
+    [BottleViewControllerServer() addObserver:self forKeyPath:@"launchers" options:0 context:_BottleViewControllerKVCContext];
 
-    if (!self->_controlPanelLaunchers) {
-        self->_controlPanelLaunchers = [[NSMutableArray alloc] init];
-    }
+    [[self controlPanelsLoadingSpinner] setUsesThreadedAnimation:YES];
+    [self setControlPanelLaunchers:[NSMutableArray array]];
+
+    NSBundle *bundle = [NSBundle mainBundle];
+    [[self graphicsOptionView] setToolTip:[bundle localizedStringForKey:@"Graphics backend options" value:@"" table:nil]];
+    CXFlatPopUpButton *graphics = [self graphicsPopUpButton];
+    [self setAutoGraphicsMenuItem:[graphics addItemWithTitle:[bundle localizedStringForKey:@"Auto" value:@"" table:nil]
+                                                     toolTip:[bundle localizedStringForKey:@"Automatically use the best graphics backend" value:@"" table:nil]]];
+    [self setD3dMetalMenuItem:[graphics addItemWithTitle:[bundle localizedStringForKey:@"D3DMetal" value:@"" table:nil] toolTip:@""]];
+    [self setDxmtMenuItem:[graphics addItemWithTitle:[bundle localizedStringForKey:@"DXMT" value:@"" table:nil] toolTip:@""]];
+    [self setDxvkMenuItem:[graphics addItemWithTitle:[bundle localizedStringForKey:@"DXVK" value:@"" table:nil]
+                                             toolTip:[bundle localizedStringForKey:@"DXVK graphics backend" value:@"" table:nil]]];
+    [self setWined3dMenuItem:[graphics addItemWithTitle:[bundle localizedStringForKey:@"Wine" value:@"" table:nil]
+                                                toolTip:[bundle localizedStringForKey:@"Wine graphics backend" value:@"" table:nil]]];
+    CXFlatPopUpButton *vulkan = [self vulkanPopUpButton];
+    [self setMoltenvkMenuItem:[vulkan addItemWithTitle:[bundle localizedStringForKey:@"MoltenVK" value:@"" table:nil]
+                                               toolTip:[bundle localizedStringForKey:@"MoltenVK Vulkan backend" value:@"" table:nil]]];
+    [self setMtlvkMenuItem:[vulkan addItemWithTitle:@"MTLVK" toolTip:@"MTLVK translation layer for D3D12."]];
+
+    NSSortDescriptor *byName = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES selector:@selector(localizedStandardCompare:)];
+    [[self installedSoftwareTableView] setSortDescriptors:@[byName]];
+    [[self leaveRatingButton] setContentTintColor:[NSColor linkColor]];
+    [[self iconCollectionView] registerForDraggedTypes:@[NSPasteboardTypeFileURL]];
+    [[self iconCollectionView] setDelegate:self];
 }
 
 - (id)bottle {
@@ -51,409 +92,460 @@
 }
 
 - (void)setBottle:(id)arg1 {
-    if (self->_bottle != arg1) {
-        [self willChangeValueForKey:@"bottle"];
-        [self->_bottle release];
-        self->_bottle = [arg1 retain];
-        [self didChangeValueForKey:@"bottle"];
+    if (self->_bottle == arg1) {
+        return;
+    }
+    for (NSString *keyPath in [self observers]) {
+        [self->_bottle removeObserver:self forKeyPath:keyPath];
+    }
+    [self willChangeValueForKey:@"bottle"];
+    [self->_bottle release];
+    self->_bottle = [arg1 retain];
+    [self didChangeValueForKey:@"bottle"];
 
-        [self reloadLaunchers];
-        [self reloadControlPanels];
+    [self setPackage:[self packageForBottle:arg1]];
+    if ([self package] && [[self package] packageobject]) {
+        [self setCanBeRated:![[self package] isComponent] && ![arg1 isIsManaged]];
+    } else {
+        [self setCanBeRated:NO];
+    }
+    [self reloadLaunchers];
+    [self resetMenuForNewBottle];
+    [[self bottle] loadApplicationInfo];
+    for (NSString *keyPath in [self observers]) {
+        [self->_bottle addObserver:self forKeyPath:keyPath options:0 context:_BottleViewControllerKVCContext];
     }
 }
 
 - (void)reloadLaunchers {
-    if (!self->_bottle) return;
-    NSArray *apps = nil;
-    if ([self->_bottle respondsToSelector:@selector(launchers)]) {
-        apps = [self->_bottle launchers];
-    }
-    if (self->_iconCollectionViewController) {
-        [self->_iconCollectionViewController setLaunchers:apps ?: @[]];
-    }
-    if (self->_noAppsFoundLabel) {
-        [self->_noAppsFoundLabel setHidden:([apps count] > 0)];
-    }
+    NSArray *launchers = [BottleViewControllerServer() launchers];
+    [[self iconCollectionViewController] setLaunchers:[self launcherNodesForLaunchers:launchers]];
+    [[self noAppsFoundLabel] setHidden:[[[self iconCollectionViewController] launchers] count] != 0];
 }
 
 - (void)reloadControlPanels {
-    if (!self->_bottle) return;
-    if (self->_controlPanelsLoadingSpinner) {
-        [self->_controlPanelsLoadingSpinner startAnimation:self];
-    }
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        NSArray *cpls = nil;
-        if ([self->_bottle respondsToSelector:@selector(controlPanels)]) {
-            cpls = [self->_bottle controlPanels];
+    [[self controlPanelLaunchers] removeAllObjects];
+    NSArray *arranged = [[[[self controlPanelsSection] arrangedSubviews] copy] autorelease];
+    for (NSView *view in arranged) {
+        if (view != [self controlPanelsLoadingView]) {
+            [[self controlPanelsSection] removeArrangedSubview:view];
+            [view removeFromSuperview];
         }
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self->_controlPanelLaunchers removeAllObjects];
-            if (cpls) {
-                [self->_controlPanelLaunchers addObjectsFromArray:cpls];
-            }
-            if (self->_controlPanelsLoadingSpinner) {
-                [self->_controlPanelsLoadingSpinner stopAnimation:self];
-            }
-            if (self->_controlPanelsLoadingView) {
-                [self->_controlPanelsLoadingView setHidden:YES];
-            }
-        });
-    });
+    }
+    if ([[self bottle] isIsControlPanelReady]) {
+        [self showControlPanelLoader:NO];
+        NSMutableArray *panels = [NSMutableArray arrayWithArray:[[self bottle] controlPanelTable]];
+        [self sortControlPanels:panels];
+        for (NSUInteger i = 0; i < [panels count]; i++) {
+            id panel = [panels objectAtIndexedSubscript:i];
+            [[self controlPanelLaunchers] addObject:[LauncherControlPanel launcherWithControlPanel:panel bottle:[self bottle]]];
+            [self addButtonForControlPanel:panel index:i];
+        }
+    } else {
+        [self showControlPanelLoader:YES];
+        [[self bottle] loadControlPanelInfo];
+    }
 }
 
 - (id)packageForBottle:(id)arg1 {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r31 = r31 - 0x50;
-     *   var_30 = r24;
-     *   decomp_var_28 = r23;
-     *   var_20 = r22;
-     *   decomp_var_18 = r21;
-     *   var_10 = r20;
-     *   decomp_var_8 = r19;
-     *   saved_fp = r29;
-     *   decomp_var_m8 = r30;
-     *   r21 = self;
-     *   r19 = [[[CXSetupLib c4ProfilesClass] profilesSet] retain];
-     *   if ((objc_opt_respondsToSelector() & 0x1) != 0x0) {
-     *   r0 = [r19 contentsDict];
-     *   r0 = [r0 retain];
-     *   }
-     *   else {
-     *   r0 = [r19 retain];
-     *   }
-     *   r20 = r0;
-     *   r0 = [r21 bottle];
-     *   r0 = [r0 retain];
-     *   r21 = r0;
-     *   r23 = [[r0 appid] retain];
-     *   r22 = [[NSString stringWithFormat:@"com.codeweavers.c4.%@", r3] retain];
-     *   [r23 release];
-     *   ... (9 more lines)
-     */
-    return nil;
+    id profiles = [[CXSetupLib c4ProfilesClass] profilesSet];
+    NSDictionary *profilesByID = [profiles respondsToSelector:@selector(contentsDict)] ? [profiles contentsDict] : profiles;
+    NSString *appID = [NSString stringWithFormat:@"com.codeweavers.c4.%@", [[self bottle] appid]];
+    id profile = [profilesByID objectForKey:appID];
+    return [[[PackageTreeNode alloc] initWithProfile:profile] autorelease];
 }
 
 
 - (void)updateDependencyButton {
-    return;
+    NSArray *missing = [[CXSetupLib installTaskClass] getMissingDependencies:[self bottle]];
+    [[self dependencyButton] setHidden:[missing count] == 0];
 }
 
 - (void)updateQuitButton {
-    return;
+    NSBundle *bundle = [NSBundle mainBundle];
+    NSString *tooltipFormat;
+    if ([[self bottle] isCanForceQuit]) {
+        [[self quitButton] setTitle:[bundle localizedStringForKey:@"Force Quit" value:@"" table:nil]];
+        [[self quitButton] setEnabled:YES];
+        tooltipFormat = [bundle localizedStringForKey:@"Force quit all applications in the '%@' bottle" value:@"" table:nil];
+    } else {
+        [[self quitButton] setTitle:[bundle localizedStringForKey:@"Quit All Applications" value:@"" table:nil]];
+        tooltipFormat = [bundle localizedStringForKey:@"Quit all applications in the '%@' bottle" value:@"" table:nil];
+    }
+    [[self quitButton] setToolTip:[NSString stringWithFormat:tooltipFormat, [[self bottle] name]]];
 }
 
 - (void)updateMenuItems {
-    return;
+    BottleWrapper *bottle = [self bottle];
+    NSBundle *bundle = [NSBundle mainBundle];
+    NSString *bottleName = [bottle name];
+    BOOL configurable = ![bottle isIsManaged] && ![bottle isIsDisabled];
+    LauncherTreeNode *selected = [[self iconCollectionViewController] selectedLauncher];
+
+    [[self runWithOptionsButton] setHidden:selected == nil];
+    [[self runWithOptionsButton] setToolTip:[bundle localizedStringForKey:@"Run the selected launcher with options" value:@"" table:nil]];
+    [[self runWithOptionsButton] setEnabled:[bottle isCanRunCommands] && [selected canRunCommands]];
+
+    [[self runCommandButton] setEnabled:[bottle isCanRunCommands]];
+    [[self runCommandButton] setToolTip:[NSString stringWithFormat:[bundle localizedStringForKey:@"Select a command to run in the '%@' bottle" value:@"" table:nil], bottleName]];
+    [[self openCDriveButton] setEnabled:[bottle isIsUsable]];
+    [[self openCDriveButton] setToolTip:[NSString stringWithFormat:[bundle localizedStringForKey:@"Open the C: drive for the '%@' bottle" value:@"" table:nil], bottleName]];
+    [[self installIntoBottleButton] setEnabled:[bottle isCanInstall]];
+    [[self installIntoBottleButton] setToolTip:[NSString stringWithFormat:[bundle localizedStringForKey:@"Install a Windows application into the '%@' bottle" value:@"" table:nil], bottleName]];
+    [[self deleteButton] setEnabled:![bottle isIsBusy]];
+    [[self deleteButton] setToolTip:[NSString stringWithFormat:[bundle localizedStringForKey:@"Delete the '%@' bottle" value:@"" table:nil], bottleName]];
+
+    NSColor *enabledColor = [NSColor labelColor];
+    NSColor *disabledColor = [NSColor secondarySelectedControlColor];
+
+    // Graphics backend.
+    [[self graphicsPopUpButton] setEnabled:configurable && [bottle isCanRunCommands]];
+    [[self graphicsLabel] setTextColor:[[self graphicsPopUpButton] isEnabled] ? enabledColor : disabledColor];
+    NSString *d3dMetalTip = [bundle localizedStringForKey:@"D3DMetal translation layer for D3D11 and D3D12.\nPart of the Game Porting Toolkit." value:@"" table:nil];
+    [[self d3dMetalMenuItem] setEnabled:[bottle isIsD3DMetalAvailable] && ![bottle isIsMTLVKEnabled]];
+    [[self d3dMetalMenuItem] setToolTip:d3dMetalTip];
+    if (![bottle isIsD3DMetalAvailable]) {
+        [[self d3dMetalMenuItem] setToolTip:[bundle localizedStringForKey:@"D3DMetal translation layer for D3D11 and D3D12.\nPart of the Game Porting Toolkit.\n\nNot supported on this computer: requires Apple Silicon and macOS Sonoma." value:@"" table:nil]];
+    }
+    [[self dxmtMenuItem] setEnabled:[bottle isIsDXMTAvailable]];
+    [[self dxmtMenuItem] setToolTip:[bundle localizedStringForKey:@"DXMT translation layer for D3D11." value:@"" table:nil]];
+    if (![bottle isIsDXMTAvailable]) {
+        [[self dxmtMenuItem] setToolTip:[bundle localizedStringForKey:@"DXMT translation layer for D3D11.\n\nNot supported on this computer: requires Apple Silicon and macOS Sonoma." value:@"" table:nil]];
+    }
+    [[self dxmtMenuItem] setEnabled:![bottle isIsMTLVKEnabled]];
+    [[self dxvkMenuItem] setEnabled:![bottle isIsMTLVKEnabled]];
+    NSMenuItem *graphicsItem;
+    if ([bottle isIsDXVKEnabled]) {
+        graphicsItem = [self dxvkMenuItem];
+    } else if ([bottle isIsDXMTEnabled]) {
+        graphicsItem = [self dxmtMenuItem];
+    } else if ([bottle isIsD3DMetalEnabled]) {
+        graphicsItem = [self d3dMetalMenuItem];
+    } else if ([bottle isIsWineD3DEnabled]) {
+        graphicsItem = [self wined3dMenuItem];
+    } else {
+        graphicsItem = [self autoGraphicsMenuItem];
+    }
+    [[self graphicsPopUpButton] selectItem:graphicsItem];
+
+    // Vulkan backend: only selectable when no D3D translation layer is forced.
+    BOOL vulkanEnabled = configurable && [bottle isCanRunCommands] && [bottle isIsMTLVKAvailable] &&
+                         ![bottle isIsDXMTEnabled] && ![bottle isIsDXVKEnabled] && ![bottle isIsD3DMetalEnabled];
+    [[self vulkanPopUpButton] setEnabled:vulkanEnabled];
+    [[self vulkanLabel] setTextColor:[[self vulkanPopUpButton] isEnabled] ? enabledColor : disabledColor];
+    [[self mtlvkMenuItem] setEnabled:[bottle isIsMTLVKAvailable]];
+    [[self vulkanOptionView] setToolTip:[bundle localizedStringForKey:@"Vulkan backend options" value:@"" table:nil]];
+    if ([bottle isIsMTLVKAvailable]) {
+        if ([bottle isIsDXVKEnabled] || [bottle isIsD3DMetalEnabled]) {
+            [[self vulkanOptionView] setToolTip:[bundle localizedStringForKey:@"Vulkan backend options.\n\nNot available in combination with DXVK or D3DMetal." value:@"" table:nil]];
+        }
+    } else {
+        [[self vulkanOptionView] setToolTip:[bundle localizedStringForKey:@"Vulkan backend options.\n\nAlternatives supported on this computer: requires Apple Silicon and macOS Sequoia." value:@"" table:nil]];
+    }
+    [[self vulkanPopUpButton] selectItem:[bottle isIsMTLVKEnabled] ? [self mtlvkMenuItem] : [self moltenvkMenuItem]];
+    [[self vulkanOptionView] setHidden:YES];
+
+    // MSync.
+    [[self msyncSwitch] setEnabled:configurable && [bottle isCanRunCommands]];
+    [[self msyncLabel] setTextColor:[[self msyncSwitch] isEnabled] ? enabledColor : disabledColor];
+    [[self msyncSwitch] setState:[bottle isIsMSyncEnabled] ? NSControlStateValueOn : NSControlStateValueOff];
+    [[self msyncView] setToolTip:[bundle localizedStringForKey:@"Mach Semaphore-based synchronization" value:@"" table:nil]];
+
+    // DLSS.
+    [[self dlssSwitch] setEnabled:configurable && [bottle isCanRunCommands] && [bottle isIsDLSSAvailable]];
+    [[self dlssLabel] setTextColor:[[self dlssSwitch] isEnabled] ? enabledColor : disabledColor];
+    [[self dlssSwitch] setState:[bottle isIsDLSSEnabled] ? NSControlStateValueOn : NSControlStateValueOff];
+    [[self dlssView] setToolTip:[bundle localizedStringForKey:@"DLSS for D3DMetal and DXMT" value:@"" table:nil]];
+    if (![bottle isIsDLSSAvailable]) {
+        [[self dlssView] setToolTip:[bundle localizedStringForKey:@"DLSS for D3DMetal and DXMT. Requires Apple Silicon and macOS Tahoe for D3DMetal, macOS Sonoma for DXMT." value:@"" table:nil]];
+    }
+
+    // High resolution.
+    [[self highResolutionSwitch] setEnabled:configurable && [bottle isIsActive] && [bottle isIsHighResolutionEnabledReady]];
+    [[self highResolutionLabel] setTextColor:[[self highResolutionSwitch] isEnabled] ? enabledColor : disabledColor];
+    [[self highResolutionSwitch] setState:[bottle isIsHighResolutionEnabled] ? NSControlStateValueOn : NSControlStateValueOff];
+    [[self highResolutionView] setToolTip:[bundle localizedStringForKey:@"High resolution mode" value:@"" table:nil]];
+
+    // CrossOver Preview.
+    [[self previewSwitch] setEnabled:![bottle isIsManaged]];
+    [[self previewLabel] setTextColor:[[self previewSwitch] isEnabled] ? enabledColor : disabledColor];
+    [[self previewSwitch] setState:[bottle isIsPreviewEnabled] ? NSControlStateValueOn : NSControlStateValueOff];
+    [[self previewView] setToolTip:[bundle localizedStringForKey:@"Enable this bottle for CrossOver Preview" value:@"" table:nil]];
+    [[self previewView] setHidden:YES];
+
+    [self updateDependencyButton];
+    [[self quitButton] setEnabled:[bottle isIsActive]];
+    [self updateQuitButton];
 }
 
 - (void)resetMenuForNewBottle {
-    return;
+    [[self installedSoftwareTableView] scrollToBeginningOfDocument:nil];
+    [self updateMenuItems];
+    [self reloadControlPanels];
 }
 
 - (id)iconForControlPanel:(id)arg1 {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   var_20 = r22;
-     *   decomp_var_18 = r21;
-     *   r31 = r31 + 0xffffffffffffffd0;
-     *   var_10 = r20;
-     *   decomp_var_8 = r19;
-     *   saved_fp = r29;
-     *   decomp_var_m8 = r30;
-     *   r19 = [arg2 retain];
-     *   if (*_iconForControlPanel:.onceToken != -0x1) {
-     *   dispatch_once(_iconForControlPanel:.onceToken, ___block_literal_global);
-     *   }
-     *   r0 = [r19 valueForKey:@"exe"];
-     *   r0 = [r0 retain];
-     *   r20 = r0;
-     *   r0 = [r0 lastPathComponent];
-     *   r0 = [r0 retain];
-     *   r21 = r0;
-     *   r22 = [[r0 lowercaseString] retain];
-     *   [r21 release];
-     *   [r20 release];
-     *   r0 = *_iconForControlPanel:.iconsNamesByExe;
-     *   r0 = [r0 objectForKeyedSubscript:r22];
-     *   r0 = [r0 retain];
-     *   if (r0 != 0x0) {
-     *   r20 = r0;
-     *   ... (10 more lines)
-     */
-    return nil;
+    static dispatch_once_t onceToken;
+    static NSDictionary *iconsNamesByExe = nil;
+    dispatch_once(&onceToken, ^{
+        iconsNamesByExe = [@{@"winecfg.exe": @"sf-symbols.gearshape",
+                             @"joy.cpl": @"sf-symbols.gamecontroller",
+                             @"wineboot.exe": @"sf-symbols.restart.circle",
+                             @"taskmgr.exe": @"sf-symbols.list.bullet",
+                             @"inetcpl.cpl": @"sf-symbols.network"} retain];
+    });
+    NSString *exe = [[[arg1 valueForKey:@"exe"] lastPathComponent] lowercaseString];
+    NSString *iconName = [iconsNamesByExe objectForKeyedSubscript:exe];
+    return [NSImage imageNamed:iconName ?: @"sf-symbols.gearshape-2"];
 }
 
 - (void)sortControlPanels:(id)arg1 {
-    return;
+    static dispatch_once_t onceToken;
+    static NSArray *orderOfWellKnownPanels = nil;
+    dispatch_once(&onceToken, ^{
+        orderOfWellKnownPanels = [@[@"winecfg.exe", @"joy.cpl", @"wineboot.exe", @"taskmgr.exe", @"inetcpl.cpl"] retain];
+    });
+    // Well-known panels come first in a fixed order; the rest follow by name.
+    [arg1 sortUsingComparator:^NSComparisonResult(id a, id b) {
+        NSUInteger ia = [orderOfWellKnownPanels indexOfObject:[[[a valueForKey:@"exe"] lastPathComponent] lowercaseString]];
+        NSUInteger ib = [orderOfWellKnownPanels indexOfObject:[[[b valueForKey:@"exe"] lastPathComponent] lowercaseString]];
+        if (ia != NSNotFound && ib != NSNotFound) {
+            return ia < ib ? NSOrderedAscending : (ia > ib ? NSOrderedDescending : NSOrderedSame);
+        }
+        if (ia != NSNotFound) {
+            return NSOrderedAscending;
+        }
+        if (ib != NSNotFound) {
+            return NSOrderedDescending;
+        }
+        return [[a valueForKey:@"name"] localizedCaseInsensitiveCompare:[b valueForKey:@"name"]];
+    }];
 }
 
 - (void)addButtonForControlPanel:(id)arg1 index:(NSInteger)arg2 {
-    return;
+    CXFlatButton *button = [CXFlatButton flatButtonWithTitle:[arg1 valueForKey:@"name"] icon:[self iconForControlPanel:arg1]];
+    [button setShowsBorderOnlyWhileMouseInside:YES];
+    [button setToolTip:[arg1 valueForKey:@"description"]];
+    [button setTag:arg2];
+    [button setTarget:self];
+    [button setAction:@selector(controlPanelButtonClicked:)];
+    [[self controlPanelsSection] addArrangedSubview:button];
+    [[[button widthAnchor] constraintEqualToAnchor:[[self controlPanelsSection] widthAnchor]] setActive:YES];
 }
 
 - (void)showControlPanelLoader:(BOOL)arg1 {
-    return;
+    [[self controlPanelsLoadingView] setHidden:!arg1];
+    if (arg1) {
+        [[self controlPanelsLoadingSpinner] startAnimation:nil];
+    } else {
+        [[self controlPanelsLoadingSpinner] stopAnimation:nil];
+    }
 }
 
 
 - (id)launcherNodesForLaunchers:(id)arg1 {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r31 = r31 - 0x130;
-     *   var_50 = r28;
-     *   decomp_var_48 = r27;
-     *   var_40 = r26;
-     *   decomp_var_38 = r25;
-     *   var_30 = r24;
-     *   decomp_var_28 = r23;
-     *   var_20 = r22;
-     *   decomp_var_18 = r21;
-     *   var_10 = r20;
-     *   decomp_var_8 = r19;
-     *   saved_fp = r29;
-     *   decomp_var_m8 = r30;
-     *   r20 = self;
-     *   var_60 = **___stack_chk_guard;
-     *   r21 = [arg2 retain];
-     *   r19 = [[NSMutableArray array] retain];
-     *   var_120 = q0;
-     *   var_110 = q0;
-     *   r0 = [r21 retain];
-     *   r21 = r0;
-     *   r0 = [r0 countByEnumeratingWithState:&var_120 objects:&decomp_var_e0 count:0x10];
-     *   if (r0 != 0x0) {
-     *   r22 = r0;
-     *   r26 = *var_110;
-     *   ... (106 more lines)
-     */
-    return nil;
+    NSMutableArray *nodes = [NSMutableArray array];
+    for (LauncherItem *item in arg1) {
+        if ([item isLeaf] && [item isKindOfClass:[LauncherApp class]]) {
+            if ([item bottle] == [self bottle]) {
+                [nodes addObject:[LauncherAppTreeNode fromLauncher:item]];
+            }
+        } else if (![item isLeaf] && [item isKindOfClass:[LauncherFolder class]]) {
+            [nodes addObjectsFromArray:[self launcherNodesForLaunchers:[(LauncherFolder *)item items]]];
+        }
+    }
+    [nodes sortUsingSelector:@selector(compareSortOrderThenName:)];
+    return nodes;
 }
 
 - (void)observeValueForKeyPath:(id)arg1 ofObject:(id)arg2 change:(id)arg3 context:(void *)arg4 {
-    return;
-}
-
-- (void)leaveRating:(id)arg1 {
-    return;
-}
-
-- (id)bottleDescription {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   var_10 = r20;
-     *   decomp_var_8 = r19;
-     *   r31 = r31 + 0xffffffffffffffe0;
-     *   saved_fp = r29;
-     *   decomp_var_m8 = r30;
-     *   r0 = [self bottle];
-     *   r0 = [r0 retain];
-     *   r20 = r0;
-     *   r19 = [[r0 currentDescription] retain];
-     *   [r20 release];
-     *   if ([r19 length] != 0x0) {
-     *   r20 = [r19 retain];
-     *   }
-     *   else {
-     *   r20 = 0x0;
-     *   }
-     *   [r19 release];
-     *   r0 = [r20 autorelease];
-     *   return r0;
-     */
-    return nil;
-}
-
-- (void)setBottleDescription:(id)arg1 {
-    if (self->_bottle && [self->_bottle respondsToSelector:@selector(setCurrentDescription:)]) {
-        [self->_bottle setCurrentDescription:arg1 ?: @""];
+    if (arg4 != _BottleViewControllerKVCContext) {
+        [super observeValueForKeyPath:arg1 ofObject:arg2 change:arg3 context:arg4];
+        return;
+    }
+    if (arg2 == BottleViewControllerServer() && [arg1 isEqualToString:@"launchers"]) {
+        [self reloadLaunchers];
+    } else if (arg2 == [self bottle] && [arg1 isEqualToString:@"isControlPanelReady"]) {
+        [self reloadControlPanels];
+    } else if (arg2 == [self bottle]) {
+        [self updateMenuItems];
     }
 }
 
+- (void)leaveRating:(id)arg1 {
+    if (![self canBeRated]) {
+        return;
+    }
+    SubmitRatingController *rating = [[SubmitRatingController alloc] initWithBottle:[self bottle]];
+    if (rating) {
+        [[[self view] window] beginSheet:[rating window] completionHandler:nil];
+    }
+}
+
+- (id)bottleDescription {
+    NSString *description = [[self bottle] currentDescription];
+    return [description length] != 0 ? description : nil;
+}
+
+- (void)setBottleDescription:(id)arg1 {
+    [[self bottle] setCurrentDescription:arg1 ?: @""];
+}
+
 - (void)iconCollectionViewControllerSelectionChanged:(id)arg1 {
-    return;
+    [self updateMenuItems];
 }
 
 - (void)runWithOptionsClicked:(id)arg1 {
-    return;
+    id selected = [[self iconCollectionViewController] selectedLauncher];
+    if ([selected isKindOfClass:[LauncherAppTreeNode class]]) {
+        [BottleMenuHandler runCommandInBottle:[self bottle] withLauncher:[selected launcher]];
+    }
 }
 
 - (void)runCommandClicked:(id)arg1 {
-    return;
+    [BottleMenuHandler runCommandInBottle:[self bottle]];
 }
 
 - (void)installIntoBottleClicked:(id)arg1 {
-    return;
+    [BottleMenuHandler installSoftwareIntoBottle:[self bottle] withWindow:[[self view] window]];
 }
 
 - (void)dependencyButtonClicked:(id)arg1 {
-    return;
+    [BottleMenuHandler installMissingDependencies:[self bottle] withWindow:[[self view] window]];
 }
 
 - (void)openCDriveClicked:(id)arg1 {
-    return;
+    [BottleMenuHandler openCDriveForBottle:[self bottle]];
 }
 
 - (void)quitClicked:(id)arg1 {
-    return;
+    if ([[self bottle] isCanForceQuit]) {
+        [BottleMenuHandler forceQuitBottle:[self bottle]];
+    } else {
+        [BottleMenuHandler quitBottle:[self bottle]];
+    }
 }
 
 - (void)deleteClicked:(id)arg1 {
-    return;
+    [BottleMenuHandler deleteBottle:[self bottle] withWindow:[[self view] window]];
 }
 
 - (void)graphicsOptionChanged:(id)arg1 {
-    return;
+    NSMenuItem *item = [[self graphicsPopUpButton] selectedItem];
+    if (item == [self autoGraphicsMenuItem]) {
+        [[self bottle] setGraphicsBackendAuto];
+    } else if (item == [self d3dMetalMenuItem]) {
+        [[self bottle] setGraphicsBackendD3DMetal];
+    } else if (item == [self dxmtMenuItem]) {
+        [[self bottle] setGraphicsBackendDXMT];
+    } else if (item == [self dxvkMenuItem]) {
+        [[self bottle] setGraphicsBackendDXVK];
+    } else if (item == [self wined3dMenuItem]) {
+        [[self bottle] setGraphicsBackendWine];
+    }
 }
 
 - (void)vulkanOptionChanged:(id)arg1 {
-    return;
+    NSMenuItem *item = [[self vulkanPopUpButton] selectedItem];
+    if (item == [self moltenvkMenuItem]) {
+        [[self bottle] setVulkanBackendMoltenVK];
+    } else if (item == [self mtlvkMenuItem]) {
+        [[self bottle] setVulkanBackendMTLVK];
+    }
 }
 
 - (void)dlssToggled:(id)arg1 {
-    return;
+    if ([[self bottle] isIsDLSSEnabled]) {
+        [[self bottle] disableDLSS];
+    } else {
+        [[self bottle] enableDLSS];
+    }
 }
 
 - (void)msyncToggled:(id)arg1 {
-    return;
+    [BottleMenuHandler toggleMSyncForBottle:[self bottle] withWindow:[[self view] window] modalCompletionHandler:^(BOOL cancelled) {
+        if (cancelled) {
+            [arg1 setState:[arg1 state] != NSControlStateValueOn];
+        }
+    }];
 }
 
 - (void)highResolutionToggled:(id)arg1 {
-    return;
+    [BottleMenuHandler toggleHighResolutionForBottle:[self bottle] withWindow:[[self view] window] modalCompletionHandler:^(BOOL cancelled) {
+        if (cancelled) {
+            [arg1 setState:[arg1 state] != NSControlStateValueOn];
+        }
+    }];
 }
 
 - (void)previewToggled:(id)arg1 {
-    return;
+    [BottleMenuHandler togglePreviewForBottle:[self bottle] withWindow:[[self view] window] modalCompletionHandler:^(BOOL cancelled) {
+        if (cancelled) {
+            [arg1 setState:[arg1 state] != NSControlStateValueOn];
+        }
+    }];
 }
 
 - (void)controlPanelButtonClicked:(id)arg1 {
-    return;
+    NSButton *button = arg1;
+    [button setEnabled:NO];
+    LauncherControlPanel *launcher = [[self controlPanelLaunchers] objectAtIndexedSubscript:[button tag]];
+    [launcher launchWithErrorHandler:^(NSError *error) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self presentError:error modalForWindow:[[self view] window] delegate:nil didPresentSelector:NULL contextInfo:NULL];
+            [button setEnabled:YES];
+        });
+    }];
+    // Re-enable the button after a few seconds unless the bottle changed.
+    BottleWrapper *bottle = [[self bottle] retain];
+    [self retain];
+    [button retain];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 3 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+        if ([self bottle] == bottle) {
+            [button setEnabled:YES];
+        }
+        [button release];
+        [bottle release];
+        [self release];
+    });
 }
 
 - (void)bottleDescriptionDidEndEditing:(id)arg1 {
-    return;
+    [[self bottle] writeDescription];
 }
 
 - (id)selectedApplication {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   var_20 = r22;
-     *   decomp_var_18 = r21;
-     *   r31 = r31 + 0xffffffffffffffd0;
-     *   var_10 = r20;
-     *   decomp_var_8 = r19;
-     *   saved_fp = r29;
-     *   decomp_var_m8 = r30;
-     *   r20 = self;
-     *   r0 = [self installedSoftwareTableView];
-     *   r0 = [r0 retain];
-     *   r21 = r0;
-     *   r19 = [r0 clickedRow];
-     *   [r21 release];
-     *   if (r19 != -0x1) {
-     *   r0 = [r20 installedSoftware];
-     *   r0 = [r0 retain];
-     *   r20 = r0;
-     *   r0 = [r0 arrangedObjects];
-     *   r0 = [r0 retain];
-     *   r21 = r0;
-     *   r19 = [[r0 objectAtIndexedSubscript:r19] retain];
-     *   [r21 release];
-     *   [r20 release];
-     *   }
-     *   else {
-     *   ... (4 more lines)
-     */
-    return nil;
+    NSInteger row = [[self installedSoftwareTableView] clickedRow];
+    if (row == -1) {
+        return nil;
+    }
+    return [[[self installedSoftware] arrangedObjects] objectAtIndexedSubscript:row];
 }
 
 - (BOOL)canUninstall {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   var_20 = r22;
-     *   decomp_var_18 = r21;
-     *   r31 = r31 + 0xffffffffffffffd0;
-     *   var_10 = r20;
-     *   decomp_var_8 = r19;
-     *   saved_fp = r29;
-     *   decomp_var_m8 = r30;
-     *   r19 = self;
-     *   r0 = [self selectedApplication];
-     *   r0 = [r0 retain];
-     *   r20 = r0;
-     *   [r0 release];
-     *   if (r20 != 0x0) {
-     *   r0 = [r19 selectedApplication];
-     *   r0 = [r0 retain];
-     *   r19 = r0;
-     *   r0 = [r0 canUninstall];
-     *   r0 = [r0 retain];
-     *   r20 = r0;
-     *   r21 = [r0 boolValue];
-     *   [r20 release];
-     *   [r19 release];
-     *   r0 = r21;
-     *   }
-     *   else {
-     *   ... (3 more lines)
-     */
-    return NO;
+    id<CXInstalledApplication> app = [self selectedApplication];
+    return app && [[app canUninstall] boolValue];
 }
 
 - (void)uninstallClicked:(id)arg1 {
-    return;
+    id<CXInstalledApplication> app = [self selectedApplication];
+    if (app) {
+        [app uninstall];
+    }
 }
 
 - (BOOL)control:(id)arg1 textView:(id)arg2 doCommandBySelector:(SEL)arg3 {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r2 = arg2;
-     *   r0 = self;
-     *   var_20 = r22;
-     *   decomp_var_18 = r21;
-     *   r31 = r31 + 0xffffffffffffffd0;
-     *   var_10 = r20;
-     *   decomp_var_8 = r19;
-     *   saved_fp = r29;
-     *   decomp_var_m8 = r30;
-     *   r19 = arg4;
-     *   if (@selector(insertNewline:) == arg4) {
-     *   r0 = [r2 retain];
-     *   r20 = r0;
-     *   r21 = [[r0 currentEditor] retain];
-     *   [r20 endEditing:r21];
-     *   [r20 release];
-     *   r0 = [r21 release];
-     *   }
-     *   if (@selector(insertNewline:) == r19) {
-     *   r0 = 0x1;
-     *   }
-     *   return r0;
-     */
+    if (arg3 == @selector(insertNewline:)) {
+        [arg1 endEditing:[arg1 currentEditor]];
+        return YES;
+    }
     return NO;
 }
 
 - (BOOL)performDragOperation:(id)arg1 {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r21 = [[arg2 draggingPasteboard] retain];
-     *   r20 = [[NSURL URLFromPasteboard:r21] retain];
-     *   [r21 release];
-     *   r21 = [[**_NSApp CXServer] retain];
-     *   r22 = [[r20 path] retain];
-     *   r0 = [self bottle];
-     *   r0 = [r0 retain];
-     *   r19 = r0;
-     *   r23 = [[r0 name] retain];
-     *   [r21 runClient:r22 inBottle:r23 withDialog:0x1];
-     *   [r23 release];
-     *   [r19 release];
-     *   [r22 release];
-     *   [r21 release];
-     *   [r20 release];
-     *   return 0x1;
-     */
-    return NO;
+    NSURL *url = [NSURL URLFromPasteboard:[arg1 draggingPasteboard]];
+    [BottleViewControllerServer() runClient:[url path] inBottle:[[self bottle] name] withDialog:YES];
+    return YES;
 }
 
 - (id)observers {
@@ -472,7 +564,10 @@
 }
 
 - (void)setPackage:(id)arg1 {
-    self->_package = arg1;
+    if (self->_package != arg1) {
+        [self->_package release];
+        self->_package = [arg1 retain];
+    }
 }
 
 - (BOOL)canBeRated {
@@ -488,7 +583,10 @@
 }
 
 - (void)setIconCollectionViewController:(id)arg1 {
-    self->_iconCollectionViewController = arg1;
+    if (self->_iconCollectionViewController != arg1) {
+        [self->_iconCollectionViewController release];
+        self->_iconCollectionViewController = [arg1 retain];
+    }
 }
 
 - (id)iconCollectionView {
@@ -520,7 +618,10 @@
 }
 
 - (void)setControlPanelLaunchers:(id)arg1 {
-    self->_controlPanelLaunchers = arg1;
+    if (self->_controlPanelLaunchers != arg1) {
+        [self->_controlPanelLaunchers release];
+        self->_controlPanelLaunchers = [arg1 retain];
+    }
 }
 
 - (id)runWithOptionsButton {

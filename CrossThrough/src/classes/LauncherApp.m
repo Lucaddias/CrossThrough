@@ -6,57 +6,69 @@
 @implementation LauncherApp
 
 + (id)launcherWithURL:(id)arg1 {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r20 = [arg2 retain];
-     *   r19 = [[self alloc] initWithURL:r20];
-     *   [r20 release];
-     *   r0 = [r19 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return [[[self alloc] initWithURL:arg1] autorelease];
 }
 
 - (id)initWithURL:(id)arg1 {
-    self = [super init];
+    NSString *name = [[arg1 lastPathComponent] stringByDeletingPathExtension];
+    CXBundle *bundle = [CXBundle bundleWithURL:arg1];
+    if (bundle) {
+        // Helper apps are renamed to unique bundle names; prefer the menu name
+        // the user saw in Windows.
+        if ([[bundle objectForInfoDictionaryKey:(NSString *)kCFBundleNameKey] isEqualToString:name]) {
+            NSString *originalName = [bundle objectForInfoDictionaryKey:@"CXOriginalMenuName"];
+            if (originalName) {
+                name = originalName;
+            }
+        }
+    }
+    self = [super initWithName:name];
     if (self) {
-        // Initialized
+        self->_url = [arg1 copy];
+        self->_bundleID = [[bundle objectForInfoDictionaryKey:(NSString *)kCFBundleIdentifierKey] copy];
+        [self setIcon:[bundle icon]];
+        [self setHelperVersion:[bundle helperVersion]];
+        if (bundle) {
+            id collection = [[CXSetupLib bottleCollectionClass] sharedCollection];
+            NSString *bottleName = [bundle objectForInfoDictionaryKey:@"CXHelperAppBottleName"];
+            [self setBottle:[collection bottleWithName:bottleName]];
+        }
     }
     return self;
 }
 
+- (void)dealloc {
+    [self->_url release];
+    [self->_bundleID release];
+    [super dealloc];
+}
+
 - (id)copyWithZone:(void *)arg1 {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   var_20 = self;
-     *   r0 = [[&var_20 super] copyWithZone:arg2];
-     *   r20 = r0;
-     *   [r0 setUrl:self->_url];
-     *   [r20 setBundleID:self->_bundleID];
-     *   r0 = r20;
-     *   return r0;
-     */
-    return nil;
+    LauncherApp *copy = [super copyWithZone:arg1];
+    [copy setUrl:self->_url];
+    [copy setBundleID:self->_bundleID];
+    return copy;
 }
 
 - (void)launchWithErrorHandler:(id)arg1 {
-    return;
+    void (^errorHandler)(NSError *) = arg1;
+    NSError *error = nil;
+    NSRunningApplication *app = [[NSWorkspace sharedWorkspace] openURL:[self url]
+                                                               options:NSWorkspaceLaunchAsync
+                                                         configuration:@{}
+                                                                 error:&error];
+    if (app) {
+        if (@available(macOS 14.0, *)) {
+            NSLog(@"yielding activation to launcher %@", app);
+            [NSApp yieldActivationToApplication:app];
+        }
+    } else if (errorHandler) {
+        errorHandler(error);
+    }
 }
 
 - (id)description {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   var_30 = self;
-     *   r0 = [[&var_30 super] description];
-     *   r21 = [r0 retain];
-     *   r19 = [[self url] retain];
-     *   r20 = [[NSString stringWithFormat:@"%@ url %@", r3, r4] retain];
-     *   [r19 release];
-     *   [r21 release];
-     *   r0 = [r20 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return [NSString stringWithFormat:@"%@ url %@", [super description], [self url]];
 }
 
 - (id)url {
