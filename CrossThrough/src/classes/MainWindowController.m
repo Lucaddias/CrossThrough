@@ -266,8 +266,8 @@
 
 - (BOOL)outlineView:(id)arg1 isGroupItem:(id)arg2 {
     id item = [arg2 respondsToSelector:@selector(representedObject)] ? [arg2 representedObject] : arg2;
-    if ([item respondsToSelector:@selector(type)]) {
-        return [item type] == 0;
+    if ([item isKindOfClass:[BottleNode class]]) {
+        return [(BottleNode *)item type] == 0;
     }
     return NO;
 }

@@ -22,7 +22,7 @@
 
 - (void)updateTextField {
     id node = [self objectValue];
-    id bottle = [node respondsToSelector:@selector(bottle)] ? [node bottle] : nil;
+    BottleWrapper *bottle = [node respondsToSelector:@selector(bottle)] ? [node bottle] : nil;
     BOOL isDefault = [bottle respondsToSelector:@selector(isDefault)] ? [bottle isDefault] : NO;
     NSFont *f = [self.textField font] ?: [NSFont systemFontOfSize:13.0];
     NSFontTraitMask trait = isDefault ? NSBoldFontMask : NSUnboldFontMask;

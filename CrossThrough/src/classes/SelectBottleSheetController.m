@@ -154,7 +154,7 @@ static dispatch_once_t _catOnceToken = 0;
             warning = [self attributedWarningStringWithString:msg];
         } else {
             NSString *bName = [self->_targetBottle valueForKey:@"bottlename"];
-            id bottle = [[self bottleCollection] bottleWithName:bName];
+            BottleWrapper *bottle = [[self bottleCollection] bottleWithName:bName];
             NSDictionary *pkgs = [bottle installedPackages];
             NSMutableDictionary *mutPkgs = [NSMutableDictionary dictionaryWithDictionary:pkgs];
             [mutPkgs removeObjectForKey:@"com.codeweavers.c4.cxhtml"];
@@ -171,11 +171,10 @@ static dispatch_once_t _catOnceToken = 0;
 - (void)addMenuItemsFromCategories:(id)categories isBottles:(BOOL)isBottles {
     if (_catOnceToken != -1) {
         dispatch_once(&_catOnceToken, ^{
-            id cxSetup = [CXSetupLib cxSetupClass];
-            NSNumber *rec = [cxSetup bottleCategory:@"RECOMMENDED"];
-            NSNumber *comp = [cxSetup bottleCategory:@"COMPATIBLE"];
-            NSNumber *none = [cxSetup bottleCategory:@"NONE"];
-            NSNumber *incomp = [cxSetup bottleCategory:@"INCOMPATIBLE"];
+            NSNumber *rec = [[CXSetupLib cxSetupClass] bottleCategory:@"RECOMMENDED"];
+            NSNumber *comp = [[CXSetupLib cxSetupClass] bottleCategory:@"COMPATIBLE"];
+            NSNumber *none = [[CXSetupLib cxSetupClass] bottleCategory:@"NONE"];
+            NSNumber *incomp = [[CXSetupLib cxSetupClass] bottleCategory:@"INCOMPATIBLE"];
             _orderedCategoryNumbers = [[NSArray alloc] initWithObjects:rec, comp, none, incomp, nil];
 
             NSBundle *mb = [NSBundle mainBundle];
@@ -256,7 +255,7 @@ static dispatch_once_t _catOnceToken = 0;
     NSArray *sortedKeys = [[bottles allKeys] sortedArrayUsingSelector:@selector(localizedStandardCompare:)];
 
     for (NSString *key in sortedKeys) {
-        id bottle = [bottles objectForKey:key];
+        TargetBottle *bottle = (TargetBottle *)[bottles objectForKey:key];
         NSNumber *cat = [bottle respondsToSelector:@selector(getCategory)] ? [bottle getCategory] : nil;
         if (!cat) {
             cat = [[CXSetupLib cxSetupClass] bottleCategory:@"NONE"];
@@ -294,7 +293,7 @@ static dispatch_once_t _catOnceToken = 0;
     [templates enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
         NSString *dispName = [[CXSetupLib bottleManagementClass] displayNameForTemplate:key];
         if (!dispName) dispName = key;
-        NSNumber *cat = [obj respondsToSelector:@selector(getCategory)] ? [obj getCategory] : nil;
+        NSNumber *cat = [(TargetBottle *)obj respondsToSelector:@selector(getCategory)] ? [(TargetBottle *)obj getCategory] : nil;
         if (!cat) {
             cat = [[CXSetupLib cxSetupClass] bottleCategory:@"NONE"];
         }

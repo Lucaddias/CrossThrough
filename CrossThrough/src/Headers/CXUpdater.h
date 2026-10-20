@@ -22,7 +22,7 @@
 }
 
 // Class Methods
-+ (id)sharedUpdater;
++ (CXUpdater *)sharedUpdater;
 + (id)updaterForBundle:(id)arg1;
 
 // Instance Methods

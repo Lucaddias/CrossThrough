@@ -6,57 +6,40 @@
 @implementation CXTaskSpecialString
 
 - (id)initWithString:(id)arg1 {
-    self = [super init];
-    if (self) {
-        // Initialized
-    }
+    self->realString = [arg1 retain];
     return self;
 }
 
+- (void)dealloc {
+    [self->realString release];
+    self->realString = nil;
+    [super dealloc];
+}
+
 - (id)copy {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = [self copyWithZone:0x0];
-     *   return r0;
-     */
-    return nil;
+    return [self copyWithZone:NULL];
 }
 
 - (id)mutableCopy {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = [self mutableCopyWithZone:0x0];
-     *   return r0;
-     */
-    return nil;
+    return [self mutableCopyWithZone:NULL];
 }
 
-- (id)copyWithZone:(void *)arg1 {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r19 = [self->realString copyWithZone:arg2];
-     *   r20 = [[CXTaskSpecialString alloc] initWithString:r19];
-     *   [r19 release];
-     *   r0 = r20;
-     *   return r0;
-     */
-    return nil;
+- (id)copyWithZone:(NSZone *)arg1 {
+    id copied = [self->realString copyWithZone:arg1];
+    CXTaskSpecialString *res = [[CXTaskSpecialString alloc] initWithString:copied];
+    [copied release];
+    return res;
 }
 
-- (id)mutableCopyWithZone:(void *)arg1 {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r19 = [self->realString mutableCopyWithZone:arg2];
-     *   r20 = [[CXTaskSpecialString alloc] initWithString:r19];
-     *   [r19 release];
-     *   r0 = r20;
-     *   return r0;
-     */
-    return nil;
+- (id)mutableCopyWithZone:(NSZone *)arg1 {
+    id copied = [self->realString mutableCopyWithZone:arg1];
+    CXTaskSpecialString *res = [[CXTaskSpecialString alloc] initWithString:copied];
+    [copied release];
+    return res;
 }
 
-- (id)fileSystemRepresentation {
-    return self->realString;
+- (const char *)fileSystemRepresentation {
+    return [self->realString UTF8String];
 }
 
 - (id)forwardingTargetForSelector:(SEL)arg1 {

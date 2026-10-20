@@ -37,13 +37,21 @@ extern void _Py_Dealloc(PyObject *);
 // Forward declare PyObjC bridge classes
 @class AIETask;
 @class TargetBottle;
-@class WineApplicationController;
 @class SFAuthorization;
+
+@interface WineApplicationController : NSObject
+- (BOOL)handleEvent:(NSEvent *)event;
+- (void)didSendEvent:(NSEvent *)event;
+@end
 
 @interface RatingUtils : NSObject
 - (id)initWithAppID:(id)arg1;
 - (id)fetchRating;
 - (id)setRating:(id)arg1 Notes:(id)arg2;
+@end
+
+@interface TargetBottle : NSObject
+- (id)getCategory;
 @end
 
 @interface BottleWrapper : NSObject
@@ -69,6 +77,11 @@ extern void _Py_Dealloc(PyObject *);
 - (BOOL)isIsInstalledPackagesReady;
 - (void)loadApplicationInfo;
 - (BOOL)isIsDefault;
+- (BOOL)isDefault;
+- (id)installedPackages;
+- (id)getCategory;
+- (id)currentDescription;
+- (void)setCurrentDescription:(id)desc;
 - (void)setIsDefault:(id)arg1 completionHandler:(id)arg2;
 - (BOOL)isIsManaged;
 - (BOOL)isIsDeleted;
@@ -137,12 +150,81 @@ extern void _Py_Dealloc(PyObject *);
 + (id)isValidNewBottleName:(id)arg1;
 @end
 
-@interface CXSetup : NSObject
+@interface IconUtils : NSObject
+- (void)fetchIconList;
+- (void)fetchIcon:(id)arg1;
+- (id)getIconPath:(id)arg1;
+@end
+
+@interface NSObject (CXDynamicClassMethods)
++ (id)profilesSet;
++ (id)getMatchingProfiles:(id)arg1;
++ (id)getOnlineFilePath;
++ (id)updateOnlineProfilesFromURL:(id)arg1;
++ (id)tasteC4PFile:(id)arg1;
++ (id)prepareSingleUseC4PFile:(id)arg1;
++ (id)dropinC4PFile:(id)arg1 withSig:(id)arg2;
+
++ (id)localStartMenuPath;
++ (id)localDesktopPath;
++ (id)createShortcutForBottle:(id)arg1 command:(id)arg2 name:(id)arg3 folder:(id)arg4 localDesktopPath:(id)arg5 andStartMenuPath:(id)arg6;
+
++ (id)sanitizedBottleName:(id)arg1;
++ (id)cmdLineToArgv:(id)arg1;
++ (id)basename:(id)arg1;
++ (id)dirname:(id)arg1;
++ (id)getLanguageValue:(id)arg1 forLanguage:(id)arg2;
++ (id)installerLoggingPreset;
++ (id)loggingPresets;
+
++ (id)systemInformationString;
++ (id)systemInformationStringForBottle:(id)arg1;
+
 + (id)bottleStatus:(id)arg1;
++ (id)bottleCategory:(id)arg1;
++ (id)dependencyReason:(id)arg1;
++ (id)dependencyOverride:(id)arg1;
++ (void)setEnvValue:(id)arg1 forKey:(id)arg2;
++ (void)unsetEnvValueForKey:(id)arg1;
 @end
 
 @interface InstallTask : NSObject
 - (id)initWithDelegate:(id)arg1;
+- (void)setDelegate:(id)delegate;
+- (id)delegate;
+- (void)setLocale:(id)locale;
+- (void)setInstallerSource:(id)source Requested:(id)requested;
+- (void)setInstallerSteam;
+- (void)setInstallerDownload;
+- (void)setProfile:(id)profile;
+- (id)profileLanguages;
+- (id)getDependencyDetails;
+- (id)getInstallerDetails;
+- (id)getBottleDetails;
+- (id)getLanguageDetails;
+- (id)getMiscDetails;
+- (void)updateProfiles;
+- (BOOL)isNewBottleNameValid:(id)name;
+- (void)createNewBottle:(id)name template:(id)tmpl;
+- (void)setNewBottleName:(id)name;
+- (void)addSourceMedia:(id)media withLabel:(id)label andDevice:(id)dev;
+- (void)removeSourceMedia:(id)media;
+- (BOOL)volumeMatchesProfile:(id)vol;
+- (id)addBottle:(id)bottle;
+- (void)removeBottle:(id)bottle;
+- (void)installedApplicationsReady:(id)apps;
+- (void)triggerBottleAnalysis;
+- (void)useAutorunFile:(id)file;
+- (void)autoFillSettings;
+- (id)GetCreateNewBottle;
+- (void)addDependencyOverrides:(id)overrides ofType:(id)type;
+- (void)removeDependencyOverrides:(id)overrides;
+- (void)ClearDependencyOverrides;
+- (id)SuggestedDependencyOverrides;
+@end
+
+@interface Engine : NSObject
+- (id)initWithInstallTask:(id)task logFile:(id)log channels:(id)chan env:(id)env;
 @end
 
 #endif /* PythonShim_h */

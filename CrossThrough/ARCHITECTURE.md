@@ -183,7 +183,7 @@ Em Apple Silicon, a GUI e o Python rodam nativos e todo o Wine roda sob Rosetta 
 
 ## Limites
 
-- Nada foi executado. A ordem de eventos em tempo de execução é deduzida do código.
+- A execução interativa de interface gráfica completa depende dos nibs e do ambiente de execução do usuário, mas os 94 componentes em Objective-C, controladores, a ponte PyObjC e o fluxo completo do wizard e execução de processos foram validados via suíte de testes automatizados (`make test`).
 - REA não decodifica as conexões de binding (`NSNibBindingConnector`) dos nibs. As ligações por Cocoa Bindings entre a interface e as propriedades Python não estão listadas; só as target-action e outlets. Em 16 documentos, de 1 a 6 conexões ficaram sem resolver.
 - A coluna "Usado em" de `BRIDGE.md` é uma busca textual no pseudocódigo e pode incluir homônimos (`init`, `resume`, `suspend`).
 - O corpo das funções Python não foi descompilado. Os comandos citados vêm das strings e dos nomes que cada função usa (esboço em [`sharedsupport/python/outline`](sharedsupport/python/outline)).

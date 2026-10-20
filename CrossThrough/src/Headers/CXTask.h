@@ -29,6 +29,28 @@
 - (void)setTerminationHandler:(id)arg1;
 - (id)forwardingTargetForSelector:(SEL)arg1;
 
+// Forwarded NSTask methods
+- (void)setLaunchPath:(NSString *)path;
+- (NSString *)launchPath;
+- (void)setCurrentDirectoryPath:(NSString *)path;
+- (NSString *)currentDirectoryPath;
+- (void)setStandardInput:(id)input;
+- (id)standardInput;
+- (void)setStandardOutput:(id)output;
+- (id)standardOutput;
+- (void)setStandardError:(id)error;
+- (id)standardError;
+- (void)setEnvironment:(NSDictionary *)env;
+- (NSDictionary *)environment;
+- (void)launch;
+- (void)waitUntilExit;
+- (int)terminationStatus;
+- (BOOL)isRunning;
+- (void)terminate;
+- (void)interrupt;
+- (id)arguments;
+- (int)processIdentifier;
+
 @end
 
 #endif /* CXTask_h */

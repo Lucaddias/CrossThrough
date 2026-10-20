@@ -71,7 +71,7 @@ static NSImage *_defIcon = nil;
     return [NSSet setWithObject:@"packageid"];
 }
 
-static id s_iconUtils = nil;
+static IconUtils * s_iconUtils = nil;
 
 + (void)updateIconList {
     if (!s_iconUtils) {

@@ -18,6 +18,7 @@
 #import "CDTools.h"
 #import "CXBundle.h"
 #import "CXTask.h"
+#import "CXUpdater.h"
 #import <math.h>
 
 @implementation CXServerCrossOver

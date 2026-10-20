@@ -24,7 +24,8 @@ Engenharia reversa do CrossOver 26.3 para macOS (CodeWeavers). Os nomes que vêm
 | Funções C, callbacks e blocos ObjC em `__TEXT,__text` (186/186, 100% de `__text`) | ✅ [`c_functions.c`](CrossThrough/decompiled/c_functions.c) + [`classes/`](CrossThrough/decompiled/classes) |
 | Comparação e mapeamento da slice x86_64 (2287/2288 funções pareadas, 6 com referências diferentes) | ✅ [`x86_64/`](CrossThrough/decompiled/x86_64) |
 | Scripts Python/Perl em `SharedSupport/CrossOver` (36 entradas de `bin/`, 16 scripts e 66 módulos Perl, 50 módulos Python 3.13 desmontados) | ✅ [`sharedsupport/`](CrossThrough/sharedsupport) |
-| Código compilável (Headers, Shims, 94 classes, funções C, Makefile) | ✅ [`src/`](CrossThrough/src) |
+| Código compilável (Headers, Shims, 94 classes, funções C, Makefile, 0 avisos de compilação) | ✅ [`src/`](CrossThrough/src) |
+| Suíte de testes automatizados (`make test` com simulação end-to-end do wizard, engine e CXTask) | ✅ [`tests/`](CrossThrough/tests) |
 | Documentação da arquitetura (GUI ↔ backend: inicialização do Python, ponte PyObjC, processos, privilégios, helper apps) | ✅ [`ARCHITECTURE.md`](CrossThrough/ARCHITECTURE.md) |
 
 ## Arquitetura (resumo)
@@ -78,4 +79,12 @@ O binário final é gerado em `build/CrossThrough`. Para empacotar o bundle comp
 
 ```bash
 make app
+```
+
+## Testes
+
+Para executar a suíte de testes de integração e ponta a ponta (`test_wizard`), que valida o interpretador Python embutido, a ponte PyObjC, o fluxo do assistente de instalação (`PackageViewController`, `PackageInstaller`), a manipulação de tarefas via proxy (`CXTask`, `CXTaskSpecialString`) e as rotinas de `CXServer` e `CXServerCrossOver`:
+
+```bash
+make test
 ```

@@ -1,5 +1,6 @@
 // PackageInstaller.m — CrossThrough
 #import "PackageInstaller.h"
+#import "InstallConfiguration.h"
 #import "CrossThrough.h"
 #import "HopperCompat.h"
 

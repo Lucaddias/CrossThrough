@@ -182,7 +182,7 @@ static void _boolSetterMethodIMP(id self, SEL _cmd, BOOL value) {
     if (self) {
         Class taskClass = [CXSetupLib installTaskClass];
         if (taskClass) {
-            self->_installTask = [[taskClass alloc] initWithDelegate:self];
+            self->_installTask = [(InstallTask *)[taskClass alloc] initWithDelegate:self];
         }
         self->_delegates = [[NSMutableArray alloc] init];
         self->_bottleCollection = [[[CXSetupLib bottleCollectionClass] sharedCollection] retain];
@@ -245,7 +245,7 @@ static void _boolSetterMethodIMP(id self, SEL _cmd, BOOL value) {
 
 - (BOOL)bottleIsCompatibleWithPackage {
     if ([self hasPackage]) {
-        id tb = [self targetBottle];
+        TargetBottle *tb = (TargetBottle *)[self targetBottle];
         if (!tb) return YES;
         NSNumber *cat = [tb getCategory];
         NSNumber *incomp = [[CXSetupLib cxSetupClass] bottleCategory:@"INCOMPATIBLE"];
@@ -435,7 +435,7 @@ static void _boolSetterMethodIMP(id self, SEL _cmd, BOOL value) {
     if ([logPath length] == 0) logPath = nil;
     NSString *channels = [self->_logChannels length] > 0 ? self->_logChannels : nil;
 
-    return [[[CXSetupLib cxAiEngineClass] alloc] initWithInstallTask:self->_installTask
+    return [(Engine *)[[CXSetupLib cxAiEngineClass] alloc] initWithInstallTask:self->_installTask
                                                             logFile:logPath
                                                            channels:channels
                                                                 env:env];

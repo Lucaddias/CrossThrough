@@ -63,7 +63,7 @@
 }
 
 - (void)sendEvent:(id)arg1 {
-    id wine = [self wineController];
+    WineApplicationController *wine = (WineApplicationController *)[self wineController];
     if (!wine || ![wine respondsToSelector:@selector(handleEvent:)] || ![wine handleEvent:arg1]) {
         [super sendEvent:arg1];
         if (wine && [wine respondsToSelector:@selector(didSendEvent:)]) {
