@@ -24,6 +24,7 @@ Engenharia reversa do CrossOver 26.3 para macOS (CodeWeavers). Os nomes que vêm
 | Funções C, callbacks e blocos ObjC em `__TEXT,__text` (186/186, 100% de `__text`) | ✅ [`c_functions.c`](CrossThrough/decompiled/c_functions.c) + [`classes/`](CrossThrough/decompiled/classes) |
 | Comparação e mapeamento da slice x86_64 (2287/2288 funções pareadas, 6 com referências diferentes) | ✅ [`x86_64/`](CrossThrough/decompiled/x86_64) |
 | Scripts Python/Perl em `SharedSupport/CrossOver` (36 entradas de `bin/`, 16 scripts e 66 módulos Perl, 50 módulos Python 3.13 desmontados) | ✅ [`sharedsupport/`](CrossThrough/sharedsupport) |
+| Código compilável (Headers, Shims, 94 classes, funções C, Makefile) | ✅ [`src/`](CrossThrough/src) |
 | Documentação da arquitetura (GUI ↔ backend: inicialização do Python, ponte PyObjC, processos, privilégios, helper apps) | ✅ [`ARCHITECTURE.md`](CrossThrough/ARCHITECTURE.md) |
 
 ## Arquitetura (resumo)
@@ -41,19 +42,40 @@ Detalhes em [`ARCHITECTURE.md`](CrossThrough/ARCHITECTURE.md).
 
 ```
 CrossThrough/
+├── Makefile                # compilação completa via Clang e empacotamento .app
+├── src/                    # código-fonte compilável
+│   ├── Headers/            # 88 headers de classes e 6 de categorias extraídos do Mach-O
+│   ├── include/            # CrossThrough.h, shims (Sparkle, Python, HopperCompat, c_functions.h)
+│   ├── classes/*.m         # implementações Objective-C das 94 classes e categorias
+│   ├── c_functions.m       # funções C e callbacks standalone
+│   └── main.m              # ponto de entrada da aplicação (NSApplicationMain)
 ├── ARCHITECTURE.md         # como a GUI, o Python, o Perl e o Wine se ligam
 ├── reproduce.sh            # regenera e confere x86_64/ e sharedsupport/
-├── decompiled/
+├── decompiled/             # pseudocódigo bruto do Hopper via REA
 │   ├── INDEX.md            # todas as procedures por classe, com endereço
 │   ├── objc_methods.json   # classe -> [(endereço, seletor)]
 │   ├── classes/*.m         # pseudocódigo por classe (Hopper)
 │   ├── c_functions.c       # funções C e blocos fora das classes
 │   ├── x86_64/             # mapa arm64 ↔ x86_64 e diferenças entre as slices
 │   └── .ingest.py          # converte a saída do REA batch_decompile em classes/*.m
-└── sharedsupport/
+└── sharedsupport/          # ferramentas Perl e biblioteca Python
     ├── README.md           # ferramentas Perl, biblioteca Python, Wine e como se ligam
     ├── TOOLS.md            # inventário de bin/ e lib/perl/ (tools.json)
     ├── python/             # INDEX.md, BRIDGE.md, outline/*.py, dis/*.dis, modules.json
     └── .tools/             # leitor de .pyc 3.13 e geradores dos índices
 ```
 
+## Como compilar
+
+Para compilar todo o código Objective-C em um binário nativo arm64 do macOS:
+
+```bash
+cd CrossThrough
+make -j8
+```
+
+O binário final é gerado em `build/CrossThrough`. Para empacotar o bundle completo da aplicação (`CrossThrough.app` com `Info.plist` e recursos):
+
+```bash
+make app
+```
