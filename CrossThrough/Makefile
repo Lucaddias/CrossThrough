@@ -50,11 +50,20 @@ app: $(TARGET)
 	@mkdir -p $(APP_BUNDLE)/Contents/MacOS
 	@mkdir -p $(APP_BUNDLE)/Contents/Frameworks
 	@cp $(TARGET) $(APP_BUNDLE)/Contents/MacOS/CrossThrough
+	@ln -sf CrossThrough $(APP_BUNDLE)/Contents/MacOS/CrossOver
+	@if [ -d /Applications/CrossOver.app/Contents/Frameworks ]; then \
+		cp -R /Applications/CrossOver.app/Contents/Frameworks/ $(APP_BUNDLE)/Contents/Frameworks/; \
+	fi
+	@if [ -d /Applications/CrossOver.app/Contents/SharedSupport ]; then \
+		ln -sf /Applications/CrossOver.app/Contents/SharedSupport $(APP_BUNDLE)/Contents/SharedSupport; \
+	fi
 	@if [ -d /Applications/CrossOver.app/Contents/Resources ]; then \
 		cp -R /Applications/CrossOver.app/Contents/Resources $(APP_BUNDLE)/Contents/; \
 	fi
 	@if [ -f /Applications/CrossOver.app/Contents/Info.plist ]; then \
 		cp /Applications/CrossOver.app/Contents/Info.plist $(APP_BUNDLE)/Contents/; \
+		/usr/libexec/PlistBuddy -c "Set :CFBundleExecutable CrossThrough" $(APP_BUNDLE)/Contents/Info.plist 2>/dev/null || true; \
+		/usr/libexec/PlistBuddy -c "Set :CFBundleIdentifier com.crossthrough.app" $(APP_BUNDLE)/Contents/Info.plist 2>/dev/null || true; \
 	fi
 	@echo "App bundle created at $(APP_BUNDLE)"
 
