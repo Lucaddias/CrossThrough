@@ -13,6 +13,7 @@ CFLAGS = -O2 -x objective-c \
 LDFLAGS = -F /Applications/CrossOver.app/Contents/Frameworks \
           -framework Cocoa \
           -framework Security \
+          -framework SecurityFoundation \
           -framework SystemConfiguration \
           -framework WebKit \
           -framework Sparkle \

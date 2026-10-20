@@ -2,302 +2,317 @@
 #import "NewBottleController.h"
 #import "CrossThrough.h"
 #import "HopperCompat.h"
+#import "CXSetupLib.h"
 
 @implementation NewBottleController
 
 + (id)keyPathsForValuesAffectingCanCreate {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = [NSSet setWithObject:@"bottleName"];
-     *   return r0;
-     */
-    return nil;
+    return [NSSet setWithObject:@"bottleName"];
 }
 
 - (id)init {
-    self = [super init];
+    self = [super initWithWindowNibName:@"NewBottle"];
     if (self) {
-        // Initialized
+        NSString *suggested = [[NSBundle mainBundle] localizedStringForKey:@"New Bottle" value:@"" table:nil];
+        [self setSuggestedBottleName:suggested];
     }
     return self;
 }
 
+- (void)dealloc {
+    [_bottle release];
+    [_suggestedBottleName release];
+    [_archiveURL release];
+    [_bottleName release];
+    [_bottleToCopy release];
+    [_bottleTemplate release];
+    [_templateArray release];
+    [super dealloc];
+}
+
 - (void)setCopyMode:(BOOL)arg1 withBottleToCopy:(id)arg2 {
-    return;
+    self->_copyMode = arg1;
+    NSWindow *win = [self window];
+    if (arg1) {
+        NSString *fmt = [[NSBundle mainBundle] localizedStringForKey:@"Make a Copy of %@" value:@"" table:nil];
+        NSString *title = [NSString stringWithFormat:fmt, arg2];
+        [win setTitle:title];
+        [self setBottleToCopy:arg2];
+    } else {
+        NSString *title = [[NSBundle mainBundle] localizedStringForKey:@"Create a Bottle" value:@"" table:nil];
+        [win setTitle:title];
+        [self setBottleToCopy:nil];
+    }
 }
 
 - (void)setupGUI {
-    return;
+    [self setIsWorking:NO];
+    NSString *unique = [[CXSetupLib bottleQueryClass] uniqueBottleName:[self suggestedBottleName]];
+    [self setBottleName:unique];
+
+    NSArray *templates = [[CXSetupLib bottleManagementClass] templates];
+    NSMutableArray *templateList = [NSMutableArray array];
+
+    [templates enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(id template, NSUInteger idx, BOOL *stop) {
+        NSString *displayName = [[CXSetupLib bottleManagementClass] displayNameForTemplate:template];
+        NSDictionary *dict = @{@"name": template, @"displayName": (displayName ?: @"")};
+        [templateList addObject:dict];
+
+        NSString *currentTemplate = [self bottleTemplate];
+        if (currentTemplate != nil) {
+            if ([currentTemplate compare:@"win10_64"] != NSOrderedSame) {
+                [self setBottleTemplate:template];
+            }
+        } else {
+            [self setBottleTemplate:template];
+        }
+    }];
+    [self setTemplateArray:templateList];
+
+    [self window];
+    if ([[self sourceBottleLabel] isHiddenOrHasHiddenAncestor]) {
+        id superview = [[self sourceBottleLabel] superview];
+        id c1 = [self nameLabelCopyingLabelWidths];
+        id c2 = [self sourceBottleToCreatingSpacer];
+        if (c1 && c2) {
+            [superview removeConstraints:@[c1, c2]];
+        }
+    }
+    if ([[self bottleTypePopUp] isHiddenOrHasHiddenAncestor]) {
+        id superview = [[self bottleTypePopUp] superview];
+        id c1 = [self nameLabelTypeLabelWidths];
+        id c2 = [self typeToCreatingSpacer];
+        if (c1 && c2) {
+            [superview removeConstraints:@[c1, c2]];
+        }
+    }
+    if ([[self archivePathControl] isHiddenOrHasHiddenAncestor]) {
+        id superview = [[self archivePathControl] superview];
+        id c1 = [self nameLabelRestoringLabelWidths];
+        id c2 = [self archiveToCreatingSpacer];
+        if (c1 && c2) {
+            [superview removeConstraints:@[c1, c2]];
+        }
+    }
 }
 
 - (void)createPressed:(id)arg1 {
-    return;
+    [self setIsWorking:YES];
+    [NSThread detachNewThreadSelector:@selector(doCreate) toTarget:self withObject:nil];
 }
 
 - (void)doCreate {
-    return;
+    @autoreleasepool {
+        NSArray *result = nil;
+        if ([self copyMode]) {
+            result = [[CXSetupLib bottleManagementClass] duplicateBottle:[self bottleName] fromBottle:[self bottleToCopy]];
+        } else {
+            if ([self archiveURL] != nil) {
+                result = [[CXSetupLib bottleManagementClass] restoreBottle:[self bottleName] fromArchive:[[self archiveURL] path]];
+            } else {
+                result = [[CXSetupLib bottleManagementClass] createBottle:[self bottleName] fromTemplate:[self bottleTemplate]];
+            }
+        }
+
+        BOOL success = NO;
+        if ([result count] > 0) {
+            success = [[result objectAtIndex:0] boolValue];
+        }
+        if (success) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [[[CXSetupLib bottleCollectionClass] sharedCollection] refresh];
+                id bottle = [[[CXSetupLib bottleCollectionClass] sharedCollection] bottleWithName:[self bottleName]];
+                [self setBottle:bottle];
+                [self setIsWorking:NO];
+                [self exitSuccess:nil];
+            });
+        } else {
+            id errorMsg = [result count] > 1 ? [result objectAtIndex:1] : @"Unknown error";
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self setIsWorking:NO];
+                [self createFailed:errorMsg];
+            });
+        }
+    }
 }
 
 - (void)createFailed:(id)arg1 {
-    return;
+    NSAlert *alert = [[NSAlert alloc] init];
+    NSString *msg = [[NSBundle mainBundle] localizedStringForKey:@"Bottle creation failed" value:@"" table:nil];
+    [alert setMessageText:msg];
+    [alert setInformativeText:arg1 ?: @""];
+    [alert beginSheetModalForWindow:[self window] completionHandler:nil];
+    [alert release];
 }
 
 - (void)exitSuccess:(id)arg1 {
-    return;
+    [[self window] close];
+    [[NSApplication sharedApplication] endSheet:[self window] returnCode:NSModalResponseOK];
 }
 
 - (void)cancelPressed:(id)arg1 {
-    return;
+    [[self window] close];
+    [[NSApplication sharedApplication] endSheet:[self window] returnCode:NSModalResponseCancel];
 }
 
 - (BOOL)canCreate {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   var_20 = r22;
-     *   decomp_var_18 = r21;
-     *   r31 = r31 + 0xffffffffffffffd0;
-     *   var_10 = r20;
-     *   decomp_var_8 = r19;
-     *   saved_fp = r29;
-     *   decomp_var_m8 = r30;
-     *   r20 = self;
-     *   r0 = [self bottleName];
-     *   r0 = [r0 retain];
-     *   r19 = r0;
-     *   if ([r0 length] != 0x0) {
-     *   r21 = [CXSetupLib bottleQueryClass];
-     *   r22 = [[r20 bottleName] retain];
-     *   r0 = [r21 isValidNewBottleName:r22];
-     *   r0 = [r0 retain];
-     *   r21 = r0;
-     *   r20 = [r0 boolValue];
-     *   [r21 release];
-     *   [r22 release];
-     *   }
-     *   else {
-     *   r20 = 0x0;
-     *   }
-     *   [r19 release];
-     *   ... (2 more lines)
-     */
+    NSString *name = [self bottleName];
+    if ([name length] != 0) {
+        NSNumber *valid = [[CXSetupLib bottleQueryClass] isValidNewBottleName:name];
+        return [valid boolValue];
+    }
     return NO;
 }
 
 - (id)bottle {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_getProperty(self, _cmd, sign_extend_64(*(int32_t *)ivar_offset(_bottle)), 0x1);
-     *   return r0;
-     */
-    return nil;
+    return self->_bottle;
 }
 
 - (void)setBottle:(id)arg1 {
-    return;
+    if (self->_bottle != arg1) {
+        [self->_bottle release];
+        self->_bottle = [arg1 retain];
+    }
 }
 
 - (id)suggestedBottleName {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_getProperty(self, _cmd, sign_extend_64(*(int32_t *)ivar_offset(_suggestedBottleName)), 0x1);
-     *   return r0;
-     */
-    return nil;
+    return self->_suggestedBottleName;
 }
 
 - (void)setSuggestedBottleName:(id)arg1 {
-    return;
+    if (self->_suggestedBottleName != arg1) {
+        [self->_suggestedBottleName release];
+        self->_suggestedBottleName = [arg1 copy];
+    }
 }
 
 - (id)archiveURL {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_getProperty(self, _cmd, sign_extend_64(*(int32_t *)ivar_offset(_archiveURL)), 0x1);
-     *   return r0;
-     */
-    return nil;
+    return self->_archiveURL;
 }
 
 - (void)setArchiveURL:(id)arg1 {
-    return;
+    if (self->_archiveURL != arg1) {
+        [self->_archiveURL release];
+        self->_archiveURL = [arg1 copy];
+    }
 }
 
 - (id)bottleTypePopUp {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_bottleTypePopUp);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return self->_bottleTypePopUp;
 }
 
 - (void)setBottleTypePopUp:(id)arg1 {
-    return;
+    self->_bottleTypePopUp = arg1;
 }
 
 - (id)nameLabelTypeLabelWidths {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_nameLabelTypeLabelWidths);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return self->_nameLabelTypeLabelWidths;
 }
 
 - (void)setNameLabelTypeLabelWidths:(id)arg1 {
-    return;
+    self->_nameLabelTypeLabelWidths = arg1;
 }
 
 - (id)typeToCreatingSpacer {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_typeToCreatingSpacer);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return self->_typeToCreatingSpacer;
 }
 
 - (void)setTypeToCreatingSpacer:(id)arg1 {
-    return;
+    self->_typeToCreatingSpacer = arg1;
 }
 
 - (id)sourceBottleLabel {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_sourceBottleLabel);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return self->_sourceBottleLabel;
 }
 
 - (void)setSourceBottleLabel:(id)arg1 {
-    return;
+    self->_sourceBottleLabel = arg1;
 }
 
 - (id)nameLabelCopyingLabelWidths {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_nameLabelCopyingLabelWidths);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return self->_nameLabelCopyingLabelWidths;
 }
 
 - (void)setNameLabelCopyingLabelWidths:(id)arg1 {
-    return;
+    self->_nameLabelCopyingLabelWidths = arg1;
 }
 
 - (id)sourceBottleToCreatingSpacer {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_sourceBottleToCreatingSpacer);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return self->_sourceBottleToCreatingSpacer;
 }
 
 - (void)setSourceBottleToCreatingSpacer:(id)arg1 {
-    return;
+    self->_sourceBottleToCreatingSpacer = arg1;
 }
 
 - (id)archivePathControl {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_archivePathControl);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return self->_archivePathControl;
 }
 
 - (void)setArchivePathControl:(id)arg1 {
-    return;
+    self->_archivePathControl = arg1;
 }
 
 - (id)nameLabelRestoringLabelWidths {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_nameLabelRestoringLabelWidths);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return self->_nameLabelRestoringLabelWidths;
 }
 
 - (void)setNameLabelRestoringLabelWidths:(id)arg1 {
-    return;
+    self->_nameLabelRestoringLabelWidths = arg1;
 }
 
 - (id)archiveToCreatingSpacer {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_archiveToCreatingSpacer);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return self->_archiveToCreatingSpacer;
 }
 
 - (void)setArchiveToCreatingSpacer:(id)arg1 {
-    return;
+    self->_archiveToCreatingSpacer = arg1;
 }
 
 - (id)bottleName {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_getProperty(self, _cmd, sign_extend_64(*(int32_t *)ivar_offset(_bottleName)), 0x1);
-     *   return r0;
-     */
-    return nil;
+    return self->_bottleName;
 }
 
 - (void)setBottleName:(id)arg1 {
-    return;
+    if (self->_bottleName != arg1) {
+        [self willChangeValueForKey:@"canCreate"];
+        [self->_bottleName release];
+        self->_bottleName = [arg1 copy];
+        [self didChangeValueForKey:@"canCreate"];
+    }
 }
 
 - (id)bottleToCopy {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_getProperty(self, _cmd, sign_extend_64(*(int32_t *)ivar_offset(_bottleToCopy)), 0x1);
-     *   return r0;
-     */
-    return nil;
+    return self->_bottleToCopy;
 }
 
 - (void)setBottleToCopy:(id)arg1 {
-    return;
+    if (self->_bottleToCopy != arg1) {
+        [self->_bottleToCopy release];
+        self->_bottleToCopy = [arg1 copy];
+    }
 }
 
 - (id)bottleTemplate {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_getProperty(self, _cmd, sign_extend_64(*(int32_t *)ivar_offset(_bottleTemplate)), 0x1);
-     *   return r0;
-     */
-    return nil;
+    return self->_bottleTemplate;
 }
 
 - (void)setBottleTemplate:(id)arg1 {
-    return;
+    if (self->_bottleTemplate != arg1) {
+        [self->_bottleTemplate release];
+        self->_bottleTemplate = [arg1 copy];
+    }
 }
 
 - (id)templateArray {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_getProperty(self, _cmd, sign_extend_64(*(int32_t *)ivar_offset(_templateArray)), 0x1);
-     *   return r0;
-     */
-    return nil;
+    return self->_templateArray;
 }
 
 - (void)setTemplateArray:(id)arg1 {
-    return;
+    if (self->_templateArray != arg1) {
+        [self->_templateArray release];
+        self->_templateArray = [arg1 copy];
+    }
 }
 
 - (BOOL)copyMode {
