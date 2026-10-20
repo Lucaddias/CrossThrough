@@ -41,6 +41,7 @@ Detalhes em [`ARCHITECTURE.md`](CrossOver/ARCHITECTURE.md).
 ```
 CrossOver/
 ├── ARCHITECTURE.md         # como a GUI, o Python, o Perl e o Wine se ligam
+├── reproduce.sh            # regenera e confere x86_64/ e sharedsupport/
 ├── decompiled/
 │   ├── INDEX.md            # todas as procedures por classe, com endereço
 │   ├── objc_methods.json   # classe -> [(endereço, seletor)]
@@ -57,6 +58,20 @@ CrossOver/
 
 ## Como reproduzir
 
+### Pseudocódigo da GUI (Hopper)
+
 1. Conceda a permissão *Automation → Hopper Disassembler* ao app que roda o REA.
 2. `open_binary` no binário, depois `list_procedures`.
 3. Rode `batch_decompile` em lotes de endereços e passe cada saída para `python3 CrossOver/decompiled/.ingest.py <saida.json>`.
+
+### Todo o resto (um comando)
+
+[`CrossOver/reproduce.sh`](CrossOver/reproduce.sh) regenera as saídas de `decompiled/x86_64/` e de `sharedsupport/` a partir do `CrossOver.app` instalado e compara cada arquivo com o que está no repositório. Ele extrai as slices com `lipo`, roda `.slicediff.py`, `analyze_python.py`, `analyze_tools.py`, `make_index.py` e `bridge.py`. O CrossOver não é executado.
+
+Precisa de Python ≥ 3.13 (por padrão `python3.14`) e de um bundle de Evidence do REA com `inspect_with_objdump` `symbols` e `disassemble` das duas slices, exportado com `export_evidence_bundle`:
+
+```bash
+CrossOver/reproduce.sh <rea-bundle.json> [dir-de-saida]
+```
+
+O script termina com `idênticos: N   diferentes: 0` quando tudo bate. Com o CrossOver 26.3 são 110 arquivos idênticos.
