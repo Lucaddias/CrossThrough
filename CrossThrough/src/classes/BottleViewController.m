@@ -15,7 +15,7 @@
 }
 
 - (id)init {
-    self = [super init];
+    self = [super initWithNibName:@"BottleView" bundle:nil];
     if (self) {
         // Initialized
     }

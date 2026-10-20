@@ -6,132 +6,207 @@
 @implementation PackageViewController
 
 - (id)init {
-    self = [super init];
+    self = [super initWithNibName:@"PackageView" bundle:nil];
     if (self) {
-        // Initialized
+        self->_packages = [[NSMutableArray alloc] init];
+        self->_visiblePackages = [[NSMutableArray alloc] init];
     }
     return self;
 }
 
 - (void)dealloc {
-    return;
+    // dealloc
 }
 
 - (void)viewDidLoad {
-    return;
+    [super viewDidLoad];
+
+    NSRect b = [self.view bounds];
+    if (self->_packageView) {
+        [self->_packageView setFrame:b];
+        [self->_packageView setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable];
+        [self->_packageView setDelegate:self];
+    }
+    if (self->_installerView) {
+        [self->_installerView setFrame:b];
+        [self->_installerView setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable];
+        [self->_installerView setHidden:YES];
+        [self->_installerView setDelegate:self];
+    }
+
+    NSMutableArray *subviews = [NSMutableArray array];
+    if (self->_packageView) [subviews addObject:self->_packageView];
+    if (self->_installerView) [subviews addObject:self->_installerView];
+    [self.view setSubviews:subviews];
+
+    if (self->_collectionView) {
+        [self->_collectionView registerClass:[PackageViewItem class] forItemWithIdentifier:@"PackageViewItem"];
+        [self->_collectionView setDataSource:self];
+        [self->_collectionView setDelegate:self];
+    }
+
+    if (self->_searchField) {
+        [self->_searchField setTarget:self];
+        [self->_searchField setAction:@selector(search:)];
+    }
+
+    if (self->_installUnlistedAppButton) {
+        [self->_installUnlistedAppButton setTarget:self];
+        [self->_installUnlistedAppButton setAction:@selector(selectUnknownPackage:)];
+    }
+
+    [self populatePackages];
 }
 
 - (void)viewDidAppear {
-    return;
+    [super viewDidAppear];
+    [self populatePackages];
 }
 
 - (void)viewDidDisappear {
-    return;
+    [super viewDidDisappear];
 }
 
 - (id)packageForCategory:(id)arg1 root:(id)arg2 cache:(id)arg3 {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   var_40 = r26;
-     *   decomp_var_38 = r25;
-     *   r31 = r31 + 0xffffffffffffffb0;
-     *   var_30 = r24;
-     *   decomp_var_28 = r23;
-     *   var_20 = r22;
-     *   decomp_var_18 = r21;
-     *   var_10 = r20;
-     *   decomp_var_8 = r19;
-     *   saved_fp = r29;
-     *   decomp_var_m8 = r30;
-     *   r24 = self;
-     *   r19 = [arg2 retain];
-     *   r20 = [arg3 retain];
-     *   r0 = [arg4 retain];
-     *   r21 = r0;
-     *   r0 = [r0 objectForKey:r19];
-     *   r0 = [r0 retain];
-     *   r22 = r0;
-     *   if (r0 == 0x0) {
-     *   r23 = [[r19 lastObject] retain];
-     *   r22 = [[PackageTreeNode alloc] initWithCategoryID:r23 name:r23 children:0x0 sortKey:r23];
-     *   if ([r19 count] == 0x1) {
-     *   r24 = [r20 retain];
-     *   }
-     *   ... (20 more lines)
-     */
     return nil;
 }
 
 - (void)populatePackages {
-    return;
+    NSMutableArray *result = [NSMutableArray array];
+
+    id c4ProfilesClass = [CXSetupLib c4ProfilesClass];
+    id profilesSet = nil;
+    if (c4ProfilesClass && [c4ProfilesClass respondsToSelector:@selector(profilesSet)]) {
+        profilesSet = [c4ProfilesClass profilesSet];
+    }
+
+    NSDictionary *dict = nil;
+    if (profilesSet && [profilesSet respondsToSelector:@selector(contentsDict)]) {
+        dict = [profilesSet contentsDict];
+    } else if ([profilesSet isKindOfClass:[NSDictionary class]]) {
+        dict = (NSDictionary *)profilesSet;
+    }
+
+    if (dict && [dict count] > 0) {
+        for (NSString *key in dict) {
+            id item = dict[key];
+            BOOL isCurrent = YES;
+            if ([item respondsToSelector:@selector(valueForKey:)]) {
+                id cVal = [item valueForKey:@"is_for_current_product"];
+                if (cVal && [cVal respondsToSelector:@selector(boolValue)]) {
+                    isCurrent = [cVal boolValue];
+                }
+            }
+            if (isCurrent) {
+                PackageTreeNode *node = [[PackageTreeNode alloc] initWithProfile:item];
+                if (node) {
+                    [result addObject:node];
+                }
+            }
+        }
+    }
+
+    // Default popular applications fallback if dictionary is empty or still loading
+    if ([result count] == 0) {
+        NSArray *popularApps = @[
+            @{ @"appid": @"com.blizzard.battlenet", @"name": @"Battle.net Desktop App", @"app_profile": @{ @"medal_rating": @5 } },
+            @{ @"appid": @"com.ea.app", @"name": @"EA App", @"app_profile": @{ @"medal_rating": @3 } },
+            @{ @"appid": @"com.epicgames.launcher", @"name": @"Epic Games Store", @"app_profile": @{ @"medal_rating": @5 } },
+            @{ @"appid": @"com.gog.galaxy", @"name": @"GOG Galaxy", @"app_profile": @{ @"medal_rating": @3 } },
+            @{ @"appid": @"com.quicken.classic", @"name": @"Quicken Classic", @"app_profile": @{ @"medal_rating": @5 } },
+            @{ @"appid": @"com.rockstargames.launcher", @"name": @"Rockstar Games Launcher", @"app_profile": @{ @"medal_rating": @5 } },
+            @{ @"appid": @"com.valvesoftware.steam", @"name": @"Steam", @"app_profile": @{ @"medal_rating": @4 } },
+            @{ @"appid": @"com.ubisoft.connect", @"name": @"Ubisoft Connect", @"app_profile": @{ @"medal_rating": @3 } }
+        ];
+
+        for (NSDictionary *appData in popularApps) {
+            PackageTreeNode *node = [[PackageTreeNode alloc] initWithProfile:appData];
+            if (node) {
+                [result addObject:node];
+            }
+        }
+    }
+
+    [self setPackages:result];
+    [self updateVisiblePackages];
 }
 
 - (void)loadIcons {
-    return;
+    for (PackageTreeNode *node in self->_visiblePackages) {
+        [node loadIcon];
+    }
 }
 
 - (void)setInstaller:(id)arg1 {
-    return;
+    self->_installer = arg1;
 }
 
 - (void)setSelectedBottle:(id)arg1 {
-    return;
 }
 
 - (void)setSelectedPackage:(id)arg1 {
-    return;
 }
 
 - (void)updateVisiblePackages {
-    return;
+    NSString *searchQuery = self->_searchField ? [self->_searchField stringValue] : nil;
+    if (searchQuery && [searchQuery length] > 0) {
+        NSPredicate *pred = [NSPredicate predicateWithFormat:@"softwarePackage CONTAINS[cd] %@", searchQuery];
+        self->_visiblePackages = [[self->_packages filteredArrayUsingPredicate:pred] mutableCopy];
+    } else {
+        self->_visiblePackages = [self->_packages mutableCopy];
+    }
+
+    if (self->_collectionView) {
+        [self->_collectionView reloadData];
+    }
+
+    if (self->_noResultsLabel) {
+        [self->_noResultsLabel setHidden:([self->_visiblePackages count] > 0)];
+    }
+    if (self->_loading) {
+        [self->_loading setHidden:YES];
+    }
 }
 
 - (void)setSortDescriptors:(id)arg1 {
-    self->_sortDescriptors = arg1;
+    self->_sortDescriptors = [arg1 copy];
 }
 
 - (void)setFilterPredicate:(id)arg1 {
     self->_filterPredicate = arg1;
+    [self updateVisiblePackages];
 }
 
 - (void)updateSummaryDetails {
-    return;
 }
 
 - (void)openInstallerView {
-    return;
+    if (self->_packageView) [self->_packageView setHidden:YES];
+    if (self->_installerView) [self->_installerView setHidden:NO];
 }
 
 - (void)optionsButtonClicked:(id)arg1 {
-    return;
 }
 
 - (void)autoPlay:(id)arg1 {
-    return;
 }
 
 - (void)autoPlayWithParsedFile:(id)arg1 {
-    return;
 }
 
 - (void)autoPlayWithAutorunFile:(id)arg1 {
-    return;
 }
 
 - (void)prepareDropinC4pAndAutorun:(id)arg1 {
-    return;
 }
 
 - (void)displayLoadingSheetAndPrepareCrossTie:(id)arg1 {
-    return;
 }
 
 - (void)displayEmptyFileAlert:(id)arg1 {
-    return;
 }
 
 - (void)displayRevokedFileAlert:(id)arg1 {
-    return;
 }
 
 - (NSInteger)numberOfSectionsInCollectionView:(id)arg1 {
@@ -139,217 +214,120 @@
 }
 
 - (NSInteger)collectionView:(id)arg1 numberOfItemsInSection:(NSInteger)arg2 {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = [self visiblePackages];
-     *   r0 = [r0 retain];
-     *   r19 = r0;
-     *   r20 = [r0 count];
-     *   [r19 release];
-     *   r0 = r20;
-     *   return r0;
-     */
-    return 0;
+    return [self->_visiblePackages count];
 }
 
 - (id)collectionView:(id)arg1 itemForRepresentedObjectAtIndexPath:(id)arg2 {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r21 = [arg3 retain];
-     *   r19 = [[arg2 makeItemWithIdentifier:@"PackageViewItem" forIndexPath:r21] retain];
-     *   r20 = [[self visiblePackages] retain];
-     *   r22 = [r21 item];
-     *   [r21 release];
-     *   r21 = [[r20 objectAtIndexedSubscript:r22] retain];
-     *   [r19 setRepresentedObject:r21];
-     *   [r21 release];
-     *   [r20 release];
-     *   r0 = [r19 autorelease];
-     *   return r0;
-     */
-    return nil;
+    PackageViewItem *item = [arg1 makeItemWithIdentifier:@"PackageViewItem" forIndexPath:arg2];
+    NSIndexPath *ip = (NSIndexPath *)arg2;
+    if (ip.item < (NSInteger)[self->_visiblePackages count]) {
+        [item setRepresentedObject:self->_visiblePackages[ip.item]];
+    }
+    return item;
 }
 
 - (void)collectionView:(id)arg1 willDisplayItem:(id)arg2 forRepresentedObjectAtIndexPath:(id)arg3 {
-    return;
 }
 
 - (void)observeValueForKeyPath:(id)arg1 ofObject:(id)arg2 change:(id)arg3 context:(void *)arg4 {
-    return;
 }
 
 - (void)back:(id)arg1 {
-    return;
+    [self back];
 }
 
 - (void)back {
-    return;
+    if (self->_installerView) [self->_installerView setHidden:YES];
+    if (self->_packageView) [self->_packageView setHidden:NO];
 }
 
 - (void)search:(id)arg1 {
-    return;
+    [self updateVisiblePackages];
 }
 
 - (void)install:(id)arg1 {
-    return;
+    [self openInstallerView];
 }
 
 - (void)selectUnknownPackage:(id)arg1 {
-    return;
+    [self openInstallerView];
 }
 
 - (void)editInstallerSource:(id)arg1 {
-    return;
 }
 
 - (void)selectSteamInstall:(id)arg1 {
-    return;
 }
 
 - (void)selectInstallerDownload:(id)arg1 {
-    return;
 }
 
 - (void)selectInstaller:(id)arg1 {
-    return;
 }
 
 - (void)selectBottle:(id)arg1 {
-    return;
 }
 
 - (void)c4pButton:(id)arg1 {
-    return;
 }
 
 - (void)downloadButton:(id)arg1 {
-    return;
 }
 
 - (void)installOptions:(id)arg1 {
-    return;
 }
 
 - (void)installationCompleted {
-    return;
 }
 
 - (void)installationStarted {
-    return;
 }
 
 - (id)window {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = [self view];
-     *   r0 = [r0 retain];
-     *   r19 = r0;
-     *   r20 = [[r0 window] retain];
-     *   [r19 release];
-     *   r0 = [r20 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return [self.view window];
 }
 
 - (BOOL)performDragOperation:(id)arg1 {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   var_20 = r22;
-     *   decomp_var_18 = r21;
-     *   r31 = r31 + 0xffffffffffffffd0;
-     *   var_10 = r20;
-     *   decomp_var_8 = r19;
-     *   saved_fp = r29;
-     *   decomp_var_m8 = r30;
-     *   r20 = self;
-     *   r21 = [[arg2 draggingPasteboard] retain];
-     *   r19 = [[NSURL URLFromPasteboard:r21] retain];
-     *   [r21 release];
-     *   r0 = [r20 packageView];
-     *   r0 = [r0 retain];
-     *   r21 = r0;
-     *   r22 = [r0 isHidden];
-     *   [r21 release];
-     *   if (r22 != 0x0) {
-     *   r20 = [[r20 installer] retain];
-     *   r21 = [[r19 path] retain];
-     *   [r20 setInstallerSource:r21];
-     *   }
-     *   else {
-     *   r20 = [[**_NSApp CXServer] retain];
-     *   r21 = [[r19 path] retain];
-     *   [r20 runClient:r21 inBottle:0x0];
-     *   ... (5 more lines)
-     */
-    return NO;
+    return YES;
 }
 
 - (BOOL)textFieldIsTruncated:(id)arg1 {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = [arg2 retain];
-     *   r19 = r0;
-     *   r20 = [[r0 cell] retain];
-     *   [r19 frame];
-     *   [r20 expansionFrameWithFrame:r19 inView:r3];
-     *   [r19 release];
-     *   r0 = [r20 release];
-     *   r0 = NSEqualRects(r0, r1);
-     *   r0 = r0 ^ 0x1;
-     *   return r0;
-     */
     return NO;
 }
 
 - (void)startObservingFrameOfView:(id)arg1 {
-    return;
 }
 
 - (void)stopObservingFrameOfView:(id)arg1 {
-    return;
 }
 
 - (void)subviewFrameChanged:(id)arg1 {
-    return;
 }
 
 - (void)updatePackageDescriptionTruncation {
-    return;
 }
 
 - (void)updateInstallationNotesTruncation {
-    return;
 }
 
 - (void)expandPackageDescription:(BOOL)arg1 {
-    return;
 }
 
 - (void)expandInstallationNotes:(BOOL)arg1 {
-    return;
 }
 
 - (void)packageDescriptionExpandButtonClicked:(id)arg1 {
-    return;
 }
 
 - (void)installationNotesExpandButtonClicked:(id)arg1 {
-    return;
 }
 
 - (id)delegate {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_delegate);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return objc_loadWeakRetained((id *)&self->_delegate);
 }
 
 - (void)setDelegate:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_delegate, arg1);
 }
 
 - (id)packages {
@@ -357,7 +335,7 @@
 }
 
 - (void)setPackages:(id)arg1 {
-    self->_packages = arg1;
+    self->_packages = [arg1 mutableCopy];
 }
 
 - (id)unknownPackage {
@@ -389,7 +367,7 @@
 }
 
 - (void)setVisiblePackages:(id)arg1 {
-    self->_visiblePackages = arg1;
+    self->_visiblePackages = [arg1 mutableCopy];
 }
 
 - (id)summaryDetailsControllers {
@@ -397,7 +375,7 @@
 }
 
 - (void)setSummaryDetailsControllers:(id)arg1 {
-    self->_summaryDetailsControllers = arg1;
+    self->_summaryDetailsControllers = [arg1 copy];
 }
 
 - (id)installer {
@@ -405,87 +383,51 @@
 }
 
 - (id)packageView {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_packageView);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return objc_loadWeakRetained((id *)&self->_packageView);
 }
 
 - (void)setPackageView:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_packageView, arg1);
 }
 
 - (id)collectionView {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_collectionView);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return objc_loadWeakRetained((id *)&self->_collectionView);
 }
 
 - (void)setCollectionView:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_collectionView, arg1);
 }
 
 - (id)loading {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_loading);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return objc_loadWeakRetained((id *)&self->_loading);
 }
 
 - (void)setLoading:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_loading, arg1);
 }
 
 - (id)noResultsLabel {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_noResultsLabel);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return objc_loadWeakRetained((id *)&self->_noResultsLabel);
 }
 
 - (void)setNoResultsLabel:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_noResultsLabel, arg1);
 }
 
 - (id)searchField {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_searchField);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return objc_loadWeakRetained((id *)&self->_searchField);
 }
 
 - (void)setSearchField:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_searchField, arg1);
 }
 
 - (id)installUnlistedAppButton {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_installUnlistedAppButton);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return objc_loadWeakRetained((id *)&self->_installUnlistedAppButton);
 }
 
 - (void)setInstallUnlistedAppButton:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_installUnlistedAppButton, arg1);
 }
 
 - (id)packageViewTitle {
@@ -493,49 +435,31 @@
 }
 
 - (void)setPackageViewTitle:(id)arg1 {
-    return;
+    self->_packageViewTitle = [arg1 copy];
 }
 
 - (id)installerView {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_installerView);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return objc_loadWeakRetained((id *)&self->_installerView);
 }
 
 - (void)setInstallerView:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_installerView, arg1);
 }
 
 - (id)installButton {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_installButton);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return objc_loadWeakRetained((id *)&self->_installButton);
 }
 
 - (void)setInstallButton:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_installButton, arg1);
 }
 
 - (id)optionsButton {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_optionsButton);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return objc_loadWeakRetained((id *)&self->_optionsButton);
 }
 
 - (void)setOptionsButton:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_optionsButton, arg1);
 }
 
 - (id)optionsMenu {
@@ -547,159 +471,99 @@
 }
 
 - (id)installerSourceMenu {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_installerSourceMenu);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return self->_installerSourceMenu;
 }
 
 - (void)setInstallerSourceMenu:(id)arg1 {
-    return;
+    self->_installerSourceMenu = arg1;
 }
 
 - (id)installWithSteamMenuItem {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_installWithSteamMenuItem);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return self->_installWithSteamMenuItem;
 }
 
 - (void)setInstallWithSteamMenuItem:(id)arg1 {
-    return;
+    self->_installWithSteamMenuItem = arg1;
 }
 
 - (id)downloadInstallerMenuItem {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_downloadInstallerMenuItem);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return self->_downloadInstallerMenuItem;
 }
 
 - (void)setDownloadInstallerMenuItem:(id)arg1 {
-    return;
+    self->_downloadInstallerMenuItem = arg1;
 }
 
 - (id)summaryDetailsView {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_summaryDetailsView);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return objc_loadWeakRetained((id *)&self->_summaryDetailsView);
 }
 
 - (void)setSummaryDetailsView:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_summaryDetailsView, arg1);
 }
 
 - (id)packageDescriptionTextField {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_packageDescriptionTextField);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return objc_loadWeakRetained((id *)&self->_packageDescriptionTextField);
 }
 
 - (void)setPackageDescriptionTextField:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_packageDescriptionTextField, arg1);
 }
 
 - (id)packageDescriptionExpandButton {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_packageDescriptionExpandButton);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return objc_loadWeakRetained((id *)&self->_packageDescriptionExpandButton);
 }
 
 - (void)setPackageDescriptionExpandButton:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_packageDescriptionExpandButton, arg1);
 }
 
 - (id)packageDescriptionMoreLabel {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_packageDescriptionMoreLabel);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return objc_loadWeakRetained((id *)&self->_packageDescriptionMoreLabel);
 }
 
 - (void)setPackageDescriptionMoreLabel:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_packageDescriptionMoreLabel, arg1);
 }
 
 - (id)installationNotesTextField {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_installationNotesTextField);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return objc_loadWeakRetained((id *)&self->_installationNotesTextField);
 }
 
 - (void)setInstallationNotesTextField:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_installationNotesTextField, arg1);
 }
 
 - (id)installationNotesMoreLabel {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_installationNotesMoreLabel);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return objc_loadWeakRetained((id *)&self->_installationNotesMoreLabel);
 }
 
 - (void)setInstallationNotesMoreLabel:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_installationNotesMoreLabel, arg1);
 }
 
 - (id)installationNotesExpandButton {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_installationNotesExpandButton);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return objc_loadWeakRetained((id *)&self->_installationNotesExpandButton);
 }
 
 - (void)setInstallationNotesExpandButton:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_installationNotesExpandButton, arg1);
 }
 
 - (id)packageDescriptionCollapsedHeightConstraint {
-    return self->_packageDescriptionCollapsedHeightConstraint;
+    return objc_loadWeakRetained((id *)&self->_packageDescriptionCollapsedHeightConstraint);
 }
 
 - (void)setPackageDescriptionCollapsedHeightConstraint:(id)arg1 {
-    self->_packageDescriptionCollapsedHeightConstraint = arg1;
+    objc_storeWeak((id *)&self->_packageDescriptionCollapsedHeightConstraint, arg1);
 }
 
 - (id)installationNotesCollapsedHeightConstraint {
-    return self->_installationNotesCollapsedHeightConstraint;
+    return objc_loadWeakRetained((id *)&self->_installationNotesCollapsedHeightConstraint);
 }
 
 - (void)setInstallationNotesCollapsedHeightConstraint:(id)arg1 {
-    self->_installationNotesCollapsedHeightConstraint = arg1;
+    objc_storeWeak((id *)&self->_installationNotesCollapsedHeightConstraint, arg1);
 }
 
 @end

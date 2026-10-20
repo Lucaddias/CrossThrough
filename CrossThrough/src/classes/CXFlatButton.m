@@ -386,51 +386,57 @@
 }
 
 - (void)setFont:(id)arg1 {
-    return;
+    [super setFont:arg1];
+    if (self->_titleTextField) {
+        [self->_titleTextField setFont:arg1];
+    }
 }
 
 - (void)setTitle:(id)arg1 {
-    return;
+    [super setTitle:arg1];
+    if (self->_titleTextField) {
+        [self->_titleTextField setStringValue:arg1 ?: @""];
+    }
 }
 
 - (void)setAlignment:(NSInteger)arg1 {
-    return;
+    [super setAlignment:arg1];
 }
 
 - (void)setControlSize:(NSUInteger)arg1 {
-    return;
+    [super setControlSize:arg1];
 }
 
 - (void)setLineBreakMode:(NSUInteger)arg1 {
-    return;
+    [super setLineBreakMode:arg1];
 }
 
 - (void)setUsesSingleLineMode:(BOOL)arg1 {
-    return;
+    [super setUsesSingleLineMode:arg1];
 }
 
 - (void)setBaseWritingDirection:(NSInteger)arg1 {
-    return;
+    [super setBaseWritingDirection:arg1];
 }
 
 - (void)setAllowsExpansionToolTips:(BOOL)arg1 {
-    return;
+    [super setAllowsExpansionToolTips:arg1];
 }
 
 - (void)setImage:(id)arg1 {
-    return;
+    [super setImage:arg1];
 }
 
 - (void)setEnabled:(BOOL)arg1 {
-    return;
+    [super setEnabled:arg1];
 }
 
 - (void)highlight:(BOOL)arg1 {
-    return;
+    [super highlight:arg1];
 }
 
 - (void)setHighlighted:(BOOL)arg1 {
-    return;
+    [super setHighlighted:arg1];
 }
 
 - (void)setShowsBorderOnlyWhileMouseInside:(BOOL)arg1 {

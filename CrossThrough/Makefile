@@ -55,6 +55,7 @@ app: $(TARGET)
 		cp -R /Applications/CrossOver.app/Contents/Frameworks/ $(APP_BUNDLE)/Contents/Frameworks/; \
 	fi
 	@if [ -d /Applications/CrossOver.app/Contents/SharedSupport ]; then \
+		rm -rf $(APP_BUNDLE)/Contents/SharedSupport; \
 		ln -sf /Applications/CrossOver.app/Contents/SharedSupport $(APP_BUNDLE)/Contents/SharedSupport; \
 	fi
 	@if [ -d /Applications/CrossOver.app/Contents/Resources ]; then \

@@ -133,35 +133,20 @@
 }
 
 - (id)mainWindowController {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   var_10 = r20;
-     *   decomp_var_8 = r19;
-     *   r31 = r31 + 0xffffffffffffffe0;
-     *   saved_fp = r29;
-     *   decomp_var_m8 = r30;
-     *   r19 = self;
-     *   r20 = sign_extend_64(*(int32_t *)ivar_offset(mainWindowController));
-     *   r0 = *(self + r20);
-     *   if (r0 == 0x0) {
-     *   r0 = [[MainWindowController alloc] init];
-     *   r8 = *(r19 + r20);
-     *   *(r19 + r20) = r0;
-     *   [r8 release];
-     *   r0 = *(r19 + r20);
-     *   }
-     *   r0 = objc_retainAutoreleaseReturnValue(r0);
-     *   return r0;
-     */
-    return nil;
+    if (!self->mainWindowController) {
+        self->mainWindowController = [[MainWindowController alloc] init];
+    }
+    return self->mainWindowController;
 }
 
 - (void)applicationWillFinishLaunching:(id)arg1 {
-    return;
+    [super applicationWillFinishLaunching:arg1];
 }
 
 - (void)applicationDidFinishLaunching:(id)arg1 {
-    return;
+    NSLog(@"[CrossThrough] App launched: applicationDidFinishLaunching");
+    [NSApp activateIgnoringOtherApps:YES];
+    [[self mainWindowController] showWindow:self];
 }
 
 - (id)startedAppGateOp {
@@ -262,7 +247,8 @@
 }
 
 - (void)showMainWindow:(id)arg1 {
-    return;
+    [NSApp activateIgnoringOtherApps:YES];
+    [[self mainWindowController] showWindow:arg1];
 }
 
 - (void)showPreferencesWindow:(id)arg1 {
@@ -763,29 +749,9 @@
 }
 
 - (BOOL)applicationOpenUntitledFile:(id)arg1 {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   var_48 = *__NSConcreteStackBlock;
-     *   r21 = [arg2 retain];
-     *   r0 = [NSBlockOperation blockOperationWithBlock:&var_48];
-     *   r0 = [r0 retain];
-     *   r20 = r0;
-     *   [r0 addDependency:self->updateCheckOp];
-     *   [r20 setQueuePriority:0x4];
-     *   r0 = [NSOperationQueue mainQueue];
-     *   r0 = [r0 retain];
-     *   r22 = r0;
-     *   [r0 addOperation:r20];
-     *   [r22 release];
-     *   var_58 = self;
-     *   r0 = [[&var_58 super] applicationOpenUntitledFile:r21];
-     *   r19 = r0;
-     *   [r21 release];
-     *   [r20 release];
-     *   r0 = r19;
-     *   return r0;
-     */
-    return NO;
+    [NSApp activateIgnoringOtherApps:YES];
+    [[self mainWindowController] showWindow:arg1];
+    return YES;
 }
 
 - (void)runCXUpgrade {

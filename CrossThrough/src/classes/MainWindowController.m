@@ -6,19 +6,26 @@
 @implementation MainWindowController
 
 + (void)initialize {
-    return;
+    if (self == [MainWindowController class]) {
+        NSDictionary *defaults = @{ @"HiddenLauncherIDs": @[] };
+        [[NSUserDefaults standardUserDefaults] registerDefaults:defaults];
+    }
 }
 
 - (id)init {
-    self = [super init];
+    self = [super initWithWindowNibName:@"MainWindow"];
+    NSLog(@"[MainWindowController] init called, nibName=%@", [self windowNibName]);
     if (self) {
-        // Initialized
+        self->_bottleViewController = [[BottleViewController alloc] init];
+        self->_iconViewController = [[LauncherIconViewController alloc] init];
+        self->_packageViewController = [[PackageViewController alloc] init];
+        self->_bottleNodes = [[NSMutableArray alloc] init];
     }
     return self;
 }
 
 - (void)dealloc {
-    return;
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (id)bottleNodes {
@@ -26,95 +33,189 @@
 }
 
 - (void)setBottleNodes:(id)arg1 {
-    return;
+    if (self->_bottleNodes != arg1) {
+        self->_bottleNodes = [arg1 mutableCopy];
+    }
 }
 
 - (void)insertObject:(id)arg1 inBottleNodesAtIndex:(NSUInteger)arg2 {
-    return;
+    [self->_bottleNodes insertObject:arg1 atIndex:arg2];
 }
 
 - (void)removeObjectFromBottleNodesAtIndex:(NSUInteger)arg1 {
-    return;
+    [self->_bottleNodes removeObjectAtIndex:arg1];
 }
 
 - (id)selectedBottleNode {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r31 = r31 - 0x40;
-     *   var_20 = r22;
-     *   decomp_var_18 = r21;
-     *   var_10 = r20;
-     *   decomp_var_8 = r19;
-     *   saved_fp = r29;
-     *   decomp_var_m8 = r30;
-     *   r19 = self;
-     *   var_28 = **___stack_chk_guard;
-     *   r0 = [self bottleSourceView];
-     *   r0 = [r0 retain];
-     *   r20 = r0;
-     *   r21 = [r0 clickedRow];
-     *   [r20 release];
-     *   if (r21 != -0x1) {
-     *   r20 = [[r19 bottleSourceView] retain];
-     *   r0 = [r19 bottleSourceView];
-     *   r0 = [r0 retain];
-     *   r22 = r0;
-     *   r21 = [[r20 itemAtRow:[r0 clickedRow]] retain];
-     *   [r22 release];
-     *   [r20 release];
-     *   if (r21 != 0x0) {
-     *   r0 = [r21 valueForKey:@"representedObject"];
-     *   r0 = [r0 retain];
-     *   ... (48 more lines)
-     */
+    if (self->_bottleSourceView) {
+        NSInteger clicked = [self->_bottleSourceView clickedRow];
+        if (clicked != -1) {
+            id item = [self->_bottleSourceView itemAtRow:clicked];
+            if ([item respondsToSelector:@selector(representedObject)]) {
+                return [item representedObject];
+            }
+            return item;
+        }
+        NSInteger selected = [self->_bottleSourceView selectedRow];
+        if (selected != -1) {
+            id item = [self->_bottleSourceView itemAtRow:selected];
+            if ([item respondsToSelector:@selector(representedObject)]) {
+                return [item representedObject];
+            }
+            return item;
+        }
+    }
     return nil;
 }
 
 - (void)loadInfoForSelectedBottle {
-    return;
-}
-
-- (void)updateMainContentView {
-    return;
+    [self updateMainContentView];
 }
 
 - (id)privateBottlesGroupNameNoPublished {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = [NSBundle mainBundle];
-     *   r0 = [r0 retain];
-     *   r19 = r0;
-     *   r20 = [[r0 localizedStringForKey:@"BOTTLES" value:@"" table:0x0] retain];
-     *   [r19 release];
-     *   r0 = [r20 autorelease];
-     *   return r0;
-     */
-    return nil;
+    NSString *name = [[NSBundle mainBundle] localizedStringForKey:@"BOTTLES" value:@"BOTTLES" table:nil];
+    return name ?: @"BOTTLES";
 }
 
 - (void)windowDidLoad {
-    return;
+    NSLog(@"[MainWindowController] windowDidLoad called! window=%@", [self window]);
+    [super windowDidLoad];
+
+    NSMutableArray *topNodes = [NSMutableArray array];
+    BottleNode *allNode = [BottleNode allBottlesBottleNode];
+    [allNode setSortPriority:0];
+    [topNodes addObject:allNode];
+    [self setTopMenuNodes:topNodes];
+
+    NSMutableArray *bottomNodes = [NSMutableArray array];
+    BottleNode *installNode = [BottleNode installBottleNode];
+    [installNode setSortPriority:0];
+    [bottomNodes addObject:installNode];
+    [self setBottomMenuNodes:bottomNodes];
+
+    NSMutableArray *bNodes = [NSMutableArray array];
+    BottleNode *privGroup = [BottleNode groupBottleNodeWithName:[self privateBottlesGroupNameNoPublished]];
+    [privGroup setSortPriority:2];
+    [self setPrivateBottleGroup:privGroup];
+    [bNodes addObject:privGroup];
+
+    NSString *pubTitle = [[NSBundle mainBundle] localizedStringForKey:@"PUBLISHED BOTTLES" value:@"PUBLISHED BOTTLES" table:nil];
+    BottleNode *pubGroup = [BottleNode groupBottleNodeWithName:pubTitle];
+    [pubGroup setSortPriority:3];
+    [self setPublishedBottleGroup:pubGroup];
+
+    [self setBottleNodes:bNodes];
+
+    if (self->_bottleTreeController) {
+        NSSortDescriptor *sd1 = [NSSortDescriptor sortDescriptorWithKey:@"sortPriority" ascending:YES selector:@selector(compare:)];
+        NSSortDescriptor *sd2 = [NSSortDescriptor sortDescriptorWithKey:@"bottle.isDefault" ascending:NO selector:@selector(compare:)];
+        NSSortDescriptor *sd3 = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES selector:@selector(localizedStandardCompare:)];
+        [self->_bottleTreeController setSortDescriptors:@[sd1, sd2, sd3]];
+    }
+
+    if (self->_mainContentView) {
+        NSRect contentBounds = [self->_mainContentView bounds];
+        NSMutableArray *subviews = [NSMutableArray array];
+
+        if (self->_iconViewController) {
+            NSView *v = [self->_iconViewController view];
+            if (v) {
+                [v setFrame:contentBounds];
+                [v setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable];
+                [subviews addObject:v];
+            }
+        }
+        if (self->_packageViewController) {
+            NSView *v = [self->_packageViewController view];
+            if (v) {
+                [v setFrame:contentBounds];
+                [v setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable];
+                [subviews addObject:v];
+            }
+        }
+        if (self->_bottleViewController) {
+            NSView *v = [self->_bottleViewController view];
+            if (v) {
+                [v setFrame:contentBounds];
+                [v setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable];
+                [subviews addObject:v];
+            }
+        }
+        [self->_mainContentView setSubviews:subviews];
+    }
+
+    if (self->_splitView) {
+        [self->_splitView setAutosaveName:@"MainWindowSplit22"];
+    }
+
+    NSWindow *win = [self window];
+    if (win) {
+        [win setBackgroundColor:[NSColor controlBackgroundColor]];
+    }
+
+    [self selectDefaultView];
 }
 
 - (NSUInteger)window:(id)arg1 willUseFullScreenPresentationOptions:(NSUInteger)arg2 {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = arg3 | 0x800;
-     *   return r0;
-     */
-    return 0;
+    return arg2 | 0x800;
+}
+
+- (void)updateMainContentView {
+    NSArray *selected = [self.topMenuTreeController selectedObjects];
+    if ([selected count] == 0) {
+        selected = [self.bottleTreeController selectedObjects];
+    }
+    if ([selected count] == 0) {
+        selected = [self.bottomMenuTreeController selectedObjects];
+    }
+
+    BottleNode *node = [selected count] > 0 ? selected[0] : nil;
+    NSInteger type = node ? [node type] : 1;
+
+    if (type == 3) {
+        // Install Software View
+        [[self.iconViewController view] setHidden:YES];
+        [[self.packageViewController view] setHidden:NO];
+        [[self.bottleViewController view] setHidden:YES];
+    } else if (type == 2) {
+        // Single Bottle Detail View
+        [[self.iconViewController view] setHidden:YES];
+        [[self.packageViewController view] setHidden:YES];
+        [[self.bottleViewController view] setHidden:NO];
+    } else {
+        // All Bottles / Home View
+        [[self.iconViewController view] setHidden:NO];
+        [[self.packageViewController view] setHidden:YES];
+        [[self.bottleViewController view] setHidden:YES];
+    }
 }
 
 - (void)selectLaunchView {
-    return;
+    if (self->_topMenuSourceView) {
+        [self->_topMenuSourceView selectRowIndexes:[NSIndexSet indexSetWithIndex:0] byExtendingSelection:NO];
+    }
+    [self->_bottleSourceView deselectAll:self];
+    [self->_bottomMenuSourceView deselectAll:self];
+    [self updateMainContentView];
 }
 
 - (void)selectInstallView {
-    return;
+    [self->_topMenuSourceView deselectAll:self];
+    [self->_bottleSourceView deselectAll:self];
+    if (self->_bottomMenuSourceView) {
+        [self->_bottomMenuSourceView selectRowIndexes:[NSIndexSet indexSetWithIndex:0] byExtendingSelection:NO];
+    }
+    [self updateMainContentView];
 }
 
 - (void)selectDefaultView {
-    return;
+    id collection = [[CXSetupLib bottleCollectionClass] sharedCollection];
+    NSArray *list = [collection respondsToSelector:@selector(bottleList)] ? [collection bottleList] : nil;
+    if ([list count] > 0) {
+        [self selectLaunchView];
+    } else {
+        [self selectInstallView];
+    }
 }
 
 - (void)updateC4Ps {
@@ -122,11 +223,11 @@
 }
 
 - (void)autoPlay:(id)arg1 inBottle:(id)arg2 {
-    return;
+    [self selectInstallView];
 }
 
 - (void)autoPlayWithAutorunFile:(id)arg1 inBottle:(id)arg2 {
-    return;
+    [self selectInstallView];
 }
 
 - (void)addIconsForBottles:(id)arg1 {
@@ -138,129 +239,55 @@
 }
 
 - (void)observeValueForKeyPath:(id)arg1 ofObject:(id)arg2 change:(id)arg3 context:(void *)arg4 {
-    return;
+    [self updateMainContentView];
 }
 
 - (BOOL)outlineView:(id)arg1 isGroupItem:(id)arg2 {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   var_10 = r20;
-     *   decomp_var_8 = r19;
-     *   r31 = r31 + 0xffffffffffffffe0;
-     *   saved_fp = r29;
-     *   decomp_var_m8 = r30;
-     *   r0 = [arg3 representedObject];
-     *   r0 = [r0 retain];
-     *   r19 = r0;
-     *   if ([r0 type] == 0x0) {
-     *   r20 = 0x1;
-     *   }
-     *   [r19 release];
-     *   r0 = r20;
-     *   return r0;
-     */
+    id item = [arg2 respondsToSelector:@selector(representedObject)] ? [arg2 representedObject] : arg2;
+    if ([item respondsToSelector:@selector(type)]) {
+        return [item type] == 0;
+    }
     return NO;
 }
 
 - (BOOL)outlineView:(id)arg1 shouldShowOutlineCellForItem:(id)arg2 {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = [self outlineView:arg2 isGroupItem:arg3];
-     *   r0 = r0 ^ 0x1;
-     *   return r0;
-     */
-    return NO;
+    return ![self outlineView:arg1 isGroupItem:arg2];
 }
 
 - (BOOL)outlineView:(id)arg1 shouldSelectItem:(id)arg2 {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = [self outlineView:arg2 isGroupItem:arg3];
-     *   r0 = r0 ^ 0x1;
-     *   return r0;
-     */
-    return NO;
+    return ![self outlineView:arg1 isGroupItem:arg2];
 }
 
 - (void)outlineView:(id)arg1 didRemoveRowView:(id)arg2 forRow:(NSInteger)arg3 {
-    return;
+    [self updateMainContentView];
 }
 
 - (void)outlineViewSelectionDidChange:(id)arg1 {
-    return;
+    id obj = [arg1 respondsToSelector:@selector(object)] ? [arg1 object] : arg1;
+    if (obj == self->_topMenuSourceView && [self->_topMenuSourceView selectedRow] != -1) {
+        [self->_bottleSourceView deselectAll:self];
+        [self->_bottomMenuSourceView deselectAll:self];
+    } else if (obj == self->_bottleSourceView && [self->_bottleSourceView selectedRow] != -1) {
+        [self->_topMenuSourceView deselectAll:self];
+        [self->_bottomMenuSourceView deselectAll:self];
+    } else if (obj == self->_bottomMenuSourceView && [self->_bottomMenuSourceView selectedRow] != -1) {
+        [self->_topMenuSourceView deselectAll:self];
+        [self->_bottleSourceView deselectAll:self];
+    }
+    [self updateMainContentView];
 }
 
 - (id)outlineView:(id)arg1 rowViewForItem:(id)arg2 {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = [[BottleTableRowView alloc] init];
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return [[[BottleTableRowView alloc] init] autorelease];
 }
 
 - (id)outlineView:(id)arg1 viewForTableColumn:(id)arg2 item:(id)arg3 {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   var_10 = r20;
-     *   decomp_var_8 = r19;
-     *   r31 = r31 + 0xffffffffffffffe0;
-     *   saved_fp = r29;
-     *   decomp_var_m8 = r30;
-     *   r9 = arg2;
-     *   r8 = self;
-     *   if (arg3 != 0x0) {
-     *   r2 = @"DataCell";
-     *   }
-     *   else {
-     *   r2 = @"HeaderCell";
-     *   }
-     *   r0 = [r9 makeViewWithIdentifier:r2 owner:r8];
-     *   r0 = [r0 retain];
-     *   r19 = r0;
-     *   r0 = [r0 textField];
-     *   r0 = [r0 retain];
-     *   r20 = r0;
-     *   [r0 setAutoresizingMask:0x0];
-     *   [r20 release];
-     *   r0 = [r19 autorelease];
-     *   return r0;
-     */
-    return nil;
+    NSString *identifier = arg2 ? @"DataCell" : @"HeaderCell";
+    return [arg1 makeViewWithIdentifier:identifier owner:self];
 }
 
 - (BOOL)validateUserInterfaceItem:(id)arg1 {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   var_20 = r22;
-     *   decomp_var_18 = r21;
-     *   r31 = r31 + 0xffffffffffffffd0;
-     *   var_10 = r20;
-     *   decomp_var_8 = r19;
-     *   saved_fp = r29;
-     *   decomp_var_m8 = r30;
-     *   r20 = self;
-     *   r0 = [arg2 retain];
-     *   r19 = r0;
-     *   if ([r0 action] != @selector(duplicateBottle:)) {
-     *   if ([r19 action] != @selector(toggleDefaultBottle:)) {
-     *   if ([r19 action] != @selector(deleteBottle:)) {
-     *   if ([r19 action] != @selector(exportBottleToArchive:)) {
-     *   if ([r19 action] != @selector(openBottleCDrive:)) {
-     *   if ([r19 action] != @selector(renameBottle:)) {
-     *   if ([r19 action] != @selector(publishBottle:)) {
-     *   if ([r19 action] != @selector(toggleBottleHighResolution:)) {
-     *   if ([r19 action] != @selector(toggleBottleGraphicsAuto:)) {
-     *   if ([r19 action] != @selector(toggleBottleGraphicsD3DMetal:)) {
-     *   if ([r19 action] != @selector(toggleBottleGraphicsDXMT:)) {
-     *   if ([r19 action] != @selector(toggleBottleGraphicsDXVK:)) {
-     *   if ([r19 action] != @selector(toggleBottleVulkanMoltenVK:)) {
-     *   if ([r19 action] != @selector(toggleBottleVulkanMTLVK:)) {
-     *   if ([r19 action] != @selector(toggleBottleDLSS:)) {
-     *   ... (525 more lines)
-     */
-    return NO;
+    return YES;
 }
 
 - (void)setMenuItem:(id)arg1 genericTitle:(id)arg2 bottleTitleFormat:(id)arg3 {
@@ -276,36 +303,7 @@
 }
 
 - (BOOL)validateMenuItem:(id)arg1 {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r2 = arg2;
-     *   r31 = r31 - 0x60;
-     *   var_40 = r26;
-     *   decomp_var_38 = r25;
-     *   var_30 = r24;
-     *   decomp_var_28 = r23;
-     *   var_20 = r22;
-     *   decomp_var_18 = r21;
-     *   var_10 = r20;
-     *   decomp_var_8 = r19;
-     *   saved_fp = r29;
-     *   decomp_var_m8 = r30;
-     *   r20 = self;
-     *   r19 = [r2 retain];
-     *   r0 = **_NSApp;
-     *   r0 = [r0 modalWindow];
-     *   r0 = [r0 retain];
-     *   if (r0 != 0x0) {
-     *   r22 = r0;
-     *   r21 = 0x0;
-     *   [r22 release];
-     *   }
-     *   else {
-     *   r0 = [r20 window];
-     *   r0 = [r0 retain];
-     *   ... (336 more lines)
-     */
-    return NO;
+    return YES;
 }
 
 - (void)revealNewBottle:(id)arg1 {
@@ -345,11 +343,11 @@
 }
 
 - (void)showInstallViewWithSelectedBottle:(id)arg1 package:(id)arg2 {
-    return;
+    [self selectInstallView];
 }
 
 - (void)showInstallViewWithSelectedBottle:(id)arg1 {
-    return;
+    [self selectInstallView];
 }
 
 - (void)publishBottle:(id)arg1 {
@@ -409,7 +407,7 @@
 }
 
 - (void)installSoftwareToBottle:(id)arg1 {
-    return;
+    [self selectInstallView];
 }
 
 - (void)runCommandInBottle:(id)arg1 {
@@ -453,31 +451,19 @@
 }
 
 - (id)mainContentView {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_mainContentView);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return objc_loadWeakRetained((id *)&self->_mainContentView);
 }
 
 - (void)setMainContentView:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_mainContentView, arg1);
 }
 
 - (id)splitView {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_splitView);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return objc_loadWeakRetained((id *)&self->_splitView);
 }
 
 - (void)setSplitView:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_splitView, arg1);
 }
 
 - (id)topMenuNodes {
@@ -485,7 +471,9 @@
 }
 
 - (void)setTopMenuNodes:(id)arg1 {
-    return;
+    if (self->_topMenuNodes != arg1) {
+        self->_topMenuNodes = [arg1 copy];
+    }
 }
 
 - (id)bottomMenuNodes {
@@ -493,117 +481,73 @@
 }
 
 - (void)setBottomMenuNodes:(id)arg1 {
-    return;
+    if (self->_bottomMenuNodes != arg1) {
+        self->_bottomMenuNodes = [arg1 copy];
+    }
 }
 
 - (id)topMenuSourceView {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_topMenuSourceView);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return objc_loadWeakRetained((id *)&self->_topMenuSourceView);
 }
 
 - (void)setTopMenuSourceView:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_topMenuSourceView, arg1);
 }
 
 - (id)bottomMenuSourceView {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_bottomMenuSourceView);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return objc_loadWeakRetained((id *)&self->_bottomMenuSourceView);
 }
 
 - (void)setBottomMenuSourceView:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_bottomMenuSourceView, arg1);
 }
 
 - (id)topMenuTreeController {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_topMenuTreeController);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return objc_loadWeakRetained((id *)&self->_topMenuTreeController);
 }
 
 - (void)setTopMenuTreeController:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_topMenuTreeController, arg1);
 }
 
 - (id)bottomMenuTreeController {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_bottomMenuTreeController);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return objc_loadWeakRetained((id *)&self->_bottomMenuTreeController);
 }
 
 - (void)setBottomMenuTreeController:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_bottomMenuTreeController, arg1);
 }
 
 - (id)bottleSourceView {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_bottleSourceView);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return objc_loadWeakRetained((id *)&self->_bottleSourceView);
 }
 
 - (void)setBottleSourceView:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_bottleSourceView, arg1);
 }
 
 - (id)bottleTreeController {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_bottleTreeController);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return objc_loadWeakRetained((id *)&self->_bottleTreeController);
 }
 
 - (void)setBottleTreeController:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_bottleTreeController, arg1);
 }
 
 - (id)privateBottleGroup {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_getProperty(self, _cmd, sign_extend_64(*(int32_t *)ivar_offset(_privateBottleGroup)), 0x1);
-     *   return r0;
-     */
-    return nil;
+    return self->_privateBottleGroup;
 }
 
 - (void)setPrivateBottleGroup:(id)arg1 {
-    return;
+    self->_privateBottleGroup = arg1;
 }
 
 - (id)publishedBottleGroup {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_getProperty(self, _cmd, sign_extend_64(*(int32_t *)ivar_offset(_publishedBottleGroup)), 0x1);
-     *   return r0;
-     */
-    return nil;
+    return self->_publishedBottleGroup;
 }
 
 - (void)setPublishedBottleGroup:(id)arg1 {
-    return;
+    self->_publishedBottleGroup = arg1;
 }
 
 - (BOOL)updating {

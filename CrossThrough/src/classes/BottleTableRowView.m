@@ -6,11 +6,11 @@
 @implementation BottleTableRowView
 
 - (void)drawRect:(NSRect)arg1 {
-    return;
+    [super drawRect:arg1];
 }
 
 - (BOOL)isEmphasized {
-    return NO;
+    return YES;
 }
 
 @end

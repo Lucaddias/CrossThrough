@@ -12,13 +12,21 @@
 - (id)init {
     self = [super init];
     if (self) {
-        // Initialized
+        NSString *supportPath = [[NSBundle mainBundle] sharedSupportPath];
+        if (supportPath) {
+            self->crossOverRoot = [[supportPath stringByAppendingPathComponent:@"CrossOver"] retain];
+        }
+        NSURL *supportURL = [[NSBundle mainBundle] sharedSupportURL];
+        if (supportURL) {
+            self->crossOverRootURL = [[supportURL URLByAppendingPathComponent:@"CrossOver" isDirectory:YES] retain];
+        }
     }
     return self;
 }
 
 - (void)setDelegate:(id)arg1 {
-    return;
+    [self setCXServer:arg1];
+    [super setDelegate:arg1];
 }
 
 - (id)crossOverRoot {
@@ -34,99 +42,74 @@
 }
 
 - (void)setIsDemo {
-    return;
+    self->isDemo = NO;
 }
 
 - (NSInteger)daysLeft {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = *(int32_t *)(int64_t *)&self->daysLeft;
-     *   return r0;
-     */
-    return 0;
+    return self->daysLeft;
 }
 
 - (void)setDaysLeft {
-    return;
+    self->daysLeft = 999;
 }
 
 - (void)orderFrontStandardAboutPanel:(id)arg1 {
-    return;
+    [super orderFrontStandardAboutPanel:arg1];
 }
 
 - (void)reportException:(id)arg1 {
-    return;
-}
-
-- (void)setWineController:(id)arg1 {
-    return;
+    NSLog(@"[CXApplication] Exception: %@", arg1);
+    [super reportException:arg1];
 }
 
 - (void)sendEvent:(id)arg1 {
-    return;
+    id wine = [self wineController];
+    if (!wine || ![wine respondsToSelector:@selector(handleEvent:)] || ![wine handleEvent:arg1]) {
+        [super sendEvent:arg1];
+        if (wine && [wine respondsToSelector:@selector(didSendEvent:)]) {
+            [wine didSendEvent:arg1];
+        }
+    }
 }
 
 - (id)licenseID {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_getProperty(self, _cmd, sign_extend_64(*(int32_t *)ivar_offset(_licenseID)), 0x1);
-     *   return r0;
-     */
-    return nil;
+    return self->_licenseID;
 }
 
 - (void)setLicenseID:(id)arg1 {
-    return;
+    self->_licenseID = [arg1 copy];
 }
 
 - (id)licenseExpirationDate {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_getProperty(self, _cmd, sign_extend_64(*(int32_t *)ivar_offset(_licenseExpirationDate)), 0x1);
-     *   return r0;
-     */
-    return nil;
+    return self->_licenseExpirationDate;
 }
 
 - (void)setLicenseExpirationDate:(id)arg1 {
-    return;
+    self->_licenseExpirationDate = [arg1 copy];
 }
 
 - (id)wineController {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_wineController);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return objc_loadWeakRetained((id *)&self->_wineController);
+}
+
+- (void)setWineController:(id)arg1 {
+    objc_storeWeak((id *)&self->_wineController, arg1);
 }
 
 - (id)demoString {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_getProperty(self, _cmd, sign_extend_64(*(int32_t *)ivar_offset(_demoString)), 0x1);
-     *   return r0;
-     */
-    return nil;
+    return self->_demoString;
 }
 
 - (void)setDemoString:(id)arg1 {
-    return;
+    self->_demoString = [arg1 copy];
 }
 
 - (id)CXServer {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_CXServer);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return objc_loadWeakRetained((id *)&self->_CXServer);
 }
 
 - (void)setCXServer:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_CXServer, arg1);
 }
 
 @end

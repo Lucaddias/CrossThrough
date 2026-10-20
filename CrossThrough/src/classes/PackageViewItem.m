@@ -6,25 +6,16 @@
 @implementation PackageViewItem
 
 - (id)init {
-    self = [super init];
-    if (self) {
-        // Initialized
-    }
+    self = [super initWithNibName:@"PackageViewItem" bundle:nil];
     return self;
 }
 
 - (id)dividerLine {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_dividerLine);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return objc_loadWeakRetained((id *)&self->_dividerLine);
 }
 
 - (void)setDividerLine:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_dividerLine, arg1);
 }
 
 @end

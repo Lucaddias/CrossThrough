@@ -15,6 +15,9 @@ FOUNDATION_EXPORT void objc_storeStrong(id *location, id obj);
 FOUNDATION_EXPORT id objc_retainAutoreleaseReturnValue(id obj);
 FOUNDATION_EXPORT id objc_unsafeClaimAutoreleasedReturnValue(id obj);
 FOUNDATION_EXPORT void objc_enumerationMutation(id collection);
+FOUNDATION_EXPORT id objc_loadWeakRetained(id *location);
+FOUNDATION_EXPORT id objc_storeWeak(id *location, id obj);
+FOUNDATION_EXPORT void objc_destroyWeak(id *location);
 
 // Common macros in pseudocode
 #define sign_extend_64(x) ((int64_t)(x))

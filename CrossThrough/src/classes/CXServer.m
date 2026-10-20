@@ -556,12 +556,8 @@
 }
 
 - (BOOL)applicationOpenUntitledFile:(id)arg1 {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   *(int8_t *)(int64_t *)&self->gotLaunchEvent = 0x1;
-     *   return 0x1;
-     */
-    return NO;
+    self->gotLaunchEvent = YES;
+    return YES;
 }
 
 - (BOOL)applicationShouldOpenUntitledFile:(id)arg1 {
@@ -569,36 +565,10 @@
 }
 
 - (BOOL)applicationShouldHandleReopen:(id)arg1 hasVisibleWindows:(BOOL)arg2 {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   var_30 = r24;
-     *   decomp_var_28 = r23;
-     *   r31 = r31 + 0xffffffffffffffc0;
-     *   var_20 = r22;
-     *   decomp_var_18 = r21;
-     *   var_10 = r20;
-     *   decomp_var_8 = r19;
-     *   saved_fp = r29;
-     *   decomp_var_m8 = r30;
-     *   r20 = arg3;
-     *   r19 = [arg2 retain];
-     *   r21 = [[**_NSApp wineController] retain];
-     *   r22 = objc_opt_respondsToSelector();
-     *   [r21 release];
-     *   if ((r22 & 0x1) != 0x0) {
-     *   r0 = **_NSApp;
-     *   r0 = [r0 wineController];
-     *   r0 = [r0 retain];
-     *   r21 = r0;
-     *   r20 = [r0 applicationShouldHandleReopen:r19 hasVisibleWindows:r20];
-     *   [r21 release];
-     *   }
-     *   else {
-     *   r20 = 0x1;
-     *   }
-     *   ... (3 more lines)
-     */
-    return NO;
+    if (!arg2) {
+        [self applicationOpenUntitledFile:arg1];
+    }
+    return YES;
 }
 
 - (void)openDocument:(id)arg1 {
