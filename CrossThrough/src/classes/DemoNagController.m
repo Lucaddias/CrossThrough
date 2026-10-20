@@ -6,19 +6,24 @@
 @implementation DemoNagController
 
 - (id)init {
-    self = [super init];
-    if (self) {
-        // Initialized
-    }
+    self = [super initWithWindowNibName:@"DemoNag"];
     return self;
 }
 
+- (void)dealloc {
+    [_completionHandler release];
+    [super dealloc];
+}
+
 - (void)windowDidLoad {
-    return;
+    [super windowDidLoad];
 }
 
 - (void)buy:(id)arg1 {
-    return;
+    NSString *storeURL = [[NSBundle mainBundle] localizedStringForKey:@"https://www.codeweavers.com/store/" value:@"" table:@"Vendor"];
+    if (storeURL) {
+        [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:storeURL]];
+    }
 }
 
 - (void)showSerialCodeRegister {
@@ -30,15 +35,22 @@
 }
 
 - (void)runapp:(id)arg1 {
-    return;
+    [[self window] close];
+    if (self->_completionHandler) {
+        ((void (^)(id))self->_completionHandler)(nil);
+    }
 }
 
 - (void)cancel:(id)arg1 {
-    return;
+    [[self window] close];
+    exit(0);
 }
 
 - (void)beginWindowWithCompletionHandler:(id)arg1 {
-    return;
+    id block = [arg1 copy];
+    [_completionHandler release];
+    _completionHandler = block;
+    [self showWindow:self];
 }
 
 - (id)registerButton {

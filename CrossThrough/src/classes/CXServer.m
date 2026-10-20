@@ -166,10 +166,13 @@ static void _observeProxyChange(SCDynamicStoreRef store, CFArrayRef changedKeys,
 
 - (void)demoCheck {
     if ([[CXApplication sharedApplication] isDemo]) {
-        NSInteger days = [[CXApplication sharedApplication] daysLeft];
-        if (days <= 0) {
-            [self registerDemo:self];
-        }
+        DemoNagController *nag = [[DemoNagController alloc] init];
+        [nag beginWindowWithCompletionHandler:^(id res) {
+            [self continueFromDemoCheck];
+        }];
+        [nag release];
+    } else {
+        [self continueFromDemoCheck];
     }
 }
 
@@ -186,9 +189,12 @@ static void _observeProxyChange(SCDynamicStoreRef store, CFArrayRef changedKeys,
 }
 
 - (void)continueFromDemoCheck {
-    if (self->startAppOp) {
-        // Gates operations waiting for app initialization
-    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[helperServer defaultHelperServer] setIsReady];
+        [(NSOperation *)[self startAppOp] start];
+    });
+    [self updateRecentItemsMenu];
+    [self setMenusEnabled:YES];
 }
 
 - (id)startAppOp {
