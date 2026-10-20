@@ -57,22 +57,3 @@ CrossThrough/
     └── .tools/             # leitor de .pyc 3.13 e geradores dos índices
 ```
 
-## Como reproduzir
-
-### Pseudocódigo da GUI (Hopper)
-
-1. Conceda a permissão *Automation → Hopper Disassembler* ao app que roda o REA.
-2. `open_binary` no binário, depois `list_procedures`.
-3. Rode `batch_decompile` em lotes de endereços e passe cada saída para `python3 CrossThrough/decompiled/.ingest.py <saida.json>`.
-
-### Todo o resto (um comando)
-
-[`CrossThrough/reproduce.sh`](CrossThrough/reproduce.sh) regenera as saídas de `decompiled/x86_64/` e de `sharedsupport/` a partir do `CrossOver.app` instalado e compara cada arquivo com o que está no repositório. Ele extrai as slices com `lipo`, roda `.slicediff.py`, `analyze_python.py`, `analyze_tools.py`, `make_index.py` e `bridge.py`. O CrossOver não é executado.
-
-Precisa de Python ≥ 3.13 (por padrão `python3.14`) e de um bundle de Evidence do REA com `inspect_with_objdump` `symbols` e `disassemble` das duas slices, exportado com `export_evidence_bundle`:
-
-```bash
-CrossThrough/reproduce.sh <rea-bundle.json> [dir-de-saida]
-```
-
-O script termina com `idênticos: N   diferentes: 0` quando tudo bate. Com o CrossOver 26.3 são 110 arquivos idênticos.
