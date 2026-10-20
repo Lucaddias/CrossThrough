@@ -1,0 +1,1112 @@
+# appdetector — CPython 3.13 bytecode listing of lib/python/appdetector.pyc
+# sha256 740b1822331b7b71ca63e287f10d2e21649e2e569bb5ad04e18bc30e3bd7ad91, pyc flags 3, co_filename /Volumes/gitlab_data/gitlab/builds/j911ygmXM/0/crossover/crossover/macosx/CrossOver/build/Build/Products/Release/CrossOver.app/Contents/SharedSupport/CrossOver/lib/python/appdetector.py
+
+Disassembly of <code <module>> (line 1, args=0 posonly=0 kwonly=0, flags=0):
+   0        0 RESUME                           0
+   3        2 LOAD_CONST                       0 (0)
+            4 LOAD_CONST                       1 (None)
+            6 IMPORT_NAME                      0 (os)
+            8 STORE_NAME                       0 (os)
+   4       10 LOAD_CONST                       0 (0)
+           12 LOAD_CONST                       1 (None)
+           14 IMPORT_NAME                      1 (re)
+           16 STORE_NAME                       1 (re)
+   6       18 LOAD_CONST                       0 (0)
+           20 LOAD_CONST                       1 (None)
+           22 IMPORT_NAME                      2 (distversion)
+           24 STORE_NAME                       2 (distversion)
+   7       26 LOAD_CONST                       0 (0)
+           28 LOAD_CONST                       1 (None)
+           30 IMPORT_NAME                      3 (cxutils)
+           32 STORE_NAME                       3 (cxutils)
+   8       34 LOAD_CONST                       0 (0)
+           36 LOAD_CONST                       1 (None)
+           38 IMPORT_NAME                      4 (bottlequery)
+           40 STORE_NAME                       4 (bottlequery)
+   9       42 LOAD_CONST                       0 (0)
+           44 LOAD_CONST                       1 (None)
+           46 IMPORT_NAME                      5 (c4profilesmanager)
+           48 STORE_NAME                       5 (c4profilesmanager)
+  10       50 LOAD_CONST                       0 (0)
+           52 LOAD_CONST                       1 (None)
+           54 IMPORT_NAME                      6 (cxglob)
+           56 STORE_NAME                       6 (cxglob)
+  11       58 LOAD_CONST                       0 (0)
+           60 LOAD_CONST                       1 (None)
+           62 IMPORT_NAME                      7 (cxlog)
+           64 STORE_NAME                       7 (cxlog)
+  12       66 LOAD_CONST                       0 (0)
+           68 LOAD_CONST                       1 (None)
+           70 IMPORT_NAME                      8 (cxobjc)
+           72 STORE_NAME                       8 (cxobjc)
+  14       74 LOAD_CONST                       2 (<code _get_uninstall_info, line 14>)
+           76 MAKE_FUNCTION
+           78 STORE_NAME                       9 (_get_uninstall_info)
+  31       80 LOAD_BUILD_CLASS
+           82 PUSH_NULL
+           84 LOAD_CONST                       3 (<code InstalledApplication, line 31>)
+           86 MAKE_FUNCTION
+           88 LOAD_CONST                       4 ('InstalledApplication')
+           90 LOAD_NAME                        8 (cxobjc)
+           92 LOAD_ATTR                       20 (Proxy)
+          112 CALL                             3
+          120 STORE_NAME                      11 (InstalledApplication)
+ 130      122 LOAD_CONST                       5 (<code get_uninstall_applications, line 130>)
+          124 MAKE_FUNCTION
+          126 STORE_NAME                      12 (get_uninstall_applications)
+ 145      128 LOAD_BUILD_CLASS
+          130 PUSH_NULL
+          132 LOAD_CONST                       6 (<code AppDetector, line 145>)
+          134 MAKE_FUNCTION
+          136 LOAD_CONST                       7 ('AppDetector')
+          138 LOAD_NAME                        8 (cxobjc)
+          140 LOAD_ATTR                       20 (Proxy)
+          160 CALL                             3
+          168 STORE_NAME                      13 (AppDetector)
+ 149      170 LOAD_CONST                       8 (<code get_installed_applications, line 149>)
+          172 MAKE_FUNCTION
+          174 STORE_NAME                      14 (get_installed_applications)
+ 278      176 LOAD_CONST                       9 (<code fast_get_installed_applications, line 278>)
+          178 MAKE_FUNCTION
+          180 STORE_NAME                      15 (fast_get_installed_applications)
+ 285      182 LOAD_CONST                      10 (<code is_profile_installed, line 285>)
+          184 MAKE_FUNCTION
+          186 STORE_NAME                      16 (is_profile_installed)
+          188 RETURN_CONST                     1 (None)
+
+Disassembly of <code _get_uninstall_info> (line 14, args=1 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: bottlename, result, parent_key, uninstaller_key, subkeys, _values, keyname, _subkeys, values
+  14        0 RESUME                           0
+  15        2 BUILD_LIST                       0
+            4 STORE_FAST                       1 (result)
+  16        6 LOAD_CONST                       1 (('HKEY_LOCAL_MACHINE\\Software', 'HKEY_LOCAL_MACHINE\\Software\\Wow6432Node', 'HKEY_CURRENT_USER\\Software'))
+            8 GET_ITER
+     >>    10 FOR_ITER                        91 (to 196)
+           14 STORE_FAST                       2 (parent_key)
+  19       16 LOAD_CONST                       2 ('%s\\Microsoft\\Windows\\CurrentVersion\\Uninstall')
+           18 LOAD_FAST                        2 (parent_key)
+           20 BINARY_OP                        6 (%)
+           24 STORE_FAST                       3 (uninstaller_key)
+  21       26 NOP
+  22       28 LOAD_GLOBAL                      0 (bottlequery)
+           38 LOAD_ATTR                        2 (get_registry_key)
+           58 PUSH_NULL
+           60 LOAD_FAST_LOAD_FAST              3 (bottlename, uninstaller_key)
+           62 CALL                             2
+           70 UNPACK_SEQUENCE                  2
+           74 STORE_FAST_STORE_FAST           69 (subkeys, _values)
+  26       76 LOAD_FAST                        4 (subkeys)
+           78 GET_ITER
+     >>    80 FOR_ITER                        52 (to 188)
+           84 STORE_FAST                       6 (keyname)
+  27       86 LOAD_GLOBAL                      0 (bottlequery)
+           96 LOAD_ATTR                        2 (get_registry_key)
+          116 PUSH_NULL
+          118 LOAD_FAST_LOAD_FAST              3 (bottlename, uninstaller_key)
+          120 CONVERT_VALUE                    1 (str)
+          122 FORMAT_SIMPLE
+          124 LOAD_CONST                       3 ('\\')
+          126 LOAD_FAST                        6 (keyname)
+          128 CONVERT_VALUE                    1 (str)
+          130 FORMAT_SIMPLE
+          132 BUILD_STRING                     3
+          134 CALL                             2
+          142 UNPACK_SEQUENCE                  2
+          146 STORE_FAST_STORE_FAST          120 (_subkeys, values)
+  28      148 LOAD_FAST                        1 (result)
+          150 LOAD_ATTR                        7 (append + NULL|self)
+          170 LOAD_FAST_LOAD_FAST            104 (keyname, values)
+          172 BUILD_TUPLE                      2
+          174 CALL                             1
+          182 POP_TOP
+          184 JUMP_BACKWARD                   54 (to 80)
+  26 >>   188 END_FOR
+          190 POP_TOP
+          192 JUMP_BACKWARD                   93 (to 10)
+  16 >>   196 END_FOR
+          198 POP_TOP
+  29      200 LOAD_FAST                        1 (result)
+          202 RETURN_VALUE
+     >>   204 PUSH_EXC_INFO
+  23      206 LOAD_GLOBAL                      0 (bottlequery)
+          216 LOAD_ATTR                        4 (NotFoundError)
+          236 CHECK_EXC_MATCH
+          238 POP_JUMP_IF_FALSE                4 (to 250)
+          242 POP_TOP
+  24      244 POP_EXCEPT
+          246 JUMP_BACKWARD                  120 (to 10)
+  23 >>   250 RERAISE                          0
+     >>   252 COPY                             3
+          254 POP_EXCEPT
+          256 RERAISE                          1
+  ExceptionTable:
+    28 to 76 -> 204 [1]
+    204 to 244 -> 252 [2] lasti
+    250 to 252 -> 252 [2] lasti
+
+Disassembly of <code InstalledApplication> (line 31, args=0 posonly=0 kwonly=0, flags=0):
+  31        0 RESUME                           0
+            2 LOAD_NAME                        0 (__name__)
+            4 STORE_NAME                       1 (__module__)
+            6 LOAD_CONST                       0 ('InstalledApplication')
+            8 STORE_NAME                       2 (__qualname__)
+           10 LOAD_CONST                       1 (31)
+           12 STORE_NAME                       3 (__firstlineno__)
+  32       14 LOAD_CONST                       2 ("Describes an application installed in a specific bottle.\n\nEach such object has an appid property which uniquely identifies it in a\nbottle.\n\nIf there is a corresponding C4 profile then this is...)
+           16 STORE_NAME                       4 (__doc__)
+  52       18 LOAD_CONST                       3 (None)
+           20 STORE_NAME                       5 (keyname)
+  55       22 LOAD_CONST                       3 (None)
+           24 STORE_NAME                       6 (displayname)
+  58       26 LOAD_CONST                       4 (False)
+           28 STORE_NAME                       7 (systemcomponent)
+  61       30 LOAD_CONST                       3 (None)
+           32 STORE_NAME                       8 (uninstallcommand)
+  64       34 LOAD_CONST                       3 (None)
+           36 STORE_NAME                       9 (_profile)
+  66       38 LOAD_CONST                       5 (<code InstalledApplication.__init__, line 66>)
+           40 MAKE_FUNCTION
+           42 STORE_NAME                      10 (__init__)
+  78       44 LOAD_CONST                       6 (<code InstalledApplication.initWithBottleName_profile_andKeyName_, line 78>)
+           46 MAKE_FUNCTION
+           48 STORE_NAME                      11 (initWithBottleName_profile_andKeyName_)
+  87       50 LOAD_NAME                       12 (cxobjc)
+           52 LOAD_ATTR                       26 (python_method)
+  88       72 LOAD_NAME                       14 (classmethod)
+  89       74 LOAD_CONST                      14 ((None, None))
+           76 LOAD_CONST                       7 (<code InstalledApplication.platformconstructor, line 87>)
+           78 MAKE_FUNCTION
+           80 SET_FUNCTION_ATTRIBUTE           1 (defaults)
+  88       82 CALL                             0
+  87       90 CALL                             0
+  89       98 STORE_NAME                      15 (platformconstructor)
+  96      100 LOAD_NAME                       12 (cxobjc)
+          102 LOAD_ATTR                       26 (python_method)
+  97      122 LOAD_CONST                       8 (<code InstalledApplication._getprofile, line 96>)
+          124 MAKE_FUNCTION
+  96      126 CALL                             0
+  97      134 STORE_NAME                      16 (_getprofile)
+ 100      136 LOAD_NAME                       12 (cxobjc)
+          138 LOAD_ATTR                       26 (python_method)
+ 101      158 LOAD_CONST                       9 (<code InstalledApplication._setprofile, line 100>)
+          160 MAKE_FUNCTION
+ 100      162 CALL                             0
+ 101      170 STORE_NAME                      17 (_setprofile)
+ 106      172 LOAD_NAME                       18 (property)
+          174 PUSH_NULL
+          176 LOAD_NAME                       16 (_getprofile)
+          178 LOAD_NAME                       17 (_setprofile)
+          180 CALL                             2
+          188 STORE_NAME                      19 (profile)
+ 109      190 LOAD_CONST                      10 (<code InstalledApplication._getname, line 109>)
+          192 MAKE_FUNCTION
+          194 STORE_NAME                      20 (_getname)
+ 120      196 LOAD_NAME                       18 (property)
+          198 PUSH_NULL
+          200 LOAD_NAME                       20 (_getname)
+          202 CALL                             1
+          210 STORE_NAME                      21 (name)
+ 122      212 LOAD_CONST                      11 (<code InstalledApplication.canUninstall, line 122>)
+          214 MAKE_FUNCTION
+          216 STORE_NAME                      22 (canUninstall)
+ 125      218 LOAD_CONST                      12 (<code InstalledApplication.uninstall, line 125>)
+          220 MAKE_FUNCTION
+          222 STORE_NAME                      23 (uninstall)
+          224 LOAD_CONST                      13 (('_profile', 'appid', 'bottlename', 'keyname'))
+          226 STORE_NAME                      24 (__static_attributes__)
+          228 RETURN_CONST                     3 (None)
+
+Disassembly of <code InstalledApplication.__init__> (line 66, args=4 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: self, bottlename, profile, keyname
+  66        0 RESUME                           0
+  67        2 LOAD_GLOBAL                      0 (cxobjc)
+           12 LOAD_ATTR                        2 (Proxy)
+           32 LOAD_ATTR                        5 (__init__ + NULL|self)
+           52 LOAD_FAST                        0 (self)
+           54 CALL                             1
+           62 POP_TOP
+  68       64 LOAD_FAST_LOAD_FAST             16 (bottlename, self)
+           66 STORE_ATTR                       3 (bottlename)
+  69       76 LOAD_FAST_LOAD_FAST             48 (keyname, self)
+           78 STORE_ATTR                       4 (keyname)
+  70       88 LOAD_FAST                        2 (profile)
+           90 TO_BOOL
+           98 POP_JUMP_IF_FALSE               24 (to 150)
+  71      102 LOAD_FAST_LOAD_FAST             32 (profile, self)
+          104 STORE_ATTR                       5 (_profile)
+  72      114 LOAD_FAST                        2 (profile)
+          116 LOAD_ATTR                       12 (appid)
+          136 LOAD_FAST                        0 (self)
+          138 STORE_ATTR                       6 (appid)
+          148 RETURN_CONST                     0 (None)
+  74 >>   150 LOAD_CONST                       1 ('.local.')
+          152 LOAD_FAST                        3 (keyname)
+          154 BINARY_OP                        0 (+)
+          158 LOAD_FAST                        0 (self)
+          160 STORE_ATTR                       6 (appid)
+          170 RETURN_CONST                     0 (None)
+
+Disassembly of <code InstalledApplication.initWithBottleName_profile_andKeyName_> (line 78, args=4 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: self, bottlename, profile, keyname
+  78        0 RESUME                           0
+  79        2 LOAD_GLOBAL                      0 (cxobjc)
+           12 LOAD_ATTR                        2 (Proxy)
+           32 LOAD_ATTR                        5 (nsobject_init + NULL|self)
+           52 LOAD_FAST                        0 (self)
+           54 CALL                             1
+           62 STORE_FAST                       0 (self)
+  80       64 LOAD_FAST                        0 (self)
+           66 POP_JUMP_IF_NONE                18 (to 106)
+  81       70 LOAD_FAST                        0 (self)
+           72 LOAD_ATTR                        7 (__init__ + NULL|self)
+           92 LOAD_FAST_LOAD_FAST             18 (bottlename, profile)
+           94 LOAD_FAST                        3 (keyname)
+           96 CALL                             3
+          104 POP_TOP
+  82 >>   106 LOAD_FAST                        0 (self)
+          108 RETURN_VALUE
+
+Disassembly of <code InstalledApplication.platformconstructor> (line 87, args=4 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: cls, bottlename, profile, keyname
+  87        0 RESUME                           0
+  90        2 LOAD_GLOBAL                      0 (distversion)
+           12 LOAD_ATTR                        2 (IS_MACOSX)
+           32 TO_BOOL
+           40 POP_JUMP_IF_FALSE               32 (to 108)
+  93       44 LOAD_FAST                        0 (cls)
+           46 LOAD_ATTR                        5 (alloc + NULL|self)
+           66 CALL                             0
+           74 LOAD_ATTR                        7 (initWithBottleName_profile_andKeyName_ + NULL|self)
+           94 LOAD_FAST_LOAD_FAST             18 (bottlename, profile)
+           96 LOAD_FAST                        3 (keyname)
+           98 CALL                             3
+          106 RETURN_VALUE
+  94 >>   108 LOAD_FAST                        0 (cls)
+          110 PUSH_NULL
+          112 LOAD_FAST_LOAD_FAST             18 (bottlename, profile)
+          114 LOAD_FAST                        3 (keyname)
+          116 CALL                             3
+          124 RETURN_VALUE
+
+Disassembly of <code InstalledApplication._getprofile> (line 96, args=1 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: self
+  96        0 RESUME                           0
+  98        2 LOAD_FAST                        0 (self)
+            4 LOAD_ATTR                        0 (_profile)
+           24 RETURN_VALUE
+
+Disassembly of <code InstalledApplication._setprofile> (line 100, args=2 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: self, profile
+ 100        0 RESUME                           0
+ 103        2 LOAD_FAST_LOAD_FAST             16 (profile, self)
+            4 STORE_ATTR                       0 (_profile)
+ 104       14 LOAD_FAST                        1 (profile)
+           16 LOAD_ATTR                        2 (appid)
+           36 LOAD_FAST                        0 (self)
+           38 STORE_ATTR                       1 (appid)
+           48 RETURN_CONST                     1 (None)
+
+Disassembly of <code InstalledApplication._getname> (line 109, args=1 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: self
+ 109        0 RESUME                           0
+ 114        2 LOAD_FAST                        0 (self)
+            4 LOAD_ATTR                        0 (_profile)
+           24 TO_BOOL
+           32 POP_JUMP_IF_FALSE               22 (to 80)
+ 115       36 LOAD_FAST                        0 (self)
+           38 LOAD_ATTR                        0 (_profile)
+           58 LOAD_ATTR                        2 (name)
+           78 RETURN_VALUE
+ 116 >>    80 LOAD_FAST                        0 (self)
+           82 LOAD_ATTR                        4 (displayname)
+          102 TO_BOOL
+          110 POP_JUMP_IF_FALSE               12 (to 138)
+ 117      114 LOAD_FAST                        0 (self)
+          116 LOAD_ATTR                        4 (displayname)
+          136 RETURN_VALUE
+ 118 >>   138 LOAD_FAST                        0 (self)
+          140 LOAD_ATTR                        6 (keyname)
+          160 RETURN_VALUE
+
+Disassembly of <code InstalledApplication.canUninstall> (line 122, args=1 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: self
+ 122        0 RESUME                           0
+ 123        2 LOAD_GLOBAL                      1 (bool + NULL)
+           12 LOAD_FAST                        0 (self)
+           14 LOAD_ATTR                        2 (uninstallcommand)
+           34 CALL                             1
+           42 RETURN_VALUE
+
+Disassembly of <code InstalledApplication.uninstall> (line 125, args=1 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: self
+ 125        0 RESUME                           0
+ 126        2 LOAD_FAST                        0 (self)
+            4 LOAD_ATTR                        0 (uninstallcommand)
+           24 TO_BOOL
+           32 POP_JUMP_IF_FALSE               33 (to 102)
+ 127       36 LOAD_GLOBAL                      2 (cxutils)
+           46 LOAD_ATTR                        4 (run)
+           66 PUSH_NULL
+           68 LOAD_FAST                        0 (self)
+           70 LOAD_ATTR                        0 (uninstallcommand)
+           90 CALL                             1
+           98 POP_TOP
+          100 RETURN_CONST                     0 (None)
+ 126 >>   102 RETURN_CONST                     0 (None)
+
+Disassembly of <code get_uninstall_applications> (line 130, args=1 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: bottlename, result, winebin, keyname, values, app
+ 130        0 RESUME                           0
+ 132        2 BUILD_LIST                       0
+            4 STORE_FAST                       1 (result)
+ 133        6 LOAD_GLOBAL                      0 (os)
+           16 LOAD_ATTR                        2 (path)
+           36 LOAD_ATTR                        5 (join + NULL|self)
+           56 LOAD_GLOBAL                      6 (cxutils)
+           66 LOAD_ATTR                        8 (CX_ROOT)
+           86 LOAD_CONST                       1 ('bin')
+           88 LOAD_CONST                       2 ('wine')
+           90 CALL                             3
+           98 STORE_FAST                       2 (winebin)
+ 134      100 LOAD_GLOBAL                     11 (_get_uninstall_info + NULL)
+          110 LOAD_FAST                        0 (bottlename)
+          112 CALL                             1
+          120 GET_ITER
+     >>   122 FOR_ITER                       109 (to 344)
+          126 UNPACK_SEQUENCE                  2
+          130 STORE_FAST_STORE_FAST           52 (keyname, values)
+ 135      132 LOAD_GLOBAL                     12 (InstalledApplication)
+          142 LOAD_ATTR                       15 (platformconstructor + NULL|self)
+          162 LOAD_FAST_LOAD_FAST              3 (bottlename, keyname)
+          164 LOAD_CONST                       3 (('keyname',))
+          166 CALL_KW                          2
+          168 STORE_FAST                       5 (app)
+ 136      170 LOAD_FAST                        4 (values)
+          172 LOAD_ATTR                       17 (get + NULL|self)
+          192 LOAD_CONST                       4 ('displayname')
+          194 CALL                             1
+          202 LOAD_FAST                        5 (app)
+          204 STORE_ATTR                       9 (displayname)
+ 137      214 LOAD_FAST                        4 (values)
+          216 LOAD_ATTR                       17 (get + NULL|self)
+          236 LOAD_CONST                       5 ('systemcomponent')
+          238 LOAD_CONST                       6 (0)
+          240 CALL                             2
+          248 LOAD_CONST                       7 (1)
+          250 COMPARE_OP                      72 (==)
+          254 LOAD_FAST                        5 (app)
+          256 STORE_ATTR                      10 (systemcomponent)
+ 138      266 LOAD_CONST                       8 ('uninstallstring')
+          268 LOAD_FAST                        4 (values)
+          270 CONTAINS_OP                      0 (in)
+          274 POP_JUMP_IF_FALSE               14 (to 306)
+ 140      278 LOAD_FAST                        2 (winebin)
+          280 LOAD_CONST                       9 ('--bottle')
+          282 LOAD_FAST                        0 (bottlename)
+          284 LOAD_CONST                      10 ('--wl-app')
+          286 LOAD_CONST                      11 ('uninstaller')
+          288 LOAD_CONST                      12 ('--remove')
+          290 LOAD_FAST                        3 (keyname)
+          292 BUILD_LIST                       7
+          294 LOAD_FAST                        5 (app)
+          296 STORE_ATTR                      11 (uninstallcommand)
+ 141 >>   306 LOAD_FAST                        1 (result)
+          308 LOAD_ATTR                       25 (append + NULL|self)
+          328 LOAD_FAST                        5 (app)
+          330 CALL                             1
+          338 POP_TOP
+          340 JUMP_BACKWARD                  111 (to 122)
+ 134 >>   344 END_FOR
+          346 POP_TOP
+ 142      348 LOAD_FAST                        1 (result)
+          350 RETURN_VALUE
+
+Disassembly of <code AppDetector> (line 145, args=0 posonly=0 kwonly=0, flags=0):
+ 145        0 RESUME                           0
+            2 LOAD_NAME                        0 (__name__)
+            4 STORE_NAME                       1 (__module__)
+            6 LOAD_CONST                       0 ('AppDetector')
+            8 STORE_NAME                       2 (__qualname__)
+           10 LOAD_CONST                       1 (145)
+           12 STORE_NAME                       3 (__firstlineno__)
+ 146       14 LOAD_CONST                       2 (())
+           16 STORE_NAME                       4 (__static_attributes__)
+           18 RETURN_CONST                     3 (None)
+
+Disassembly of <code get_installed_applications> (line 149, args=2 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: bottlename, profiles, installed_apps, file_glob_tree, uninstall_apps, known_uninstall_apps, profile, app_profile, found, regex, app, steamidstring, _filename, registry_glob_tree, key, glob, _subkeys, values, data_regex, value_regex, value, data, keyparts
+ 149        0 RESUME                           0
+ 150        2 BUILD_MAP                        0
+            4 STORE_FAST                       2 (installed_apps)
+ 152        6 LOAD_GLOBAL                      0 (bottlequery)
+           16 LOAD_ATTR                        2 (is_disabled)
+           36 PUSH_NULL
+           38 LOAD_FAST                        0 (bottlename)
+           40 CALL                             1
+           48 TO_BOOL
+           56 POP_JUMP_IF_FALSE                2 (to 64)
+ 153       60 LOAD_FAST                        2 (installed_apps)
+           62 RETURN_VALUE
+ 156 >>    64 LOAD_GLOBAL                      4 (cxglob)
+           74 LOAD_ATTR                        6 (FileGlobTree)
+           94 PUSH_NULL
+           96 CALL                             0
+          104 STORE_FAST                       3 (file_glob_tree)
+ 157      106 LOAD_GLOBAL                      9 (get_uninstall_applications + NULL)
+          116 LOAD_FAST                        0 (bottlename)
+          118 CALL                             1
+          126 STORE_FAST                       4 (uninstall_apps)
+ 158      128 LOAD_GLOBAL                     11 (set + NULL)
+          138 CALL                             0
+          146 STORE_FAST                       5 (known_uninstall_apps)
+ 159      148 LOAD_FAST                        1 (profiles)
+          150 LOAD_ATTR                       13 (values + NULL|self)
+          170 CALL                             0
+          178 GET_ITER
+     >>   180 FOR_ITER                       733 (to 1652)
+          186 STORE_FAST                       6 (profile)
+ 160      188 LOAD_FAST                        6 (profile)
+          190 LOAD_ATTR                       14 (app_profile)
+          210 STORE_FAST                       7 (app_profile)
+ 161      212 LOAD_FAST                        7 (app_profile)
+          214 POP_JUMP_IF_NOT_NONE             2 (to 222)
+ 162      218 JUMP_BACKWARD                   21 (to 180)
+ 163 >>   222 LOAD_CONST                       1 (False)
+          224 STORE_FAST                       8 (found)
+ 165      226 LOAD_FAST                        7 (app_profile)
+          228 LOAD_ATTR                       16 (installed_key_pattern)
+          248 POP_JUMP_IF_NONE               224 (to 700)
+ 166      252 NOP
+ 167      254 LOAD_GLOBAL                     18 (re)
+          264 LOAD_ATTR                       20 (compile)
+          284 PUSH_NULL
+          286 LOAD_FAST                        7 (app_profile)
+          288 LOAD_ATTR                       16 (installed_key_pattern)
+          308 LOAD_GLOBAL                     18 (re)
+          318 LOAD_ATTR                       22 (IGNORECASE)
+          338 CALL                             2
+          346 STORE_FAST                       9 (regex)
+ 171      348 LOAD_FAST                        4 (uninstall_apps)
+          350 GET_ITER
+     >>   352 FOR_ITER                       159 (to 674)
+          356 STORE_FAST                      10 (app)
+ 172      358 LOAD_FAST                        9 (regex)
+          360 LOAD_ATTR                       25 (match + NULL|self)
+          380 LOAD_GLOBAL                     26 (cxutils)
+          390 LOAD_ATTR                       28 (string_to_unicode)
+          410 PUSH_NULL
+          412 LOAD_FAST                       10 (app)
+          414 LOAD_ATTR                       30 (keyname)
+          434 CALL                             1
+          442 CALL                             1
+          450 TO_BOOL
+          458 POP_JUMP_IF_TRUE                 2 (to 466)
+          462 JUMP_BACKWARD                   57 (to 352)
+ 173 >>   466 LOAD_GLOBAL                     32 (InstalledApplication)
+          476 LOAD_ATTR                       35 (platformconstructor + NULL|self)
+          496 LOAD_FAST_LOAD_FAST              6 (bottlename, profile)
+          498 LOAD_FAST                       10 (app)
+          500 LOAD_ATTR                       30 (keyname)
+          520 CALL                             3
+          528 LOAD_FAST_LOAD_FAST             38 (installed_apps, profile)
+          530 LOAD_ATTR                       36 (appid)
+          550 STORE_SUBSCR
+ 174      554 LOAD_FAST                       10 (app)
+          556 LOAD_ATTR                       38 (uninstallcommand)
+          576 LOAD_FAST_LOAD_FAST             38 (installed_apps, profile)
+          578 LOAD_ATTR                       36 (appid)
+          598 BINARY_SUBSCR
+          602 STORE_ATTR                      19 (uninstallcommand)
+ 175      612 LOAD_FAST                        5 (known_uninstall_apps)
+          614 LOAD_ATTR                       41 (add + NULL|self)
+          634 LOAD_FAST                       10 (app)
+          636 LOAD_ATTR                       30 (keyname)
+          656 CALL                             1
+          664 POP_TOP
+ 176      666 LOAD_CONST                       2 (True)
+          668 STORE_FAST                       8 (found)
+ 177      670 POP_TOP
+          672 JUMP_FORWARD                     2 (to 678)
+ 171 >>   674 END_FOR
+          676 POP_TOP
+ 178 >>   678 LOAD_FAST                        8 (found)
+          680 TO_BOOL
+          688 POP_JUMP_IF_FALSE                3 (to 698)
+ 179      692 JUMP_BACKWARD                  259 (to 180)
+ 178 >>   698 NOP
+ 181 >>   700 LOAD_FAST                        7 (app_profile)
+          702 LOAD_ATTR                       50 (steamid)
+          722 TO_BOOL
+          730 POP_JUMP_IF_FALSE              187 (to 1108)
+ 184      734 LOAD_CONST                       6 ('Steam App %s')
+          736 LOAD_FAST                        7 (app_profile)
+          738 LOAD_ATTR                       50 (steamid)
+          758 BINARY_OP                        6 (%)
+          762 STORE_FAST                      11 (steamidstring)
+ 185      764 LOAD_FAST                        4 (uninstall_apps)
+          766 GET_ITER
+     >>   768 FOR_ITER                       166 (to 1104)
+          772 STORE_FAST                      10 (app)
+ 186      774 LOAD_FAST                       11 (steamidstring)
+          776 LOAD_ATTR                       53 (lower + NULL|self)
+          796 CALL                             0
+          804 LOAD_GLOBAL                     26 (cxutils)
+          814 LOAD_ATTR                       28 (string_to_unicode)
+          834 PUSH_NULL
+          836 LOAD_FAST                       10 (app)
+          838 LOAD_ATTR                       30 (keyname)
+          858 CALL                             1
+          866 COMPARE_OP                      88 (== bool)
+          870 POP_JUMP_IF_FALSE              104 (to 1082)
+ 187      874 LOAD_GLOBAL                     32 (InstalledApplication)
+          884 LOAD_ATTR                       35 (platformconstructor + NULL|self)
+          904 LOAD_FAST_LOAD_FAST              6 (bottlename, profile)
+          906 LOAD_FAST                       10 (app)
+          908 LOAD_ATTR                       30 (keyname)
+          928 CALL                             3
+          936 LOAD_FAST_LOAD_FAST             38 (installed_apps, profile)
+          938 LOAD_ATTR                       36 (appid)
+          958 STORE_SUBSCR
+ 188      962 LOAD_FAST                       10 (app)
+          964 LOAD_ATTR                       38 (uninstallcommand)
+          984 LOAD_FAST_LOAD_FAST             38 (installed_apps, profile)
+          986 LOAD_ATTR                       36 (appid)
+         1006 BINARY_SUBSCR
+         1010 STORE_ATTR                      19 (uninstallcommand)
+ 189     1020 LOAD_FAST                        5 (known_uninstall_apps)
+         1022 LOAD_ATTR                       41 (add + NULL|self)
+         1042 LOAD_FAST                       10 (app)
+         1044 LOAD_ATTR                       30 (keyname)
+         1064 CALL                             1
+         1072 POP_TOP
+ 190     1074 LOAD_CONST                       2 (True)
+         1076 STORE_FAST                       8 (found)
+ 191     1078 POP_TOP
+         1080 JUMP_FORWARD                    13 (to 1108)
+ 192 >>  1082 LOAD_FAST                        8 (found)
+         1084 TO_BOOL
+         1092 POP_JUMP_IF_TRUE                 2 (to 1100)
+         1096 JUMP_BACKWARD                  166 (to 768)
+ 193 >>  1100 JUMP_BACKWARD                  168 (to 768)
+ 185 >>  1104 END_FOR
+         1106 POP_TOP
+ 195 >>  1108 LOAD_FAST                        7 (app_profile)
+         1110 LOAD_ATTR                       54 (installed_display_pattern)
+         1130 POP_JUMP_IF_NONE               239 (to 1612)
+ 196     1134 NOP
+ 197     1136 LOAD_GLOBAL                     18 (re)
+         1146 LOAD_ATTR                       20 (compile)
+         1166 PUSH_NULL
+         1168 LOAD_FAST                        7 (app_profile)
+         1170 LOAD_ATTR                       54 (installed_display_pattern)
+         1190 LOAD_GLOBAL                     18 (re)
+         1200 LOAD_ATTR                       22 (IGNORECASE)
+         1220 CALL                             2
+         1228 STORE_FAST                       9 (regex)
+ 201     1230 LOAD_FAST                        4 (uninstall_apps)
+         1232 GET_ITER
+     >>  1234 FOR_ITER                       174 (to 1586)
+         1238 STORE_FAST                      10 (app)
+ 202     1240 LOAD_FAST                       10 (app)
+         1242 LOAD_ATTR                       56 (displayname)
+         1262 POP_JUMP_IF_NOT_NONE             2 (to 1270)
+         1266 JUMP_BACKWARD                   18 (to 1234)
+     >>  1270 LOAD_FAST                        9 (regex)
+         1272 LOAD_ATTR                       25 (match + NULL|self)
+         1292 LOAD_GLOBAL                     26 (cxutils)
+         1302 LOAD_ATTR                       28 (string_to_unicode)
+         1322 PUSH_NULL
+         1324 LOAD_FAST                       10 (app)
+         1326 LOAD_ATTR                       56 (displayname)
+         1346 CALL                             1
+         1354 CALL                             1
+         1362 TO_BOOL
+         1370 POP_JUMP_IF_TRUE                 2 (to 1378)
+         1374 JUMP_BACKWARD                   72 (to 1234)
+ 203 >>  1378 LOAD_GLOBAL                     32 (InstalledApplication)
+         1388 LOAD_ATTR                       35 (platformconstructor + NULL|self)
+         1408 LOAD_FAST_LOAD_FAST              6 (bottlename, profile)
+         1410 LOAD_FAST                       10 (app)
+         1412 LOAD_ATTR                       30 (keyname)
+         1432 CALL                             3
+         1440 LOAD_FAST_LOAD_FAST             38 (installed_apps, profile)
+         1442 LOAD_ATTR                       36 (appid)
+         1462 STORE_SUBSCR
+ 204     1466 LOAD_FAST                       10 (app)
+         1468 LOAD_ATTR                       38 (uninstallcommand)
+         1488 LOAD_FAST_LOAD_FAST             38 (installed_apps, profile)
+         1490 LOAD_ATTR                       36 (appid)
+         1510 BINARY_SUBSCR
+         1514 STORE_ATTR                      19 (uninstallcommand)
+ 205     1524 LOAD_FAST                        5 (known_uninstall_apps)
+         1526 LOAD_ATTR                       41 (add + NULL|self)
+         1546 LOAD_FAST                       10 (app)
+         1548 LOAD_ATTR                       30 (keyname)
+         1568 CALL                             1
+         1576 POP_TOP
+ 206     1578 LOAD_CONST                       2 (True)
+         1580 STORE_FAST                       8 (found)
+ 207     1582 POP_TOP
+         1584 JUMP_FORWARD                     2 (to 1590)
+ 201 >>  1586 END_FOR
+         1588 POP_TOP
+ 208 >>  1590 LOAD_FAST                        8 (found)
+         1592 TO_BOOL
+         1600 POP_JUMP_IF_FALSE                3 (to 1610)
+ 209     1604 JUMP_BACKWARD                  715 (to 180)
+ 208 >>  1610 NOP
+ 211 >>  1612 LOAD_FAST                        3 (file_glob_tree)
+         1614 LOAD_ATTR                       59 (add_profile + NULL|self)
+         1634 LOAD_FAST_LOAD_FAST             96 (profile, bottlename)
+         1636 CALL                             2
+         1644 POP_TOP
+         1646 JUMP_BACKWARD                  736 (to 180)
+ 159 >>  1652 END_FOR
+         1654 POP_TOP
+ 214     1656 LOAD_FAST                        3 (file_glob_tree)
+         1658 LOAD_ATTR                       61 (matches + NULL|self)
+         1678 LOAD_CONST                       8 ('')
+         1680 LOAD_FAST                        0 (bottlename)
+         1682 CALL                             2
+         1690 GET_ITER
+     >>  1692 FOR_ITER                        58 (to 1812)
+         1696 UNPACK_SEQUENCE                  2
+         1700 STORE_FAST_STORE_FAST          198 (_filename, profile)
+ 215     1702 LOAD_FAST                        6 (profile)
+         1704 LOAD_ATTR                       36 (appid)
+         1724 LOAD_FAST                        2 (installed_apps)
+         1726 CONTAINS_OP                      0 (in)
+         1730 POP_JUMP_IF_FALSE                2 (to 1738)
+ 217     1734 JUMP_BACKWARD                   23 (to 1692)
+ 218 >>  1738 LOAD_GLOBAL                     32 (InstalledApplication)
+         1748 LOAD_ATTR                       35 (platformconstructor + NULL|self)
+         1768 LOAD_FAST_LOAD_FAST              6 (bottlename, profile)
+         1770 CALL                             2
+         1778 STORE_FAST                      10 (app)
+ 219     1780 LOAD_FAST_LOAD_FAST            162 (app, installed_apps)
+         1782 LOAD_FAST                       10 (app)
+         1784 LOAD_ATTR                       36 (appid)
+         1804 STORE_SUBSCR
+         1808 JUMP_BACKWARD                   60 (to 1692)
+ 214 >>  1812 END_FOR
+         1814 POP_TOP
+ 222     1816 LOAD_GLOBAL                      4 (cxglob)
+         1826 LOAD_ATTR                       62 (RegistryGlobTree)
+         1846 LOAD_ATTR                       65 (get + NULL|self)
+         1866 LOAD_FAST                        1 (profiles)
+         1868 CALL                             1
+         1876 STORE_FAST                      13 (registry_glob_tree)
+ 223     1878 LOAD_FAST                       13 (registry_glob_tree)
+         1880 LOAD_ATTR                       61 (matches + NULL|self)
+         1900 LOAD_CONST                       8 ('')
+         1902 LOAD_FAST                        0 (bottlename)
+         1904 CALL                             2
+         1912 GET_ITER
+     >>  1914 FOR_ITER                       498 (to 2916)
+         1920 UNPACK_SEQUENCE                  2
+         1924 STORE_FAST                      14 (key)
+         1926 UNPACK_SEQUENCE                  2
+         1930 STORE_FAST_STORE_FAST          111 (profile, glob)
+ 224     1932 LOAD_FAST                        6 (profile)
+         1934 LOAD_ATTR                       36 (appid)
+         1954 LOAD_FAST                        2 (installed_apps)
+         1956 CONTAINS_OP                      0 (in)
+         1960 POP_JUMP_IF_FALSE                2 (to 1968)
+ 226     1964 JUMP_BACKWARD                   27 (to 1914)
+ 227 >>  1968 LOAD_FAST                       15 (glob)
+         1970 LOAD_ATTR                       66 (value_pattern)
+         1990 LOAD_CONST                       8 ('')
+         1992 COMPARE_OP                     119 (!= bool)
+         1996 POP_JUMP_IF_FALSE              419 (to 2840)
+ 229     2002 LOAD_FAST                       14 (key)
+         2004 LOAD_ATTR                       69 (replace + NULL|self)
+         2024 LOAD_CONST                       9 ('/')
+         2026 LOAD_CONST                      10 ('\\')
+         2028 CALL                             2
+         2036 STORE_FAST                      14 (key)
+ 230     2038 LOAD_FAST                       14 (key)
+         2040 LOAD_ATTR                       71 (endswith + NULL|self)
+         2060 LOAD_CONST                      10 ('\\')
+         2062 CALL                             1
+         2070 TO_BOOL
+         2078 POP_JUMP_IF_TRUE                 5 (to 2092)
+ 231     2082 LOAD_CONST                      11 ('%s\\')
+         2084 LOAD_FAST                       14 (key)
+         2086 BINARY_OP                        6 (%)
+         2090 STORE_FAST                      14 (key)
+ 232 >>  2092 LOAD_GLOBAL                      0 (bottlequery)
+         2102 LOAD_ATTR                       72 (get_registry_key)
+         2122 PUSH_NULL
+         2124 LOAD_FAST_LOAD_FAST             14 (bottlename, key)
+         2126 CALL                             2
+         2134 UNPACK_SEQUENCE                  2
+         2138 STORE_FAST                      16 (_subkeys)
+         2140 STORE_FAST                      17 (values)
+ 233     2142 NOP
+ 234     2144 LOAD_GLOBAL                     18 (re)
+         2154 LOAD_ATTR                       20 (compile)
+         2174 PUSH_NULL
+         2176 LOAD_FAST                       15 (glob)
+         2178 LOAD_ATTR                       74 (data_pattern)
+         2198 LOAD_GLOBAL                     18 (re)
+         2208 LOAD_ATTR                       22 (IGNORECASE)
+         2228 CALL                             2
+         2236 STORE_FAST                      18 (data_regex)
+ 238     2238 LOAD_FAST                       15 (glob)
+         2240 LOAD_ATTR                       66 (value_pattern)
+         2260 LOAD_CONST                      13 ('@')
+         2262 COMPARE_OP                      88 (== bool)
+         2266 POP_JUMP_IF_FALSE               36 (to 2342)
+ 239     2270 LOAD_CONST                       8 ('')
+         2272 LOAD_FAST                       17 (values)
+         2274 CONTAINS_OP                      1 (not in)
+         2278 POP_JUMP_IF_FALSE                2 (to 2286)
+ 240     2282 JUMP_BACKWARD                  186 (to 1914)
+ 241 >>  2286 LOAD_FAST                       18 (data_regex)
+         2288 LOAD_ATTR                       25 (match + NULL|self)
+         2308 LOAD_FAST                       17 (values)
+         2310 LOAD_CONST                       8 ('')
+         2312 BINARY_SUBSCR
+         2316 CALL                             1
+         2324 TO_BOOL
+         2332 POP_JUMP_IF_TRUE                 2 (to 2340)
+ 242     2336 JUMP_BACKWARD                  213 (to 1914)
+ 241 >>  2340 JUMP_FORWARD                   134 (to 2610)
+ 244 >>  2342 NOP
+ 245     2344 LOAD_GLOBAL                     18 (re)
+         2354 LOAD_ATTR                       20 (compile)
+         2374 PUSH_NULL
+         2376 LOAD_FAST                       15 (glob)
+         2378 LOAD_ATTR                       66 (value_pattern)
+         2398 LOAD_GLOBAL                     18 (re)
+         2408 LOAD_ATTR                       22 (IGNORECASE)
+         2428 CALL                             2
+         2436 STORE_FAST                      19 (value_regex)
+ 249     2438 LOAD_FAST                       17 (values)
+         2440 LOAD_ATTR                       77 (items + NULL|self)
+         2460 CALL                             0
+         2468 GET_ITER
+     >>  2470 FOR_ITER                        63 (to 2600)
+         2474 UNPACK_SEQUENCE                  2
+         2478 STORE_FAST                      20 (value)
+         2480 STORE_FAST                      21 (data)
+ 250     2482 LOAD_FAST                       19 (value_regex)
+         2484 LOAD_ATTR                       25 (match + NULL|self)
+         2504 LOAD_FAST                       20 (value)
+         2506 CALL                             1
+         2514 TO_BOOL
+         2522 POP_JUMP_IF_TRUE                 2 (to 2530)
+         2526 JUMP_BACKWARD                   30 (to 2470)
+     >>  2530 LOAD_FAST                       18 (data_regex)
+         2532 LOAD_ATTR                       25 (match + NULL|self)
+         2552 LOAD_GLOBAL                     79 (str + NULL)
+         2562 LOAD_FAST                       21 (data)
+         2564 CALL                             1
+         2572 CALL                             1
+         2580 TO_BOOL
+         2588 POP_JUMP_IF_TRUE                 2 (to 2596)
+         2592 JUMP_BACKWARD                   63 (to 2470)
+ 251 >>  2596 POP_TOP
+         2598 JUMP_FORWARD                     5 (to 2610)
+ 249 >>  2600 END_FOR
+         2602 POP_TOP
+ 254     2604 JUMP_BACKWARD                  348 (to 1914)
+ 255 >>  2610 LOAD_FAST                       14 (key)
+         2612 LOAD_ATTR                       81 (split + NULL|self)
+         2632 LOAD_CONST                      10 ('\\')
+         2634 CALL                             1
+         2642 STORE_FAST                      22 (keyparts)
+ 257     2644 LOAD_GLOBAL                     83 (len + NULL)
+         2654 LOAD_FAST                       22 (keyparts)
+         2656 CALL                             1
+         2664 LOAD_CONST                      15 (8)
+         2666 COMPARE_OP                      88 (== bool)
+         2670 POP_JUMP_IF_FALSE               83 (to 2840)
+ 258     2674 LOAD_FAST                       22 (keyparts)
+         2676 LOAD_CONST                      16 (0)
+         2678 BINARY_SUBSCR
+         2682 LOAD_CONST                      17 ('hkey_local_machine')
+         2684 COMPARE_OP                      88 (== bool)
+         2688 POP_JUMP_IF_TRUE                 9 (to 2710)
+         2692 LOAD_FAST                       22 (keyparts)
+         2694 LOAD_CONST                      16 (0)
+         2696 BINARY_SUBSCR
+         2700 LOAD_CONST                      18 ('hkey_current_user')
+         2702 COMPARE_OP                      88 (== bool)
+         2706 POP_JUMP_IF_FALSE               65 (to 2840)
+ 259 >>  2710 LOAD_FAST                       22 (keyparts)
+         2712 LOAD_CONST                      19 (1)
+         2714 BINARY_SUBSCR
+         2718 LOAD_CONST                      20 ('software')
+         2720 COMPARE_OP                      88 (== bool)
+         2724 POP_JUMP_IF_FALSE               56 (to 2840)
+ 260     2728 LOAD_FAST                       22 (keyparts)
+         2730 LOAD_CONST                      21 (2)
+         2732 BINARY_SUBSCR
+         2736 LOAD_CONST                      22 ('microsoft')
+         2738 COMPARE_OP                      88 (== bool)
+         2742 POP_JUMP_IF_FALSE               47 (to 2840)
+ 261     2746 LOAD_FAST                       22 (keyparts)
+         2748 LOAD_CONST                      23 (3)
+         2750 BINARY_SUBSCR
+         2754 LOAD_CONST                      24 ('windows')
+         2756 COMPARE_OP                      88 (== bool)
+         2760 POP_JUMP_IF_FALSE               38 (to 2840)
+ 262     2764 LOAD_FAST                       22 (keyparts)
+         2766 LOAD_CONST                      25 (4)
+         2768 BINARY_SUBSCR
+         2772 LOAD_CONST                      26 ('currentversion')
+         2774 COMPARE_OP                      88 (== bool)
+         2778 POP_JUMP_IF_FALSE               29 (to 2840)
+ 263     2782 LOAD_FAST                       22 (keyparts)
+         2784 LOAD_CONST                      27 (5)
+         2786 BINARY_SUBSCR
+         2790 LOAD_CONST                      28 ('uninstall')
+         2792 COMPARE_OP                      88 (== bool)
+         2796 POP_JUMP_IF_FALSE               20 (to 2840)
+ 265     2800 LOAD_FAST                        5 (known_uninstall_apps)
+         2802 LOAD_ATTR                       41 (add + NULL|self)
+         2822 LOAD_FAST                       22 (keyparts)
+         2824 LOAD_CONST                      29 (6)
+         2826 BINARY_SUBSCR
+         2830 CALL                             1
+         2838 POP_TOP
+ 266 >>  2840 LOAD_GLOBAL                     32 (InstalledApplication)
+         2850 LOAD_ATTR                       35 (platformconstructor + NULL|self)
+         2870 LOAD_FAST_LOAD_FAST              6 (bottlename, profile)
+         2872 CALL                             2
+         2880 STORE_FAST                      10 (app)
+ 267     2882 LOAD_FAST_LOAD_FAST            162 (app, installed_apps)
+         2884 LOAD_FAST                       10 (app)
+         2886 LOAD_ATTR                       36 (appid)
+         2906 STORE_SUBSCR
+         2910 JUMP_BACKWARD                  501 (to 1914)
+ 223 >>  2916 END_FOR
+         2918 POP_TOP
+ 270 >>  2920 LOAD_FAST                        4 (uninstall_apps)
+         2922 GET_ITER
+     >>  2924 FOR_ITER                        73 (to 3074)
+         2928 STORE_FAST                      10 (app)
+ 271     2930 LOAD_FAST                       10 (app)
+         2932 LOAD_ATTR                       56 (displayname)
+         2952 TO_BOOL
+         2960 POP_JUMP_IF_TRUE                 2 (to 2968)
+         2964 JUMP_BACKWARD                   22 (to 2924)
+     >>  2968 LOAD_FAST                       10 (app)
+         2970 LOAD_ATTR                       84 (systemcomponent)
+         2990 TO_BOOL
+         2998 POP_JUMP_IF_FALSE                2 (to 3006)
+         3002 JUMP_BACKWARD                   41 (to 2924)
+ 272 >>  3006 LOAD_FAST                       10 (app)
+         3008 LOAD_ATTR                       30 (keyname)
+         3028 LOAD_FAST                        5 (known_uninstall_apps)
+         3030 CONTAINS_OP                      1 (not in)
+         3034 POP_JUMP_IF_TRUE                 2 (to 3042)
+         3038 JUMP_BACKWARD                   59 (to 2924)
+ 273 >>  3042 LOAD_FAST_LOAD_FAST            162 (app, installed_apps)
+         3044 LOAD_FAST                       10 (app)
+         3046 LOAD_ATTR                       36 (appid)
+         3066 STORE_SUBSCR
+         3070 JUMP_BACKWARD                   75 (to 2924)
+ 270 >>  3074 END_FOR
+         3076 POP_TOP
+ 275     3078 LOAD_FAST                        2 (installed_apps)
+         3080 RETURN_VALUE
+     >>  3082 PUSH_EXC_INFO
+ 168     3084 LOAD_GLOBAL                     18 (re)
+         3094 LOAD_ATTR                       42 (error)
+         3114 CHECK_EXC_MATCH
+         3116 POP_JUMP_IF_FALSE               95 (to 3310)
+         3120 POP_TOP
+ 169     3122 LOAD_GLOBAL                     44 (cxlog)
+         3132 LOAD_ATTR                       46 (warn)
+         3152 PUSH_NULL
+         3154 LOAD_CONST                       3 ('installed key pattern ')
+         3156 LOAD_GLOBAL                     44 (cxlog)
+         3166 LOAD_ATTR                       48 (debug_str)
+         3186 PUSH_NULL
+         3188 LOAD_FAST                        7 (app_profile)
+         3190 LOAD_ATTR                       16 (installed_key_pattern)
+         3210 CALL                             1
+         3218 CONVERT_VALUE                    1 (str)
+         3220 FORMAT_SIMPLE
+         3222 LOAD_CONST                       4 (' in profile for ')
+         3224 LOAD_GLOBAL                     44 (cxlog)
+         3234 LOAD_ATTR                       48 (debug_str)
+         3254 PUSH_NULL
+         3256 LOAD_FAST                        6 (profile)
+         3258 LOAD_ATTR                       36 (appid)
+         3278 CALL                             1
+         3286 CONVERT_VALUE                    1 (str)
+         3288 FORMAT_SIMPLE
+         3290 LOAD_CONST                       5 (' is an invalid regular expression')
+         3292 BUILD_STRING                     5
+         3294 CALL                             1
+         3302 POP_TOP
+         3304 POP_EXCEPT
+         3306 JUMP_BACKWARD_NO_INTERRUPT    1305 (to 700)
+ 168 >>  3310 RERAISE                          0
+     >>  3312 COPY                             3
+         3314 POP_EXCEPT
+         3316 RERAISE                          1
+     >>  3318 PUSH_EXC_INFO
+ 198     3320 LOAD_GLOBAL                     18 (re)
+         3330 LOAD_ATTR                       42 (error)
+         3350 CHECK_EXC_MATCH
+         3352 POP_JUMP_IF_FALSE               95 (to 3546)
+         3356 POP_TOP
+ 199     3358 LOAD_GLOBAL                     44 (cxlog)
+         3368 LOAD_ATTR                       46 (warn)
+         3388 PUSH_NULL
+         3390 LOAD_CONST                       7 ('installed display pattern ')
+         3392 LOAD_GLOBAL                     44 (cxlog)
+         3402 LOAD_ATTR                       48 (debug_str)
+         3422 PUSH_NULL
+         3424 LOAD_FAST                        7 (app_profile)
+         3426 LOAD_ATTR                       54 (installed_display_pattern)
+         3446 CALL                             1
+         3454 CONVERT_VALUE                    1 (str)
+         3456 FORMAT_SIMPLE
+         3458 LOAD_CONST                       4 (' in profile for ')
+         3460 LOAD_GLOBAL                     44 (cxlog)
+         3470 LOAD_ATTR                       48 (debug_str)
+         3490 PUSH_NULL
+         3492 LOAD_FAST                        6 (profile)
+         3494 LOAD_ATTR                       36 (appid)
+         3514 CALL                             1
+         3522 CONVERT_VALUE                    1 (str)
+         3524 FORMAT_SIMPLE
+         3526 LOAD_CONST                       5 (' is an invalid regular expression')
+         3528 BUILD_STRING                     5
+         3530 CALL                             1
+         3538 POP_TOP
+         3540 POP_EXCEPT
+         3542 JUMP_BACKWARD_NO_INTERRUPT     967 (to 1612)
+ 198 >>  3546 RERAISE                          0
+     >>  3548 COPY                             3
+         3550 POP_EXCEPT
+         3552 RERAISE                          1
+     >>  3554 PUSH_EXC_INFO
+ 235     3556 LOAD_GLOBAL                     18 (re)
+         3566 LOAD_ATTR                       42 (error)
+         3586 CHECK_EXC_MATCH
+         3588 POP_JUMP_IF_FALSE               97 (to 3786)
+         3592 POP_TOP
+ 236     3594 LOAD_GLOBAL                     44 (cxlog)
+         3604 LOAD_ATTR                       46 (warn)
+         3624 PUSH_NULL
+         3626 LOAD_CONST                      12 ('registry data pattern ')
+         3628 LOAD_GLOBAL                     44 (cxlog)
+         3638 LOAD_ATTR                       48 (debug_str)
+         3658 PUSH_NULL
+         3660 LOAD_FAST                       15 (glob)
+         3662 LOAD_ATTR                       74 (data_pattern)
+         3682 CALL                             1
+         3690 CONVERT_VALUE                    1 (str)
+         3692 FORMAT_SIMPLE
+         3694 LOAD_CONST                       4 (' in profile for ')
+         3696 LOAD_GLOBAL                     44 (cxlog)
+         3706 LOAD_ATTR                       48 (debug_str)
+         3726 PUSH_NULL
+         3728 LOAD_FAST                        6 (profile)
+         3730 LOAD_ATTR                       36 (appid)
+         3750 CALL                             1
+         3758 CONVERT_VALUE                    1 (str)
+         3760 FORMAT_SIMPLE
+         3762 LOAD_CONST                       5 (' is an invalid regular expression')
+         3764 BUILD_STRING                     5
+         3766 CALL                             1
+         3774 POP_TOP
+ 237     3776 POP_EXCEPT
+         3778 POP_TOP
+         3780 JUMP_BACKWARD                  433 (to 2920)
+ 235 >>  3786 RERAISE                          0
+     >>  3788 COPY                             3
+         3790 POP_EXCEPT
+         3792 RERAISE                          1
+     >>  3794 PUSH_EXC_INFO
+ 246     3796 LOAD_GLOBAL                     18 (re)
+         3806 LOAD_ATTR                       42 (error)
+         3826 CHECK_EXC_MATCH
+         3828 POP_JUMP_IF_FALSE               97 (to 4026)
+         3832 POP_TOP
+ 247     3834 LOAD_GLOBAL                     44 (cxlog)
+         3844 LOAD_ATTR                       46 (warn)
+         3864 PUSH_NULL
+         3866 LOAD_CONST                      14 ('registry value pattern ')
+         3868 LOAD_GLOBAL                     44 (cxlog)
+         3878 LOAD_ATTR                       48 (debug_str)
+         3898 PUSH_NULL
+         3900 LOAD_FAST                       15 (glob)
+         3902 LOAD_ATTR                       66 (value_pattern)
+         3922 CALL                             1
+         3930 CONVERT_VALUE                    1 (str)
+         3932 FORMAT_SIMPLE
+         3934 LOAD_CONST                       4 (' in profile for ')
+         3936 LOAD_GLOBAL                     44 (cxlog)
+         3946 LOAD_ATTR                       48 (debug_str)
+         3966 PUSH_NULL
+         3968 LOAD_FAST                        6 (profile)
+         3970 LOAD_ATTR                       36 (appid)
+         3990 CALL                             1
+         3998 CONVERT_VALUE                    1 (str)
+         4000 FORMAT_SIMPLE
+         4002 LOAD_CONST                       5 (' is an invalid regular expression')
+         4004 BUILD_STRING                     5
+         4006 CALL                             1
+         4014 POP_TOP
+ 248     4016 POP_EXCEPT
+         4018 POP_TOP
+         4020 JUMP_BACKWARD                  553 (to 2920)
+ 246 >>  4026 RERAISE                          0
+     >>  4028 COPY                             3
+         4030 POP_EXCEPT
+         4032 RERAISE                          1
+  ExceptionTable:
+    254 to 348 -> 3082 [1]
+    1136 to 1230 -> 3318 [1]
+    2144 to 2238 -> 3554 [1]
+    2344 to 2438 -> 3794 [1]
+    3082 to 3304 -> 3312 [2] lasti
+    3310 to 3312 -> 3312 [2] lasti
+    3318 to 3540 -> 3548 [2] lasti
+    3546 to 3548 -> 3548 [2] lasti
+    3554 to 3776 -> 3788 [2] lasti
+    3786 to 3788 -> 3788 [2] lasti
+    3794 to 4016 -> 4028 [2] lasti
+    4026 to 4028 -> 4028 [2] lasti
+
+Disassembly of <code fast_get_installed_applications> (line 278, args=2 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: bottlename, profiles
+ 278        0 RESUME                           0
+ 282        2 LOAD_GLOBAL                      1 (get_installed_applications + NULL)
+           12 LOAD_FAST_LOAD_FAST              1 (bottlename, profiles)
+           14 CALL                             2
+           22 RETURN_VALUE
+
+Disassembly of <code is_profile_installed> (line 285, args=2 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: bottlename, profile, profiles, applications
+ 285        0 RESUME                           0
+ 287        2 LOAD_GLOBAL                      0 (c4profilesmanager)
+           12 LOAD_ATTR                        2 (C4ProfilesSet)
+           32 PUSH_NULL
+           34 CALL                             0
+           42 STORE_FAST                       2 (profiles)
+ 288       44 LOAD_FAST_LOAD_FAST             18 (profile, profiles)
+           46 LOAD_FAST                        1 (profile)
+           48 LOAD_ATTR                        4 (appid)
+           68 STORE_SUBSCR
+ 289       72 LOAD_GLOBAL                      7 (get_installed_applications + NULL)
+           82 LOAD_FAST_LOAD_FAST              2 (bottlename, profiles)
+           84 CALL                             2
+           92 STORE_FAST                       3 (applications)
+ 290       94 LOAD_FAST                        1 (profile)
+           96 LOAD_ATTR                        4 (appid)
+          116 LOAD_FAST                        3 (applications)
+          118 CONTAINS_OP                      0 (in)
+          122 POP_JUMP_IF_FALSE               14 (to 154)
+ 291      126 LOAD_FAST_LOAD_FAST             49 (applications, profile)
+          128 LOAD_ATTR                        4 (appid)
+          148 BINARY_SUBSCR
+          152 RETURN_VALUE
+ 292 >>   154 RETURN_CONST                     1 (None)

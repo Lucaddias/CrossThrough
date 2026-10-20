@@ -1,0 +1,1173 @@
+# proxyinfo — CPython 3.13 bytecode listing of lib/python/proxyinfo.pyc
+# sha256 92b63b676b7db9be3fa3675222ec6dc58cf02cef03ad8ad17dc90c27489cd2c4, pyc flags 3, co_filename /Volumes/gitlab_data/gitlab/builds/j911ygmXM/0/crossover/crossover/macosx/CrossOver/build/Build/Products/Release/CrossOver.app/Contents/SharedSupport/CrossOver/lib/python/proxyinfo.py
+
+Disassembly of <code <module>> (line 1, args=0 posonly=0 kwonly=0, flags=0):
+   0        0 RESUME                           0
+   3        2 LOAD_CONST                       0 (0)
+            4 LOAD_CONST                       1 (None)
+            6 IMPORT_NAME                      0 (os)
+            8 STORE_NAME                       0 (os)
+   4       10 LOAD_CONST                       0 (0)
+           12 LOAD_CONST                       1 (None)
+           14 IMPORT_NAME                      1 (traceback)
+           16 STORE_NAME                       1 (traceback)
+   5       18 LOAD_CONST                       0 (0)
+           20 LOAD_CONST                       1 (None)
+           22 IMPORT_NAME                      2 (sys)
+           24 STORE_NAME                       2 (sys)
+   7       26 LOAD_CONST                       0 (0)
+           28 LOAD_CONST                       1 (None)
+           30 IMPORT_NAME                      3 (urllib.request)
+           32 IMPORT_FROM                      4 (request)
+           34 STORE_NAME                       5 (urllib2)
+           36 POP_TOP
+   9       38 LOAD_CONST                       0 (0)
+           40 LOAD_CONST                       1 (None)
+           42 IMPORT_NAME                      6 (cxlog)
+           44 STORE_NAME                       6 (cxlog)
+  10       46 LOAD_CONST                       0 (0)
+           48 LOAD_CONST                       1 (None)
+           50 IMPORT_NAME                      7 (cxproduct)
+           52 STORE_NAME                       7 (cxproduct)
+  11       54 LOAD_CONST                       0 (0)
+           56 LOAD_CONST                       1 (None)
+           58 IMPORT_NAME                      8 (cxutils)
+           60 STORE_NAME                       8 (cxutils)
+  12       62 LOAD_CONST                       0 (0)
+           64 LOAD_CONST                       1 (None)
+           66 IMPORT_NAME                      9 (distversion)
+           68 STORE_NAME                       9 (distversion)
+  23       70 LOAD_CONST                       1 (None)
+           72 STORE_GLOBAL                    10 (_DESKTOP_ENVIRONMENT)
+  25       74 LOAD_CONST                       2 (<code get_desktop_environment, line 25>)
+           76 MAKE_FUNCTION
+           78 STORE_NAME                      11 (get_desktop_environment)
+  83       80 LOAD_CONST                       3 (False)
+           82 STORE_NAME                      12 (_USE_LIBPROXY)
+  84       84 LOAD_CONST                       1 (None)
+           86 STORE_GLOBAL                    13 (_LIBPROXY_FACTORY)
+  86       88 LOAD_CONST                       4 (<code get_libproxy_factory, line 86>)
+           90 MAKE_FUNCTION
+           92 STORE_NAME                      14 (get_libproxy_factory)
+  99       94 LOAD_CONST                       5 (<code has_libproxy, line 99>)
+           96 MAKE_FUNCTION
+           98 STORE_NAME                      15 (has_libproxy)
+ 105      100 LOAD_CONST                       6 (<code get_proxy_libproxy, line 105>)
+          102 MAKE_FUNCTION
+          104 STORE_NAME                      16 (get_proxy_libproxy)
+ 121      106 LOAD_CONST                       7 (<code get_proxy_gconf, line 121>)
+          108 MAKE_FUNCTION
+          110 STORE_NAME                      17 (get_proxy_gconf)
+ 160      112 LOAD_CONST                       8 (<code get_proxy_gsettings, line 160>)
+          114 MAKE_FUNCTION
+          116 STORE_NAME                      18 (get_proxy_gsettings)
+ 204      118 LOAD_CONST                       1 (None)
+          120 STORE_GLOBAL                    19 (_HAS_KDE)
+ 206      122 LOAD_CONST                       9 (<code _init_kde, line 206>)
+          124 MAKE_FUNCTION
+          126 STORE_NAME                      20 (_init_kde)
+ 226      128 LOAD_CONST                      10 (<code get_proxy_kde_int, line 226>)
+          130 MAKE_FUNCTION
+          132 STORE_NAME                      21 (get_proxy_kde_int)
+ 235      134 LOAD_CONST                      11 (<code get_proxy_kde, line 235>)
+          136 MAKE_FUNCTION
+          138 STORE_NAME                      22 (get_proxy_kde)
+ 276      140 LOAD_CONST                      12 (<code get_proxy_env, line 276>)
+          142 MAKE_FUNCTION
+          144 STORE_NAME                      23 (get_proxy_env)
+ 281      146 LOAD_CONST                      13 (<code get_proxy_conf, line 281>)
+          148 MAKE_FUNCTION
+          150 STORE_NAME                      24 (get_proxy_conf)
+ 293      152 LOAD_BUILD_CLASS
+          154 PUSH_NULL
+          156 LOAD_CONST                      14 (<code DynamicProxyHandler, line 293>)
+          158 MAKE_FUNCTION
+          160 LOAD_CONST                      15 ('DynamicProxyHandler')
+          162 LOAD_NAME                        5 (urllib2)
+          164 LOAD_ATTR                       50 (ProxyHandler)
+          184 CALL                             3
+          192 STORE_NAME                      26 (DynamicProxyHandler)
+ 358      194 LOAD_CONST                      16 (<code install_default_opener, line 358>)
+          196 MAKE_FUNCTION
+          198 STORE_NAME                      27 (install_default_opener)
+ 365      200 LOAD_CONST                      17 (<code _init, line 365>)
+          202 MAKE_FUNCTION
+          204 STORE_NAME                      28 (_init)
+ 372      206 LOAD_NAME                       29 (__name__)
+          208 LOAD_CONST                      18 ('__main__')
+          210 COMPARE_OP                      88 (== bool)
+          214 POP_JUMP_IF_FALSE               71 (to 360)
+ 374      218 LOAD_NAME                        0 (os)
+          220 LOAD_ATTR                       60 (path)
+          240 LOAD_ATTR                       63 (join + NULL|self)
+          260 LOAD_NAME                        0 (os)
+          262 LOAD_ATTR                       60 (path)
+          282 LOAD_ATTR                       65 (dirname + NULL|self)
+          302 LOAD_NAME                        2 (sys)
+          304 LOAD_ATTR                       66 (argv)
+          324 LOAD_CONST                       0 (0)
+          326 BINARY_SUBSCR
+          330 CALL                             1
+          338 LOAD_CONST                      19 ('../..')
+          340 CALL                             2
+          348 LOAD_NAME                        8 (cxutils)
+          350 STORE_ATTR                      34 (CX_ROOT)
+ 375 >>   360 LOAD_NAME                       28 (_init)
+          362 PUSH_NULL
+          364 CALL                             0
+          372 POP_TOP
+ 384      374 LOAD_CONST                      20 (<code main, line 384>)
+          376 MAKE_FUNCTION
+          378 STORE_NAME                      35 (main)
+ 393      380 LOAD_NAME                       29 (__name__)
+          382 LOAD_CONST                      18 ('__main__')
+          384 COMPARE_OP                      88 (== bool)
+          388 POP_JUMP_IF_FALSE                8 (to 408)
+ 394      392 LOAD_NAME                       35 (main)
+          394 PUSH_NULL
+          396 CALL                             0
+          404 POP_TOP
+          406 RETURN_CONST                     1 (None)
+ 393 >>   408 RETURN_CONST                     1 (None)
+
+Disassembly of <code get_desktop_environment> (line 25, args=0 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: Gio, GLib, proxy, session_managers, dbus_name, desktop_environment, has_owner, exception
+  25        0 RESUME                           0
+  29        2 LOAD_GLOBAL                      0 (_DESKTOP_ENVIRONMENT)
+           12 TO_BOOL
+           20 POP_JUMP_IF_FALSE                6 (to 36)
+  30       24 LOAD_GLOBAL                      0 (_DESKTOP_ENVIRONMENT)
+           34 RETURN_VALUE
+  32 >>    36 LOAD_CONST                       1 ('unknown')
+           38 STORE_GLOBAL                     0 (_DESKTOP_ENVIRONMENT)
+  33       40 LOAD_GLOBAL                      2 (cxutils)
+           50 LOAD_ATTR                        4 (CX_ROOT)
+           70 POP_JUMP_IF_NONE                48 (to 170)
+  34       74 LOAD_GLOBAL                      6 (cxproduct)
+           84 LOAD_ATTR                        8 (get_config)
+          104 PUSH_NULL
+          106 CALL                             0
+          114 LOAD_CONST                       3 ('CrossOver')
+          116 BINARY_SUBSCR
+          120 LOAD_ATTR                       11 (get + NULL|self)
+          140 LOAD_CONST                       4 ('ManualProxySettings')
+          142 LOAD_CONST                       5 ('0')
+          144 CALL                             2
+          152 LOAD_CONST                       6 ('1')
+          154 COMPARE_OP                      88 (== bool)
+          158 POP_JUMP_IF_FALSE                4 (to 170)
+  35      162 LOAD_CONST                       7 ('config')
+          164 STORE_GLOBAL                     0 (_DESKTOP_ENVIRONMENT)
+          166 JUMP_FORWARD                   269 (to 708)
+  36 >>   170 LOAD_GLOBAL                     12 (distversion)
+          180 LOAD_ATTR                       14 (IS_MACOSX)
+          200 TO_BOOL
+          208 POP_JUMP_IF_FALSE                3 (to 218)
+  37      212 LOAD_CONST                       8 ('macosx')
+          214 STORE_GLOBAL                     0 (_DESKTOP_ENVIRONMENT)
+          216 JUMP_FORWARD                   245 (to 708)
+  38 >>   218 LOAD_CONST                       9 ('GNOME_DESKTOP_SESSION_ID')
+          220 LOAD_GLOBAL                     16 (os)
+          230 LOAD_ATTR                       18 (environ)
+          250 CONTAINS_OP                      0 (in)
+          254 POP_JUMP_IF_FALSE                3 (to 264)
+  39      258 LOAD_CONST                      10 ('gnome')
+          260 STORE_GLOBAL                     0 (_DESKTOP_ENVIRONMENT)
+          262 JUMP_FORWARD                   222 (to 708)
+  40 >>   264 LOAD_CONST                      11 ('KDE_FULL_SESSION')
+          266 LOAD_GLOBAL                     16 (os)
+          276 LOAD_ATTR                       18 (environ)
+          296 CONTAINS_OP                      0 (in)
+          300 POP_JUMP_IF_FALSE                3 (to 310)
+  41      304 LOAD_CONST                      12 ('kde')
+          306 STORE_GLOBAL                     0 (_DESKTOP_ENVIRONMENT)
+          308 JUMP_FORWARD                   199 (to 708)
+  43 >>   310 NOP
+  44      312 LOAD_CONST                      13 (0)
+          314 LOAD_CONST                      14 (('Gio', 'GLib'))
+          316 IMPORT_NAME                     10 (gi.repository)
+          318 IMPORT_FROM                     11 (Gio)
+          320 STORE_FAST                       0 (Gio)
+          322 IMPORT_FROM                     12 (GLib)
+          324 STORE_FAST                       1 (GLib)
+          326 POP_TOP
+  46      328 LOAD_FAST                        0 (Gio)
+          330 LOAD_ATTR                       26 (DBusProxy)
+          350 LOAD_ATTR                       29 (new_for_bus_sync + NULL|self)
+  47      370 LOAD_FAST                        0 (Gio)
+          372 LOAD_ATTR                       30 (BusType)
+          392 LOAD_ATTR                       32 (SESSION)
+  48      412 LOAD_FAST                        0 (Gio)
+          414 LOAD_ATTR                       34 (DBusProxyFlags)
+          434 LOAD_ATTR                       36 (NONE)
+  49      454 LOAD_CONST                       2 (None)
+  50      456 LOAD_CONST                      15 ('org.freedesktop.DBus')
+  51      458 LOAD_CONST                      16 ('/org/freedesktop/DBus')
+  52      460 LOAD_CONST                      15 ('org.freedesktop.DBus')
+  53      462 LOAD_CONST                       2 (None)
+  46      464 LOAD_CONST                      17 (('bus_type', 'flags', 'info', 'name', 'object_path', 'interface_name', 'cancellable'))
+          466 CALL_KW                          7
+          468 STORE_FAST                       2 (proxy)
+  55      470 LOAD_CONST                      18 ((('org.gnome.SessionManager', 'gnome'), ('org.kde.ksmserver', 'kde'), ('org.xfce.SessionManager', 'xfce')))
+          472 STORE_FAST                       3 (session_managers)
+  61      474 LOAD_FAST                        3 (session_managers)
+          476 GET_ITER
+     >>   478 FOR_ITER                       110 (to 702)
+          482 UNPACK_SEQUENCE                  2
+          486 STORE_FAST_STORE_FAST           69 (dbus_name, desktop_environment)
+  62      488 LOAD_FAST                        2 (proxy)
+          490 LOAD_ATTR                       39 (call_sync + NULL|self)
+          510 LOAD_CONST                      19 ('NameHasOwner')
+  63      512 LOAD_FAST                        1 (GLib)
+          514 LOAD_ATTR                       40 (Variant)
+          534 LOAD_ATTR                       43 (new_tuple + NULL|self)
+          554 LOAD_FAST                        1 (GLib)
+          556 LOAD_ATTR                       40 (Variant)
+          576 LOAD_ATTR                       45 (new_string + NULL|self)
+          596 LOAD_FAST                        4 (dbus_name)
+          598 CALL                             1
+          606 CALL                             1
+  64      614 LOAD_FAST                        0 (Gio)
+          616 LOAD_ATTR                       46 (DBusCallFlags)
+          636 LOAD_ATTR                       36 (NONE)
+          656 LOAD_CONST                      20 (-1)
+          658 LOAD_CONST                       2 (None)
+  62      660 CALL                             5
+  64      668 LOAD_CONST                      13 (0)
+  62      670 BINARY_SUBSCR
+          674 STORE_FAST                       6 (has_owner)
+  65      676 LOAD_FAST                        6 (has_owner)
+          678 TO_BOOL
+          686 POP_JUMP_IF_TRUE                 2 (to 694)
+          690 JUMP_BACKWARD                  108 (to 478)
+  66 >>   694 LOAD_FAST                        5 (desktop_environment)
+          696 STORE_GLOBAL                     0 (_DESKTOP_ENVIRONMENT)
+  67      698 POP_TOP
+          700 JUMP_FORWARD                     3 (to 708)
+  61 >>   702 END_FOR
+          704 POP_TOP
+          706 NOP
+  71 >>   708 LOAD_GLOBAL                     50 (cxlog)
+          718 LOAD_ATTR                       52 (log)
+          738 PUSH_NULL
+          740 LOAD_CONST                      22 ('Found desktop environment: %s')
+          742 LOAD_GLOBAL                      0 (_DESKTOP_ENVIRONMENT)
+          752 BINARY_OP                        6 (%)
+          756 CALL                             1
+          764 POP_TOP
+  73      766 LOAD_GLOBAL                      0 (_DESKTOP_ENVIRONMENT)
+          776 RETURN_VALUE
+     >>   778 PUSH_EXC_INFO
+  68      780 LOAD_GLOBAL                     48 (Exception)
+          790 CHECK_EXC_MATCH
+          792 POP_JUMP_IF_FALSE               44 (to 884)
+          796 STORE_FAST                       7 (exception)
+  69      798 LOAD_GLOBAL                     50 (cxlog)
+          808 LOAD_ATTR                       52 (log)
+          828 PUSH_NULL
+          830 LOAD_CONST                      21 ('could not connect to D-Bus: %s\n')
+          832 LOAD_GLOBAL                     55 (str + NULL)
+          842 LOAD_FAST                        7 (exception)
+          844 CALL                             1
+          852 BINARY_OP                        6 (%)
+          856 CALL                             1
+          864 POP_TOP
+          866 POP_EXCEPT
+          868 LOAD_CONST                       2 (None)
+          870 STORE_FAST                       7 (exception)
+          872 DELETE_FAST                      7 (exception)
+          874 JUMP_BACKWARD_NO_INTERRUPT      84 (to 708)
+     >>   876 LOAD_CONST                       2 (None)
+          878 STORE_FAST                       7 (exception)
+          880 DELETE_FAST                      7 (exception)
+          882 RERAISE                          1
+  68 >>   884 RERAISE                          0
+     >>   886 COPY                             3
+          888 POP_EXCEPT
+          890 RERAISE                          1
+  ExceptionTable:
+    312 to 686 -> 778 [0]
+    694 to 700 -> 778 [0]
+    702 to 706 -> 778 [0]
+    778 to 798 -> 886 [1] lasti
+    798 to 866 -> 876 [1] lasti
+    876 to 886 -> 886 [1] lasti
+
+Disassembly of <code get_libproxy_factory> (line 86, args=0 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: libproxy, exception
+  86        0 RESUME                           0
+  90        2 LOAD_GLOBAL                      0 (_USE_LIBPROXY)
+           12 TO_BOOL
+           20 POP_JUMP_IF_FALSE               34 (to 92)
+           24 LOAD_GLOBAL                      2 (_LIBPROXY_FACTORY)
+           34 POP_JUMP_IF_NOT_NONE            27 (to 92)
+  91       38 NOP
+  93       40 LOAD_CONST                       2 (0)
+           42 LOAD_CONST                       1 (None)
+           44 IMPORT_NAME                      2 (libproxy)
+           46 STORE_FAST                       0 (libproxy)
+  94       48 LOAD_FAST                        0 (libproxy)
+           50 LOAD_ATTR                        7 (ProxyFactory + NULL|self)
+           70 CALL                             0
+           78 STORE_GLOBAL                     1 (_LIBPROXY_FACTORY)
+  97       80 LOAD_GLOBAL                      2 (_LIBPROXY_FACTORY)
+           90 RETURN_VALUE
+     >>    92 LOAD_GLOBAL                      2 (_LIBPROXY_FACTORY)
+          102 RETURN_VALUE
+     >>   104 PUSH_EXC_INFO
+  95      106 LOAD_GLOBAL                      8 (Exception)
+          116 CHECK_EXC_MATCH
+          118 POP_JUMP_IF_FALSE               49 (to 220)
+          122 STORE_FAST                       1 (exception)
+  96      124 LOAD_GLOBAL                     10 (cxlog)
+          134 LOAD_ATTR                       12 (log)
+          154 PUSH_NULL
+          156 LOAD_CONST                       3 ('could not load libproxy: %s\n')
+          158 LOAD_GLOBAL                     15 (str + NULL)
+          168 LOAD_FAST                        1 (exception)
+          170 CALL                             1
+          178 BINARY_OP                        6 (%)
+          182 CALL                             1
+          190 POP_TOP
+          192 POP_EXCEPT
+          194 LOAD_CONST                       1 (None)
+          196 STORE_FAST                       1 (exception)
+          198 DELETE_FAST                      1 (exception)
+  97      200 LOAD_GLOBAL                      2 (_LIBPROXY_FACTORY)
+          210 RETURN_VALUE
+     >>   212 LOAD_CONST                       1 (None)
+          214 STORE_FAST                       1 (exception)
+          216 DELETE_FAST                      1 (exception)
+          218 RERAISE                          1
+  95 >>   220 RERAISE                          0
+     >>   222 COPY                             3
+          224 POP_EXCEPT
+          226 RERAISE                          1
+  ExceptionTable:
+    40 to 80 -> 104 [0]
+    104 to 124 -> 222 [1] lasti
+    124 to 192 -> 212 [1] lasti
+    212 to 222 -> 222 [1] lasti
+
+Disassembly of <code has_libproxy> (line 99, args=0 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  99        0 RESUME                           0
+ 101        2 LOAD_GLOBAL                      1 (get_libproxy_factory + NULL)
+           12 CALL                             0
+           20 TO_BOOL
+           28 POP_JUMP_IF_FALSE                1 (to 34)
+ 102       32 RETURN_CONST                     1 (True)
+ 103 >>    34 RETURN_CONST                     2 (False)
+
+Disassembly of <code get_proxy_libproxy> (line 105, args=1 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: req, factory, proxy
+ 105        0 RESUME                           0
+ 107        2 LOAD_GLOBAL                      1 (get_libproxy_factory + NULL)
+           12 CALL                             0
+           20 STORE_FAST                       1 (factory)
+ 108       22 LOAD_FAST                        1 (factory)
+           24 TO_BOOL
+           32 POP_JUMP_IF_FALSE               42 (to 120)
+ 109       36 LOAD_FAST                        1 (factory)
+           38 LOAD_ATTR                        3 (getProxies + NULL|self)
+           58 LOAD_FAST                        0 (req)
+           60 LOAD_ATTR                        5 (get_full_url + NULL|self)
+           80 CALL                             0
+           88 CALL                             1
+           96 LOAD_CONST                       1 (0)
+           98 BINARY_SUBSCR
+          102 STORE_FAST                       2 (proxy)
+ 110      104 LOAD_FAST                        2 (proxy)
+          106 LOAD_CONST                       2 ('direct://')
+          108 COMPARE_OP                     119 (!= bool)
+          112 POP_JUMP_IF_FALSE                2 (to 120)
+ 111      116 LOAD_FAST                        2 (proxy)
+          118 RETURN_VALUE
+ 112 >>   120 RETURN_CONST                     3 ('')
+
+Disassembly of <code get_proxy_gconf> (line 121, args=1 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: req, GConf, client, scheme, host, port, auth_user, auth_pass, auth_info
+ 121        0 RESUME                           0
+ 124        2 NOP
+ 125        4 LOAD_CONST                       1 (0)
+            6 LOAD_CONST                       2 (('GConf',))
+            8 IMPORT_NAME                      0 (gi.repository)
+           10 IMPORT_FROM                      1 (GConf)
+           12 STORE_FAST                       1 (GConf)
+           14 POP_TOP
+ 129       16 LOAD_FAST                        1 (GConf)
+           18 LOAD_ATTR                        6 (Client)
+           38 LOAD_ATTR                        9 (get_default + NULL|self)
+           58 CALL                             0
+           66 STORE_FAST                       2 (client)
+ 131       68 LOAD_FAST                        0 (req)
+           70 LOAD_ATTR                       10 (type)
+           90 STORE_FAST                       3 (scheme)
+ 132       92 LOAD_FAST                        3 (scheme)
+           94 LOAD_CONST                       4 ('https')
+           96 COMPARE_OP                      88 (== bool)
+          100 POP_JUMP_IF_FALSE                2 (to 108)
+ 133      104 LOAD_CONST                       5 ('secure')
+          106 STORE_FAST                       3 (scheme)
+ 135 >>   108 LOAD_FAST                        3 (scheme)
+          110 LOAD_CONST                       6 ('http')
+          112 COMPARE_OP                      88 (== bool)
+          116 POP_JUMP_IF_FALSE               58 (to 236)
+ 136      120 LOAD_FAST                        2 (client)
+          122 LOAD_ATTR                       13 (get_bool + NULL|self)
+          142 LOAD_CONST                       7 ('/system/http_proxy/use_http_proxy')
+          144 CALL                             1
+          152 TO_BOOL
+          160 POP_JUMP_IF_TRUE                 1 (to 166)
+ 137      164 RETURN_CONST                     3 ('')
+ 138 >>   166 LOAD_FAST                        2 (client)
+          168 LOAD_ATTR                       15 (get_string + NULL|self)
+          188 LOAD_CONST                       8 ('/system/http_proxy/host')
+          190 CALL                             1
+          198 STORE_FAST                       4 (host)
+ 139      200 LOAD_FAST                        2 (client)
+          202 LOAD_ATTR                       17 (get_int + NULL|self)
+          222 LOAD_CONST                       9 ('/system/http_proxy/port')
+          224 CALL                             1
+          232 STORE_FAST                       5 (port)
+          234 JUMP_FORWARD                    62 (to 360)
+ 141 >>   236 LOAD_FAST                        2 (client)
+          238 LOAD_ATTR                       15 (get_string + NULL|self)
+          258 LOAD_CONST                      10 ('/system/proxy/mode')
+          260 CALL                             1
+          268 LOAD_CONST                      11 ('none')
+          270 COMPARE_OP                      88 (== bool)
+          274 POP_JUMP_IF_FALSE                1 (to 280)
+ 142      278 RETURN_CONST                     3 ('')
+ 143 >>   280 LOAD_FAST                        2 (client)
+          282 LOAD_ATTR                       15 (get_string + NULL|self)
+          302 LOAD_CONST                      12 ('/system/proxy/%s_host')
+          304 LOAD_FAST                        3 (scheme)
+          306 BINARY_OP                        6 (%)
+          310 CALL                             1
+          318 STORE_FAST                       4 (host)
+ 144      320 LOAD_FAST                        2 (client)
+          322 LOAD_ATTR                       17 (get_int + NULL|self)
+          342 LOAD_CONST                      13 ('/system/proxy/%s_port')
+          344 LOAD_FAST                        3 (scheme)
+          346 BINARY_OP                        6 (%)
+          350 CALL                             1
+          358 STORE_FAST                       5 (port)
+ 146 >>   360 LOAD_FAST                        4 (host)
+          362 TO_BOOL
+          370 POP_JUMP_IF_FALSE                7 (to 388)
+          374 LOAD_FAST                        5 (port)
+          376 TO_BOOL
+          384 POP_JUMP_IF_TRUE                 1 (to 390)
+ 147 >>   388 RETURN_CONST                     3 ('')
+ 149 >>   390 LOAD_FAST                        2 (client)
+          392 LOAD_ATTR                       13 (get_bool + NULL|self)
+          412 LOAD_CONST                      14 ('/system/http_proxy/use_authentication')
+          414 CALL                             1
+          422 TO_BOOL
+          430 POP_JUMP_IF_FALSE               45 (to 524)
+ 152      434 LOAD_FAST                        2 (client)
+          436 LOAD_ATTR                       15 (get_string + NULL|self)
+          456 LOAD_CONST                      15 ('/system/http_proxy/authentication_user')
+          458 CALL                             1
+          466 STORE_FAST                       6 (auth_user)
+ 153      468 LOAD_FAST                        2 (client)
+          470 LOAD_ATTR                       15 (get_string + NULL|self)
+          490 LOAD_CONST                      16 ('/system/http_proxy/authentication_password')
+          492 CALL                             1
+          500 STORE_FAST                       7 (auth_pass)
+ 154      502 LOAD_FAST                        6 (auth_user)
+          504 CONVERT_VALUE                    1 (str)
+          506 FORMAT_SIMPLE
+          508 LOAD_CONST                      17 (':')
+          510 LOAD_FAST                        7 (auth_pass)
+          512 CONVERT_VALUE                    1 (str)
+          514 FORMAT_SIMPLE
+          516 LOAD_CONST                      18 ('@')
+          518 BUILD_STRING                     4
+          520 STORE_FAST                       8 (auth_info)
+          522 JUMP_FORWARD                     2 (to 528)
+ 156 >>   524 LOAD_CONST                       3 ('')
+          526 STORE_FAST                       8 (auth_info)
+ 158 >>   528 LOAD_FAST                        8 (auth_info)
+          530 CONVERT_VALUE                    1 (str)
+          532 FORMAT_SIMPLE
+          534 LOAD_FAST                        4 (host)
+          536 CONVERT_VALUE                    1 (str)
+          538 FORMAT_SIMPLE
+          540 LOAD_CONST                      17 (':')
+          542 LOAD_FAST                        5 (port)
+          544 CONVERT_VALUE                    1 (str)
+          546 FORMAT_SIMPLE
+          548 BUILD_STRING                     4
+          550 RETURN_VALUE
+     >>   552 PUSH_EXC_INFO
+ 126      554 LOAD_GLOBAL                      4 (ImportError)
+          564 CHECK_EXC_MATCH
+          566 POP_JUMP_IF_FALSE                3 (to 576)
+          570 POP_TOP
+ 127      572 POP_EXCEPT
+          574 RETURN_CONST                     3 ('')
+ 126 >>   576 RERAISE                          0
+     >>   578 COPY                             3
+          580 POP_EXCEPT
+          582 RERAISE                          1
+  ExceptionTable:
+    4 to 16 -> 552 [0]
+    552 to 572 -> 578 [1] lasti
+    576 to 578 -> 578 [1] lasti
+
+Disassembly of <code get_proxy_gsettings> (line 160, args=1 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: req, which_cmd, retcode, out, _err, gsettings_path, schema, gsettings_cmd, scheme, host, port
+ 160        0 RESUME                           0
+ 163        2 LOAD_CONST                       1 ('which')
+            4 LOAD_CONST                       2 ('gsettings')
+            6 BUILD_LIST                       2
+            8 STORE_FAST                       1 (which_cmd)
+ 164       10 LOAD_GLOBAL                      0 (cxutils)
+           20 LOAD_ATTR                        2 (run)
+           40 PUSH_NULL
+           42 LOAD_FAST                        1 (which_cmd)
+           44 LOAD_GLOBAL                      0 (cxutils)
+           54 LOAD_ATTR                        4 (GRAB)
+           74 LOAD_CONST                       3 (('stdout',))
+           76 CALL_KW                          2
+           78 UNPACK_SEQUENCE                  3
+           82 STORE_FAST_STORE_FAST           35 (retcode, out)
+           84 STORE_FAST                       4 (_err)
+ 165       86 LOAD_FAST                        2 (retcode)
+           88 LOAD_CONST                       4 (0)
+           90 COMPARE_OP                      88 (== bool)
+           94 POP_JUMP_IF_FALSE               17 (to 132)
+ 166       98 LOAD_FAST                        3 (out)
+          100 LOAD_ATTR                        7 (rstrip + NULL|self)
+          120 CALL                             0
+          128 STORE_FAST                       5 (gsettings_path)
+          130 JUMP_FORWARD                     1 (to 134)
+ 168 >>   132 RETURN_CONST                     5 ('')
+ 170 >>   134 LOAD_CONST                       6 ('org.gnome.system.proxy')
+          136 STORE_FAST                       6 (schema)
+ 172      138 LOAD_FAST                        5 (gsettings_path)
+          140 LOAD_CONST                       7 ('get')
+          142 LOAD_FAST                        6 (schema)
+          144 LOAD_CONST                       8 ('mode')
+          146 BUILD_LIST                       4
+          148 STORE_FAST                       7 (gsettings_cmd)
+ 173      150 LOAD_GLOBAL                      0 (cxutils)
+          160 LOAD_ATTR                        2 (run)
+          180 PUSH_NULL
+          182 LOAD_FAST                        7 (gsettings_cmd)
+          184 LOAD_GLOBAL                      0 (cxutils)
+          194 LOAD_ATTR                        4 (GRAB)
+          214 LOAD_CONST                       3 (('stdout',))
+          216 CALL_KW                          2
+          218 UNPACK_SEQUENCE                  3
+          222 STORE_FAST_STORE_FAST           35 (retcode, out)
+          224 STORE_FAST                       4 (_err)
+ 174      226 LOAD_FAST                        2 (retcode)
+          228 LOAD_CONST                       4 (0)
+          230 COMPARE_OP                     119 (!= bool)
+          234 POP_JUMP_IF_TRUE                36 (to 310)
+          238 LOAD_FAST                        3 (out)
+          240 LOAD_ATTR                        7 (rstrip + NULL|self)
+          260 CALL                             0
+          268 LOAD_ATTR                        9 (replace + NULL|self)
+          288 LOAD_CONST                       9 ("'")
+          290 LOAD_CONST                       5 ('')
+          292 CALL                             2
+          300 LOAD_CONST                      10 ('none')
+          302 COMPARE_OP                      88 (== bool)
+          306 POP_JUMP_IF_FALSE                1 (to 312)
+ 175 >>   310 RETURN_CONST                     5 ('')
+ 177 >>   312 LOAD_FAST                        0 (req)
+          314 LOAD_ATTR                       10 (type)
+          334 STORE_FAST                       8 (scheme)
+ 178      336 LOAD_CONST                      11 ('org.gnome.system.proxy.')
+          338 LOAD_FAST                        8 (scheme)
+          340 BINARY_OP                        0 (+)
+          344 STORE_FAST                       6 (schema)
+ 180      346 LOAD_FAST                        5 (gsettings_path)
+          348 LOAD_CONST                       7 ('get')
+          350 LOAD_FAST                        6 (schema)
+          352 LOAD_CONST                      12 ('host')
+          354 BUILD_LIST                       4
+          356 STORE_FAST                       7 (gsettings_cmd)
+ 181      358 LOAD_GLOBAL                      0 (cxutils)
+          368 LOAD_ATTR                        2 (run)
+          388 PUSH_NULL
+          390 LOAD_FAST                        7 (gsettings_cmd)
+          392 LOAD_GLOBAL                      0 (cxutils)
+          402 LOAD_ATTR                        4 (GRAB)
+          422 LOAD_CONST                       3 (('stdout',))
+          424 CALL_KW                          2
+          426 UNPACK_SEQUENCE                  3
+          430 STORE_FAST_STORE_FAST           35 (retcode, out)
+          432 STORE_FAST                       4 (_err)
+ 182      434 LOAD_CONST                       5 ('')
+          436 STORE_FAST                       9 (host)
+ 183      438 LOAD_FAST                        2 (retcode)
+          440 LOAD_CONST                       4 (0)
+          442 COMPARE_OP                      88 (== bool)
+          446 POP_JUMP_IF_FALSE               32 (to 514)
+ 184      450 LOAD_FAST                        3 (out)
+          452 LOAD_ATTR                        7 (rstrip + NULL|self)
+          472 CALL                             0
+          480 LOAD_ATTR                        9 (replace + NULL|self)
+          500 LOAD_CONST                       9 ("'")
+          502 LOAD_CONST                       5 ('')
+          504 CALL                             2
+          512 STORE_FAST                       9 (host)
+ 186 >>   514 LOAD_FAST                        9 (host)
+          516 LOAD_CONST                       5 ('')
+          518 COMPARE_OP                      88 (== bool)
+          522 POP_JUMP_IF_FALSE                1 (to 528)
+ 187      526 RETURN_CONST                     5 ('')
+ 189 >>   528 LOAD_FAST                        5 (gsettings_path)
+          530 LOAD_CONST                       7 ('get')
+          532 LOAD_FAST                        6 (schema)
+          534 LOAD_CONST                      13 ('port')
+          536 BUILD_LIST                       4
+          538 STORE_FAST                       7 (gsettings_cmd)
+ 190      540 LOAD_GLOBAL                      0 (cxutils)
+          550 LOAD_ATTR                        2 (run)
+          570 PUSH_NULL
+          572 LOAD_FAST                        7 (gsettings_cmd)
+          574 LOAD_GLOBAL                      0 (cxutils)
+          584 LOAD_ATTR                        4 (GRAB)
+          604 LOAD_CONST                       3 (('stdout',))
+          606 CALL_KW                          2
+          608 UNPACK_SEQUENCE                  3
+          612 STORE_FAST_STORE_FAST           35 (retcode, out)
+          614 STORE_FAST                       4 (_err)
+ 191      616 LOAD_FAST                        2 (retcode)
+          618 LOAD_CONST                       4 (0)
+          620 COMPARE_OP                      88 (== bool)
+          624 POP_JUMP_IF_FALSE               17 (to 662)
+ 192      628 LOAD_FAST                        3 (out)
+          630 LOAD_ATTR                        7 (rstrip + NULL|self)
+          650 CALL                             0
+          658 STORE_FAST                      10 (port)
+          660 JUMP_FORWARD                     1 (to 664)
+ 194 >>   662 RETURN_CONST                     5 ('')
+ 196 >>   664 LOAD_FAST                        9 (host)
+          666 CONVERT_VALUE                    1 (str)
+          668 FORMAT_SIMPLE
+          670 LOAD_CONST                      14 (':')
+          672 LOAD_FAST                       10 (port)
+          674 CONVERT_VALUE                    1 (str)
+          676 FORMAT_SIMPLE
+          678 BUILD_STRING                     3
+          680 RETURN_VALUE
+
+Disassembly of <code _init_kde> (line 206, args=0 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: PyQt4, PyKDE4, exception
+ 206        0 RESUME                           0
+ 210        2 LOAD_GLOBAL                      0 (_HAS_KDE)
+           12 POP_JUMP_IF_NOT_NONE            39 (to 94)
+ 211       16 NOP
+ 213       18 LOAD_CONST                       2 (0)
+           20 LOAD_CONST                       1 (None)
+           22 IMPORT_NAME                      1 (PyQt4.Qt)
+           24 STORE_FAST                       0 (PyQt4)
+ 215       26 LOAD_CONST                       2 (0)
+           28 LOAD_CONST                       1 (None)
+           30 IMPORT_NAME                      2 (PyKDE4.kdecore)
+           32 STORE_FAST                       1 (PyKDE4)
+ 220       34 LOAD_FAST                        0 (PyQt4)
+           36 LOAD_ATTR                        6 (Qt)
+           56 LOAD_ATTR                        9 (QApplication + NULL|self)
+           76 BUILD_LIST                       0
+           78 CALL                             1
+           86 POP_TOP
+ 221       88 LOAD_CONST                       3 (True)
+           90 STORE_GLOBAL                     0 (_HAS_KDE)
+           92 RETURN_CONST                     1 (None)
+ 210 >>    94 RETURN_CONST                     1 (None)
+     >>    96 PUSH_EXC_INFO
+ 222       98 LOAD_GLOBAL                     10 (Exception)
+          108 CHECK_EXC_MATCH
+          110 POP_JUMP_IF_FALSE               46 (to 206)
+          114 STORE_FAST                       2 (exception)
+ 223      116 LOAD_GLOBAL                     12 (cxlog)
+          126 LOAD_ATTR                       14 (log)
+          146 PUSH_NULL
+          148 LOAD_CONST                       4 ('could not initialize the KDE 4 libraries: %s\n')
+          150 LOAD_GLOBAL                     17 (str + NULL)
+          160 LOAD_FAST                        2 (exception)
+          162 CALL                             1
+          170 BINARY_OP                        6 (%)
+          174 CALL                             1
+          182 POP_TOP
+ 224      184 LOAD_CONST                       5 (False)
+          186 STORE_GLOBAL                     0 (_HAS_KDE)
+          188 POP_EXCEPT
+          190 LOAD_CONST                       1 (None)
+          192 STORE_FAST                       2 (exception)
+          194 DELETE_FAST                      2 (exception)
+          196 RETURN_CONST                     1 (None)
+     >>   198 LOAD_CONST                       1 (None)
+          200 STORE_FAST                       2 (exception)
+          202 DELETE_FAST                      2 (exception)
+          204 RERAISE                          1
+ 222 >>   206 RERAISE                          0
+     >>   208 COPY                             3
+          210 POP_EXCEPT
+          212 RERAISE                          1
+  ExceptionTable:
+    18 to 92 -> 96 [0]
+    96 to 116 -> 208 [1] lasti
+    116 to 188 -> 198 [1] lasti
+    198 to 208 -> 208 [1] lasti
+
+Disassembly of <code get_proxy_kde_int> (line 226, args=2 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: config, name, value
+ 226        0 RESUME                           0
+ 230        2 LOAD_FAST                        0 (config)
+            4 LOAD_ATTR                        1 (readEntry + NULL|self)
+           24 LOAD_FAST                        1 (name)
+           26 CALL                             1
+           34 STORE_FAST                       2 (value)
+ 231       36 LOAD_FAST                        2 (value)
+           38 LOAD_CONST                       1 ('')
+           40 COMPARE_OP                      88 (== bool)
+           44 POP_JUMP_IF_FALSE                1 (to 50)
+ 232       48 RETURN_CONST                     2 (0)
+ 233 >>    50 LOAD_GLOBAL                      3 (int + NULL)
+           60 LOAD_FAST                        2 (value)
+           62 CALL                             1
+           70 RETURN_VALUE
+
+Disassembly of <code get_proxy_kde> (line 235, args=1 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: req, PyKDE4, config, proxy_settings, proxy_type, proxy_url
+ 235        0 RESUME                           0
+ 237        2 LOAD_GLOBAL                      0 (_HAS_KDE)
+           12 TO_BOOL
+           20 POP_JUMP_IF_FALSE              309 (to 644)
+ 239       26 LOAD_CONST                       1 (0)
+           28 LOAD_CONST                       2 (None)
+           30 IMPORT_NAME                      1 (PyKDE4.kdecore)
+           32 STORE_FAST                       1 (PyKDE4)
+ 242       34 LOAD_FAST                        1 (PyKDE4)
+           36 LOAD_ATTR                        4 (kdecore)
+           56 LOAD_ATTR                        7 (KConfig + NULL|self)
+           76 LOAD_CONST                       3 ('kioslaverc')
+           78 CALL                             1
+           86 STORE_FAST                       2 (config)
+ 243       88 LOAD_FAST                        2 (config)
+           90 LOAD_ATTR                        9 (group + NULL|self)
+          110 LOAD_CONST                       4 ('Proxy Settings')
+          112 CALL                             1
+          120 STORE_FAST                       3 (proxy_settings)
+ 244      122 LOAD_GLOBAL                     11 (get_proxy_kde_int + NULL)
+          132 LOAD_FAST                        3 (proxy_settings)
+          134 LOAD_CONST                       5 ('ProxyType')
+          136 CALL                             2
+          144 STORE_FAST                       4 (proxy_type)
+ 245      146 LOAD_FAST                        4 (proxy_type)
+          148 LOAD_CONST                       1 (0)
+          150 COMPARE_OP                      88 (== bool)
+          154 POP_JUMP_IF_FALSE                1 (to 160)
+ 247      158 RETURN_CONST                     6 ('')
+ 248 >>   160 LOAD_FAST                        4 (proxy_type)
+          162 LOAD_CONST                       7 (1)
+          164 COMPARE_OP                     119 (!= bool)
+          168 POP_JUMP_IF_FALSE               26 (to 224)
+ 249      172 LOAD_GLOBAL                     12 (cxlog)
+          182 LOAD_ATTR                       14 (warn)
+          202 PUSH_NULL
+          204 LOAD_CONST                       8 ('Cannot handle KDE proxy of type %d; using environment instead of KDE settings')
+          206 LOAD_FAST                        4 (proxy_type)
+          208 BINARY_OP                        6 (%)
+          212 CALL                             1
+          220 POP_TOP
+ 250      222 RETURN_CONST                     6 ('')
+ 251 >>   224 LOAD_FAST                        3 (proxy_settings)
+          226 LOAD_ATTR                       17 (readEntry + NULL|self)
+          246 LOAD_CONST                       9 ('NoProxyFor')
+          248 CALL                             1
+          256 TO_BOOL
+          264 POP_JUMP_IF_FALSE               67 (to 402)
+ 252      268 LOAD_FAST                        3 (proxy_settings)
+          270 LOAD_ATTR                       17 (readEntry + NULL|self)
+          290 LOAD_CONST                      10 ('ReversedException')
+          292 CALL                             1
+          300 LOAD_CONST                      11 ('false')
+          302 COMPARE_OP                      88 (== bool)
+          306 POP_JUMP_IF_FALSE               23 (to 356)
+ 255      310 LOAD_GLOBAL                     12 (cxlog)
+          320 LOAD_ATTR                       14 (warn)
+          340 PUSH_NULL
+          342 LOAD_CONST                      12 ('Cannot handle proxy exceptions; ignoring them')
+          344 CALL                             1
+          352 POP_TOP
+          354 JUMP_FORWARD                    23 (to 402)
+ 257 >>   356 LOAD_GLOBAL                     12 (cxlog)
+          366 LOAD_ATTR                       14 (warn)
+          386 PUSH_NULL
+          388 LOAD_CONST                      13 ('Cannot handle proxy exceptions; using environment instead of KDE settings')
+          390 CALL                             1
+          398 POP_TOP
+ 258      400 RETURN_CONST                     6 ('')
+ 259 >>   402 LOAD_GLOBAL                     11 (get_proxy_kde_int + NULL)
+          412 LOAD_FAST                        3 (proxy_settings)
+          414 LOAD_CONST                      14 ('AuthMode')
+          416 CALL                             2
+          424 TO_BOOL
+          432 POP_JUMP_IF_FALSE               23 (to 482)
+ 260      436 LOAD_GLOBAL                     12 (cxlog)
+          446 LOAD_ATTR                       14 (warn)
+          466 PUSH_NULL
+          468 LOAD_CONST                      15 ("Don't know how to read KDE proxy authorization; using environment instead of KDE settings")
+          470 CALL                             1
+          478 POP_TOP
+ 261      480 RETURN_CONST                     6 ('')
+ 263 >>   482 LOAD_GLOBAL                     19 (str + NULL)
+          492 LOAD_FAST                        3 (proxy_settings)
+          494 LOAD_ATTR                       17 (readEntry + NULL|self)
+          514 LOAD_FAST                        0 (req)
+          516 LOAD_ATTR                       20 (type)
+          536 LOAD_CONST                      16 ('Proxy')
+          538 BINARY_OP                        0 (+)
+          542 CALL                             1
+          550 CALL                             1
+          558 STORE_FAST                       5 (proxy_url)
+ 264      560 LOAD_FAST                        5 (proxy_url)
+          562 LOAD_ATTR                       23 (replace + NULL|self)
+          582 LOAD_CONST                      17 (' ')
+          584 LOAD_CONST                      18 (':')
+          586 CALL                             2
+          594 STORE_FAST                       5 (proxy_url)
+ 265      596 LOAD_FAST                        5 (proxy_url)
+          598 LOAD_ATTR                       25 (startswith + NULL|self)
+          618 LOAD_CONST                      19 ('//:')
+          620 CALL                             1
+          628 TO_BOOL
+          636 POP_JUMP_IF_TRUE                 2 (to 644)
+ 266      640 LOAD_FAST                        5 (proxy_url)
+          642 RETURN_VALUE
+ 267 >>   644 RETURN_CONST                     6 ('')
+
+Disassembly of <code get_proxy_env> (line 276, args=1 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: req
+ 276        0 RESUME                           0
+ 278        2 LOAD_GLOBAL                      0 (os)
+           12 LOAD_ATTR                        2 (environ)
+           32 LOAD_ATTR                        5 (get + NULL|self)
+           52 LOAD_FAST                        0 (req)
+           54 LOAD_ATTR                        6 (type)
+           74 LOAD_CONST                       1 ('_proxy')
+           76 BINARY_OP                        0 (+)
+           80 LOAD_CONST                       2 ('')
+           82 CALL                             2
+           90 RETURN_VALUE
+
+Disassembly of <code get_proxy_conf> (line 281, args=1 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: req, global_config
+ 281        0 RESUME                           0
+ 283        2 LOAD_GLOBAL                      0 (cxproduct)
+           12 LOAD_ATTR                        2 (get_config)
+           32 PUSH_NULL
+           34 CALL                             0
+           42 STORE_FAST                       1 (global_config)
+ 284       44 LOAD_FAST                        1 (global_config)
+           46 LOAD_CONST                       1 ('CrossOver')
+           48 BINARY_SUBSCR
+           52 LOAD_ATTR                        5 (get + NULL|self)
+           72 LOAD_FAST                        0 (req)
+           74 LOAD_ATTR                        6 (type)
+           94 LOAD_CONST                       2 ('Proxy')
+           96 BINARY_OP                        0 (+)
+          100 LOAD_CONST                       3 ('')
+          102 CALL                             2
+          110 RETURN_VALUE
+
+Disassembly of <code DynamicProxyHandler> (line 293, args=0 posonly=0 kwonly=0, flags=0):
+ 293        0 RESUME                           0
+            2 LOAD_NAME                        0 (__name__)
+            4 STORE_NAME                       1 (__module__)
+            6 LOAD_CONST                       0 ('DynamicProxyHandler')
+            8 STORE_NAME                       2 (__qualname__)
+           10 LOAD_CONST                       1 (293)
+           12 STORE_NAME                       3 (__firstlineno__)
+ 294       14 LOAD_CONST                       2 ('A proxy handler that dynamically detects the proxy settings each time\nit is queried so it can react to proxy configuration changes.\n')
+           16 STORE_NAME                       4 (__doc__)
+ 299       18 LOAD_CONST                       3 (100)
+           20 STORE_NAME                       5 (handler_order)
+ 302       22 LOAD_NAME                        6 (get_proxy_gconf)
+           24 LOAD_NAME                        7 (get_proxy_gsettings)
+           26 LOAD_NAME                        8 (get_proxy_env)
+           28 BUILD_TUPLE                      3
+ 303       30 LOAD_NAME                        9 (get_proxy_kde)
+           32 LOAD_NAME                        8 (get_proxy_env)
+           34 BUILD_TUPLE                      2
+ 304       36 LOAD_NAME                        6 (get_proxy_gconf)
+           38 LOAD_NAME                        8 (get_proxy_env)
+           40 BUILD_TUPLE                      2
+ 306       42 LOAD_NAME                        8 (get_proxy_env)
+           44 BUILD_TUPLE                      1
+ 307       46 LOAD_NAME                        8 (get_proxy_env)
+           48 BUILD_TUPLE                      1
+ 308       50 LOAD_NAME                       10 (get_proxy_conf)
+           52 BUILD_TUPLE                      1
+ 301       54 LOAD_CONST                       4 (('gnome', 'kde', 'xfce', 'macosx', 'unknown', 'config'))
+           56 BUILD_CONST_KEY_MAP              6
+           58 STORE_NAME                      11 (_PROXY_DETECTORS)
+ 311       60 LOAD_CONST                       5 (<code DynamicProxyHandler.__init__, line 311>)
+           62 MAKE_FUNCTION
+           64 STORE_NAME                      12 (__init__)
+ 322       66 LOAD_CONST                       6 (<code DynamicProxyHandler.get_proxy, line 322>)
+           68 MAKE_FUNCTION
+           70 STORE_NAME                      13 (get_proxy)
+ 339       72 LOAD_CONST                       7 (<code DynamicProxyHandler.do_open, line 339>)
+           74 MAKE_FUNCTION
+           76 STORE_NAME                      14 (do_open)
+ 345       78 LOAD_CONST                       8 (<code DynamicProxyHandler.ftp_open, line 345>)
+           80 MAKE_FUNCTION
+           82 STORE_NAME                      15 (ftp_open)
+ 348       84 LOAD_CONST                       9 (<code DynamicProxyHandler.http_open, line 348>)
+           86 MAKE_FUNCTION
+           88 STORE_NAME                      16 (http_open)
+ 351       90 LOAD_CONST                      10 (<code DynamicProxyHandler.https_open, line 351>)
+           92 MAKE_FUNCTION
+           94 STORE_NAME                      17 (https_open)
+ 354       96 LOAD_CONST                      11 (<code DynamicProxyHandler.socks_open, line 354>)
+           98 MAKE_FUNCTION
+          100 STORE_NAME                      18 (socks_open)
+          102 LOAD_CONST                      12 (('_detectors',))
+          104 STORE_NAME                      19 (__static_attributes__)
+          106 RETURN_CONST                    13 (None)
+
+Disassembly of <code DynamicProxyHandler.__init__> (line 311, args=1 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: self
+ 311        0 RESUME                           0
+ 312        2 LOAD_GLOBAL                      0 (urllib2)
+           12 LOAD_ATTR                        2 (ProxyHandler)
+           32 LOAD_ATTR                        5 (__init__ + NULL|self)
+           52 LOAD_FAST                        0 (self)
+           54 BUILD_MAP                        0
+           56 CALL                             2
+           64 POP_TOP
+ 313       66 LOAD_GLOBAL                      7 (has_libproxy + NULL)
+           76 CALL                             0
+           84 TO_BOOL
+           92 POP_JUMP_IF_FALSE               13 (to 122)
+ 317       96 LOAD_GLOBAL                      8 (get_proxy_libproxy)
+          106 BUILD_TUPLE                      1
+          108 LOAD_FAST                        0 (self)
+          110 STORE_ATTR                       5 (_detectors)
+          120 RETURN_CONST                     0 (None)
+ 320 >>   122 LOAD_FAST                        0 (self)
+          124 LOAD_ATTR                       12 (_PROXY_DETECTORS)
+          144 LOAD_GLOBAL                     15 (get_desktop_environment + NULL)
+          154 CALL                             0
+          162 BINARY_SUBSCR
+          166 LOAD_FAST                        0 (self)
+          168 STORE_ATTR                       5 (_detectors)
+          178 RETURN_CONST                     0 (None)
+
+Disassembly of <code DynamicProxyHandler.get_proxy> (line 322, args=2 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: self, req, get_proxy, url
+ 322        0 RESUME                           0
+ 323        2 LOAD_FAST                        0 (self)
+            4 LOAD_ATTR                        0 (_detectors)
+           24 GET_ITER
+     >>    26 FOR_ITER                        45 (to 120)
+           30 STORE_FAST                       2 (get_proxy)
+ 324       32 NOP
+ 325       34 LOAD_FAST                        2 (get_proxy)
+           36 PUSH_NULL
+           38 LOAD_FAST                        1 (req)
+           40 CALL                             1
+           48 STORE_FAST                       3 (url)
+ 326       50 LOAD_FAST                        3 (url)
+           52 TO_BOOL
+           60 POP_JUMP_IF_FALSE               26 (to 116)
+ 333       64 LOAD_GLOBAL                      2 (cxlog)
+           74 LOAD_ATTR                        4 (log)
+           94 PUSH_NULL
+           96 LOAD_CONST                       1 ('Proxy settings detected.  Network communication will be attempted via proxy.\n')
+           98 CALL                             1
+          106 POP_TOP
+ 334      108 LOAD_FAST                        3 (url)
+          110 SWAP                             2
+          112 POP_TOP
+          114 RETURN_VALUE
+ 326 >>   116 JUMP_BACKWARD                   47 (to 26)
+ 323 >>   120 END_FOR
+          122 POP_TOP
+ 337      124 RETURN_CONST                     0 (None)
+     >>   126 PUSH_EXC_INFO
+ 335      128 POP_TOP
+ 336      130 LOAD_GLOBAL                      2 (cxlog)
+          140 LOAD_ATTR                        6 (warn)
+          160 PUSH_NULL
+          162 LOAD_CONST                       2 ('Could not get the proxy info:\n%s')
+          164 LOAD_GLOBAL                      8 (traceback)
+          174 LOAD_ATTR                       10 (format_exc)
+          194 PUSH_NULL
+          196 CALL                             0
+          204 BINARY_OP                        6 (%)
+          208 CALL                             1
+          216 POP_TOP
+          218 POP_EXCEPT
+          220 JUMP_BACKWARD                   99 (to 26)
+     >>   224 COPY                             3
+          226 POP_EXCEPT
+          228 RERAISE                          1
+  ExceptionTable:
+    34 to 110 -> 126 [1]
+    126 to 218 -> 224 [2] lasti
+
+Disassembly of <code DynamicProxyHandler.do_open> (line 339, args=2 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: self, req, proxy
+ 339        0 RESUME                           0
+ 340        2 LOAD_FAST                        0 (self)
+            4 LOAD_ATTR                        1 (get_proxy + NULL|self)
+           24 LOAD_FAST                        1 (req)
+           26 CALL                             1
+           34 STORE_FAST                       2 (proxy)
+ 341       36 LOAD_FAST                        2 (proxy)
+           38 TO_BOOL
+           46 POP_JUMP_IF_FALSE               28 (to 106)
+ 342       50 LOAD_FAST                        0 (self)
+           52 LOAD_ATTR                        3 (proxy_open + NULL|self)
+           72 LOAD_FAST_LOAD_FAST             18 (req, proxy)
+           74 LOAD_FAST                        1 (req)
+           76 LOAD_ATTR                        4 (type)
+           96 CALL                             3
+          104 RETURN_VALUE
+ 343 >>   106 RETURN_CONST                     0 (None)
+
+Disassembly of <code DynamicProxyHandler.ftp_open> (line 345, args=2 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: self, req
+ 345        0 RESUME                           0
+ 346        2 LOAD_FAST                        0 (self)
+            4 LOAD_ATTR                        1 (do_open + NULL|self)
+           24 LOAD_FAST                        1 (req)
+           26 CALL                             1
+           34 RETURN_VALUE
+
+Disassembly of <code DynamicProxyHandler.http_open> (line 348, args=2 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: self, req
+ 348        0 RESUME                           0
+ 349        2 LOAD_FAST                        0 (self)
+            4 LOAD_ATTR                        1 (do_open + NULL|self)
+           24 LOAD_FAST                        1 (req)
+           26 CALL                             1
+           34 RETURN_VALUE
+
+Disassembly of <code DynamicProxyHandler.https_open> (line 351, args=2 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: self, req
+ 351        0 RESUME                           0
+ 352        2 LOAD_FAST                        0 (self)
+            4 LOAD_ATTR                        1 (do_open + NULL|self)
+           24 LOAD_FAST                        1 (req)
+           26 CALL                             1
+           34 RETURN_VALUE
+
+Disassembly of <code DynamicProxyHandler.socks_open> (line 354, args=2 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: self, req
+ 354        0 RESUME                           0
+ 355        2 LOAD_FAST                        0 (self)
+            4 LOAD_ATTR                        1 (do_open + NULL|self)
+           24 LOAD_FAST                        1 (req)
+           26 CALL                             1
+           34 RETURN_VALUE
+
+Disassembly of <code install_default_opener> (line 358, args=0 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: proxy_handler, opener
+ 358        0 RESUME                           0
+ 360        2 LOAD_GLOBAL                      1 (DynamicProxyHandler + NULL)
+           12 CALL                             0
+           20 STORE_FAST                       0 (proxy_handler)
+ 361       22 LOAD_GLOBAL                      2 (urllib2)
+           32 LOAD_ATTR                        4 (build_opener)
+           52 PUSH_NULL
+           54 LOAD_FAST                        0 (proxy_handler)
+           56 CALL                             1
+           64 STORE_FAST                       1 (opener)
+ 362       66 LOAD_GLOBAL                      2 (urllib2)
+           76 LOAD_ATTR                        6 (install_opener)
+           96 PUSH_NULL
+           98 LOAD_FAST                        1 (opener)
+          100 CALL                             1
+          108 POP_TOP
+          110 RETURN_CONST                     1 (None)
+
+Disassembly of <code _init> (line 365, args=0 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+ 365        0 RESUME                           0
+ 367        2 LOAD_GLOBAL                      1 (has_libproxy + NULL)
+           12 CALL                             0
+           20 TO_BOOL
+           28 POP_JUMP_IF_TRUE                26 (to 84)
+           32 LOAD_GLOBAL                      3 (get_desktop_environment + NULL)
+           42 CALL                             0
+           50 LOAD_CONST                       1 ('kde')
+           52 COMPARE_OP                      88 (== bool)
+           56 POP_JUMP_IF_FALSE               11 (to 82)
+ 369       60 LOAD_GLOBAL                      5 (_init_kde + NULL)
+           70 CALL                             0
+           78 POP_TOP
+           80 RETURN_CONST                     2 (None)
+ 367 >>    82 RETURN_CONST                     2 (None)
+     >>    84 RETURN_CONST                     2 (None)
+
+Disassembly of <code main> (line 384, args=0 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: dynproxy, scheme
+ 384        0 RESUME                           0
+ 385        2 LOAD_GLOBAL                      1 (print + NULL)
+           12 LOAD_CONST                       1 ('Desktop environment: ')
+           14 LOAD_GLOBAL                      3 (get_desktop_environment + NULL)
+           24 CALL                             0
+           32 BINARY_OP                        0 (+)
+           36 CALL                             1
+           44 POP_TOP
+ 386       46 LOAD_GLOBAL                      5 (DynamicProxyHandler + NULL)
+           56 CALL                             0
+           64 STORE_FAST                       0 (dynproxy)
+ 387       66 LOAD_GLOBAL                      1 (print + NULL)
+           76 LOAD_CONST                       2 ('Hit Enter to refresh, Ctrl-D to quit')
+           78 CALL                             1
+           86 POP_TOP
+ 388       88 LOAD_GLOBAL                      6 (sys)
+           98 LOAD_ATTR                        8 (stdin)
+          118 LOAD_ATTR                       11 (readline + NULL|self)
+          138 CALL                             0
+          146 TO_BOOL
+          154 POP_JUMP_IF_FALSE              104 (to 366)
+ 389 >>   158 LOAD_CONST                       3 (('ftp', 'http', 'https', 'socks'))
+          160 GET_ITER
+     >>   162 FOR_ITER                        60 (to 286)
+          166 STORE_FAST                       1 (scheme)
+ 390      168 LOAD_GLOBAL                      1 (print + NULL)
+          178 LOAD_FAST                        1 (scheme)
+          180 CONVERT_VALUE                    1 (str)
+          182 FORMAT_SIMPLE
+          184 LOAD_CONST                       4 (' -> [')
+          186 LOAD_FAST                        0 (dynproxy)
+          188 LOAD_ATTR                       13 (get_proxy + NULL|self)
+          208 LOAD_GLOBAL                     14 (urllib2)
+          218 LOAD_ATTR                       16 (Request)
+          238 PUSH_NULL
+          240 LOAD_FAST                        1 (scheme)
+          242 LOAD_CONST                       5 ('://codeweavers.com')
+          244 BINARY_OP                        0 (+)
+          248 CALL                             1
+          256 CALL                             1
+          264 CONVERT_VALUE                    1 (str)
+          266 FORMAT_SIMPLE
+          268 LOAD_CONST                       6 (']')
+          270 BUILD_STRING                     4
+          272 CALL                             1
+          280 POP_TOP
+          282 JUMP_BACKWARD                   62 (to 162)
+ 389 >>   286 END_FOR
+          288 POP_TOP
+ 388      290 LOAD_GLOBAL                      6 (sys)
+          300 LOAD_ATTR                        8 (stdin)
+          320 LOAD_ATTR                       11 (readline + NULL|self)
+          340 CALL                             0
+          348 TO_BOOL
+          356 POP_JUMP_IF_FALSE                2 (to 364)
+          360 JUMP_BACKWARD                  103 (to 158)
+     >>   364 RETURN_CONST                     0 (None)
+     >>   366 RETURN_CONST                     0 (None)

@@ -1,0 +1,702 @@
+# bottlecollection — CPython 3.13 bytecode listing of lib/python/bottlecollection.pyc
+# sha256 d4562b7e589280a3f79fcfa7518f4a6669545a7906639640bce80aec865dec65, pyc flags 3, co_filename /Volumes/gitlab_data/gitlab/builds/j911ygmXM/0/crossover/crossover/macosx/CrossOver/build/Build/Products/Release/CrossOver.app/Contents/SharedSupport/CrossOver/lib/python/bottlecollection.py
+
+Disassembly of <code <module>> (line 1, args=0 posonly=0 kwonly=0, flags=0):
+   0        0 RESUME                           0
+   3        2 LOAD_CONST                       0 (0)
+            4 LOAD_CONST                       1 (None)
+            6 IMPORT_NAME                      0 (bottlequery)
+            8 STORE_NAME                       0 (bottlequery)
+   4       10 LOAD_CONST                       0 (0)
+           12 LOAD_CONST                       1 (None)
+           14 IMPORT_NAME                      1 (bottlewrapper)
+           16 STORE_NAME                       1 (bottlewrapper)
+   5       18 LOAD_CONST                       0 (0)
+           20 LOAD_CONST                       1 (None)
+           22 IMPORT_NAME                      2 (cxobjc)
+           24 STORE_NAME                       2 (cxobjc)
+   6       26 LOAD_CONST                       0 (0)
+           28 LOAD_CONST                       1 (None)
+           30 IMPORT_NAME                      3 (distversion)
+           32 STORE_NAME                       3 (distversion)
+   9       34 LOAD_BUILD_CLASS
+           36 PUSH_NULL
+           38 LOAD_CONST                       2 (<code BottleCollection, line 9>)
+           40 MAKE_FUNCTION
+           42 LOAD_CONST                       3 ('BottleCollection')
+           44 LOAD_NAME                        2 (cxobjc)
+           46 LOAD_ATTR                        8 (Proxy)
+           66 CALL                             3
+           74 STORE_NAME                       5 (BottleCollection)
+ 160       76 LOAD_NAME                        2 (cxobjc)
+           78 LOAD_ATTR                       12 (method)
+           98 PUSH_NULL
+          100 LOAD_NAME                        5 (BottleCollection)
+          102 LOAD_CONST                       4 ('sharedCollection')
+          104 CALL                             2
+ 161      112 LOAD_CONST                       5 (<code sharedCollection, line 160>)
+          114 MAKE_FUNCTION
+ 160      116 CALL                             0
+ 161      124 STORE_NAME                       7 (sharedCollection)
+          126 RETURN_CONST                     1 (None)
+
+Disassembly of <code BottleCollection> (line 9, args=0 posonly=0 kwonly=0, flags=0):
+   9        0 RESUME                           0
+            2 LOAD_NAME                        0 (__name__)
+            4 STORE_NAME                       1 (__module__)
+            6 LOAD_CONST                       0 ('BottleCollection')
+            8 STORE_NAME                       2 (__qualname__)
+           10 LOAD_CONST                       1 (9)
+           12 STORE_NAME                       3 (__firstlineno__)
+  11       14 LOAD_NAME                        4 (cxobjc)
+           16 LOAD_ATTR                       10 (array_property)
+           36 PUSH_NULL
+           38 CALL                             0
+           46 STORE_NAME                       6 (bottleList)
+  13       48 LOAD_CONST                       2 (<code BottleCollection.__init__, line 13>)
+           50 MAKE_FUNCTION
+           52 STORE_NAME                       7 (__init__)
+  21       54 LOAD_CONST                       3 (<code BottleCollection.init, line 21>)
+           56 MAKE_FUNCTION
+           58 STORE_NAME                       8 (init)
+  27       60 LOAD_NAME                        4 (cxobjc)
+           62 LOAD_ATTR                       18 (namedSelector)
+           82 PUSH_NULL
+           84 LOAD_CONST                       4 (b'refresh')
+           86 CALL                             1
+  28       94 LOAD_CONST                       5 (<code BottleCollection.refresh, line 27>)
+           96 MAKE_FUNCTION
+  27       98 CALL                             0
+  28      106 STORE_NAME                      10 (refresh)
+  59      108 LOAD_NAME                        4 (cxobjc)
+          110 LOAD_ATTR                       18 (namedSelector)
+          130 PUSH_NULL
+          132 LOAD_CONST                       6 (b'reset')
+          134 CALL                             1
+  60      142 LOAD_CONST                       7 (<code BottleCollection.reset, line 59>)
+          144 MAKE_FUNCTION
+  59      146 CALL                             0
+  60      154 STORE_NAME                      11 (reset)
+  66      156 LOAD_CONST                       8 (<code BottleCollection.has_32_bit_bottle, line 66>)
+          158 MAKE_FUNCTION
+          160 STORE_NAME                      12 (has_32_bit_bottle)
+  72      162 LOAD_NAME                        4 (cxobjc)
+          164 LOAD_ATTR                       26 (object_property)
+          184 PUSH_NULL
+          186 LOAD_CONST                       9 (True)
+          188 LOAD_NAME                        4 (cxobjc)
+          190 LOAD_ATTR                       28 (BOOL)
+  73      210 LOAD_NAME                       12 (has_32_bit_bottle)
+  74      212 LOAD_CONST                      10 ('bottleList')
+          214 BUILD_LIST                       1
+  72      216 LOAD_CONST                      11 (('read_only', 'typestr', 'getter', 'depends_on'))
+          218 CALL_KW                          4
+          220 STORE_NAME                      15 (has32BitBottle)
+  76      222 LOAD_NAME                        4 (cxobjc)
+          224 LOAD_ATTR                       32 (python_method)
+  77      244 LOAD_CONST                      12 (<code BottleCollection.add_ignored_bottle, line 76>)
+          246 MAKE_FUNCTION
+  76      248 CALL                             0
+  77      256 STORE_NAME                      17 (add_ignored_bottle)
+  80      258 LOAD_NAME                        4 (cxobjc)
+          260 LOAD_ATTR                       32 (python_method)
+  81      280 LOAD_CONST                      13 (<code BottleCollection.remove_ignored_bottle, line 80>)
+          282 MAKE_FUNCTION
+  80      284 CALL                             0
+  81      292 STORE_NAME                      18 (remove_ignored_bottle)
+  84      294 LOAD_NAME                        4 (cxobjc)
+          296 LOAD_ATTR                       18 (namedSelector)
+          316 PUSH_NULL
+          318 LOAD_CONST                      14 (b'refreshDefaultBottle')
+          320 CALL                             1
+  85      328 LOAD_CONST                      15 (<code BottleCollection.refreshDefaultBottle, line 84>)
+          330 MAKE_FUNCTION
+  84      332 CALL                             0
+  85      340 STORE_NAME                      19 (refreshDefaultBottle)
+  90      342 LOAD_NAME                        4 (cxobjc)
+          344 LOAD_ATTR                       18 (namedSelector)
+          364 PUSH_NULL
+          366 LOAD_CONST                      16 (b'bottleWithName:')
+          368 CALL                             1
+  91      376 LOAD_CONST                      17 (<code BottleCollection.bottle_with_name, line 90>)
+          378 MAKE_FUNCTION
+  90      380 CALL                             0
+  91      388 STORE_NAME                      20 (bottle_with_name)
+  98      390 LOAD_NAME                        4 (cxobjc)
+          392 LOAD_ATTR                       32 (python_method)
+  99      412 LOAD_CONST                      18 (<code BottleCollection.bottle_names, line 98>)
+          414 MAKE_FUNCTION
+  98      416 CALL                             0
+  99      424 STORE_NAME                      21 (bottle_names)
+ 102      426 LOAD_NAME                        4 (cxobjc)
+          428 LOAD_ATTR                       32 (python_method)
+ 103      448 LOAD_CONST                      19 (<code BottleCollection.bottles, line 102>)
+          450 MAKE_FUNCTION
+ 102      452 CALL                             0
+ 103      460 STORE_NAME                      22 (bottles)
+ 106      462 LOAD_NAME                        4 (cxobjc)
+          464 LOAD_ATTR                       32 (python_method)
+ 107      484 LOAD_CONST                      20 (<code BottleCollection.addBottle, line 106>)
+          486 MAKE_FUNCTION
+ 106      488 CALL                             0
+ 107      496 STORE_NAME                      23 (addBottle)
+ 128      498 LOAD_NAME                        4 (cxobjc)
+          500 LOAD_ATTR                       32 (python_method)
+ 129      520 LOAD_CONST                      21 (<code BottleCollection.removeBottle, line 128>)
+          522 MAKE_FUNCTION
+ 128      524 CALL                             0
+ 129      532 STORE_NAME                      24 (removeBottle)
+ 139      534 LOAD_NAME                        4 (cxobjc)
+          536 LOAD_ATTR                       18 (namedSelector)
+          556 PUSH_NULL
+          558 LOAD_CONST                      22 (b'addChangeDelegate:')
+          560 CALL                             1
+ 140      568 LOAD_CONST                      23 (<code BottleCollection.addChangeDelegate, line 139>)
+          570 MAKE_FUNCTION
+ 139      572 CALL                             0
+ 140      580 STORE_NAME                      25 (addChangeDelegate)
+ 143      582 LOAD_NAME                        4 (cxobjc)
+          584 LOAD_ATTR                       32 (python_method)
+ 144      604 LOAD_CONST                      24 (<code BottleCollection.removeChangeDelegate, line 143>)
+          606 MAKE_FUNCTION
+ 143      608 CALL                             0
+ 144      616 STORE_NAME                      26 (removeChangeDelegate)
+ 147      618 LOAD_NAME                        4 (cxobjc)
+          620 LOAD_ATTR                       32 (python_method)
+ 148      640 LOAD_CONST                      25 (<code BottleCollection.addBottleChangeDelegate, line 147>)
+          642 MAKE_FUNCTION
+ 147      644 CALL                             0
+ 148      652 STORE_NAME                      27 (addBottleChangeDelegate)
+ 153      654 LOAD_NAME                        4 (cxobjc)
+          656 LOAD_ATTR                       32 (python_method)
+ 154      676 LOAD_CONST                      26 (<code BottleCollection.removeBottleChangeDelegate, line 153>)
+          678 MAKE_FUNCTION
+ 153      680 CALL                             0
+ 154      688 STORE_NAME                      28 (removeBottleChangeDelegate)
+          690 LOAD_CONST                      27 (('bottleChangeDelegates', 'bottleList', 'changeDelegates', 'ignored_bottles'))
+          692 STORE_NAME                      29 (__static_attributes__)
+          694 RETURN_CONST                    28 (None)
+
+Disassembly of <code BottleCollection.__init__> (line 13, args=1 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: self
+  13        0 RESUME                           0
+  14        2 BUILD_LIST                       0
+            4 LOAD_FAST                        0 (self)
+            6 STORE_ATTR                       0 (bottleList)
+  15       16 BUILD_LIST                       0
+           18 LOAD_FAST                        0 (self)
+           20 STORE_ATTR                       1 (ignored_bottles)
+  17       30 BUILD_LIST                       0
+           32 LOAD_FAST                        0 (self)
+           34 STORE_ATTR                       2 (changeDelegates)
+  18       44 BUILD_LIST                       0
+           46 LOAD_FAST                        0 (self)
+           48 STORE_ATTR                       3 (bottleChangeDelegates)
+  19       58 LOAD_FAST                        0 (self)
+           60 LOAD_ATTR                        9 (refresh + NULL|self)
+           80 CALL                             0
+           88 POP_TOP
+           90 RETURN_CONST                     0 (None)
+
+Disassembly of <code BottleCollection.init> (line 21, args=1 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: self
+  21        0 RESUME                           0
+  22        2 LOAD_GLOBAL                      0 (cxobjc)
+           12 LOAD_ATTR                        2 (Proxy)
+           32 LOAD_ATTR                        5 (nsobject_init + NULL|self)
+           52 LOAD_FAST                        0 (self)
+           54 CALL                             1
+           62 STORE_FAST                       0 (self)
+  23       64 LOAD_FAST                        0 (self)
+           66 POP_JUMP_IF_NONE                16 (to 102)
+  24       70 LOAD_FAST                        0 (self)
+           72 LOAD_ATTR                        7 (__init__ + NULL|self)
+           92 CALL                             0
+          100 POP_TOP
+  25 >>   102 LOAD_FAST                        0 (self)
+          104 RETURN_VALUE
+
+Disassembly of <code BottleCollection.refresh> (line 27, args=1 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: self, bottle_list, changed, bottle, bottle_name, delegate
+  27        0 RESUME                           0
+  29        2 LOAD_GLOBAL                      0 (bottlequery)
+           12 LOAD_ATTR                        2 (get_bottle_list)
+           32 PUSH_NULL
+           34 CALL                             0
+           42 STORE_FAST                       1 (bottle_list)
+  30       44 LOAD_CONST                       1 (False)
+           46 STORE_FAST                       2 (changed)
+  33       48 LOAD_FAST                        0 (self)
+           50 LOAD_ATTR                        5 (bottles + NULL|self)
+           70 CALL                             0
+           78 GET_ITER
+     >>    80 FOR_ITER                        69 (to 222)
+           84 STORE_FAST                       3 (bottle)
+  34       86 LOAD_FAST                        3 (bottle)
+           88 LOAD_ATTR                        6 (name)
+          108 LOAD_FAST                        1 (bottle_list)
+          110 CONTAINS_OP                      1 (not in)
+          114 POP_JUMP_IF_TRUE                 2 (to 122)
+          118 JUMP_BACKWARD                   21 (to 80)
+     >>   122 LOAD_FAST                        3 (bottle)
+          124 LOAD_ATTR                        8 (is_renaming)
+          144 TO_BOOL
+          152 POP_JUMP_IF_FALSE                2 (to 160)
+          156 JUMP_BACKWARD                   40 (to 80)
+  35 >>   160 LOAD_FAST                        0 (self)
+          162 LOAD_ATTR                       11 (removeBottle + NULL|self)
+          182 LOAD_FAST                        3 (bottle)
+          184 LOAD_ATTR                        6 (name)
+          204 CALL                             1
+          212 POP_TOP
+  36      214 LOAD_CONST                       2 (True)
+          216 STORE_FAST                       2 (changed)
+          218 JUMP_BACKWARD                   71 (to 80)
+  33 >>   222 END_FOR
+          224 POP_TOP
+  39      226 LOAD_FAST                        0 (self)
+          228 LOAD_ATTR                        5 (bottles + NULL|self)
+          248 CALL                             0
+          256 GET_ITER
+     >>   258 FOR_ITER                        93 (to 448)
+          262 STORE_FAST                       3 (bottle)
+  40      264 LOAD_FAST                        3 (bottle)
+          266 LOAD_ATTR                        6 (name)
+          286 LOAD_FAST                        1 (bottle_list)
+          288 CONTAINS_OP                      0 (in)
+          292 POP_JUMP_IF_FALSE               29 (to 354)
+  41      296 LOAD_FAST                        1 (bottle_list)
+          298 LOAD_ATTR                       13 (remove + NULL|self)
+          318 LOAD_FAST                        3 (bottle)
+          320 LOAD_ATTR                        6 (name)
+          340 CALL                             1
+          348 POP_TOP
+          350 JUMP_BACKWARD                   48 (to 258)
+  42 >>   354 LOAD_FAST                        3 (bottle)
+          356 LOAD_ATTR                       14 (changeablename)
+          376 LOAD_FAST                        1 (bottle_list)
+          378 CONTAINS_OP                      0 (in)
+          382 POP_JUMP_IF_TRUE                 2 (to 390)
+          386 JUMP_BACKWARD                   66 (to 258)
+  43 >>   390 LOAD_FAST                        1 (bottle_list)
+          392 LOAD_ATTR                       13 (remove + NULL|self)
+          412 LOAD_FAST                        3 (bottle)
+          414 LOAD_ATTR                       14 (changeablename)
+          434 CALL                             1
+          442 POP_TOP
+          444 JUMP_BACKWARD                   95 (to 258)
+  39 >>   448 END_FOR
+          450 POP_TOP
+  46      452 LOAD_FAST                        0 (self)
+          454 LOAD_ATTR                       16 (ignored_bottles)
+          474 GET_ITER
+     >>   476 FOR_ITER                        27 (to 534)
+          480 STORE_FAST                       4 (bottle_name)
+  47      482 LOAD_FAST_LOAD_FAST             65 (bottle_name, bottle_list)
+          484 CONTAINS_OP                      0 (in)
+          488 POP_JUMP_IF_TRUE                 2 (to 496)
+          492 JUMP_BACKWARD                   10 (to 476)
+  48 >>   496 LOAD_FAST                        1 (bottle_list)
+          498 LOAD_ATTR                       13 (remove + NULL|self)
+          518 LOAD_FAST                        4 (bottle_name)
+          520 CALL                             1
+          528 POP_TOP
+          530 JUMP_BACKWARD                   29 (to 476)
+  46 >>   534 END_FOR
+          536 POP_TOP
+  51      538 LOAD_FAST                        1 (bottle_list)
+          540 GET_ITER
+     >>   542 FOR_ITER                        22 (to 590)
+          546 STORE_FAST                       4 (bottle_name)
+  52      548 LOAD_FAST                        0 (self)
+          550 LOAD_ATTR                       19 (addBottle + NULL|self)
+          570 LOAD_FAST                        4 (bottle_name)
+          572 CALL                             1
+          580 POP_TOP
+  53      582 LOAD_CONST                       2 (True)
+          584 STORE_FAST                       2 (changed)
+          586 JUMP_BACKWARD                   24 (to 542)
+  51 >>   590 END_FOR
+          592 POP_TOP
+  55      594 LOAD_FAST                        2 (changed)
+          596 TO_BOOL
+          604 POP_JUMP_IF_FALSE               36 (to 680)
+  56      608 LOAD_FAST                        0 (self)
+          610 LOAD_ATTR                       20 (changeDelegates)
+          630 GET_ITER
+     >>   632 FOR_ITER                        19 (to 674)
+          636 STORE_FAST                       5 (delegate)
+  57      638 LOAD_FAST                        5 (delegate)
+          640 LOAD_ATTR                       23 (bottleCollectionChanged + NULL|self)
+          660 CALL                             0
+          668 POP_TOP
+          670 JUMP_BACKWARD                   21 (to 632)
+  56 >>   674 END_FOR
+          676 POP_TOP
+          678 RETURN_CONST                     0 (None)
+  55 >>   680 RETURN_CONST                     0 (None)
+
+Disassembly of <code BottleCollection.reset> (line 59, args=1 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: self, bottle_name
+  59        0 RESUME                           0
+  61        2 LOAD_FAST                        0 (self)
+            4 LOAD_ATTR                        1 (bottle_names + NULL|self)
+           24 CALL                             0
+           32 GET_ITER
+     >>    34 FOR_ITER                        20 (to 78)
+           38 STORE_FAST                       1 (bottle_name)
+  62       40 LOAD_FAST                        0 (self)
+           42 LOAD_ATTR                        3 (removeBottle + NULL|self)
+           62 LOAD_FAST                        1 (bottle_name)
+           64 CALL                             1
+           72 POP_TOP
+           74 JUMP_BACKWARD                   22 (to 34)
+  61 >>    78 END_FOR
+           80 POP_TOP
+  64       82 LOAD_FAST                        0 (self)
+           84 LOAD_ATTR                        5 (refresh + NULL|self)
+          104 CALL                             0
+          112 POP_TOP
+          114 RETURN_CONST                     0 (None)
+
+Disassembly of <code BottleCollection.has_32_bit_bottle> (line 66, args=1 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: self, bottle
+  66        0 RESUME                           0
+  67        2 LOAD_FAST                        0 (self)
+            4 LOAD_ATTR                        0 (bottleList)
+           24 GET_ITER
+     >>    26 FOR_ITER                        21 (to 72)
+           30 STORE_FAST                       1 (bottle)
+  68       32 LOAD_FAST                        1 (bottle)
+           34 LOAD_ATTR                        2 (arch)
+           54 LOAD_CONST                       1 ('win32')
+           56 COMPARE_OP                      88 (== bool)
+           60 POP_JUMP_IF_TRUE                 2 (to 68)
+           64 JUMP_BACKWARD                   21 (to 26)
+  69 >>    68 POP_TOP
+           70 RETURN_CONST                     2 (True)
+  67 >>    72 END_FOR
+           74 POP_TOP
+  70       76 RETURN_CONST                     3 (False)
+
+Disassembly of <code BottleCollection.add_ignored_bottle> (line 76, args=2 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: self, new_name
+  76        0 RESUME                           0
+  78        2 LOAD_FAST                        0 (self)
+            4 LOAD_ATTR                        0 (ignored_bottles)
+           24 LOAD_ATTR                        3 (append + NULL|self)
+           44 LOAD_FAST                        1 (new_name)
+           46 CALL                             1
+           54 POP_TOP
+           56 RETURN_CONST                     0 (None)
+
+Disassembly of <code BottleCollection.remove_ignored_bottle> (line 80, args=2 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: self, new_name
+  80        0 RESUME                           0
+  82        2 LOAD_FAST                        0 (self)
+            4 LOAD_ATTR                        0 (ignored_bottles)
+           24 LOAD_ATTR                        3 (remove + NULL|self)
+           44 LOAD_FAST                        1 (new_name)
+           46 CALL                             1
+           54 POP_TOP
+           56 RETURN_CONST                     0 (None)
+
+Disassembly of <code BottleCollection.refreshDefaultBottle> (line 84, args=1 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: self, default_bottle_name, bottle
+  84        0 RESUME                           0
+  86        2 LOAD_GLOBAL                      0 (bottlequery)
+           12 LOAD_ATTR                        2 (get_default_bottle)
+           32 PUSH_NULL
+           34 CALL                             0
+           42 STORE_FAST                       1 (default_bottle_name)
+  87       44 LOAD_FAST                        0 (self)
+           46 LOAD_ATTR                        4 (bottleList)
+           66 GET_ITER
+     >>    68 FOR_ITER                        23 (to 118)
+           72 STORE_FAST                       2 (bottle)
+  88       74 LOAD_FAST                        2 (bottle)
+           76 LOAD_ATTR                        6 (name)
+           96 LOAD_FAST                        1 (default_bottle_name)
+           98 COMPARE_OP                      72 (==)
+          102 LOAD_FAST                        2 (bottle)
+          104 STORE_ATTR                       4 (is_default)
+          114 JUMP_BACKWARD                   25 (to 68)
+  87 >>   118 END_FOR
+          120 POP_TOP
+          122 RETURN_CONST                     0 (None)
+
+Disassembly of <code BottleCollection.bottle_with_name> (line 90, args=2 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: self, bottle_name, bottle
+  90        0 RESUME                           0
+  92        2 LOAD_FAST                        0 (self)
+            4 LOAD_ATTR                        0 (bottleList)
+           24 GET_ITER
+     >>    26 FOR_ITER                        23 (to 76)
+           30 STORE_FAST                       2 (bottle)
+  93       32 LOAD_FAST                        2 (bottle)
+           34 LOAD_ATTR                        2 (name)
+           54 LOAD_FAST                        1 (bottle_name)
+           56 COMPARE_OP                      88 (== bool)
+           60 POP_JUMP_IF_TRUE                 2 (to 68)
+           64 JUMP_BACKWARD                   21 (to 26)
+  94 >>    68 LOAD_FAST                        2 (bottle)
+           70 SWAP                             2
+           72 POP_TOP
+           74 RETURN_VALUE
+  92 >>    76 END_FOR
+           78 POP_TOP
+  96       80 RETURN_CONST                     0 (None)
+
+Disassembly of <code BottleCollection.bottle_names> (line 98, args=1 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: self, bottle
+  98        0 RESUME                           0
+ 100        2 LOAD_FAST                        0 (self)
+            4 LOAD_ATTR                        0 (bottleList)
+           24 GET_ITER
+           26 LOAD_FAST_AND_CLEAR              1 (bottle)
+           28 SWAP                             2
+           30 BUILD_LIST                       0
+           32 SWAP                             2
+           34 GET_ITER
+     >>    36 FOR_ITER                        14 (to 68)
+           40 STORE_FAST_LOAD_FAST            17 (bottle, bottle)
+           42 LOAD_ATTR                        2 (name)
+           62 LIST_APPEND                      2
+           64 JUMP_BACKWARD                   16 (to 36)
+     >>    68 END_FOR
+           70 POP_TOP
+           72 SWAP                             2
+           74 STORE_FAST                       1 (bottle)
+           76 RETURN_VALUE
+     >>    78 SWAP                             2
+           80 POP_TOP
+           82 SWAP                             2
+           84 STORE_FAST                       1 (bottle)
+           86 RERAISE                          0
+  ExceptionTable:
+    30 to 72 -> 78 [2]
+
+Disassembly of <code BottleCollection.bottles> (line 102, args=1 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: self
+ 102        0 RESUME                           0
+ 104        2 LOAD_GLOBAL                      1 (list + NULL)
+           12 LOAD_FAST                        0 (self)
+           14 LOAD_ATTR                        2 (bottleList)
+           34 CALL                             1
+           42 RETURN_VALUE
+
+Disassembly of <code BottleCollection.addBottle> (line 106, args=2 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: self, bottle_name, bottle, delegate
+ 106        0 RESUME                           0
+ 109        2 LOAD_FAST                        0 (self)
+            4 LOAD_ATTR                        1 (bottles + NULL|self)
+           24 CALL                             0
+           32 GET_ITER
+     >>    34 FOR_ITER                        21 (to 80)
+           38 STORE_FAST                       2 (bottle)
+ 110       40 LOAD_FAST                        2 (bottle)
+           42 LOAD_ATTR                        2 (name)
+           62 LOAD_FAST                        1 (bottle_name)
+           64 COMPARE_OP                      88 (== bool)
+           68 POP_JUMP_IF_TRUE                 2 (to 76)
+           72 JUMP_BACKWARD                   21 (to 34)
+ 111 >>    76 POP_TOP
+           78 RETURN_CONST                     0 (None)
+ 109 >>    80 END_FOR
+           82 POP_TOP
+ 113       84 LOAD_GLOBAL                      4 (distversion)
+           94 LOAD_ATTR                        6 (IS_MACOSX)
+          114 TO_BOOL
+          122 POP_JUMP_IF_FALSE               46 (to 218)
+ 114      126 LOAD_GLOBAL                      8 (bottlewrapper)
+          136 LOAD_ATTR                       10 (BottleWrapper)
+          156 LOAD_ATTR                       13 (alloc + NULL|self)
+          176 CALL                             0
+          184 LOAD_ATTR                       15 (initWithName_ + NULL|self)
+          204 LOAD_FAST                        1 (bottle_name)
+          206 CALL                             1
+          214 STORE_FAST                       2 (bottle)
+          216 JUMP_FORWARD                    22 (to 262)
+ 116 >>   218 LOAD_GLOBAL                      8 (bottlewrapper)
+          228 LOAD_ATTR                       10 (BottleWrapper)
+          248 PUSH_NULL
+          250 LOAD_FAST                        1 (bottle_name)
+          252 CALL                             1
+          260 STORE_FAST                       2 (bottle)
+ 118 >>   262 LOAD_FAST                        0 (self)
+          264 LOAD_ATTR                       16 (bottleList)
+          284 LOAD_ATTR                       19 (append + NULL|self)
+          304 LOAD_FAST                        2 (bottle)
+          306 CALL                             1
+          314 POP_TOP
+ 119      316 LOAD_FAST                        2 (bottle)
+          318 LOAD_ATTR                       21 (add_menu_observers + NULL|self)
+          338 CALL                             0
+          346 POP_TOP
+ 121      348 LOAD_FAST                        0 (self)
+          350 LOAD_ATTR                       22 (bottleChangeDelegates)
+          370 GET_ITER
+     >>   372 FOR_ITER                        20 (to 416)
+          376 STORE_FAST                       3 (delegate)
+ 122      378 LOAD_FAST                        2 (bottle)
+          380 LOAD_ATTR                       25 (add_change_delegate + NULL|self)
+          400 LOAD_FAST                        3 (delegate)
+          402 CALL                             1
+          410 POP_TOP
+          412 JUMP_BACKWARD                   22 (to 372)
+ 121 >>   416 END_FOR
+          418 POP_TOP
+ 124      420 LOAD_FAST                        2 (bottle)
+          422 LOAD_ATTR                       25 (add_change_delegate + NULL|self)
+          442 LOAD_FAST                        0 (self)
+          444 CALL                             1
+          452 POP_TOP
+ 126      454 LOAD_FAST                        0 (self)
+          456 LOAD_ATTR                       27 (refreshDefaultBottle + NULL|self)
+          476 CALL                             0
+          484 POP_TOP
+          486 RETURN_CONST                     0 (None)
+
+Disassembly of <code BottleCollection.removeBottle> (line 128, args=2 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: self, bottle_name, bottle
+ 128        0 RESUME                           0
+ 130        2 LOAD_FAST                        0 (self)
+            4 LOAD_ATTR                        1 (bottle_with_name + NULL|self)
+           24 LOAD_FAST                        1 (bottle_name)
+           26 CALL                             1
+           34 STORE_FAST                       2 (bottle)
+ 131       36 LOAD_FAST                        2 (bottle)
+           38 TO_BOOL
+           46 POP_JUMP_IF_TRUE                 1 (to 52)
+ 132       50 RETURN_CONST                     0 (None)
+ 134 >>    52 LOAD_FAST                        0 (self)
+           54 LOAD_ATTR                        2 (bottleList)
+           74 LOAD_ATTR                        5 (remove + NULL|self)
+           94 LOAD_FAST                        2 (bottle)
+           96 CALL                             1
+          104 POP_TOP
+ 135      106 LOAD_FAST                        2 (bottle)
+          108 LOAD_ATTR                        7 (remove_change_delegate + NULL|self)
+          128 LOAD_FAST                        0 (self)
+          130 CALL                             1
+          138 POP_TOP
+ 136      140 LOAD_FAST                        2 (bottle)
+          142 LOAD_ATTR                        9 (remove_observers + NULL|self)
+          162 CALL                             0
+          170 POP_TOP
+ 137      172 LOAD_FAST                        0 (self)
+          174 LOAD_ATTR                       11 (refreshDefaultBottle + NULL|self)
+          194 CALL                             0
+          202 POP_TOP
+          204 RETURN_CONST                     0 (None)
+
+Disassembly of <code BottleCollection.addChangeDelegate> (line 139, args=2 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: self, inDelegate
+ 139        0 RESUME                           0
+ 141        2 LOAD_FAST                        0 (self)
+            4 LOAD_ATTR                        0 (changeDelegates)
+           24 LOAD_ATTR                        3 (append + NULL|self)
+           44 LOAD_FAST                        1 (inDelegate)
+           46 CALL                             1
+           54 POP_TOP
+           56 RETURN_CONST                     0 (None)
+
+Disassembly of <code BottleCollection.removeChangeDelegate> (line 143, args=2 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: self, inDelegate
+ 143        0 RESUME                           0
+ 145        2 LOAD_FAST                        0 (self)
+            4 LOAD_ATTR                        0 (changeDelegates)
+           24 LOAD_ATTR                        3 (remove + NULL|self)
+           44 LOAD_FAST                        1 (inDelegate)
+           46 CALL                             1
+           54 POP_TOP
+           56 RETURN_CONST                     0 (None)
+
+Disassembly of <code BottleCollection.addBottleChangeDelegate> (line 147, args=2 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: self, inDelegate, bottleobj
+ 147        0 RESUME                           0
+ 149        2 LOAD_FAST                        0 (self)
+            4 LOAD_ATTR                        0 (bottleChangeDelegates)
+           24 LOAD_ATTR                        3 (append + NULL|self)
+           44 LOAD_FAST                        1 (inDelegate)
+           46 CALL                             1
+           54 POP_TOP
+ 150       56 LOAD_FAST                        0 (self)
+           58 LOAD_ATTR                        5 (bottles + NULL|self)
+           78 CALL                             0
+           86 GET_ITER
+     >>    88 FOR_ITER                        20 (to 132)
+           92 STORE_FAST                       2 (bottleobj)
+ 151       94 LOAD_FAST                        2 (bottleobj)
+           96 LOAD_ATTR                        7 (add_change_delegate + NULL|self)
+          116 LOAD_FAST                        1 (inDelegate)
+          118 CALL                             1
+          126 POP_TOP
+          128 JUMP_BACKWARD                   22 (to 88)
+ 150 >>   132 END_FOR
+          134 POP_TOP
+          136 RETURN_CONST                     0 (None)
+
+Disassembly of <code BottleCollection.removeBottleChangeDelegate> (line 153, args=2 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: self, inDelegate, bottleobj
+ 153        0 RESUME                           0
+ 155        2 LOAD_FAST                        0 (self)
+            4 LOAD_ATTR                        0 (bottleChangeDelegates)
+           24 LOAD_ATTR                        3 (remove + NULL|self)
+           44 LOAD_FAST                        1 (inDelegate)
+           46 CALL                             1
+           54 POP_TOP
+ 156       56 LOAD_FAST                        0 (self)
+           58 LOAD_ATTR                        5 (bottles + NULL|self)
+           78 CALL                             0
+           86 GET_ITER
+     >>    88 FOR_ITER                        20 (to 132)
+           92 STORE_FAST                       2 (bottleobj)
+ 157       94 LOAD_FAST                        2 (bottleobj)
+           96 LOAD_ATTR                        7 (remove_change_delegate + NULL|self)
+          116 LOAD_FAST                        1 (inDelegate)
+          118 CALL                             1
+          126 POP_TOP
+          128 JUMP_BACKWARD                   22 (to 88)
+ 156 >>   132 END_FOR
+          134 POP_TOP
+          136 RETURN_CONST                     0 (None)
+
+Disassembly of <code sharedCollection> (line 160, args=0 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+ 160        0 RESUME                           0
+ 164        2 NOP
+ 165        4 LOAD_GLOBAL                      0 (sharedBottleCollection)
+           14 RETURN_VALUE
+     >>    16 PUSH_EXC_INFO
+ 166       18 LOAD_GLOBAL                      2 (NameError)
+           28 CHECK_EXC_MATCH
+           30 POP_JUMP_IF_FALSE               80 (to 194)
+           34 POP_TOP
+ 167       36 LOAD_GLOBAL                      4 (distversion)
+           46 LOAD_ATTR                        6 (IS_MACOSX)
+           66 TO_BOOL
+           74 POP_JUMP_IF_FALSE               41 (to 160)
+ 168       78 LOAD_GLOBAL                      8 (BottleCollection)
+           88 LOAD_ATTR                       11 (alloc + NULL|self)
+          108 CALL                             0
+          116 LOAD_ATTR                       13 (init + NULL|self)
+          136 CALL                             0
+          144 STORE_GLOBAL                     0 (sharedBottleCollection)
+          146 POP_EXCEPT
+ 172      148 LOAD_GLOBAL                      0 (sharedBottleCollection)
+          158 RETURN_VALUE
+ 170 >>   160 LOAD_GLOBAL                      9 (BottleCollection + NULL)
+          170 CALL                             0
+          178 STORE_GLOBAL                     0 (sharedBottleCollection)
+          180 POP_EXCEPT
+ 172      182 LOAD_GLOBAL                      0 (sharedBottleCollection)
+          192 RETURN_VALUE
+ 166 >>   194 RERAISE                          0
+     >>   196 COPY                             3
+          198 POP_EXCEPT
+          200 RERAISE                          1
+  ExceptionTable:
+    4 to 14 -> 16 [0]
+    16 to 146 -> 196 [1] lasti
+    160 to 180 -> 196 [1] lasti
+    194 to 196 -> 196 [1] lasti

@@ -22,26 +22,34 @@
 | Descompilação de todos os métodos ObjC (2.108/2.108, 0 erros) | ✅ [`classes/`](CrossOver/decompiled/classes) |
 | Funções C, callbacks e blocos ObjC em `__TEXT,__text` (186/186, 100% de `__text`) | ✅ [`c_functions.c`](CrossOver/decompiled/c_functions.c) + [`classes/`](CrossOver/decompiled/classes) |
 | Comparação e mapeamento da slice x86_64 (2287/2288 funções pareadas, 6 com referências diferentes) | ✅ [`x86_64/`](CrossOver/decompiled/x86_64) |
-| Scripts Python/Perl em `SharedSupport/CrossOver` | ⏳ pendente |
+| Scripts Python/Perl em `SharedSupport/CrossOver` (36 entradas de `bin/`, 16 scripts e 66 módulos Perl, 50 módulos Python 3.13 desmontados) | ✅ [`sharedsupport/`](CrossOver/sharedsupport) |
 | Documentação da arquitetura (GUI ↔ backend) | ⏳ pendente |
 
 ## Arquitetura (observações iniciais)
 
 - **GUI nativa em Objective-C/Cocoa.** As classes principais são `MainWindowController`, `BottleViewController`, `PackageViewController` e `PackageInstaller`.
 - **`CXServerCrossOver`** (~13,9 mil linhas de pseudocódigo) é a maior classe. Gera os apps "helper" do macOS por bottle (`CrossOverHelper*`, `CFBundleDocumentTypes`, associações de extensão/URL como `steam`, `mailto`) e os menus a partir dos dados da bottle (`%WINEPREFIX%`, `--bottle %@`).
-- **Python 3.13 embutido** (`Contents/Frameworks/Python.framework`). A lógica de bottles e instalação fica em `SharedSupport/CrossOver/{bin,lib,share}`.
+- **Python 3.13 embutido** (`Contents/Frameworks/Python.framework`). A lógica de bottles e instalação fica em `SharedSupport/CrossOver/{bin,lib,share}`: a GUI usa classes Python via PyObjC (`cxobjc.Proxy`), que chamam as ferramentas Perl (`wine`, `cxbottle`, `cxmenu`, `cxassoc`, `cxsu`). Detalhes em [`sharedsupport/`](CrossOver/sharedsupport).
+- **Wine só x86_64.** `wineloader`, `wineserver` e as dylibs de `lib64/` não têm slice arm64; no Apple Silicon o Wine roda sob Rosetta 2.
 - **Sparkle 2.4.1** cuida das atualizações (`CXUpdater`, `CXSparkleUserDriver`).
 - **CrossTie** (`CrossTieURLHandler`, `LoadingCrossTieSheetController`) é o formato de receitas de instalação.
 
 ## Estrutura
 
 ```
-CrossOver/decompiled/
-├── INDEX.md            # todas as procedures por classe, com endereço
-├── objc_methods.json   # classe -> [(endereço, seletor)]
-├── classes/*.m         # pseudocódigo por classe (Hopper)
-├── x86_64/             # mapa arm64 ↔ x86_64 e diferenças entre as slices
-└── .ingest.py          # converte a saída do REA batch_decompile em classes/*.m
+CrossOver/
+├── decompiled/
+│   ├── INDEX.md            # todas as procedures por classe, com endereço
+│   ├── objc_methods.json   # classe -> [(endereço, seletor)]
+│   ├── classes/*.m         # pseudocódigo por classe (Hopper)
+│   ├── c_functions.c       # funções C e blocos fora das classes
+│   ├── x86_64/             # mapa arm64 ↔ x86_64 e diferenças entre as slices
+│   └── .ingest.py          # converte a saída do REA batch_decompile em classes/*.m
+└── sharedsupport/
+    ├── README.md           # ferramentas Perl, biblioteca Python, Wine e como se ligam
+    ├── TOOLS.md            # inventário de bin/ e lib/perl/ (tools.json)
+    ├── python/             # INDEX.md, outline/*.py, dis/*.dis, modules.json
+    └── .tools/             # leitor de .pyc 3.13 e geradores dos índices
 ```
 
 ## Como reproduzir

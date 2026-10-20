@@ -1,0 +1,2796 @@
+{
+ "bytecode": {
+  "appdetector": {
+   "bytes": 14198,
+   "classes": [
+    "InstalledApplication",
+    "AppDetector"
+   ],
+   "co_filename": "/Volumes/gitlab_data/gitlab/builds/j911ygmXM/0/crossover/crossover/macosx/CrossOver/build/Build/Products/Release/CrossOver.app/Contents/SharedSupport/CrossOver/lib/python/appdetector.py",
+   "code_objects": 16,
+   "doc": null,
+   "file": "lib/python/appdetector.pyc",
+   "functions": [
+    "_get_uninstall_info",
+    "get_uninstall_applications",
+    "get_installed_applications",
+    "fast_get_installed_applications",
+    "is_profile_installed"
+   ],
+   "imported_by": [
+    "bottlewrapper",
+    "cxaiecore",
+    "cxaiengine",
+    "libcxsetup"
+   ],
+   "imports": [
+    "os",
+    "re",
+    "distversion",
+    "cxutils",
+    "bottlequery",
+    "c4profilesmanager",
+    "cxglob",
+    "cxlog",
+    "cxobjc"
+   ],
+   "imports_internal": [
+    "bottlequery",
+    "c4profilesmanager",
+    "cxglob",
+    "cxlog",
+    "cxobjc",
+    "cxutils",
+    "distversion"
+   ],
+   "imports_other": [],
+   "imports_stdlib": [
+    "os",
+    "re"
+   ],
+   "instructions": 1048,
+   "module": "appdetector",
+   "pyc_flags": 3,
+   "sha256": "740b1822331b7b71ca63e287f10d2e21649e2e569bb5ad04e18bc30e3bd7ad91",
+   "source_hash": "c9248fa108386467"
+  },
+  "bottlecollection": {
+   "bytes": 8989,
+   "classes": [
+    "BottleCollection"
+   ],
+   "co_filename": "/Volumes/gitlab_data/gitlab/builds/j911ygmXM/0/crossover/crossover/macosx/CrossOver/build/Build/Products/Release/CrossOver.app/Contents/SharedSupport/CrossOver/lib/python/bottlecollection.py",
+   "code_objects": 20,
+   "doc": null,
+   "file": "lib/python/bottlecollection.pyc",
+   "functions": [],
+   "imported_by": [
+    "libcxsetup"
+   ],
+   "imports": [
+    "bottlequery",
+    "bottlewrapper",
+    "cxobjc",
+    "distversion"
+   ],
+   "imports_internal": [
+    "bottlequery",
+    "bottlewrapper",
+    "cxobjc",
+    "distversion"
+   ],
+   "imports_other": [],
+   "imports_stdlib": [],
+   "instructions": 636,
+   "module": "bottlecollection",
+   "pyc_flags": 3,
+   "sha256": "d4562b7e589280a3f79fcfa7518f4a6669545a7906639640bce80aec865dec65",
+   "source_hash": "9747a12d06aca964"
+  },
+  "bottlemanagement": {
+   "bytes": 13742,
+   "classes": [
+    "BottleManagement"
+   ],
+   "co_filename": "/Volumes/gitlab_data/gitlab/builds/j911ygmXM/0/crossover/crossover/macosx/CrossOver/build/Build/Products/Release/CrossOver.app/Contents/SharedSupport/CrossOver/lib/python/bottlemanagement.py",
+   "code_objects": 19,
+   "doc": null,
+   "file": "lib/python/bottlemanagement.pyc",
+   "functions": [
+    "_bottle_tool",
+    "publish_bottle",
+    "rename_bottle",
+    "delete_bottle",
+    "set_default_bottle",
+    "package_bottle",
+    "_get_template_key",
+    "is_running",
+    "quit_bottle",
+    "get_up_to_date",
+    "kill_bottle"
+   ],
+   "imported_by": [
+    "bottlewrapper",
+    "cxaiemisc",
+    "installtask",
+    "libcxsetup"
+   ],
+   "imports": [
+    "os",
+    "cxproduct",
+    "distversion",
+    "cxutils",
+    "cxobjc",
+    "cxlog",
+    "bottlequery",
+    "cxutils"
+   ],
+   "imports_internal": [
+    "bottlequery",
+    "cxlog",
+    "cxobjc",
+    "cxproduct",
+    "cxutils",
+    "distversion"
+   ],
+   "imports_other": [],
+   "imports_stdlib": [
+    "os"
+   ],
+   "instructions": 1066,
+   "module": "bottlemanagement",
+   "pyc_flags": 3,
+   "sha256": "9237f9f66462eb48715e8293b8fea76f565ca909c17c3b6438c81fb10d86ac1b",
+   "source_hash": "8f633d1cda26db91"
+  },
+  "bottlequery": {
+   "bytes": 51287,
+   "classes": [
+    "BottleQuery",
+    "NotFoundError",
+    "AsyncManipResult",
+    "_BottleManipulator"
+   ],
+   "co_filename": "/Volumes/gitlab_data/gitlab/builds/j911ygmXM/0/crossover/crossover/macosx/CrossOver/build/Build/Products/Release/CrossOver.app/Contents/SharedSupport/CrossOver/lib/python/bottlequery.py",
+   "code_objects": 59,
+   "doc": null,
+   "file": "lib/python/bottlequery.pyc",
+   "functions": [
+    "_validate_wineprefix",
+    "get_bottle_list",
+    "get_default_bottle",
+    "get_prefix_for_bottle",
+    "get_native_paths",
+    "get_native_path",
+    "get_windows_paths",
+    "get_windows_path",
+    "get_control_panel_info",
+    "config_file_path",
+    "get_config",
+    "is_disabled",
+    "is_managed",
+    "get_system_drive",
+    "resolve_icon_path",
+    "shutdown_manipulator",
+    "BottleManipulator",
+    "reset_cache",
+    "_manip_unescape",
+    "deserialize_reg",
+    "get_registry_key",
+    "set_registry_key",
+    "unset_registry_value",
+    "set_windows_version",
+    "get_windows_version",
+    "get_windows_version_name",
+    "get_unix_environ",
+    "expand_unix_string",
+    "get_win_environ",
+    "expand_win_string",
+    "add_drive",
+    "rm_drive"
+   ],
+   "imported_by": [
+    "appdetector",
+    "bottlecollection",
+    "bottlemanagement",
+    "bottlewrapper",
+    "cxaiecore",
+    "cxaiengine",
+    "cxassoc",
+    "cxdiag",
+    "cxglob",
+    "cxmenu",
+    "installtask",
+    "libcxsetup"
+   ],
+   "imports": [
+    "os",
+    "fcntl",
+    "subprocess",
+    "threading",
+    "time",
+    "collections",
+    "cxproduct",
+    "cxlog",
+    "cxutils",
+    "cxevent",
+    "cxconfig",
+    "cxobjc",
+    "distversion",
+    "cxutils"
+   ],
+   "imports_internal": [
+    "cxconfig",
+    "cxevent",
+    "cxlog",
+    "cxobjc",
+    "cxproduct",
+    "cxutils",
+    "distversion"
+   ],
+   "imports_other": [],
+   "imports_stdlib": [
+    "collections",
+    "fcntl",
+    "os",
+    "subprocess",
+    "threading",
+    "time"
+   ],
+   "instructions": 4505,
+   "module": "bottlequery",
+   "pyc_flags": 3,
+   "sha256": "304121786818f1581df0fef203e0b2acb1123ed62466001e0b031792b6053d62",
+   "source_hash": "fae35ddc8c14c4d9"
+  },
+  "bottlewrapper": {
+   "bytes": 81344,
+   "classes": [
+    "BottleWrapper",
+    "BottleWrapperOperation",
+    "AddMenuObserversOperation",
+    "LoadApplicationInfoOperation",
+    "LoadControlPanelInfoOperation",
+    "LoadHighResolutionInfoOperation",
+    "SetHighResolutionEnabledStateOperation",
+    "SetIsDefaultOperation",
+    "DeleteBottleOperation",
+    "RenameBottleOperation",
+    "QuitBottleOperation",
+    "ForceQuitBottleOperation"
+   ],
+   "co_filename": "/Volumes/gitlab_data/gitlab/builds/j911ygmXM/0/crossover/crossover/macosx/CrossOver/build/Build/Products/Release/CrossOver.app/Contents/SharedSupport/CrossOver/lib/python/bottlewrapper.py",
+   "code_objects": 167,
+   "doc": null,
+   "file": "lib/python/bottlewrapper.pyc",
+   "functions": [],
+   "imported_by": [
+    "bottlecollection",
+    "libcxsetup"
+   ],
+   "imports": [
+    "os",
+    "platform",
+    "time",
+    "distversion",
+    "bottlequery",
+    "bottlemanagement",
+    "c4profilesmanager",
+    "cxconfig",
+    "cxdiag",
+    "cxfsnotifier",
+    "cxlog",
+    "cxmenu",
+    "cxobjc",
+    "cxutils",
+    "pyop",
+    "cxutils",
+    "ctypes",
+    "ctypes.util",
+    "appdetector"
+   ],
+   "imports_internal": [
+    "appdetector",
+    "bottlemanagement",
+    "bottlequery",
+    "c4profilesmanager",
+    "cxconfig",
+    "cxdiag",
+    "cxfsnotifier",
+    "cxlog",
+    "cxmenu",
+    "cxobjc",
+    "cxutils",
+    "distversion",
+    "pyop"
+   ],
+   "imports_other": [],
+   "imports_stdlib": [
+    "ctypes",
+    "os",
+    "platform",
+    "time"
+   ],
+   "instructions": 5453,
+   "module": "bottlewrapper",
+   "pyc_flags": 3,
+   "sha256": "7d846409683eba269a64f501572345a90e486bd5d87512d93b0f2aac414c616f",
+   "source_hash": "c7a508b1b18d521e"
+  },
+  "c4parser": {
+   "bytes": 63885,
+   "classes": [
+    "_C4PHandler",
+    "C4PFile"
+   ],
+   "co_filename": "/Volumes/gitlab_data/gitlab/builds/j911ygmXM/0/crossover/crossover/macosx/CrossOver/build/Build/Products/Release/CrossOver.app/Contents/SharedSupport/CrossOver/lib/python/c4parser.py",
+   "code_objects": 77,
+   "doc": null,
+   "file": "lib/python/c4parser.pyc",
+   "functions": [],
+   "imported_by": [
+    "c4profilesmanager"
+   ],
+   "imports": [
+    "os.path",
+    "time",
+    "traceback",
+    "xml.sax",
+    "xml.sax.handler",
+    "cxlog",
+    "c4profiles"
+   ],
+   "imports_internal": [
+    "c4profiles",
+    "cxlog"
+   ],
+   "imports_other": [],
+   "imports_stdlib": [
+    "os",
+    "time",
+    "traceback",
+    "xml"
+   ],
+   "instructions": 4917,
+   "module": "c4parser",
+   "pyc_flags": 3,
+   "sha256": "aa917152601f5c4770811c46a8f86ad0d787b25e1236f114bf3890c7ea3cff61",
+   "source_hash": "afc18daa1ff1361c"
+  },
+  "c4profiles": {
+   "bytes": 85590,
+   "classes": [
+    "C4Condition",
+    "C4ConditionUnary",
+    "C4ConditionNot",
+    "C4ConditionNary",
+    "C4ConditionAnd",
+    "C4ConditionOr",
+    "C4ConditionCompare",
+    "C4ConditionMatch",
+    "C4CDGlob",
+    "C4CDProfile",
+    "C4RegistryGlob",
+    "C4ApplicationProfile",
+    "C4EnvVar",
+    "C4FilesToCopy",
+    "C4RegistryValue",
+    "C4Registry",
+    "C4LnkFile",
+    "C4InstallerProfile",
+    "C4CXVersion",
+    "C4PTimestamp",
+    "C4CXContributor",
+    "C4CXMedal",
+    "C4Profile",
+    "C4HighlightedProfile",
+    "C4RevokeProfile",
+    "supported_list"
+   ],
+   "co_filename": "/Volumes/gitlab_data/gitlab/builds/j911ygmXM/0/crossover/crossover/macosx/CrossOver/build/Build/Products/Release/CrossOver.app/Contents/SharedSupport/CrossOver/lib/python/c4profiles.py",
+   "code_objects": 149,
+   "doc": "Defines classes to represent and manipulate the C4 profile information.",
+   "file": "lib/python/c4profiles.pyc",
+   "functions": [
+    "tie_product",
+    "_validate_file_globs",
+    "_validate_file_paths",
+    "_validate_regular_expression",
+    "_validate_language_field",
+    "_validate_cxdiag_checks",
+    "_dump_value",
+    "_dump_fields",
+    "_copy_value",
+    "_copy_values",
+    "_update_value",
+    "_update_values",
+    "_update_html",
+    "_update_html_dict",
+    "get_revokelist_file"
+   ],
+   "imported_by": [
+    "c4parser",
+    "c4profilesmanager",
+    "cxaiengine",
+    "cxglob",
+    "installtask"
+   ],
+   "imports": [
+    "os",
+    "re",
+    "iso8601",
+    "cxproduct",
+    "cxconfig",
+    "cxlog",
+    "cxurlget",
+    "cxutils",
+    "distversion",
+    "cxutils"
+   ],
+   "imports_internal": [
+    "cxconfig",
+    "cxlog",
+    "cxproduct",
+    "cxurlget",
+    "cxutils",
+    "distversion",
+    "iso8601"
+   ],
+   "imports_other": [],
+   "imports_stdlib": [
+    "os",
+    "re"
+   ],
+   "instructions": 6685,
+   "module": "c4profiles",
+   "pyc_flags": 3,
+   "sha256": "97e58ea547361bb8eb8a68fabc70d0c97e83a068fb7bc032aa660bb045bcf9d5",
+   "source_hash": "2df87e7cf5640861"
+  },
+  "c4profilesmanager": {
+   "bytes": 19894,
+   "classes": [
+    "_C4PSource",
+    "C4Profiles",
+    "C4ProfilesSet"
+   ],
+   "co_filename": "/Volumes/gitlab_data/gitlab/builds/j911ygmXM/0/crossover/crossover/macosx/CrossOver/build/Build/Products/Release/CrossOver.app/Contents/SharedSupport/CrossOver/lib/python/c4profilesmanager.py",
+   "code_objects": 28,
+   "doc": "Handles refreshing and reading the C4 profile information.",
+   "file": "lib/python/c4profilesmanager.pyc",
+   "functions": [],
+   "imported_by": [
+    "appdetector",
+    "bottlewrapper",
+    "demoutils",
+    "installtask",
+    "libcxsetup"
+   ],
+   "imports": [
+    "os",
+    "threading",
+    "time",
+    "cxobjc",
+    "cxlog",
+    "cxutils",
+    "cxproduct",
+    "c4profiles",
+    "distversion",
+    "fileupdate",
+    "cddetector",
+    "downloaddetector",
+    "c4parser",
+    "shutil"
+   ],
+   "imports_internal": [
+    "c4parser",
+    "c4profiles",
+    "cddetector",
+    "cxlog",
+    "cxobjc",
+    "cxproduct",
+    "cxutils",
+    "distversion",
+    "downloaddetector",
+    "fileupdate"
+   ],
+   "imports_other": [],
+   "imports_stdlib": [
+    "os",
+    "shutil",
+    "threading",
+    "time"
+   ],
+   "instructions": 1508,
+   "module": "c4profilesmanager",
+   "pyc_flags": 3,
+   "sha256": "b80f8825765da2c0b9987713c18890ed129232709025b6a06c0e19349c9315c9",
+   "source_hash": "b7776f01db1fc4d0"
+  },
+  "cddetector": {
+   "bytes": 2994,
+   "classes": [
+    "CDDetector"
+   ],
+   "co_filename": "/Volumes/gitlab_data/gitlab/builds/j911ygmXM/0/crossover/crossover/macosx/CrossOver/build/Build/Products/Release/CrossOver.app/Contents/SharedSupport/CrossOver/lib/python/cddetector.py",
+   "code_objects": 4,
+   "doc": null,
+   "file": "lib/python/cddetector.pyc",
+   "functions": [
+    "get_cd_profiles_for_all_products"
+   ],
+   "imported_by": [
+    "c4profilesmanager",
+    "libcxsetup"
+   ],
+   "imports": [
+    "re",
+    "globtree",
+    "cxlog",
+    "cxobjc",
+    "cxproduct"
+   ],
+   "imports_internal": [
+    "cxlog",
+    "cxobjc",
+    "cxproduct",
+    "globtree"
+   ],
+   "imports_other": [],
+   "imports_stdlib": [
+    "re"
+   ],
+   "instructions": 228,
+   "module": "cddetector",
+   "pyc_flags": 3,
+   "sha256": "b97968b2325e11812fc3807de98afaba7634d585b762e5fe2944881099fa443f",
+   "source_hash": "9b469f85b60a2250"
+  },
+  "cxaiebase": {
+   "bytes": 22848,
+   "classes": [
+    "AIETask",
+    "AIENop",
+    "AIETaskGroup",
+    "AIEScheduler"
+   ],
+   "co_filename": "/Volumes/gitlab_data/gitlab/builds/j911ygmXM/0/crossover/crossover/macosx/CrossOver/build/Build/Products/Release/CrossOver.app/Contents/SharedSupport/CrossOver/lib/python/cxaiebase.py",
+   "code_objects": 45,
+   "doc": null,
+   "file": "lib/python/cxaiebase.pyc",
+   "functions": [
+    "task_sort_key",
+    "tasks_str"
+   ],
+   "imported_by": [
+    "cxaiecore",
+    "cxaiemedia",
+    "cxaiemisc",
+    "cxaiengine"
+   ],
+   "imports": [
+    "threading",
+    "cxlog",
+    "cxobjc"
+   ],
+   "imports_internal": [
+    "cxlog",
+    "cxobjc"
+   ],
+   "imports_other": [],
+   "imports_stdlib": [
+    "threading"
+   ],
+   "instructions": 1408,
+   "module": "cxaiebase",
+   "pyc_flags": 3,
+   "sha256": "7f1336e43c14120a9c6770cf9c8a910f944de2638bc06ff952ace5fb62984b1b",
+   "source_hash": "f8204a780c629847"
+  },
+  "cxaiecore": {
+   "bytes": 61417,
+   "classes": [
+    "AIECore"
+   ],
+   "co_filename": "/Volumes/gitlab_data/gitlab/builds/j911ygmXM/0/crossover/crossover/macosx/CrossOver/build/Build/Products/Release/CrossOver.app/Contents/SharedSupport/CrossOver/lib/python/cxaiecore.py",
+   "code_objects": 58,
+   "doc": null,
+   "file": "lib/python/cxaiecore.pyc",
+   "functions": [
+    "tar_member_depth"
+   ],
+   "imported_by": [
+    "cxaiengine"
+   ],
+   "imports": [
+    "errno",
+    "os",
+    "os.path",
+    "shutil",
+    "stat",
+    "zipfile",
+    "tarfile",
+    "tempfile",
+    "threading",
+    "traceback",
+    "cxlog",
+    "cxutils",
+    "globtree",
+    "bottlequery",
+    "cxaiebase",
+    "cxaiemedia",
+    "distversion",
+    "appdetector",
+    "cxutils"
+   ],
+   "imports_internal": [
+    "appdetector",
+    "bottlequery",
+    "cxaiebase",
+    "cxaiemedia",
+    "cxlog",
+    "cxutils",
+    "distversion",
+    "globtree"
+   ],
+   "imports_other": [],
+   "imports_stdlib": [
+    "errno",
+    "os",
+    "shutil",
+    "stat",
+    "tarfile",
+    "tempfile",
+    "threading",
+    "traceback",
+    "zipfile"
+   ],
+   "instructions": 4504,
+   "module": "cxaiecore",
+   "pyc_flags": 3,
+   "sha256": "0d54e7d82f5dcd62da56dec18446f6d1807e208c01158a0376299e2165eebe22",
+   "source_hash": "f04407c46114581c"
+  },
+  "cxaiemedia": {
+   "bytes": 33235,
+   "classes": [
+    "AIEInsertMedia",
+    "AIEReleaseMedia",
+    "AIEDownload",
+    "AIEScanMedia"
+   ],
+   "co_filename": "/Volumes/gitlab_data/gitlab/builds/j911ygmXM/0/crossover/crossover/macosx/CrossOver/build/Build/Products/Release/CrossOver.app/Contents/SharedSupport/CrossOver/lib/python/cxaiemedia.py",
+   "code_objects": 48,
+   "doc": null,
+   "file": "lib/python/cxaiemedia.pyc",
+   "functions": [
+    "needs_installer_file",
+    "find_file",
+    "locate_installer",
+    "get_builtin_installer",
+    "get_cached_filename",
+    "_is_cache_filename",
+    "size_cached_installers",
+    "delete_cached_installers",
+    "verify_checksum"
+   ],
+   "imported_by": [
+    "cxaiecore",
+    "cxaiengine",
+    "installtask"
+   ],
+   "imports": [
+    "os",
+    "os.path",
+    "stat",
+    "tempfile",
+    "hashlib",
+    "urllib.parse",
+    "cxproduct",
+    "cxlog",
+    "cxurlget",
+    "cxutils",
+    "globtree",
+    "cxaiebase",
+    "cxhtmlutils",
+    "shutil",
+    "cxutils"
+   ],
+   "imports_internal": [
+    "cxaiebase",
+    "cxhtmlutils",
+    "cxlog",
+    "cxproduct",
+    "cxurlget",
+    "cxutils",
+    "globtree"
+   ],
+   "imports_other": [],
+   "imports_stdlib": [
+    "hashlib",
+    "os",
+    "shutil",
+    "stat",
+    "tempfile",
+    "urllib"
+   ],
+   "instructions": 2370,
+   "module": "cxaiemedia",
+   "pyc_flags": 3,
+   "sha256": "fe61401c49d3f286aaa33a69c6d832610ab57578ade4356dcd626f8c3c2ff499",
+   "source_hash": "e1abcb1ebf335c55"
+  },
+  "cxaiemisc": {
+   "bytes": 11222,
+   "classes": [
+    "AIECXFixes",
+    "AIECreateBottle",
+    "AIEPreAssoc",
+    "AIESyncMenu",
+    "AIESyncAssoc"
+   ],
+   "co_filename": "/Volumes/gitlab_data/gitlab/builds/j911ygmXM/0/crossover/crossover/macosx/CrossOver/build/Build/Products/Release/CrossOver.app/Contents/SharedSupport/CrossOver/lib/python/cxaiemisc.py",
+   "code_objects": 25,
+   "doc": null,
+   "file": "lib/python/cxaiemisc.pyc",
+   "functions": [
+    "get_bottle_init_task",
+    "get_postinstall_task"
+   ],
+   "imported_by": [
+    "cxaiengine"
+   ],
+   "imports": [
+    "os.path",
+    "re",
+    "cxutils",
+    "distversion",
+    "bottlemanagement",
+    "cxaiebase",
+    "cxutils",
+    "cxfixes"
+   ],
+   "imports_internal": [
+    "bottlemanagement",
+    "cxaiebase",
+    "cxfixes",
+    "cxutils",
+    "distversion"
+   ],
+   "imports_other": [],
+   "imports_stdlib": [
+    "os",
+    "re"
+   ],
+   "instructions": 752,
+   "module": "cxaiemisc",
+   "pyc_flags": 3,
+   "sha256": "c807afe3e461affa5f4df2653f3aad8fa779cec740f3afed230b030408640125",
+   "source_hash": "358e69b301dc3d90"
+  },
+  "cxaiengine": {
+   "bytes": 22609,
+   "classes": [
+    "Engine"
+   ],
+   "co_filename": "/Volumes/gitlab_data/gitlab/builds/j911ygmXM/0/crossover/crossover/macosx/CrossOver/build/Build/Products/Release/CrossOver.app/Contents/SharedSupport/CrossOver/lib/python/cxaiengine.py",
+   "code_objects": 11,
+   "doc": "This is the Application Installation Engine, AIE for short.",
+   "file": "lib/python/cxaiengine.pyc",
+   "functions": [],
+   "imported_by": [
+    "libcxsetup"
+   ],
+   "imports": [
+    "os.path",
+    "os",
+    "cxlog",
+    "cxutils",
+    "appdetector",
+    "bottlequery",
+    "c4profiles",
+    "cxaiecore",
+    "cxaiemedia",
+    "cxaiemisc",
+    "cxaiebase",
+    "cxobjc",
+    "systeminfo"
+   ],
+   "imports_internal": [
+    "appdetector",
+    "bottlequery",
+    "c4profiles",
+    "cxaiebase",
+    "cxaiecore",
+    "cxaiemedia",
+    "cxaiemisc",
+    "cxlog",
+    "cxobjc",
+    "cxutils",
+    "systeminfo"
+   ],
+   "imports_other": [],
+   "imports_stdlib": [
+    "os"
+   ],
+   "instructions": 1182,
+   "module": "cxaiengine",
+   "pyc_flags": 3,
+   "sha256": "513abfc7082b59a282977bbea2f593cb0b0a7cd3cbef20201bf601b5c0fad0d7",
+   "source_hash": "60f37e17c75f93fd"
+  },
+  "cxassoc": {
+   "bytes": 11867,
+   "classes": [
+    "Error",
+    "Association",
+    "CXAssocPrefs"
+   ],
+   "co_filename": "/Volumes/gitlab_data/gitlab/builds/j911ygmXM/0/crossover/crossover/macosx/CrossOver/build/Build/Products/Release/CrossOver.app/Contents/SharedSupport/CrossOver/lib/python/cxassoc.py",
+   "code_objects": 19,
+   "doc": null,
+   "file": "lib/python/cxassoc.pyc",
+   "functions": [
+    "cxassoc_path",
+    "run_cxassoc"
+   ],
+   "imported_by": [],
+   "imports": [
+    "os",
+    "bottlequery",
+    "cxconfig",
+    "cxutils",
+    "cxlog"
+   ],
+   "imports_internal": [
+    "bottlequery",
+    "cxconfig",
+    "cxlog",
+    "cxutils"
+   ],
+   "imports_other": [],
+   "imports_stdlib": [
+    "os"
+   ],
+   "instructions": 857,
+   "module": "cxassoc",
+   "pyc_flags": 3,
+   "sha256": "cec75a2c27af8c80e4692ceeaf7831388604340d59306f2724f54e7c78bd1cf7",
+   "source_hash": "546805101cb1bbb3"
+  },
+  "cxconfig": {
+   "bytes": 43866,
+   "classes": [
+    "Section",
+    "Raw",
+    "File",
+    "_StackSection",
+    "Stack"
+   ],
+   "co_filename": "/Volumes/gitlab_data/gitlab/builds/j911ygmXM/0/crossover/crossover/macosx/CrossOver/build/Build/Products/Release/CrossOver.app/Contents/SharedSupport/CrossOver/lib/python/cxconfig.py",
+   "code_objects": 69,
+   "doc": "Provides support for reading and modifying configuration files.",
+   "file": "lib/python/cxconfig.pyc",
+   "functions": [
+    "get"
+   ],
+   "imported_by": [
+    "bottlequery",
+    "bottlewrapper",
+    "c4profiles",
+    "cxassoc",
+    "cxdiag",
+    "cxmenu",
+    "cxproduct",
+    "demoutils"
+   ],
+   "imports": [
+    "os",
+    "re",
+    "sys",
+    "threading",
+    "time",
+    "collections.abc",
+    "collections.abc",
+    "weakref",
+    "cxfsnotifier",
+    "cxlog",
+    "cxobservable",
+    "cxutils",
+    "UserDict",
+    "UserDict"
+   ],
+   "imports_internal": [
+    "cxfsnotifier",
+    "cxlog",
+    "cxobservable",
+    "cxutils"
+   ],
+   "imports_other": [
+    "UserDict"
+   ],
+   "imports_stdlib": [
+    "collections",
+    "os",
+    "re",
+    "sys",
+    "threading",
+    "time",
+    "weakref"
+   ],
+   "instructions": 2809,
+   "module": "cxconfig",
+   "pyc_flags": 3,
+   "sha256": "9d66adb564b8cdb2d66f1536102475a63c0d56a0878dad5cd8de190429e3542b",
+   "source_hash": "0c08c64506f3a3db"
+  },
+  "cxdiag": {
+   "bytes": 11920,
+   "classes": [
+    "CXDiag"
+   ],
+   "co_filename": "/Volumes/gitlab_data/gitlab/builds/j911ygmXM/0/crossover/crossover/macosx/CrossOver/build/Build/Products/Release/CrossOver.app/Contents/SharedSupport/CrossOver/lib/python/cxdiag.py",
+   "code_objects": 16,
+   "doc": "Provides efficient access to the cxdiag diagnostics.",
+   "file": "lib/python/cxdiag.pyc",
+   "functions": [
+    "_get_cached_cxdiag",
+    "localize_title",
+    "get",
+    "clear"
+   ],
+   "imported_by": [
+    "bottlewrapper",
+    "installtask",
+    "systeminfo"
+   ],
+   "imports": [
+    "os.path",
+    "time",
+    "re",
+    "cxconfig",
+    "cxlog",
+    "cxproduct",
+    "cxutils",
+    "cxwhich",
+    "distversion",
+    "cxutils",
+    "bottlequery"
+   ],
+   "imports_internal": [
+    "bottlequery",
+    "cxconfig",
+    "cxlog",
+    "cxproduct",
+    "cxutils",
+    "cxwhich",
+    "distversion"
+   ],
+   "imports_other": [],
+   "imports_stdlib": [
+    "os",
+    "re",
+    "time"
+   ],
+   "instructions": 853,
+   "module": "cxdiag",
+   "pyc_flags": 3,
+   "sha256": "7b5616dbc2938e5c71ec880cac6e1c7fc0ff57cf2567a164284614b03781843d",
+   "source_hash": "22b03b06752639d6"
+  },
+  "cxevent": {
+   "bytes": 4234,
+   "classes": [
+    "Event",
+    "AsyncResult"
+   ],
+   "co_filename": "/Volumes/gitlab_data/gitlab/builds/j911ygmXM/0/crossover/crossover/macosx/CrossOver/build/Build/Products/Release/CrossOver.app/Contents/SharedSupport/CrossOver/lib/python/cxevent.py",
+   "code_objects": 14,
+   "doc": null,
+   "file": "lib/python/cxevent.pyc",
+   "functions": [],
+   "imported_by": [
+    "bottlequery"
+   ],
+   "imports": [
+    "os",
+    "threading",
+    "cxutils"
+   ],
+   "imports_internal": [
+    "cxutils"
+   ],
+   "imports_other": [],
+   "imports_stdlib": [
+    "os",
+    "threading"
+   ],
+   "instructions": 277,
+   "module": "cxevent",
+   "pyc_flags": 3,
+   "sha256": "4cd1492b50fc57fea37aa1e4d1acf8439210b216f62aa85ce8291bb35c239848",
+   "source_hash": "389d51be5c8f5e1c"
+  },
+  "cxfixes": {
+   "bytes": 35930,
+   "classes": [],
+   "co_filename": "/Volumes/gitlab_data/gitlab/builds/j911ygmXM/0/crossover/crossover/macosx/CrossOver/build/Build/Products/Release/CrossOver.app/Contents/SharedSupport/CrossOver/lib/python/cxfixes.py",
+   "code_objects": 48,
+   "doc": null,
+   "file": "lib/python/cxfixes.pyc",
+   "functions": [
+    "run_from_main_thread_callback",
+    "run_from_main_thread",
+    "display_error_internal",
+    "display_error_zenity",
+    "display_error_kdialog",
+    "display_error_xmessage",
+    "display_error",
+    "refused_internal",
+    "refused_zenity",
+    "refused_kdialog",
+    "refused_xmessage",
+    "refused",
+    "_load_fixes",
+    "detect_distribution",
+    "detect_cxproduct",
+    "arch_add_multilib",
+    "debian_add_architecture",
+    "add_error",
+    "add_masked_errors",
+    "remove_error",
+    "has_error",
+    "get_error_level",
+    "get_error_description",
+    "get_error_title",
+    "get_error_url",
+    "has_errors",
+    "get_error_count",
+    "get_errors",
+    "clear_errors",
+    "strip_fix_overrides",
+    "get_fix",
+    "get_distribution_property",
+    "get_commands",
+    "get_packages",
+    "get_package_key",
+    "get_fix_command",
+    "fix_errors",
+    "markup_error_message",
+    "get_fix_message",
+    "get_error_message",
+    "report_errors"
+   ],
+   "imported_by": [
+    "cxaiemisc",
+    "installtask"
+   ],
+   "imports": [
+    "collections",
+    "os.path",
+    "re",
+    "subprocess",
+    "cxlog",
+    "cxproduct",
+    "cxutils",
+    "distversion",
+    "cxutils",
+    "gi.repository",
+    "checkgtk",
+    "threading",
+    "cxguitools",
+    "sys",
+    "fileupdate",
+    "cxfixesparser",
+    "cxfixesobjs",
+    "globtree",
+    "cxfixesdialog"
+   ],
+   "imports_internal": [
+    "cxfixesdialog",
+    "cxfixesobjs",
+    "cxfixesparser",
+    "cxlog",
+    "cxproduct",
+    "cxutils",
+    "distversion",
+    "fileupdate",
+    "globtree"
+   ],
+   "imports_other": [
+    "checkgtk",
+    "cxguitools",
+    "gi"
+   ],
+   "imports_stdlib": [
+    "collections",
+    "os",
+    "re",
+    "subprocess",
+    "sys",
+    "threading"
+   ],
+   "instructions": 3352,
+   "module": "cxfixes",
+   "pyc_flags": 3,
+   "sha256": "72d3c3fb8f6d81c84348ba5036981a808e82b661b88b8b8ffb74c551175f6489",
+   "source_hash": "f06cd653967ca337"
+  },
+  "cxfixesdialog": {
+   "bytes": 6983,
+   "classes": [
+    "FixDialog"
+   ],
+   "co_filename": "/Volumes/gitlab_data/gitlab/builds/j911ygmXM/0/crossover/crossover/macosx/CrossOver/build/Build/Products/Release/CrossOver.app/Contents/SharedSupport/CrossOver/lib/python/cxfixesdialog.py",
+   "code_objects": 9,
+   "doc": null,
+   "file": "lib/python/cxfixesdialog.pyc",
+   "functions": [],
+   "imported_by": [
+    "cxfixes"
+   ],
+   "imports": [
+    "gi.repository",
+    "gi.repository",
+    "gi.repository",
+    "cxutils"
+   ],
+   "imports_internal": [
+    "cxutils"
+   ],
+   "imports_other": [
+    "gi"
+   ],
+   "imports_stdlib": [],
+   "instructions": 467,
+   "module": "cxfixesdialog",
+   "pyc_flags": 3,
+   "sha256": "c36c699fa7ebc093f57676ea31be93f00560ab7fb0950a2c46b614220dbcfd69",
+   "source_hash": "1f56ea69e4dc20c9"
+  },
+  "cxfixesobjs": {
+   "bytes": 19815,
+   "classes": [
+    "CXDistGlob",
+    "CXDistribution",
+    "CXProduct",
+    "CXDistFix",
+    "CXFix",
+    "CXFixes"
+   ],
+   "co_filename": "/Volumes/gitlab_data/gitlab/builds/j911ygmXM/0/crossover/crossover/macosx/CrossOver/build/Build/Products/Release/CrossOver.app/Contents/SharedSupport/CrossOver/lib/python/cxfixesobjs.py",
+   "code_objects": 36,
+   "doc": "Defines classes to represent and manipulate the CXFixes information.",
+   "file": "lib/python/cxfixesobjs.pyc",
+   "functions": [
+    "_validate_regular_expression",
+    "_dump_value",
+    "_dump_fields"
+   ],
+   "imported_by": [
+    "cxfixes",
+    "cxfixesparser"
+   ],
+   "imports": [
+    "re",
+    "cxutils"
+   ],
+   "imports_internal": [
+    "cxutils"
+   ],
+   "imports_other": [],
+   "imports_stdlib": [
+    "re"
+   ],
+   "instructions": 1588,
+   "module": "cxfixesobjs",
+   "pyc_flags": 3,
+   "sha256": "7dde856579c3713d7ad63d8c725ddb64980d773b794f54fce9a2b8c40e3fe930",
+   "source_hash": "8963e30073b6add6"
+  },
+  "cxfixesparser": {
+   "bytes": 30117,
+   "classes": [
+    "_CXFixesHandler"
+   ],
+   "co_filename": "/Volumes/gitlab_data/gitlab/builds/j911ygmXM/0/crossover/crossover/macosx/CrossOver/build/Build/Products/Release/CrossOver.app/Contents/SharedSupport/CrossOver/lib/python/cxfixesparser.py",
+   "code_objects": 43,
+   "doc": null,
+   "file": "lib/python/cxfixesparser.pyc",
+   "functions": [
+    "read_file"
+   ],
+   "imported_by": [
+    "cxfixes"
+   ],
+   "imports": [
+    "time",
+    "traceback",
+    "xml.sax",
+    "xml.sax.handler",
+    "cxlog",
+    "cxfixesobjs",
+    "errno"
+   ],
+   "imports_internal": [
+    "cxfixesobjs",
+    "cxlog"
+   ],
+   "imports_other": [],
+   "imports_stdlib": [
+    "errno",
+    "time",
+    "traceback",
+    "xml"
+   ],
+   "instructions": 2160,
+   "module": "cxfixesparser",
+   "pyc_flags": 3,
+   "sha256": "9caae448992d707a68534705092195b86f1202bb586b4d23dfc8400118d667a3",
+   "source_hash": "e71ac4716090fb50"
+  },
+  "cxfsnotifier": {
+   "bytes": 12591,
+   "classes": [
+    "_Path",
+    "PollingFSNotifier"
+   ],
+   "co_filename": "/Volumes/gitlab_data/gitlab/builds/j911ygmXM/0/crossover/crossover/macosx/CrossOver/build/Build/Products/Release/CrossOver.app/Contents/SharedSupport/CrossOver/lib/python/cxfsnotifier.py",
+   "code_objects": 24,
+   "doc": "Monitors the filesystem and notifies the registered observers of any change",
+   "file": "lib/python/cxfsnotifier.pyc",
+   "functions": [
+    "add",
+    "get",
+    "add_observer",
+    "remove_observer",
+    "poll",
+    "main"
+   ],
+   "imported_by": [
+    "bottlewrapper",
+    "cxconfig",
+    "cxmenu"
+   ],
+   "imports": [
+    "os",
+    "sys",
+    "threading",
+    "time",
+    "cxlog",
+    "cxobservable",
+    "cxutils"
+   ],
+   "imports_internal": [
+    "cxlog",
+    "cxobservable",
+    "cxutils"
+   ],
+   "imports_other": [],
+   "imports_stdlib": [
+    "os",
+    "sys",
+    "threading",
+    "time"
+   ],
+   "instructions": 831,
+   "module": "cxfsnotifier",
+   "pyc_flags": 3,
+   "sha256": "f714ae939a0a144f3a867915741b8221f4e255ccc8bb7102bff7bf8141292eb8",
+   "source_hash": "fcb2399038f1cd1b"
+  },
+  "cxglob": {
+   "bytes": 6692,
+   "classes": [
+    "FileGlobTree",
+    "RegistryGlobTree"
+   ],
+   "co_filename": "/Volumes/gitlab_data/gitlab/builds/j911ygmXM/0/crossover/crossover/macosx/CrossOver/build/Build/Products/Release/CrossOver.app/Contents/SharedSupport/CrossOver/lib/python/cxglob.py",
+   "code_objects": 14,
+   "doc": null,
+   "file": "lib/python/cxglob.pyc",
+   "functions": [
+    "find_files"
+   ],
+   "imported_by": [
+    "appdetector"
+   ],
+   "imports": [
+    "c4profiles",
+    "cxutils",
+    "globtree",
+    "bottlequery"
+   ],
+   "imports_internal": [
+    "bottlequery",
+    "c4profiles",
+    "cxutils",
+    "globtree"
+   ],
+   "imports_other": [],
+   "imports_stdlib": [],
+   "instructions": 527,
+   "module": "cxglob",
+   "pyc_flags": 3,
+   "sha256": "aec1ce27b83b267a38128035d62c925e3aa28f138f5527d7b648d6b77eb00e73",
+   "source_hash": "4b90bd5e44aaf9e7"
+  },
+  "cxhtmlutils": {
+   "bytes": 7294,
+   "classes": [],
+   "co_filename": "/Volumes/gitlab_data/gitlab/builds/j911ygmXM/0/crossover/crossover/macosx/CrossOver/build/Build/Products/Release/CrossOver.app/Contents/SharedSupport/CrossOver/lib/python/cxhtmlutils.py",
+   "code_objects": 5,
+   "doc": null,
+   "file": "lib/python/cxhtmlutils.pyc",
+   "functions": [
+    "parse_meta_refresh",
+    "is_html",
+    "test_meta_refresh",
+    "main"
+   ],
+   "imported_by": [
+    "cxaiemedia"
+   ],
+   "imports": [
+    "re",
+    "sys",
+    "cxutils",
+    "html"
+   ],
+   "imports_internal": [
+    "cxutils"
+   ],
+   "imports_other": [],
+   "imports_stdlib": [
+    "html",
+    "re",
+    "sys"
+   ],
+   "instructions": 604,
+   "module": "cxhtmlutils",
+   "pyc_flags": 3,
+   "sha256": "bcc8b623180323a294e624e716de79ab10b67c69514f544f2540db0320171a32",
+   "source_hash": "21a35e64866e0819"
+  },
+  "cxlog": {
+   "bytes": 8472,
+   "classes": [],
+   "co_filename": "/Volumes/gitlab_data/gitlab/builds/j911ygmXM/0/crossover/crossover/macosx/CrossOver/build/Build/Products/Release/CrossOver.app/Contents/SharedSupport/CrossOver/lib/python/cxlog.py",
+   "code_objects": 17,
+   "doc": "Handles logging and error reporting.",
+   "file": "lib/python/cxlog.pyc",
+   "functions": [
+    "log_to",
+    "get_file",
+    "get_filename",
+    "is_on",
+    "_exit_logging",
+    "_init_logging",
+    "_tid_prefix",
+    "_timestamp_prefix",
+    "_to_str",
+    "to_str",
+    "debug_str",
+    "log",
+    "log_",
+    "name0",
+    "warn",
+    "err"
+   ],
+   "imported_by": [
+    "appdetector",
+    "bottlemanagement",
+    "bottlequery",
+    "bottlewrapper",
+    "c4parser",
+    "c4profiles",
+    "c4profilesmanager",
+    "cddetector",
+    "cxaiebase",
+    "cxaiecore",
+    "cxaiemedia",
+    "cxaiengine",
+    "cxassoc",
+    "cxconfig",
+    "cxdiag",
+    "cxfixes",
+    "cxfixesparser",
+    "cxfsnotifier",
+    "cxmenu",
+    "cxurlget_urllib",
+    "cxutils",
+    "demoutils",
+    "fileupdate",
+    "globtree",
+    "installtask",
+    "libcxsetupbase",
+    "proxyinfo",
+    "pyop",
+    "ratingutils",
+    "webutils"
+   ],
+   "imports": [
+    "atexit",
+    "os",
+    "sys",
+    "time",
+    "threading"
+   ],
+   "imports_internal": [],
+   "imports_other": [],
+   "imports_stdlib": [
+    "atexit",
+    "os",
+    "sys",
+    "threading",
+    "time"
+   ],
+   "instructions": 574,
+   "module": "cxlog",
+   "pyc_flags": 3,
+   "sha256": "03a684e64e5801eae4262dfb34987bf484eab714b60f5631098393ac6ff75fe7",
+   "source_hash": "46074e4d1305fa90"
+  },
+  "cxmenu": {
+   "bytes": 20146,
+   "classes": [
+    "Error",
+    "CXMenu",
+    "MenuItem",
+    "MenuPrefs"
+   ],
+   "co_filename": "/Volumes/gitlab_data/gitlab/builds/j911ygmXM/0/crossover/crossover/macosx/CrossOver/build/Build/Products/Release/CrossOver.app/Contents/SharedSupport/CrossOver/lib/python/cxmenu.py",
+   "code_objects": 36,
+   "doc": null,
+   "file": "lib/python/cxmenu.pyc",
+   "functions": [
+    "cxmenu_path",
+    "config_path",
+    "run_cxmenu",
+    "get_menuroot",
+    "set_menuroot"
+   ],
+   "imported_by": [
+    "bottlewrapper",
+    "libcxsetup"
+   ],
+   "imports": [
+    "threading",
+    "os",
+    "re",
+    "cxobjc",
+    "cxconfig",
+    "cxlog",
+    "cxutils",
+    "cxfsnotifier",
+    "cxobservable",
+    "bottlequery",
+    "cxutils"
+   ],
+   "imports_internal": [
+    "bottlequery",
+    "cxconfig",
+    "cxfsnotifier",
+    "cxlog",
+    "cxobjc",
+    "cxobservable",
+    "cxutils"
+   ],
+   "imports_other": [],
+   "imports_stdlib": [
+    "os",
+    "re",
+    "threading"
+   ],
+   "instructions": 1522,
+   "module": "cxmenu",
+   "pyc_flags": 3,
+   "sha256": "94cdd0e792736a711621f10472432cdfaf3294151e534779c6203beab2286603",
+   "source_hash": "c7d79e46301d527b"
+  },
+  "cxobjc": {
+   "bytes": 10224,
+   "classes": [
+    "CXMacObject",
+    "Proxy",
+    "_ObjCDecorator",
+    "CXMacObject"
+   ],
+   "co_filename": "/Volumes/gitlab_data/gitlab/builds/j911ygmXM/0/crossover/crossover/macosx/CrossOver/build/Build/Products/Release/CrossOver.app/Contents/SharedSupport/CrossOver/lib/python/cxobjc.py",
+   "code_objects": 25,
+   "doc": "Helpers to simplify calling  Python functions from Objective-C code using",
+   "file": "lib/python/cxobjc.pyc",
+   "functions": [
+    "thunk",
+    "method",
+    "delegate",
+    "_object_wrapper",
+    "object_property",
+    "array_property",
+    "dict_property",
+    "python_method",
+    "namedSelector",
+    "object_property",
+    "array_property",
+    "dict_property"
+   ],
+   "imported_by": [
+    "appdetector",
+    "bottlecollection",
+    "bottlemanagement",
+    "bottlequery",
+    "bottlewrapper",
+    "c4profilesmanager",
+    "cddetector",
+    "cxaiebase",
+    "cxaiengine",
+    "cxmenu",
+    "cxutils",
+    "demoutils",
+    "iconutils",
+    "installtask",
+    "ratingutils",
+    "systeminfo",
+    "webutils"
+   ],
+   "imports": [
+    "Foundation",
+    "objc",
+    "objc",
+    "objc",
+    "objc",
+    "objc",
+    "objc",
+    "objc"
+   ],
+   "imports_internal": [],
+   "imports_other": [
+    "Foundation",
+    "objc"
+   ],
+   "imports_stdlib": [],
+   "instructions": 521,
+   "module": "cxobjc",
+   "pyc_flags": 3,
+   "sha256": "26595b9f3ffedbb6910c46a70ad14e6907ef294f91d3d1f66262aef1ae3214ea",
+   "source_hash": "f653b575cece6339"
+  },
+  "cxobservable": {
+   "bytes": 5025,
+   "classes": [
+    "Object"
+   ],
+   "co_filename": "/Volumes/gitlab_data/gitlab/builds/j911ygmXM/0/crossover/crossover/macosx/CrossOver/build/Build/Products/Release/CrossOver.app/Contents/SharedSupport/CrossOver/lib/python/cxobservable.py",
+   "code_objects": 8,
+   "doc": "Provides a framework for classes that have observable properties.",
+   "file": "lib/python/cxobservable.pyc",
+   "functions": [],
+   "imported_by": [
+    "cxconfig",
+    "cxfsnotifier",
+    "cxmenu",
+    "cxproduct"
+   ],
+   "imports": [],
+   "imports_internal": [],
+   "imports_other": [],
+   "imports_stdlib": [],
+   "instructions": 307,
+   "module": "cxobservable",
+   "pyc_flags": 3,
+   "sha256": "4601ee97ece4076a7e8d1e9c68a3b19744b52936ade6171a079a2bbe3597ac2e",
+   "source_hash": "99f7d360fe4d2e36"
+  },
+  "cxopt": {
+   "bytes": 1575,
+   "classes": [
+    "Parser"
+   ],
+   "co_filename": "/Volumes/gitlab_data/gitlab/builds/j911ygmXM/0/crossover/crossover/macosx/CrossOver/build/Build/Products/Release/CrossOver.app/Contents/SharedSupport/CrossOver/lib/python/cxopt.py",
+   "code_objects": 4,
+   "doc": null,
+   "file": "lib/python/cxopt.pyc",
+   "functions": [],
+   "imported_by": [],
+   "imports": [
+    "optparse",
+    "sys"
+   ],
+   "imports_internal": [],
+   "imports_other": [],
+   "imports_stdlib": [
+    "optparse",
+    "sys"
+   ],
+   "instructions": 126,
+   "module": "cxopt",
+   "pyc_flags": 3,
+   "sha256": "2b80ac83bf2758fea623d75868a19a0d59b1aef9747a151de497a405b9a287c3",
+   "source_hash": "6faa68057c048975"
+  },
+  "cxproduct": {
+   "bytes": 16633,
+   "classes": [],
+   "co_filename": "/Volumes/gitlab_data/gitlab/builds/j911ygmXM/0/crossover/crossover/macosx/CrossOver/build/Build/Products/Release/CrossOver.app/Contents/SharedSupport/CrossOver/lib/python/cxproduct.py",
+   "code_objects": 24,
+   "doc": null,
+   "file": "lib/python/cxproduct.pyc",
+   "functions": [
+    "get_product_id",
+    "get_cellar_id",
+    "get_home_dir",
+    "get_user_dir",
+    "get_icons_dir",
+    "get_installer_dir",
+    "get_managed_dir",
+    "is_root_install",
+    "is_arm64_install",
+    "is_wow64_install",
+    "is_crostini",
+    "get_config",
+    "get_config_string",
+    "set_config_string",
+    "get_config_boolean",
+    "set_config_boolean",
+    "refresh_environment",
+    "_refresh_environment",
+    "get_bottle_path",
+    "set_bottle_path",
+    "get_managed_bottle_path",
+    "get_cross_product_config",
+    "this_product"
+   ],
+   "imported_by": [
+    "bottlemanagement",
+    "bottlequery",
+    "c4profiles",
+    "c4profilesmanager",
+    "cddetector",
+    "cxaiemedia",
+    "cxdiag",
+    "cxfixes",
+    "iconutils",
+    "installtask",
+    "libcxsetup",
+    "proxyinfo",
+    "ratingutils",
+    "webutils"
+   ],
+   "imports": [
+    "os.path",
+    "re",
+    "cxconfig",
+    "cxobservable",
+    "cxutils",
+    "distversion",
+    "Foundation",
+    "errno"
+   ],
+   "imports_internal": [
+    "cxconfig",
+    "cxobservable",
+    "cxutils",
+    "distversion"
+   ],
+   "imports_other": [
+    "Foundation"
+   ],
+   "imports_stdlib": [
+    "errno",
+    "os",
+    "re"
+   ],
+   "instructions": 953,
+   "module": "cxproduct",
+   "pyc_flags": 3,
+   "sha256": "475567cdeed613754d9865ac5d028274f1f29ab3d75ccd04a1d7fc832aa80abe",
+   "source_hash": "b66e552ae234a6f2"
+  },
+  "cxurlget": {
+   "bytes": 4803,
+   "classes": [
+    "_FetchContentHandler"
+   ],
+   "co_filename": "/Volumes/gitlab_data/gitlab/builds/j911ygmXM/0/crossover/crossover/macosx/CrossOver/build/Build/Products/Release/CrossOver.app/Contents/SharedSupport/CrossOver/lib/python/cxurlget.py",
+   "code_objects": 12,
+   "doc": null,
+   "file": "lib/python/cxurlget.pyc",
+   "functions": [
+    "fetch_content",
+    "main"
+   ],
+   "imported_by": [
+    "c4profiles",
+    "cxaiemedia",
+    "fileupdate",
+    "iconutils",
+    "ratingutils",
+    "webutils"
+   ],
+   "imports": [
+    "io",
+    "sys",
+    "distversion",
+    "cxurlget_base",
+    "cxurlget_base",
+    "cxurlget_base",
+    "cxurlget_base",
+    "cxurlget_base",
+    "cxurlget_base",
+    "cxurlget_base",
+    "cxurlget_base",
+    "cxurlget_nsurl",
+    "cxurlget_urllib"
+   ],
+   "imports_internal": [
+    "cxurlget_base",
+    "cxurlget_nsurl",
+    "cxurlget_urllib",
+    "distversion"
+   ],
+   "imports_other": [],
+   "imports_stdlib": [
+    "io",
+    "sys"
+   ],
+   "instructions": 300,
+   "module": "cxurlget",
+   "pyc_flags": 3,
+   "sha256": "395d687aedcc967c5da217d18db856c81a4340a0c6247551bd5ab8d4c0601b2d",
+   "source_hash": "190ef95612e9ec69"
+  },
+  "cxurlget_base": {
+   "bytes": 7021,
+   "classes": [
+    "StopDownload",
+    "UrlError",
+    "HttpError",
+    "UrlGetterBase"
+   ],
+   "co_filename": "/Volumes/gitlab_data/gitlab/builds/j911ygmXM/0/crossover/crossover/macosx/CrossOver/build/Build/Products/Release/CrossOver.app/Contents/SharedSupport/CrossOver/lib/python/cxurlget_base.py",
+   "code_objects": 19,
+   "doc": null,
+   "file": "lib/python/cxurlget_base.pyc",
+   "functions": [
+    "format_http_date",
+    "url_to_basename",
+    "url_to_sanitized_basename"
+   ],
+   "imported_by": [
+    "cxurlget",
+    "cxurlget_nsurl",
+    "cxurlget_urllib"
+   ],
+   "imports": [
+    "urllib.request",
+    "urllib.parse",
+    "cxutils"
+   ],
+   "imports_internal": [
+    "cxutils"
+   ],
+   "imports_other": [],
+   "imports_stdlib": [
+    "urllib"
+   ],
+   "instructions": 445,
+   "module": "cxurlget_base",
+   "pyc_flags": 3,
+   "sha256": "60bd7ef418e8cede125f442716c313a97a4222b0d7cca2f00bfad72a7d1e7c7b",
+   "source_hash": "1fd78cc7dbeb40ea"
+  },
+  "cxurlget_nsurl": {
+   "bytes": 9335,
+   "classes": [
+    "_UrlGetterDelegate",
+    "UrlGetter"
+   ],
+   "co_filename": "/Volumes/gitlab_data/gitlab/builds/j911ygmXM/0/crossover/crossover/macosx/CrossOver/build/Build/Products/Release/CrossOver.app/Contents/SharedSupport/CrossOver/lib/python/cxurlget_nsurl.py",
+   "code_objects": 11,
+   "doc": null,
+   "file": "lib/python/cxurlget_nsurl.pyc",
+   "functions": [],
+   "imported_by": [
+    "cxurlget"
+   ],
+   "imports": [
+    "threading",
+    "Foundation",
+    "objc",
+    "cxurlget_base"
+   ],
+   "imports_internal": [
+    "cxurlget_base"
+   ],
+   "imports_other": [
+    "Foundation",
+    "objc"
+   ],
+   "imports_stdlib": [
+    "threading"
+   ],
+   "instructions": 607,
+   "module": "cxurlget_nsurl",
+   "pyc_flags": 3,
+   "sha256": "5d9b58b150b10dd46777d245679bd9728b1e923c792b0053eb6fb9edf7b1e53a",
+   "source_hash": "2f812b8300b54ebc"
+  },
+  "cxurlget_urllib": {
+   "bytes": 15728,
+   "classes": [
+    "DownloadError",
+    "UrlGetter"
+   ],
+   "co_filename": "/Volumes/gitlab_data/gitlab/builds/j911ygmXM/0/crossover/crossover/macosx/CrossOver/build/Build/Products/Release/CrossOver.app/Contents/SharedSupport/CrossOver/lib/python/cxurlget_urllib.py",
+   "code_objects": 14,
+   "doc": null,
+   "file": "lib/python/cxurlget_urllib.pyc",
+   "functions": [
+    "_get_rfc822_value",
+    "wrap_exception"
+   ],
+   "imported_by": [
+    "cxurlget"
+   ],
+   "imports": [
+    "errno",
+    "ftplib",
+    "gzip",
+    "http.cookiejar",
+    "os",
+    "socket",
+    "threading",
+    "traceback",
+    "time",
+    "urllib.request",
+    "urllib.parse",
+    "urllib.error",
+    "proxyinfo",
+    "cxlog",
+    "cxurlget_base"
+   ],
+   "imports_internal": [
+    "cxlog",
+    "cxurlget_base",
+    "proxyinfo"
+   ],
+   "imports_other": [],
+   "imports_stdlib": [
+    "errno",
+    "ftplib",
+    "gzip",
+    "http",
+    "os",
+    "socket",
+    "threading",
+    "time",
+    "traceback",
+    "urllib"
+   ],
+   "instructions": 1278,
+   "module": "cxurlget_urllib",
+   "pyc_flags": 3,
+   "sha256": "7f8717382845fc82718e3b3f66297ae3fba62e6e0b5445160518ec91a190d099",
+   "source_hash": "1c76d82649e0a960"
+  },
+  "cxutils": {
+   "bytes": 50997,
+   "classes": [
+    "CXUtils",
+    "FileDigest",
+    "FLock"
+   ],
+   "co_filename": "/Volumes/gitlab_data/gitlab/builds/j911ygmXM/0/crossover/crossover/macosx/CrossOver/build/Build/Products/Release/CrossOver.app/Contents/SharedSupport/CrossOver/lib/python/cxutils.py",
+   "code_objects": 68,
+   "doc": null,
+   "file": "lib/python/cxutils.pyc",
+   "functions": [
+    "mkdirs",
+    "check_mmap_permissions",
+    "check_fake_dll",
+    "string_to_unicode",
+    "string_to_utf8",
+    "cmp",
+    "unescape_string",
+    "escape_string",
+    "unmangle",
+    "remove_accelerators",
+    "md5sum_path",
+    "is_valid_windows_filename",
+    "sanitize_windows_filename",
+    "allow_bottlename_char",
+    "is_valid_bottlename",
+    "path_to_uri",
+    "uri_to_path",
+    "html_escape",
+    "html_to_text",
+    "argvtocmdline",
+    "abspath",
+    "expand_octal_chars",
+    "expand_unix_string",
+    "_int_for_version_component",
+    "subtract_version",
+    "cmp_versions",
+    "split_version",
+    "version_as_tuple",
+    "get_user_languages",
+    "get_preferred_languages",
+    "setup_textdomain",
+    "_translator",
+    "cxgettext",
+    "run",
+    "system",
+    "launch_url",
+    "select",
+    "_xdg_dirs_skip_whitespace",
+    "_internal_load_xdg_dirs",
+    "_load_xdg_dirs",
+    "get_download_dir",
+    "get_desktop_dir",
+    "get_icon_path",
+    "get_icon_paths",
+    "not_yet_implemented"
+   ],
+   "imported_by": [
+    "appdetector",
+    "bottlemanagement",
+    "bottlequery",
+    "bottlewrapper",
+    "c4profiles",
+    "c4profilesmanager",
+    "cxaiecore",
+    "cxaiemedia",
+    "cxaiemisc",
+    "cxaiengine",
+    "cxassoc",
+    "cxconfig",
+    "cxdiag",
+    "cxevent",
+    "cxfixes",
+    "cxfixesdialog",
+    "cxfixesobjs",
+    "cxfsnotifier",
+    "cxglob",
+    "cxhtmlutils",
+    "cxmenu",
+    "cxproduct",
+    "cxurlget_base",
+    "demoutils",
+    "fileupdate",
+    "globtree",
+    "iconutils",
+    "installtask",
+    "proxyinfo",
+    "ratingutils",
+    "systeminfo",
+    "webutils"
+   ],
+   "imports": [
+    "errno",
+    "fcntl",
+    "hashlib",
+    "locale",
+    "mmap",
+    "os",
+    "re",
+    "selectors",
+    "stat",
+    "subprocess",
+    "sys",
+    "time",
+    "webbrowser",
+    "urllib.parse",
+    "urllib.parse",
+    "cxlog",
+    "distversion",
+    "cxobjc",
+    "select",
+    "select",
+    "Foundation",
+    "gettext",
+    "xdg.BaseDirectory",
+    "BaseDirectory"
+   ],
+   "imports_internal": [
+    "cxlog",
+    "cxobjc",
+    "distversion"
+   ],
+   "imports_other": [
+    "BaseDirectory",
+    "Foundation",
+    "xdg"
+   ],
+   "imports_stdlib": [
+    "errno",
+    "fcntl",
+    "gettext",
+    "hashlib",
+    "locale",
+    "mmap",
+    "os",
+    "re",
+    "select",
+    "selectors",
+    "stat",
+    "subprocess",
+    "sys",
+    "time",
+    "urllib",
+    "webbrowser"
+   ],
+   "instructions": 4341,
+   "module": "cxutils",
+   "pyc_flags": 3,
+   "sha256": "bcfb45568380f0f13e5d1051a28371b2bbd483d0149328e34ca66a84da7b7a50",
+   "source_hash": "d78f06bd4f3da20c"
+  },
+  "cxwhich": {
+   "bytes": 1975,
+   "classes": [],
+   "co_filename": "/Volumes/gitlab_data/gitlab/builds/j911ygmXM/0/crossover/crossover/macosx/CrossOver/build/Build/Products/Release/CrossOver.app/Contents/SharedSupport/CrossOver/lib/python/cxwhich.py",
+   "code_objects": 2,
+   "doc": null,
+   "file": "lib/python/cxwhich.pyc",
+   "functions": [
+    "which"
+   ],
+   "imported_by": [
+    "cxdiag",
+    "fileupdate"
+   ],
+   "imports": [
+    "os"
+   ],
+   "imports_internal": [],
+   "imports_other": [],
+   "imports_stdlib": [
+    "os"
+   ],
+   "instructions": 123,
+   "module": "cxwhich",
+   "pyc_flags": 3,
+   "sha256": "c88f28b131c0c75ff60122cf6ed4e3ee876c6ce32bd70d98e0f7f7be0c4e36c8",
+   "source_hash": "959f3a0c1f32775d"
+  },
+  "demoutils": {
+   "bytes": 16669,
+   "classes": [
+    "DemoUtils"
+   ],
+   "co_filename": "/Volumes/gitlab_data/gitlab/builds/j911ygmXM/0/crossover/crossover/macosx/CrossOver/build/Build/Products/Release/CrossOver.app/Contents/SharedSupport/CrossOver/lib/python/demoutils.py",
+   "code_objects": 18,
+   "doc": null,
+   "file": "lib/python/demoutils.pyc",
+   "functions": [
+    "can_register_as_current_user",
+    "json_format_start",
+    "json_format",
+    "json_format_end",
+    "lastResortErroneous",
+    "create_acct_apply_scode",
+    "download_and_split_license_file",
+    "register"
+   ],
+   "imported_by": [
+    "libcxsetup"
+   ],
+   "imports": [
+    "os",
+    "stat",
+    "cxlog",
+    "distversion",
+    "hashlib",
+    "urllib.request",
+    "urllib.error",
+    "cxobjc",
+    "proxyinfo",
+    "cxutils",
+    "cxconfig",
+    "fileupdate",
+    "cxutils",
+    "c4profilesmanager"
+   ],
+   "imports_internal": [
+    "c4profilesmanager",
+    "cxconfig",
+    "cxlog",
+    "cxobjc",
+    "cxutils",
+    "distversion",
+    "fileupdate",
+    "proxyinfo"
+   ],
+   "imports_other": [],
+   "imports_stdlib": [
+    "hashlib",
+    "os",
+    "stat",
+    "urllib"
+   ],
+   "instructions": 1144,
+   "module": "demoutils",
+   "pyc_flags": 3,
+   "sha256": "458c6d7f3bb6842441db5599888e05a96bdd3c9a9a0697ba237791aa6430c1ed",
+   "source_hash": "3bc14c09459341a7"
+  },
+  "distversion": {
+   "bytes": 840,
+   "classes": [],
+   "co_filename": "/Volumes/gitlab_data/gitlab/builds/j911ygmXM/0/crossover/crossover/macosx/CrossOver/build/Build/Products/Release/CrossOver.app/Contents/SharedSupport/CrossOver/lib/python/distversion.py",
+   "code_objects": 1,
+   "doc": null,
+   "file": "lib/python/distversion.pyc",
+   "functions": [],
+   "imported_by": [
+    "appdetector",
+    "bottlecollection",
+    "bottlemanagement",
+    "bottlequery",
+    "bottlewrapper",
+    "c4profiles",
+    "c4profilesmanager",
+    "cxaiecore",
+    "cxaiemisc",
+    "cxdiag",
+    "cxfixes",
+    "cxproduct",
+    "cxurlget",
+    "cxutils",
+    "demoutils",
+    "installtask",
+    "proxyinfo",
+    "ratingutils",
+    "systeminfo",
+    "webutils"
+   ],
+   "imports": [],
+   "imports_internal": [],
+   "imports_other": [],
+   "imports_stdlib": [],
+   "instructions": 32,
+   "module": "distversion",
+   "pyc_flags": 3,
+   "sha256": "fcb04aaf86783e0a9a431d5fa9313fb0b6d9ba27f86d6926457f64d8457bd2c2",
+   "source_hash": "8123517eb2c1a933"
+  },
+  "downloaddetector": {
+   "bytes": 3107,
+   "classes": [
+    "ConstGlobTree"
+   ],
+   "co_filename": "/Volumes/gitlab_data/gitlab/builds/j911ygmXM/0/crossover/crossover/macosx/CrossOver/build/Build/Products/Release/CrossOver.app/Contents/SharedSupport/CrossOver/lib/python/downloaddetector.py",
+   "code_objects": 7,
+   "doc": null,
+   "file": "lib/python/downloaddetector.pyc",
+   "functions": [
+    "_get_downloads",
+    "find_installers",
+    "find_profiles"
+   ],
+   "imported_by": [
+    "c4profilesmanager",
+    "installtask"
+   ],
+   "imports": [
+    "os",
+    "globtree"
+   ],
+   "imports_internal": [
+    "globtree"
+   ],
+   "imports_other": [],
+   "imports_stdlib": [
+    "os"
+   ],
+   "instructions": 218,
+   "module": "downloaddetector",
+   "pyc_flags": 3,
+   "sha256": "db2e9b670e7ccc859d6bec3e70edc8e346400c810f9250918999a011904f21fb",
+   "source_hash": "d3bd7d93b5844c08"
+  },
+  "fileupdate": {
+   "bytes": 8836,
+   "classes": [],
+   "co_filename": "/Volumes/gitlab_data/gitlab/builds/j911ygmXM/0/crossover/crossover/macosx/CrossOver/build/Build/Products/Release/CrossOver.app/Contents/SharedSupport/CrossOver/lib/python/fileupdate.py",
+   "code_objects": 6,
+   "doc": "Updates a file, checking the signature if needed.",
+   "file": "lib/python/fileupdate.pyc",
+   "functions": [
+    "save_data_and_sig",
+    "prepare",
+    "is_signed",
+    "install",
+    "update"
+   ],
+   "imported_by": [
+    "c4profilesmanager",
+    "cxfixes",
+    "demoutils",
+    "webutils"
+   ],
+   "imports": [
+    "os",
+    "shutil",
+    "datetime",
+    "time",
+    "subprocess",
+    "tempfile",
+    "binascii",
+    "cxlog",
+    "cxutils",
+    "cxurlget",
+    "cxwhich"
+   ],
+   "imports_internal": [
+    "cxlog",
+    "cxurlget",
+    "cxutils",
+    "cxwhich"
+   ],
+   "imports_other": [],
+   "imports_stdlib": [
+    "binascii",
+    "datetime",
+    "os",
+    "shutil",
+    "subprocess",
+    "tempfile",
+    "time"
+   ],
+   "instructions": 714,
+   "module": "fileupdate",
+   "pyc_flags": 3,
+   "sha256": "f1e331a52be1b444bf4e3ea7e04253d8526ca0b901bce053cf64cfd1b86cca19",
+   "source_hash": "a366af253da8f5db"
+  },
+  "globtree": {
+   "bytes": 16668,
+   "classes": [
+    "GlobNode",
+    "GlobTree",
+    "FileGlobTree",
+    "FileContentGlobTree"
+   ],
+   "co_filename": "/Volumes/gitlab_data/gitlab/builds/j911ygmXM/0/crossover/crossover/macosx/CrossOver/build/Build/Products/Release/CrossOver.app/Contents/SharedSupport/CrossOver/lib/python/globtree.py",
+   "code_objects": 20,
+   "doc": null,
+   "file": "lib/python/globtree.pyc",
+   "functions": [
+    "file_exists_insensitive"
+   ],
+   "imported_by": [
+    "cddetector",
+    "cxaiecore",
+    "cxaiemedia",
+    "cxfixes",
+    "cxglob",
+    "downloaddetector"
+   ],
+   "imports": [
+    "re",
+    "os",
+    "cxlog",
+    "cxutils"
+   ],
+   "imports_internal": [
+    "cxlog",
+    "cxutils"
+   ],
+   "imports_other": [],
+   "imports_stdlib": [
+    "os",
+    "re"
+   ],
+   "instructions": 1402,
+   "module": "globtree",
+   "pyc_flags": 3,
+   "sha256": "c383918a060cd72d9b088c91963220bfaff82f451ead8f20c72e3bda40534152",
+   "source_hash": "442a330171879f5c"
+  },
+  "iconutils": {
+   "bytes": 4216,
+   "classes": [
+    "IconUtils"
+   ],
+   "co_filename": "/Volumes/gitlab_data/gitlab/builds/j911ygmXM/0/crossover/crossover/macosx/CrossOver/build/Build/Products/Release/CrossOver.app/Contents/SharedSupport/CrossOver/lib/python/iconutils.py",
+   "code_objects": 8,
+   "doc": null,
+   "file": "lib/python/iconutils.pyc",
+   "functions": [],
+   "imported_by": [
+    "libcxsetup"
+   ],
+   "imports": [
+    "cxobjc",
+    "cxproduct",
+    "cxurlget",
+    "cxutils",
+    "os",
+    "json",
+    "shutil",
+    "tempfile"
+   ],
+   "imports_internal": [
+    "cxobjc",
+    "cxproduct",
+    "cxurlget",
+    "cxutils"
+   ],
+   "imports_other": [],
+   "imports_stdlib": [
+    "json",
+    "os",
+    "shutil",
+    "tempfile"
+   ],
+   "instructions": 293,
+   "module": "iconutils",
+   "pyc_flags": 3,
+   "sha256": "8e32a6790aff321e77222e96208e5f114c51f001bf2d117d42407839999fbdfe",
+   "source_hash": "c6eff6aaa29b4933"
+  },
+  "installtask": {
+   "bytes": 101147,
+   "classes": [
+    "SourceMedia",
+    "TargetBottle",
+    "TargetTemplate",
+    "InstallTaskDelegate",
+    "InstallTask"
+   ],
+   "co_filename": "/Volumes/gitlab_data/gitlab/builds/j911ygmXM/0/crossover/crossover/macosx/CrossOver/build/Build/Products/Release/CrossOver.app/Contents/SharedSupport/CrossOver/lib/python/installtask.py",
+   "code_objects": 128,
+   "doc": null,
+   "file": "lib/python/installtask.pyc",
+   "functions": [
+    "_do_nothing"
+   ],
+   "imported_by": [
+    "libcxsetup"
+   ],
+   "imports": [
+    "os",
+    "os.path",
+    "re",
+    "cxfixes",
+    "cxlog",
+    "cxobjc",
+    "cxproduct",
+    "cxutils",
+    "distversion",
+    "cxutils",
+    "bottlemanagement",
+    "bottlequery",
+    "c4profiles",
+    "c4profilesmanager",
+    "cxaiemedia",
+    "cxdiag",
+    "downloaddetector"
+   ],
+   "imports_internal": [
+    "bottlemanagement",
+    "bottlequery",
+    "c4profiles",
+    "c4profilesmanager",
+    "cxaiemedia",
+    "cxdiag",
+    "cxfixes",
+    "cxlog",
+    "cxobjc",
+    "cxproduct",
+    "cxutils",
+    "distversion",
+    "downloaddetector"
+   ],
+   "imports_other": [],
+   "imports_stdlib": [
+    "os",
+    "re"
+   ],
+   "instructions": 6669,
+   "module": "installtask",
+   "pyc_flags": 3,
+   "sha256": "2d3964d40793079d58d229cb4b18578f53175bb7a87bec5e30a1a5024eb1a2fb",
+   "source_hash": "4ff5edceb00db2f9"
+  },
+  "iso8601": {
+   "bytes": 5063,
+   "classes": [
+    "ParseError",
+    "Utc",
+    "FixedOffset"
+   ],
+   "co_filename": "/Volumes/gitlab_data/gitlab/builds/j911ygmXM/0/crossover/crossover/macosx/CrossOver/build/Build/Products/Release/CrossOver.app/Contents/SharedSupport/CrossOver/lib/python/iso8601.py",
+   "code_objects": 14,
+   "doc": "ISO 8601 date time string parsing",
+   "file": "lib/python/iso8601.pyc",
+   "functions": [
+    "parse_timezone",
+    "parse_date"
+   ],
+   "imported_by": [
+    "c4profiles"
+   ],
+   "imports": [
+    "datetime",
+    "datetime",
+    "datetime",
+    "re"
+   ],
+   "imports_internal": [],
+   "imports_other": [],
+   "imports_stdlib": [
+    "datetime",
+    "re"
+   ],
+   "instructions": 319,
+   "module": "iso8601",
+   "pyc_flags": 3,
+   "sha256": "f3d5c262af43b79e7cd59951c2834a86004604b7931830cb5187e64391da653a",
+   "source_hash": "d1632f67f278240b"
+  },
+  "proxyinfo": {
+   "bytes": 14667,
+   "classes": [
+    "DynamicProxyHandler"
+   ],
+   "co_filename": "/Volumes/gitlab_data/gitlab/builds/j911ygmXM/0/crossover/crossover/macosx/CrossOver/build/Build/Products/Release/CrossOver.app/Contents/SharedSupport/CrossOver/lib/python/proxyinfo.py",
+   "code_objects": 23,
+   "doc": null,
+   "file": "lib/python/proxyinfo.pyc",
+   "functions": [
+    "get_desktop_environment",
+    "get_libproxy_factory",
+    "has_libproxy",
+    "get_proxy_libproxy",
+    "get_proxy_gconf",
+    "get_proxy_gsettings",
+    "_init_kde",
+    "get_proxy_kde_int",
+    "get_proxy_kde",
+    "get_proxy_env",
+    "get_proxy_conf",
+    "install_default_opener",
+    "_init",
+    "main"
+   ],
+   "imported_by": [
+    "cxurlget_urllib",
+    "demoutils",
+    "ratingutils",
+    "webutils"
+   ],
+   "imports": [
+    "os",
+    "traceback",
+    "sys",
+    "urllib.request",
+    "cxlog",
+    "cxproduct",
+    "cxutils",
+    "distversion",
+    "gi.repository",
+    "libproxy",
+    "PyQt4.Qt",
+    "PyKDE4.kdecore"
+   ],
+   "imports_internal": [
+    "cxlog",
+    "cxproduct",
+    "cxutils",
+    "distversion"
+   ],
+   "imports_other": [
+    "PyKDE4",
+    "PyQt4",
+    "gi",
+    "libproxy"
+   ],
+   "imports_stdlib": [
+    "os",
+    "sys",
+    "traceback",
+    "urllib"
+   ],
+   "instructions": 1082,
+   "module": "proxyinfo",
+   "pyc_flags": 3,
+   "sha256": "92b63b676b7db9be3fa3675222ec6dc58cf02cef03ad8ad17dc90c27489cd2c4",
+   "source_hash": "82a26f545318de54"
+  },
+  "pyop": {
+   "bytes": 9327,
+   "classes": [
+    "PythonOperation",
+    "PythonOperationQueue"
+   ],
+   "co_filename": "/Volumes/gitlab_data/gitlab/builds/j911ygmXM/0/crossover/crossover/macosx/CrossOver/build/Build/Products/Release/CrossOver.app/Contents/SharedSupport/CrossOver/lib/python/pyop.py",
+   "code_objects": 21,
+   "doc": null,
+   "file": "lib/python/pyop.pyc",
+   "functions": [
+    "is_main_thread",
+    "main",
+    "is_main_thread"
+   ],
+   "imported_by": [
+    "bottlewrapper"
+   ],
+   "imports": [
+    "os",
+    "threading",
+    "traceback",
+    "cxlog",
+    "PyObjCTools",
+    "Foundation",
+    "gi.repository",
+    "time",
+    "random"
+   ],
+   "imports_internal": [
+    "cxlog"
+   ],
+   "imports_other": [
+    "Foundation",
+    "PyObjCTools",
+    "gi"
+   ],
+   "imports_stdlib": [
+    "os",
+    "random",
+    "threading",
+    "time",
+    "traceback"
+   ],
+   "instructions": 659,
+   "module": "pyop",
+   "pyc_flags": 3,
+   "sha256": "f7d527420578cd39cf109a31ec3c57a3119bdf1c5ca146df97d8bda19d2f562e",
+   "source_hash": "a5d3c12c5232c156"
+  },
+  "ratingutils": {
+   "bytes": 6063,
+   "classes": [
+    "RatingUtils"
+   ],
+   "co_filename": "/Volumes/gitlab_data/gitlab/builds/j911ygmXM/0/crossover/crossover/macosx/CrossOver/build/Build/Products/Release/CrossOver.app/Contents/SharedSupport/CrossOver/lib/python/ratingutils.py",
+   "code_objects": 7,
+   "doc": null,
+   "file": "lib/python/ratingutils.pyc",
+   "functions": [
+    "get_platform"
+   ],
+   "imported_by": [
+    "libcxsetup"
+   ],
+   "imports": [
+    "cxlog",
+    "cxobjc",
+    "cxproduct",
+    "cxurlget",
+    "cxutils",
+    "distversion",
+    "proxyinfo",
+    "systeminfo",
+    "webutils",
+    "json",
+    "urllib.parse"
+   ],
+   "imports_internal": [
+    "cxlog",
+    "cxobjc",
+    "cxproduct",
+    "cxurlget",
+    "cxutils",
+    "distversion",
+    "proxyinfo",
+    "systeminfo",
+    "webutils"
+   ],
+   "imports_other": [],
+   "imports_stdlib": [
+    "json",
+    "urllib"
+   ],
+   "instructions": 498,
+   "module": "ratingutils",
+   "pyc_flags": 3,
+   "sha256": "c535139474521ab9d373b2b94552525b4e26f4fe334018ba075b2e5cf3ff85c2",
+   "source_hash": "9fa34c1f47868042"
+  },
+  "systeminfo": {
+   "bytes": 6299,
+   "classes": [
+    "SystemInfo"
+   ],
+   "co_filename": "/Volumes/gitlab_data/gitlab/builds/j911ygmXM/0/crossover/crossover/macosx/CrossOver/build/Build/Products/Release/CrossOver.app/Contents/SharedSupport/CrossOver/lib/python/systeminfo.py",
+   "code_objects": 7,
+   "doc": null,
+   "file": "lib/python/systeminfo.pyc",
+   "functions": [
+    "get_bottle_information",
+    "get_system_information"
+   ],
+   "imported_by": [
+    "cxaiengine",
+    "ratingutils"
+   ],
+   "imports": [
+    "os",
+    "struct",
+    "cxdiag",
+    "cxobjc",
+    "cxutils",
+    "distversion",
+    "gi.repository"
+   ],
+   "imports_internal": [
+    "cxdiag",
+    "cxobjc",
+    "cxutils",
+    "distversion"
+   ],
+   "imports_other": [
+    "gi"
+   ],
+   "imports_stdlib": [
+    "os",
+    "struct"
+   ],
+   "instructions": 511,
+   "module": "systeminfo",
+   "pyc_flags": 3,
+   "sha256": "2673e079df5c3cb5683e0d6e0f43ba330ccd7a83e0f077b27a46f8c12fb3f57c",
+   "source_hash": "def97c7a4e1d4dd5"
+  },
+  "webutils": {
+   "bytes": 3709,
+   "classes": [
+    "WebUtils"
+   ],
+   "co_filename": "/Volumes/gitlab_data/gitlab/builds/j911ygmXM/0/crossover/crossover/macosx/CrossOver/build/Build/Products/Release/CrossOver.app/Contents/SharedSupport/CrossOver/lib/python/webutils.py",
+   "code_objects": 6,
+   "doc": null,
+   "file": "lib/python/webutils.pyc",
+   "functions": [
+    "get_version",
+    "get_token"
+   ],
+   "imported_by": [
+    "libcxsetup",
+    "ratingutils"
+   ],
+   "imports": [
+    "cxlog",
+    "cxobjc",
+    "cxproduct",
+    "cxurlget",
+    "cxutils",
+    "distversion",
+    "fileupdate",
+    "proxyinfo",
+    "hashlib",
+    "json",
+    "os",
+    "urllib.parse"
+   ],
+   "imports_internal": [
+    "cxlog",
+    "cxobjc",
+    "cxproduct",
+    "cxurlget",
+    "cxutils",
+    "distversion",
+    "fileupdate",
+    "proxyinfo"
+   ],
+   "imports_other": [],
+   "imports_stdlib": [
+    "hashlib",
+    "json",
+    "os",
+    "urllib"
+   ],
+   "instructions": 281,
+   "module": "webutils",
+   "pyc_flags": 3,
+   "sha256": "07ca9b7cff072733a5095ca3a713d639186624972449e67e2d9182b467d362c4",
+   "source_hash": "cc34824145b2e4f5"
+  }
+ },
+ "opcode_table_source": "_opcode_metadata.pyc",
+ "opcodes": 150,
+ "sources": {
+  "libcxsetup": {
+   "bytes": 1128,
+   "classes": [
+    "CXSetup"
+   ],
+   "doc": null,
+   "file": "Contents/Resources/libcxsetup.py",
+   "functions": [],
+   "imported_by": [],
+   "imports": [
+    "os",
+    "traceback",
+    "appdetector",
+    "bottlecollection",
+    "bottlemanagement",
+    "bottlequery",
+    "bottlewrapper",
+    "c4profilesmanager",
+    "cddetector",
+    "cxproduct",
+    "cxaiengine",
+    "cxmenu",
+    "demoutils",
+    "iconutils",
+    "installtask",
+    "ratingutils",
+    "webutils"
+   ],
+   "imports_internal": [
+    "appdetector",
+    "bottlecollection",
+    "bottlemanagement",
+    "bottlequery",
+    "bottlewrapper",
+    "c4profilesmanager",
+    "cddetector",
+    "cxaiengine",
+    "cxmenu",
+    "cxproduct",
+    "demoutils",
+    "iconutils",
+    "installtask",
+    "ratingutils",
+    "webutils"
+   ],
+   "imports_other": [],
+   "imports_stdlib": [
+    "os",
+    "traceback"
+   ],
+   "lines": 48,
+   "module": "libcxsetup",
+   "sha256": "62ae1c5737452dbf0eac7305ff35ccd54873d79011d4323d08d9e57812512bc3"
+  },
+  "libcxsetupbase": {
+   "bytes": 581,
+   "classes": [],
+   "doc": null,
+   "file": "Contents/Resources/libcxsetupbase.py",
+   "functions": [
+    "dump_stacks"
+   ],
+   "imported_by": [],
+   "imports": [
+    "os",
+    "signal",
+    "sys",
+    "traceback",
+    "Foundation",
+    "PyObjCTools.KeyValueCoding",
+    "cxlog",
+    "PyObjCTools.Debugging"
+   ],
+   "imports_internal": [
+    "cxlog"
+   ],
+   "imports_other": [
+    "Foundation",
+    "PyObjCTools"
+   ],
+   "imports_stdlib": [
+    "os",
+    "signal",
+    "sys",
+    "traceback"
+   ],
+   "lines": 24,
+   "module": "libcxsetupbase",
+   "sha256": "aa31e0817c397aee72d7a72403084b149360a6e5484cd3a1d86092fcd881c72c"
+  }
+ }
+}

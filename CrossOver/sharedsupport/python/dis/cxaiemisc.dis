@@ -1,0 +1,827 @@
+# cxaiemisc — CPython 3.13 bytecode listing of lib/python/cxaiemisc.pyc
+# sha256 c807afe3e461affa5f4df2653f3aad8fa779cec740f3afed230b030408640125, pyc flags 3, co_filename /Volumes/gitlab_data/gitlab/builds/j911ygmXM/0/crossover/crossover/macosx/CrossOver/build/Build/Products/Release/CrossOver.app/Contents/SharedSupport/CrossOver/lib/python/cxaiemisc.py
+
+Disassembly of <code <module>> (line 1, args=0 posonly=0 kwonly=0, flags=0):
+   0        0 RESUME                           0
+   3        2 LOAD_CONST                       0 (0)
+            4 LOAD_CONST                       1 (None)
+            6 IMPORT_NAME                      0 (os.path)
+            8 STORE_NAME                       1 (os)
+   4       10 LOAD_CONST                       0 (0)
+           12 LOAD_CONST                       1 (None)
+           14 IMPORT_NAME                      2 (re)
+           16 STORE_NAME                       2 (re)
+   6       18 LOAD_CONST                       0 (0)
+           20 LOAD_CONST                       1 (None)
+           22 IMPORT_NAME                      3 (cxutils)
+           24 STORE_NAME                       3 (cxutils)
+   7       26 LOAD_CONST                       0 (0)
+           28 LOAD_CONST                       1 (None)
+           30 IMPORT_NAME                      4 (distversion)
+           32 STORE_NAME                       4 (distversion)
+   9       34 LOAD_CONST                       0 (0)
+           36 LOAD_CONST                       1 (None)
+           38 IMPORT_NAME                      5 (bottlemanagement)
+           40 STORE_NAME                       5 (bottlemanagement)
+  10       42 LOAD_CONST                       0 (0)
+           44 LOAD_CONST                       1 (None)
+           46 IMPORT_NAME                      6 (cxaiebase)
+           48 STORE_NAME                       6 (cxaiebase)
+  14       50 LOAD_CONST                       0 (0)
+           52 LOAD_CONST                       2 (('cxgettext',))
+           54 IMPORT_NAME                      3 (cxutils)
+           56 IMPORT_FROM                      7 (cxgettext)
+           58 STORE_NAME                       8 (_)
+           60 POP_TOP
+  22       62 LOAD_BUILD_CLASS
+           64 PUSH_NULL
+           66 LOAD_CONST                       3 (<code AIECXFixes, line 22>)
+           68 MAKE_FUNCTION
+           70 LOAD_CONST                       4 ('AIECXFixes')
+           72 LOAD_NAME                        6 (cxaiebase)
+           74 LOAD_ATTR                       18 (AIETask)
+           94 CALL                             3
+          102 STORE_NAME                      10 (AIECXFixes)
+  58      104 LOAD_BUILD_CLASS
+          106 PUSH_NULL
+          108 LOAD_CONST                       5 (<code AIECreateBottle, line 58>)
+          110 MAKE_FUNCTION
+          112 LOAD_CONST                       6 ('AIECreateBottle')
+          114 LOAD_NAME                        6 (cxaiebase)
+          116 LOAD_ATTR                       18 (AIETask)
+          136 CALL                             3
+          144 STORE_NAME                      11 (AIECreateBottle)
+  78      146 LOAD_BUILD_CLASS
+          148 PUSH_NULL
+          150 LOAD_CONST                       7 (<code AIEPreAssoc, line 78>)
+          152 MAKE_FUNCTION
+          154 LOAD_CONST                       8 ('AIEPreAssoc')
+          156 LOAD_NAME                        6 (cxaiebase)
+          158 LOAD_ATTR                       18 (AIETask)
+          178 CALL                             3
+          186 STORE_NAME                      12 (AIEPreAssoc)
+ 109      188 LOAD_CONST                       9 (<code get_bottle_init_task, line 109>)
+          190 MAKE_FUNCTION
+          192 STORE_NAME                      13 (get_bottle_init_task)
+ 136      194 LOAD_BUILD_CLASS
+          196 PUSH_NULL
+          198 LOAD_CONST                      10 (<code AIESyncMenu, line 136>)
+          200 MAKE_FUNCTION
+          202 LOAD_CONST                      11 ('AIESyncMenu')
+          204 LOAD_NAME                        6 (cxaiebase)
+          206 LOAD_ATTR                       18 (AIETask)
+          226 CALL                             3
+          234 STORE_NAME                      14 (AIESyncMenu)
+ 164      236 LOAD_BUILD_CLASS
+          238 PUSH_NULL
+          240 LOAD_CONST                      12 (<code AIESyncAssoc, line 164>)
+          242 MAKE_FUNCTION
+          244 LOAD_CONST                      13 ('AIESyncAssoc')
+          246 LOAD_NAME                        6 (cxaiebase)
+          248 LOAD_ATTR                       18 (AIETask)
+          268 CALL                             3
+          276 STORE_NAME                      15 (AIESyncAssoc)
+ 211      278 LOAD_CONST                      14 (<code get_postinstall_task, line 211>)
+          280 MAKE_FUNCTION
+          282 STORE_NAME                      16 (get_postinstall_task)
+          284 RETURN_CONST                     1 (None)
+
+Disassembly of <code AIECXFixes> (line 22, args=0 posonly=0 kwonly=0, flags=0):
+  22        0 RESUME                           0
+            2 LOAD_NAME                        0 (__name__)
+            4 STORE_NAME                       1 (__module__)
+            6 LOAD_CONST                       0 ('AIECXFixes')
+            8 STORE_NAME                       2 (__qualname__)
+           10 LOAD_CONST                       1 (22)
+           12 STORE_NAME                       3 (__firstlineno__)
+  23       14 LOAD_CONST                       2 (<code AIECXFixes.__init__, line 23>)
+           16 MAKE_FUNCTION
+           18 STORE_NAME                       4 (__init__)
+  26       20 LOAD_CONST                       3 (<code AIECXFixes.__unicode__, line 26>)
+           22 MAKE_FUNCTION
+           24 STORE_NAME                       5 (__unicode__)
+  29       26 LOAD_CONST                       4 (<code AIECXFixes.main, line 29>)
+           28 MAKE_FUNCTION
+           30 STORE_NAME                       6 (main)
+           32 LOAD_CONST                       5 (('error', 'ismarkuperror'))
+           34 STORE_NAME                       7 (__static_attributes__)
+           36 RETURN_CONST                     6 (None)
+
+Disassembly of <code AIECXFixes.__init__> (line 23, args=2 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: self, engine
+  23        0 RESUME                           0
+  24        2 LOAD_GLOBAL                      0 (cxaiebase)
+           12 LOAD_ATTR                        2 (AIETask)
+           32 LOAD_ATTR                        5 (__init__ + NULL|self)
+           52 LOAD_FAST_LOAD_FAST              1 (self, engine)
+           54 LOAD_GLOBAL                      7 (_ + NULL)
+           64 LOAD_CONST                       1 ('Preparing the system for this application')
+           66 CALL                             1
+           74 CALL                             3
+           82 POP_TOP
+           84 RETURN_CONST                     0 (None)
+
+Disassembly of <code AIECXFixes.__unicode__> (line 26, args=1 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: self
+  26        0 RESUME                           0
+  27        2 LOAD_FAST                        0 (self)
+            4 LOAD_ATTR                        0 (__class__)
+           24 LOAD_ATTR                        2 (__name__)
+           44 CONVERT_VALUE                    1 (str)
+           46 FORMAT_SIMPLE
+           48 LOAD_CONST                       1 ('(')
+           50 LOAD_FAST                        0 (self)
+           52 LOAD_ATTR                        4 (scheduler)
+           72 LOAD_ATTR                        6 (installtask)
+           92 LOAD_ATTR                        8 (bottlename)
+          112 CONVERT_VALUE                    1 (str)
+          114 FORMAT_SIMPLE
+          116 LOAD_CONST                       2 (')')
+          118 BUILD_STRING                     4
+          120 RETURN_VALUE
+
+Disassembly of <code AIECXFixes.main> (line 29, args=1 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: self, cxfixes, engine, key, info
+  29        0 RESUME                           0
+  30        2 LOAD_CONST                       1 (0)
+            4 LOAD_CONST                       0 (None)
+            6 IMPORT_NAME                      0 (cxfixes)
+            8 STORE_FAST                       1 (cxfixes)
+  31       10 LOAD_FAST                        0 (self)
+           12 LOAD_ATTR                        2 (scheduler)
+           32 STORE_FAST                       2 (engine)
+  33       34 LOAD_FAST                        1 (cxfixes)
+           36 LOAD_ATTR                        5 (clear_errors + NULL|self)
+           56 CALL                             0
+           64 POP_TOP
+  34       66 LOAD_FAST                        2 (engine)
+           68 LOAD_ATTR                        6 (installtask)
+           88 LOAD_ATTR                        9 (get_cxdiag_messages + NULL|self)
+          108 CALL                             0
+          116 LOAD_ATTR                       11 (items + NULL|self)
+          136 CALL                             0
+          144 GET_ITER
+     >>   146 FOR_ITER                        43 (to 236)
+          150 UNPACK_SEQUENCE                  2
+          154 STORE_FAST_STORE_FAST           52 (key, info)
+  35      156 LOAD_FAST                        1 (cxfixes)
+          158 LOAD_ATTR                       13 (add_error + NULL|self)
+          178 LOAD_FAST_LOAD_FAST             52 (key, info)
+          180 LOAD_ATTR                       14 (title)
+          200 LOAD_FAST                        4 (info)
+          202 LOAD_ATTR                       16 (level)
+          222 CALL                             3
+          230 POP_TOP
+          232 JUMP_BACKWARD                   45 (to 146)
+  34 >>   236 END_FOR
+          238 POP_TOP
+  36      240 LOAD_FAST                        1 (cxfixes)
+          242 LOAD_ATTR                       19 (fix_errors + NULL|self)
+          262 CALL                             0
+          270 POP_TOP
+  40      272 LOAD_FAST                        1 (cxfixes)
+          274 LOAD_ATTR                        5 (clear_errors + NULL|self)
+          294 CALL                             0
+          302 POP_TOP
+  41      304 LOAD_FAST                        2 (engine)
+          306 LOAD_ATTR                        6 (installtask)
+          326 LOAD_ATTR                        9 (get_cxdiag_messages + NULL|self)
+          346 CALL                             0
+          354 LOAD_ATTR                       11 (items + NULL|self)
+          374 CALL                             0
+          382 GET_ITER
+     >>   384 FOR_ITER                        61 (to 510)
+          388 UNPACK_SEQUENCE                  2
+          392 STORE_FAST_STORE_FAST           52 (key, info)
+  42      394 LOAD_FAST                        4 (info)
+          396 LOAD_ATTR                       16 (level)
+          416 LOAD_CONST                       2 ('required')
+          418 COMPARE_OP                      88 (== bool)
+          422 POP_JUMP_IF_TRUE                 2 (to 430)
+          426 JUMP_BACKWARD                   23 (to 384)
+  43 >>   430 LOAD_FAST                        1 (cxfixes)
+          432 LOAD_ATTR                       13 (add_error + NULL|self)
+          452 LOAD_FAST_LOAD_FAST             52 (key, info)
+          454 LOAD_ATTR                       14 (title)
+          474 LOAD_FAST                        4 (info)
+          476 LOAD_ATTR                       16 (level)
+          496 CALL                             3
+          504 POP_TOP
+          506 JUMP_BACKWARD                   63 (to 384)
+  41 >>   510 END_FOR
+          512 POP_TOP
+  45      514 LOAD_FAST                        1 (cxfixes)
+          516 LOAD_ATTR                       21 (has_errors + NULL|self)
+          536 CALL                             0
+          544 TO_BOOL
+          552 POP_JUMP_IF_FALSE               44 (to 644)
+  46      556 LOAD_FAST                        1 (cxfixes)
+          558 LOAD_ATTR                       23 (markup_error_message + NULL|self)
+          578 LOAD_FAST                        1 (cxfixes)
+          580 LOAD_ATTR                       25 (get_error_message + NULL|self)
+          600 CALL                             0
+          608 CALL                             1
+          616 LOAD_FAST                        0 (self)
+          618 STORE_ATTR                      13 (error)
+  47      628 LOAD_CONST                       3 (True)
+          630 LOAD_FAST                        0 (self)
+          632 STORE_ATTR                      14 (ismarkuperror)
+  48      642 RETURN_CONST                     4 (False)
+  50 >>   644 RETURN_CONST                     3 (True)
+
+Disassembly of <code AIECreateBottle> (line 58, args=0 posonly=0 kwonly=0, flags=0):
+  58        0 RESUME                           0
+            2 LOAD_NAME                        0 (__name__)
+            4 STORE_NAME                       1 (__module__)
+            6 LOAD_CONST                       0 ('AIECreateBottle')
+            8 STORE_NAME                       2 (__qualname__)
+           10 LOAD_CONST                       1 (58)
+           12 STORE_NAME                       3 (__firstlineno__)
+  59       14 LOAD_CONST                       2 (<code AIECreateBottle.__init__, line 59>)
+           16 MAKE_FUNCTION
+           18 STORE_NAME                       4 (__init__)
+  62       20 LOAD_CONST                       3 (<code AIECreateBottle.__unicode__, line 62>)
+           22 MAKE_FUNCTION
+           24 STORE_NAME                       5 (__unicode__)
+  65       26 LOAD_CONST                       4 (<code AIECreateBottle.main, line 65>)
+           28 MAKE_FUNCTION
+           30 STORE_NAME                       6 (main)
+           32 LOAD_CONST                       5 (('error',))
+           34 STORE_NAME                       7 (__static_attributes__)
+           36 RETURN_CONST                     6 (None)
+
+Disassembly of <code AIECreateBottle.__init__> (line 59, args=2 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: self, engine
+  59        0 RESUME                           0
+  60        2 LOAD_GLOBAL                      0 (cxaiebase)
+           12 LOAD_ATTR                        2 (AIETask)
+           32 LOAD_ATTR                        5 (__init__ + NULL|self)
+           52 LOAD_FAST_LOAD_FAST              1 (self, engine)
+           54 LOAD_GLOBAL                      7 (_ + NULL)
+           64 LOAD_CONST                       1 ('Creating the %s bottle')
+           66 CALL                             1
+           74 LOAD_FAST                        1 (engine)
+           76 LOAD_ATTR                        8 (installtask)
+           96 LOAD_ATTR                       10 (bottlename)
+          116 BINARY_OP                        6 (%)
+          120 CALL                             3
+          128 POP_TOP
+          130 RETURN_CONST                     0 (None)
+
+Disassembly of <code AIECreateBottle.__unicode__> (line 62, args=1 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: self
+  62        0 RESUME                           0
+  63        2 LOAD_FAST                        0 (self)
+            4 LOAD_ATTR                        0 (__class__)
+           24 LOAD_ATTR                        2 (__name__)
+           44 CONVERT_VALUE                    1 (str)
+           46 FORMAT_SIMPLE
+           48 LOAD_CONST                       1 ('(')
+           50 LOAD_FAST                        0 (self)
+           52 LOAD_ATTR                        4 (scheduler)
+           72 LOAD_ATTR                        6 (installtask)
+           92 LOAD_ATTR                        8 (bottlename)
+          112 CONVERT_VALUE                    1 (str)
+          114 FORMAT_SIMPLE
+          116 LOAD_CONST                       2 (')')
+          118 BUILD_STRING                     4
+          120 RETURN_VALUE
+
+Disassembly of <code AIECreateBottle.main> (line 65, args=1 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: self, engine, success, err
+  65        0 RESUME                           0
+  66        2 LOAD_FAST                        0 (self)
+            4 LOAD_ATTR                        0 (scheduler)
+           24 STORE_FAST                       1 (engine)
+  67       26 LOAD_GLOBAL                      2 (bottlemanagement)
+           36 LOAD_ATTR                        4 (create_bottle)
+           56 PUSH_NULL
+  68       58 LOAD_FAST                        1 (engine)
+           60 LOAD_ATTR                        6 (installtask)
+           80 LOAD_ATTR                        8 (bottlename)
+  69      100 LOAD_FAST                        1 (engine)
+          102 LOAD_ATTR                        6 (installtask)
+          122 LOAD_ATTR                       10 (target_template)
+  70      142 LOAD_FAST                        1 (engine)
+          144 LOAD_ATTR                       12 (state)
+          164 LOAD_CONST                       1 ('environ')
+          166 BINARY_SUBSCR
+  71      170 LOAD_FAST                        1 (engine)
+          172 LOAD_ATTR                        6 (installtask)
+          192 LOAD_ATTR                       14 (profile)
+          212 LOAD_ATTR                       16 (appid)
+  67      232 LOAD_CONST                       2 (('env', 'appid'))
+          234 CALL_KW                          4
+          236 UNPACK_SEQUENCE                  2
+          240 STORE_FAST_STORE_FAST           35 (success, err)
+  72      242 LOAD_FAST                        2 (success)
+          244 TO_BOOL
+          252 POP_JUMP_IF_FALSE                1 (to 258)
+  73      256 RETURN_CONST                     3 (True)
+  74 >>   258 LOAD_FAST_LOAD_FAST             48 (err, self)
+          260 STORE_ATTR                       9 (error)
+  75      270 RETURN_CONST                     4 (False)
+
+Disassembly of <code AIEPreAssoc> (line 78, args=0 posonly=0 kwonly=0, flags=0):
+  78        0 RESUME                           0
+            2 LOAD_NAME                        0 (__name__)
+            4 STORE_NAME                       1 (__module__)
+            6 LOAD_CONST                       0 ('AIEPreAssoc')
+            8 STORE_NAME                       2 (__qualname__)
+           10 LOAD_CONST                       1 (78)
+           12 STORE_NAME                       3 (__firstlineno__)
+  79       14 LOAD_CONST                       2 ('This task ensures that cxassoc.conf is up to date before we start\ninstalling applications.\n\nThe reason is that if it is out of date, then we may think that\npre-existing associations were creat...)
+           16 STORE_NAME                       4 (__doc__)
+  87       18 LOAD_CONST                       3 (<code AIEPreAssoc.__init__, line 87>)
+           20 MAKE_FUNCTION
+           22 STORE_NAME                       5 (__init__)
+  90       24 LOAD_CONST                       4 (<code AIEPreAssoc.__unicode__, line 90>)
+           26 MAKE_FUNCTION
+           28 STORE_NAME                       6 (__unicode__)
+  93       30 LOAD_CONST                       5 (<code AIEPreAssoc.main, line 93>)
+           32 MAKE_FUNCTION
+           34 STORE_NAME                       7 (main)
+           36 LOAD_CONST                       6 (('error',))
+           38 STORE_NAME                       8 (__static_attributes__)
+           40 RETURN_CONST                     7 (None)
+
+Disassembly of <code AIEPreAssoc.__init__> (line 87, args=2 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: self, engine
+  87        0 RESUME                           0
+  88        2 LOAD_GLOBAL                      0 (cxaiebase)
+           12 LOAD_ATTR                        2 (AIETask)
+           32 LOAD_ATTR                        5 (__init__ + NULL|self)
+           52 LOAD_FAST_LOAD_FAST              1 (self, engine)
+           54 LOAD_CONST                       1 ('')
+           56 CALL                             3
+           64 POP_TOP
+           66 RETURN_CONST                     0 (None)
+
+Disassembly of <code AIEPreAssoc.__unicode__> (line 90, args=1 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: self
+  90        0 RESUME                           0
+  91        2 LOAD_FAST                        0 (self)
+            4 LOAD_ATTR                        0 (__class__)
+           24 LOAD_ATTR                        2 (__name__)
+           44 LOAD_CONST                       1 ('()')
+           46 BINARY_OP                        0 (+)
+           50 RETURN_VALUE
+
+Disassembly of <code AIEPreAssoc.main> (line 93, args=1 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: self, engine, cmd, retcode, _out, err
+  93        0 RESUME                           0
+  94        2 LOAD_FAST                        0 (self)
+            4 LOAD_ATTR                        0 (scheduler)
+           24 STORE_FAST                       1 (engine)
+  95       26 LOAD_FAST                        1 (engine)
+           28 LOAD_ATTR                        2 (state)
+           48 LOAD_CONST                       1 ('skipassoc')
+           50 BINARY_SUBSCR
+           54 TO_BOOL
+           62 POP_JUMP_IF_FALSE                1 (to 68)
+  96       66 RETURN_CONST                     2 (True)
+  98 >>    68 LOAD_GLOBAL                      4 (os)
+           78 LOAD_ATTR                        6 (path)
+           98 LOAD_ATTR                        9 (join + NULL|self)
+          118 LOAD_GLOBAL                     10 (cxutils)
+          128 LOAD_ATTR                       12 (CX_ROOT)
+          148 LOAD_CONST                       3 ('bin')
+          150 LOAD_CONST                       4 ('cxassoc')
+          152 CALL                             3
+  99      160 LOAD_CONST                       5 ('--bottle')
+          162 LOAD_FAST                        1 (engine)
+          164 LOAD_ATTR                       14 (installtask)
+          184 LOAD_ATTR                       16 (bottlename)
+ 100      204 LOAD_CONST                       6 ('--sync')
+  98      206 BUILD_LIST                       4
+          208 STORE_FAST                       2 (cmd)
+ 101      210 LOAD_GLOBAL                     10 (cxutils)
+          220 LOAD_ATTR                       18 (run)
+          240 PUSH_NULL
+          242 LOAD_FAST_LOAD_FAST             33 (cmd, engine)
+          244 LOAD_ATTR                        2 (state)
+          264 LOAD_CONST                       7 ('environ')
+          266 BINARY_SUBSCR
+ 102      270 LOAD_GLOBAL                     10 (cxutils)
+          280 LOAD_ATTR                       20 (GRAB)
+ 101      300 LOAD_CONST                       8 (('env', 'stderr'))
+          302 CALL_KW                          3
+          304 UNPACK_SEQUENCE                  3
+          308 STORE_FAST_STORE_FAST           52 (retcode, _out)
+          310 STORE_FAST                       5 (err)
+ 103      312 LOAD_FAST                        3 (retcode)
+          314 TO_BOOL
+          322 POP_JUMP_IF_FALSE                7 (to 340)
+ 104      326 LOAD_FAST_LOAD_FAST             80 (err, self)
+          328 STORE_ATTR                      11 (error)
+ 105      338 RETURN_CONST                     9 (False)
+ 106 >>   340 RETURN_CONST                     2 (True)
+
+Disassembly of <code get_bottle_init_task> (line 109, args=1 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: engine, create_bottle, group, cxfixes
+ 109        0 RESUME                           0
+ 113        2 LOAD_FAST                        0 (engine)
+            4 LOAD_ATTR                        0 (installtask)
+           24 LOAD_ATTR                        3 (GetCreateNewBottle + NULL|self)
+           44 CALL                             0
+           52 TO_BOOL
+           60 POP_JUMP_IF_FALSE               12 (to 88)
+ 114       64 LOAD_GLOBAL                      5 (AIECreateBottle + NULL)
+           74 LOAD_FAST                        0 (engine)
+           76 CALL                             1
+           84 STORE_FAST                       1 (create_bottle)
+           86 JUMP_FORWARD                     2 (to 92)
+ 116 >>    88 LOAD_CONST                       1 (None)
+           90 STORE_FAST                       1 (create_bottle)
+ 117 >>    92 LOAD_GLOBAL                      6 (cxaiebase)
+          102 LOAD_ATTR                        8 (AIETaskGroup)
+          122 PUSH_NULL
+          124 LOAD_FAST                        0 (engine)
+          126 LOAD_CONST                       2 ('PreInstall')
+          128 LOAD_FAST                        1 (create_bottle)
+          130 LOAD_CONST                       3 (('first',))
+          132 CALL_KW                          3
+          134 STORE_FAST                       2 (group)
+ 119      136 LOAD_FAST                        2 (group)
+          138 LOAD_ATTR                       11 (insert + NULL|self)
+          158 LOAD_GLOBAL                     13 (AIEPreAssoc + NULL)
+          168 LOAD_FAST                        0 (engine)
+          170 CALL                             1
+          178 CALL                             1
+          186 POP_TOP
+ 121      188 LOAD_FAST                        0 (engine)
+          190 LOAD_ATTR                        0 (installtask)
+          210 LOAD_ATTR                       15 (get_apply_cxfixes + NULL|self)
+          230 CALL                             0
+          238 TO_BOOL
+          246 POP_JUMP_IF_FALSE               45 (to 340)
+ 122      250 LOAD_GLOBAL                     17 (AIECXFixes + NULL)
+          260 LOAD_FAST                        0 (engine)
+          262 CALL                             1
+          270 STORE_FAST                       3 (cxfixes)
+ 123      272 LOAD_FAST                        0 (engine)
+          274 LOAD_ATTR                       19 (add + NULL|self)
+          294 LOAD_FAST                        3 (cxfixes)
+          296 CALL                             1
+          304 POP_TOP
+ 124      306 LOAD_FAST                        2 (group)
+          308 LOAD_ATTR                       21 (add_dependency + NULL|self)
+          328 LOAD_FAST                        3 (cxfixes)
+          330 CALL                             1
+          338 POP_TOP
+ 126 >>   340 LOAD_FAST                        2 (group)
+          342 RETURN_VALUE
+
+Disassembly of <code AIESyncMenu> (line 136, args=0 posonly=0 kwonly=0, flags=0):
+ 136        0 RESUME                           0
+            2 LOAD_NAME                        0 (__name__)
+            4 STORE_NAME                       1 (__module__)
+            6 LOAD_CONST                       0 ('AIESyncMenu')
+            8 STORE_NAME                       2 (__qualname__)
+           10 LOAD_CONST                       1 (136)
+           12 STORE_NAME                       3 (__firstlineno__)
+ 137       14 LOAD_CONST                       2 (<code AIESyncMenu.__init__, line 137>)
+           16 MAKE_FUNCTION
+           18 STORE_NAME                       4 (__init__)
+ 140       20 LOAD_CONST                       3 (<code AIESyncMenu.__unicode__, line 140>)
+           22 MAKE_FUNCTION
+           24 STORE_NAME                       5 (__unicode__)
+ 143       26 LOAD_CONST                       4 (<code AIESyncMenu.main, line 143>)
+           28 MAKE_FUNCTION
+           30 STORE_NAME                       6 (main)
+           32 LOAD_CONST                       5 (('error',))
+           34 STORE_NAME                       7 (__static_attributes__)
+           36 RETURN_CONST                     6 (None)
+
+Disassembly of <code AIESyncMenu.__init__> (line 137, args=2 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: self, engine
+ 137        0 RESUME                           0
+ 138        2 LOAD_GLOBAL                      0 (cxaiebase)
+           12 LOAD_ATTR                        2 (AIETask)
+           32 LOAD_ATTR                        5 (__init__ + NULL|self)
+           52 LOAD_FAST_LOAD_FAST              1 (self, engine)
+           54 LOAD_GLOBAL                      7 (_ + NULL)
+           64 LOAD_CONST                       1 ('Refreshing the menus')
+           66 CALL                             1
+           74 CALL                             3
+           82 POP_TOP
+           84 RETURN_CONST                     0 (None)
+
+Disassembly of <code AIESyncMenu.__unicode__> (line 140, args=1 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: self
+ 140        0 RESUME                           0
+ 141        2 LOAD_FAST                        0 (self)
+            4 LOAD_ATTR                        0 (__class__)
+           24 LOAD_ATTR                        2 (__name__)
+           44 LOAD_CONST                       1 ('()')
+           46 BINARY_OP                        0 (+)
+           50 RETURN_VALUE
+
+Disassembly of <code AIESyncMenu.main> (line 143, args=1 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: self, engine, cmd, retcode, _out, err
+ 143        0 RESUME                           0
+ 149        2 LOAD_FAST                        0 (self)
+            4 LOAD_ATTR                        0 (scheduler)
+           24 STORE_FAST                       1 (engine)
+ 150       26 LOAD_GLOBAL                      2 (os)
+           36 LOAD_ATTR                        4 (path)
+           56 LOAD_ATTR                        7 (join + NULL|self)
+           76 LOAD_GLOBAL                      8 (cxutils)
+           86 LOAD_ATTR                       10 (CX_ROOT)
+          106 LOAD_CONST                       1 ('bin')
+          108 LOAD_CONST                       2 ('cxmenu')
+          110 CALL                             3
+ 151      118 LOAD_CONST                       3 ('--bottle')
+          120 LOAD_FAST                        1 (engine)
+          122 LOAD_ATTR                       12 (installtask)
+          142 LOAD_ATTR                       14 (bottlename)
+ 152      162 LOAD_CONST                       4 ('--sync')
+          164 LOAD_CONST                       5 ('--mode')
+          166 LOAD_CONST                       6 ('install')
+ 150      168 BUILD_LIST                       6
+          170 STORE_FAST                       2 (cmd)
+ 153      172 LOAD_FAST                        1 (engine)
+          174 LOAD_ATTR                       16 (state)
+          194 LOAD_CONST                       7 ('mainmenu_never')
+          196 BINARY_SUBSCR
+          200 TO_BOOL
+          208 POP_JUMP_IF_FALSE               62 (to 336)
+ 154      212 LOAD_FAST                        2 (cmd)
+          214 LOAD_ATTR                       19 (append + NULL|self)
+          234 LOAD_CONST                       8 ('--mmenu-never')
+          236 CALL                             1
+          244 POP_TOP
+ 155      246 LOAD_FAST                        2 (cmd)
+          248 LOAD_ATTR                       19 (append + NULL|self)
+          268 LOAD_CONST                       9 (':')
+          270 LOAD_ATTR                        7 (join + NULL|self)
+          290 LOAD_FAST                        1 (engine)
+          292 LOAD_ATTR                       16 (state)
+          312 LOAD_CONST                       7 ('mainmenu_never')
+          314 BINARY_SUBSCR
+          318 CALL                             1
+          326 CALL                             1
+          334 POP_TOP
+ 156 >>   336 LOAD_GLOBAL                      8 (cxutils)
+          346 LOAD_ATTR                       20 (run)
+          366 PUSH_NULL
+          368 LOAD_FAST_LOAD_FAST             33 (cmd, engine)
+          370 LOAD_ATTR                       16 (state)
+          390 LOAD_CONST                      10 ('environ')
+          392 BINARY_SUBSCR
+ 157      396 LOAD_GLOBAL                      8 (cxutils)
+          406 LOAD_ATTR                       22 (GRAB)
+ 156      426 LOAD_CONST                      11 (('env', 'stderr'))
+          428 CALL_KW                          3
+          430 UNPACK_SEQUENCE                  3
+          434 STORE_FAST_STORE_FAST           52 (retcode, _out)
+          436 STORE_FAST                       5 (err)
+ 158      438 LOAD_FAST                        3 (retcode)
+          440 TO_BOOL
+          448 POP_JUMP_IF_FALSE                7 (to 466)
+ 159      452 LOAD_FAST_LOAD_FAST             80 (err, self)
+          454 STORE_ATTR                      12 (error)
+ 160      464 RETURN_CONST                    12 (False)
+ 161 >>   466 RETURN_CONST                    13 (True)
+
+Disassembly of <code AIESyncAssoc> (line 164, args=0 posonly=0 kwonly=0, flags=0):
+ 164        0 RESUME                           0
+            2 LOAD_NAME                        0 (__name__)
+            4 STORE_NAME                       1 (__module__)
+            6 LOAD_CONST                       0 ('AIESyncAssoc')
+            8 STORE_NAME                       2 (__qualname__)
+           10 LOAD_CONST                       1 (164)
+           12 STORE_NAME                       3 (__firstlineno__)
+ 165       14 LOAD_CONST                       2 (<code AIESyncAssoc.__init__, line 165>)
+           16 MAKE_FUNCTION
+           18 STORE_NAME                       4 (__init__)
+ 168       20 LOAD_CONST                       3 (<code AIESyncAssoc.__unicode__, line 168>)
+           22 MAKE_FUNCTION
+           24 STORE_NAME                       5 (__unicode__)
+ 171       26 LOAD_CONST                       4 (<code AIESyncAssoc.main, line 171>)
+           28 MAKE_FUNCTION
+           30 STORE_NAME                       6 (main)
+           32 LOAD_CONST                       5 (('error',))
+           34 STORE_NAME                       7 (__static_attributes__)
+           36 RETURN_CONST                     6 (None)
+
+Disassembly of <code AIESyncAssoc.__init__> (line 165, args=2 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: self, engine
+ 165        0 RESUME                           0
+ 166        2 LOAD_GLOBAL                      0 (cxaiebase)
+           12 LOAD_ATTR                        2 (AIETask)
+           32 LOAD_ATTR                        5 (__init__ + NULL|self)
+           52 LOAD_FAST_LOAD_FAST              1 (self, engine)
+           54 LOAD_GLOBAL                      7 (_ + NULL)
+           64 LOAD_CONST                       1 ('Refreshing the associations')
+           66 CALL                             1
+           74 CALL                             3
+           82 POP_TOP
+           84 RETURN_CONST                     0 (None)
+
+Disassembly of <code AIESyncAssoc.__unicode__> (line 168, args=1 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: self
+ 168        0 RESUME                           0
+ 169        2 LOAD_FAST                        0 (self)
+            4 LOAD_ATTR                        0 (__class__)
+           24 LOAD_ATTR                        2 (__name__)
+           44 LOAD_CONST                       1 ('()')
+           46 BINARY_OP                        0 (+)
+           50 RETURN_VALUE
+
+Disassembly of <code AIESyncAssoc.main> (line 171, args=1 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: self, engine, mode_spec, default_eassocs, alt_eassocs, cmd, retcode, _out, err
+ 171        0 RESUME                           0
+ 175        2 LOAD_FAST                        0 (self)
+            4 LOAD_ATTR                        0 (scheduler)
+           24 STORE_FAST                       1 (engine)
+ 177       26 LOAD_GLOBAL                      2 (distversion)
+           36 LOAD_ATTR                        4 (IS_MACOSX)
+           56 TO_BOOL
+           64 POP_JUMP_IF_FALSE                4 (to 76)
+ 178       68 LOAD_CONST                       1 ('alternative')
+           70 BUILD_LIST                       1
+           72 STORE_FAST                       2 (mode_spec)
+           74 JUMP_FORWARD                     3 (to 82)
+ 180 >>    76 LOAD_CONST                       2 ('mime')
+           78 BUILD_LIST                       1
+           80 STORE_FAST                       2 (mode_spec)
+ 186 >>    82 LOAD_FAST                        1 (engine)
+           84 LOAD_ATTR                        6 (state)
+          104 LOAD_CONST                       3 ('defaulteassocs')
+          106 BINARY_SUBSCR
+          110 STORE_FAST                       3 (default_eassocs)
+ 187      112 LOAD_FAST                        3 (default_eassocs)
+          114 TO_BOOL
+          122 POP_JUMP_IF_FALSE               42 (to 210)
+ 188      126 LOAD_FAST                        2 (mode_spec)
+          128 LOAD_ATTR                        9 (append + NULL|self)
+          148 LOAD_CONST                       4 ('default=')
+          150 LOAD_CONST                       5 (':')
+          152 LOAD_ATTR                       11 (join + NULL|self)
+          172 LOAD_CONST                       6 (<code AIESyncAssoc.main.<locals>.<genexpr>, line 188>)
+          174 MAKE_FUNCTION
+          176 LOAD_FAST                        3 (default_eassocs)
+          178 GET_ITER
+          180 CALL                             0
+          188 CALL                             1
+          196 BINARY_OP                        0 (+)
+          200 CALL                             1
+          208 POP_TOP
+ 190 >>   210 LOAD_FAST                        1 (engine)
+          212 LOAD_ATTR                        6 (state)
+          232 LOAD_CONST                       7 ('alteassocs')
+          234 BINARY_SUBSCR
+          238 LOAD_FAST                        3 (default_eassocs)
+          240 BINARY_OP                       10 (-)
+          244 STORE_FAST                       4 (alt_eassocs)
+ 191      246 LOAD_FAST                        4 (alt_eassocs)
+          248 TO_BOOL
+          256 POP_JUMP_IF_FALSE               42 (to 344)
+ 195      260 LOAD_FAST                        2 (mode_spec)
+          262 LOAD_ATTR                        9 (append + NULL|self)
+          282 LOAD_CONST                       8 ('alternative=')
+          284 LOAD_CONST                       5 (':')
+          286 LOAD_ATTR                       11 (join + NULL|self)
+          306 LOAD_CONST                       9 (<code AIESyncAssoc.main.<locals>.<genexpr>, line 195>)
+          308 MAKE_FUNCTION
+          310 LOAD_FAST                        4 (alt_eassocs)
+          312 GET_ITER
+          314 CALL                             0
+          322 CALL                             1
+          330 BINARY_OP                        0 (+)
+          334 CALL                             1
+          342 POP_TOP
+ 199 >>   344 LOAD_GLOBAL                     12 (os)
+          354 LOAD_ATTR                       14 (path)
+          374 LOAD_ATTR                       11 (join + NULL|self)
+          394 LOAD_GLOBAL                     16 (cxutils)
+          404 LOAD_ATTR                       18 (CX_ROOT)
+          424 LOAD_CONST                      10 ('bin')
+          426 LOAD_CONST                      11 ('cxassoc')
+          428 CALL                             3
+ 200      436 LOAD_CONST                      12 ('--bottle')
+          438 LOAD_FAST                        1 (engine)
+          440 LOAD_ATTR                       20 (installtask)
+          460 LOAD_ATTR                       22 (bottlename)
+ 201      480 LOAD_CONST                      13 ('--sync')
+          482 LOAD_CONST                      14 ('--sync-mode')
+          484 LOAD_CONST                      15 ('--mode')
+ 202      486 LOAD_CONST                      16 (';')
+          488 LOAD_ATTR                       11 (join + NULL|self)
+          508 LOAD_FAST                        2 (mode_spec)
+          510 CALL                             1
+ 199      518 BUILD_LIST                       7
+          520 STORE_FAST                       5 (cmd)
+ 203      522 LOAD_GLOBAL                     16 (cxutils)
+          532 LOAD_ATTR                       24 (run)
+          552 PUSH_NULL
+          554 LOAD_FAST_LOAD_FAST             81 (cmd, engine)
+          556 LOAD_ATTR                        6 (state)
+          576 LOAD_CONST                      17 ('environ')
+          578 BINARY_SUBSCR
+ 204      582 LOAD_GLOBAL                     16 (cxutils)
+          592 LOAD_ATTR                       26 (GRAB)
+ 203      612 LOAD_CONST                      18 (('env', 'stderr'))
+          614 CALL_KW                          3
+          616 UNPACK_SEQUENCE                  3
+          620 STORE_FAST_STORE_FAST          103 (retcode, _out)
+          622 STORE_FAST                       8 (err)
+ 205      624 LOAD_FAST                        6 (retcode)
+          626 TO_BOOL
+          634 POP_JUMP_IF_FALSE                7 (to 652)
+ 206      638 LOAD_FAST_LOAD_FAST            128 (err, self)
+          640 STORE_ATTR                      14 (error)
+ 207      650 RETURN_CONST                    19 (False)
+ 208 >>   652 RETURN_CONST                    20 (True)
+
+Disassembly of <code AIESyncAssoc.main.<locals>.<genexpr>> (line 188, args=1 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS|NESTED|GENERATOR):
+  locals+cells+free: .0, x
+ 188        0 RETURN_GENERATOR
+            2 POP_TOP
+            4 RESUME                           0
+            6 LOAD_FAST                        0 (.0)
+            8 GET_ITER
+     >>    10 FOR_ITER                        27 (to 68)
+           14 STORE_FAST                       1 (x)
+           16 LOAD_GLOBAL                      0 (re)
+           26 LOAD_ATTR                        2 (escape)
+           46 PUSH_NULL
+           48 LOAD_FAST                        1 (x)
+           50 CALL                             1
+           58 YIELD_VALUE                      0
+           60 RESUME                           5
+           62 POP_TOP
+           64 JUMP_BACKWARD                   29 (to 10)
+     >>    68 END_FOR
+           70 POP_TOP
+           72 RETURN_CONST                     0 (None)
+     >>    74 CALL_INTRINSIC_1                 3 (INTRINSIC_STOPITERATION_ERROR)
+           76 RERAISE                          1
+  ExceptionTable:
+    4 to 74 -> 74 [0] lasti
+
+Disassembly of <code AIESyncAssoc.main.<locals>.<genexpr>> (line 195, args=1 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS|NESTED|GENERATOR):
+  locals+cells+free: .0, x
+ 195        0 RETURN_GENERATOR
+            2 POP_TOP
+            4 RESUME                           0
+            6 LOAD_FAST                        0 (.0)
+            8 GET_ITER
+     >>    10 FOR_ITER                        27 (to 68)
+           14 STORE_FAST                       1 (x)
+           16 LOAD_GLOBAL                      0 (re)
+           26 LOAD_ATTR                        2 (escape)
+           46 PUSH_NULL
+           48 LOAD_FAST                        1 (x)
+           50 CALL                             1
+           58 YIELD_VALUE                      0
+           60 RESUME                           5
+           62 POP_TOP
+           64 JUMP_BACKWARD                   29 (to 10)
+     >>    68 END_FOR
+           70 POP_TOP
+           72 RETURN_CONST                     0 (None)
+     >>    74 CALL_INTRINSIC_1                 3 (INTRINSIC_STOPITERATION_ERROR)
+           76 RERAISE                          1
+  ExceptionTable:
+    4 to 74 -> 74 [0] lasti
+
+Disassembly of <code get_postinstall_task> (line 211, args=1 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: engine, group
+ 211        0 RESUME                           0
+ 215        2 LOAD_GLOBAL                      0 (cxaiebase)
+           12 LOAD_ATTR                        2 (AIETaskGroup)
+           32 PUSH_NULL
+           34 LOAD_FAST                        0 (engine)
+           36 LOAD_CONST                       1 ('PostInstall')
+           38 CALL                             2
+           46 STORE_FAST                       1 (group)
+ 216       48 LOAD_FAST                        0 (engine)
+           50 LOAD_ATTR                        4 (state)
+           70 LOAD_CONST                       2 ('skipassoc')
+           72 BINARY_SUBSCR
+           76 TO_BOOL
+           84 POP_JUMP_IF_TRUE                26 (to 140)
+ 217       88 LOAD_FAST                        1 (group)
+           90 LOAD_ATTR                        7 (insert + NULL|self)
+          110 LOAD_GLOBAL                      9 (AIESyncAssoc + NULL)
+          120 LOAD_FAST                        0 (engine)
+          122 CALL                             1
+          130 CALL                             1
+          138 POP_TOP
+ 218 >>   140 LOAD_FAST                        0 (engine)
+          142 LOAD_ATTR                        4 (state)
+          162 LOAD_CONST                       3 ('skipmenu')
+          164 BINARY_SUBSCR
+          168 TO_BOOL
+          176 POP_JUMP_IF_TRUE                26 (to 232)
+ 219      180 LOAD_FAST                        1 (group)
+          182 LOAD_ATTR                        7 (insert + NULL|self)
+          202 LOAD_GLOBAL                     11 (AIESyncMenu + NULL)
+          212 LOAD_FAST                        0 (engine)
+          214 CALL                             1
+          222 CALL                             1
+          230 POP_TOP
+ 221 >>   232 LOAD_FAST                        1 (group)
+          234 RETURN_VALUE

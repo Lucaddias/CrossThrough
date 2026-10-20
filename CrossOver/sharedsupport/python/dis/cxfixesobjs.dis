@@ -1,0 +1,1694 @@
+# cxfixesobjs — CPython 3.13 bytecode listing of lib/python/cxfixesobjs.pyc
+# sha256 7dde856579c3713d7ad63d8c725ddb64980d773b794f54fce9a2b8c40e3fe930, pyc flags 3, co_filename /Volumes/gitlab_data/gitlab/builds/j911ygmXM/0/crossover/crossover/macosx/CrossOver/build/Build/Products/Release/CrossOver.app/Contents/SharedSupport/CrossOver/lib/python/cxfixesobjs.py
+
+Disassembly of <code <module>> (line 1, args=0 posonly=0 kwonly=0, flags=0):
+   0        0 RESUME                           0
+   3        2 LOAD_CONST                       0 ('Defines classes to represent and manipulate the CXFixes information.')
+            4 STORE_NAME                       0 (__doc__)
+   5        6 LOAD_CONST                       1 (0)
+            8 LOAD_CONST                       2 (None)
+           10 IMPORT_NAME                      1 (re)
+           12 STORE_NAME                       1 (re)
+   8       14 LOAD_CONST                       1 (0)
+           16 LOAD_CONST                       3 (('cxgettext',))
+           18 IMPORT_NAME                      2 (cxutils)
+           20 IMPORT_FROM                      3 (cxgettext)
+           22 STORE_NAME                       4 (_)
+           24 POP_TOP
+  17       26 LOAD_CONST                      19 ((True,))
+           28 LOAD_CONST                       4 (<code _validate_regular_expression, line 17>)
+           30 MAKE_FUNCTION
+           32 SET_FUNCTION_ATTRIBUTE           1 (defaults)
+           34 STORE_NAME                       5 (_validate_regular_expression)
+  32       36 LOAD_CONST                       5 (<code _dump_value, line 32>)
+           38 MAKE_FUNCTION
+           40 STORE_NAME                       6 (_dump_value)
+  39       42 LOAD_CONST                       6 (<code _dump_fields, line 39>)
+           44 MAKE_FUNCTION
+           46 STORE_NAME                       7 (_dump_fields)
+  63       48 LOAD_BUILD_CLASS
+           50 PUSH_NULL
+           52 LOAD_CONST                       7 (<code CXDistGlob, line 63>)
+           54 MAKE_FUNCTION
+           56 LOAD_CONST                       8 ('CXDistGlob')
+           58 CALL                             2
+           66 STORE_NAME                       8 (CXDistGlob)
+ 103       68 LOAD_BUILD_CLASS
+           70 PUSH_NULL
+           72 LOAD_CONST                       9 (<code CXDistribution, line 103>)
+           74 MAKE_FUNCTION
+           76 LOAD_CONST                      10 ('CXDistribution')
+           78 CALL                             2
+           86 STORE_NAME                       9 (CXDistribution)
+ 181       88 LOAD_BUILD_CLASS
+           90 PUSH_NULL
+           92 LOAD_CONST                      11 (<code CXProduct, line 181>)
+           94 MAKE_FUNCTION
+           96 LOAD_CONST                      12 ('CXProduct')
+           98 CALL                             2
+          106 STORE_NAME                      10 (CXProduct)
+ 244      108 LOAD_BUILD_CLASS
+          110 PUSH_NULL
+          112 LOAD_CONST                      13 (<code CXDistFix, line 244>)
+          114 MAKE_FUNCTION
+          116 LOAD_CONST                      14 ('CXDistFix')
+          118 CALL                             2
+          126 STORE_NAME                      11 (CXDistFix)
+ 315      128 LOAD_BUILD_CLASS
+          130 PUSH_NULL
+          132 LOAD_CONST                      15 (<code CXFix, line 315>)
+          134 MAKE_FUNCTION
+          136 LOAD_CONST                      16 ('CXFix')
+          138 CALL                             2
+          146 STORE_NAME                      12 (CXFix)
+ 416      148 LOAD_BUILD_CLASS
+          150 PUSH_NULL
+          152 LOAD_CONST                      17 (<code CXFixes, line 416>)
+          154 MAKE_FUNCTION
+          156 LOAD_CONST                      18 ('CXFixes')
+          158 CALL                             2
+          166 STORE_NAME                      13 (CXFixes)
+          168 RETURN_CONST                     2 (None)
+
+Disassembly of <code _validate_regular_expression> (line 17, args=3 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: pattern, location, allow_empty
+  17        0 RESUME                           0
+  18        2 LOAD_FAST                        0 (pattern)
+            4 TO_BOOL
+           12 POP_JUMP_IF_FALSE               58 (to 132)
+  19       16 NOP
+  20       18 LOAD_GLOBAL                      0 (re)
+           28 LOAD_ATTR                        2 (match)
+           48 PUSH_NULL
+           50 LOAD_FAST                        0 (pattern)
+           52 LOAD_CONST                       1 ('')
+           54 CALL                             2
+           62 TO_BOOL
+           70 POP_JUMP_IF_FALSE               28 (to 130)
+           74 LOAD_FAST                        2 (allow_empty)
+           76 TO_BOOL
+           84 POP_JUMP_IF_TRUE                20 (to 128)
+  21       88 LOAD_GLOBAL                      5 (AttributeError + NULL)
+           98 LOAD_CONST                       2 ('the ')
+          100 LOAD_FAST                        0 (pattern)
+          102 CONVERT_VALUE                    1 (str)
+          104 FORMAT_SIMPLE
+          106 LOAD_CONST                       3 (' regular expression for ')
+          108 LOAD_FAST                        1 (location)
+          110 CONVERT_VALUE                    1 (str)
+          112 FORMAT_SIMPLE
+          114 LOAD_CONST                       4 (' is overly broad')
+          116 BUILD_STRING                     5
+          118 CALL                             1
+          126 RAISE_VARARGS                    1
+  20 >>   128 RETURN_CONST                     0 (None)
+     >>   130 RETURN_CONST                     0 (None)
+  18 >>   132 RETURN_CONST                     0 (None)
+     >>   134 PUSH_EXC_INFO
+  22      136 LOAD_GLOBAL                      0 (re)
+          146 LOAD_ATTR                        6 (error)
+          166 CHECK_EXC_MATCH
+          168 POP_JUMP_IF_FALSE               19 (to 210)
+          172 POP_TOP
+  23      174 LOAD_GLOBAL                      5 (AttributeError + NULL)
+          184 LOAD_FAST                        0 (pattern)
+          186 CONVERT_VALUE                    1 (str)
+          188 FORMAT_SIMPLE
+          190 LOAD_CONST                       5 (' is an invalid regular expression for ')
+          192 LOAD_FAST                        1 (location)
+          194 CONVERT_VALUE                    1 (str)
+          196 FORMAT_SIMPLE
+          198 BUILD_STRING                     3
+          200 CALL                             1
+          208 RAISE_VARARGS                    1
+  22 >>   210 RERAISE                          0
+     >>   212 COPY                             3
+          214 POP_EXCEPT
+          216 RERAISE                          1
+  ExceptionTable:
+    18 to 128 -> 134 [0]
+    134 to 212 -> 212 [1] lasti
+
+Disassembly of <code _dump_value> (line 32, args=3 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: out, indent, value
+  32        0 RESUME                           0
+  33        2 LOAD_GLOBAL                      1 (hasattr + NULL)
+           12 LOAD_FAST                        2 (value)
+           14 LOAD_CONST                       1 ('dump')
+           16 CALL                             2
+           24 TO_BOOL
+           32 POP_JUMP_IF_FALSE               50 (to 136)
+  34       36 LOAD_FAST                        0 (out)
+           38 LOAD_ATTR                        3 (write + NULL|self)
+           58 LOAD_CONST                       2 (' %s\n')
+           60 LOAD_GLOBAL                      5 (type + NULL)
+           70 LOAD_FAST                        2 (value)
+           72 CALL                             1
+           80 BINARY_OP                        6 (%)
+           84 CALL                             1
+           92 POP_TOP
+  35       94 LOAD_FAST                        2 (value)
+           96 LOAD_ATTR                        7 (dump + NULL|self)
+          116 LOAD_FAST_LOAD_FAST              1 (out, indent)
+          118 LOAD_CONST                       3 ('| ')
+          120 BINARY_OP                        0 (+)
+          124 CALL                             2
+          132 POP_TOP
+          134 RETURN_CONST                     0 (None)
+  37 >>   136 LOAD_FAST                        0 (out)
+          138 LOAD_ATTR                        3 (write + NULL|self)
+          158 LOAD_CONST                       2 (' %s\n')
+          160 LOAD_GLOBAL                      9 (repr + NULL)
+          170 LOAD_FAST                        2 (value)
+          172 CALL                             1
+          180 BINARY_OP                        6 (%)
+          184 CALL                             1
+          192 POP_TOP
+          194 RETURN_CONST                     0 (None)
+
+Disassembly of <code _dump_fields> (line 39, args=4 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: out, indent, obj, fields, field, value, key, i, item
+  39        0 RESUME                           0
+  40        2 LOAD_FAST                        3 (fields)
+            4 GET_ITER
+     >>     6 FOR_ITER                       231 (to 472)
+           10 STORE_FAST                       4 (field)
+  41       12 LOAD_FAST_LOAD_FAST             66 (field, obj)
+           14 LOAD_ATTR                        0 (__dict__)
+           34 CONTAINS_OP                      1 (not in)
+           38 POP_JUMP_IF_FALSE                2 (to 46)
+  42       42 JUMP_BACKWARD                   20 (to 6)
+  43 >>    46 LOAD_FAST                        2 (obj)
+           48 LOAD_ATTR                        0 (__dict__)
+           68 LOAD_FAST                        4 (field)
+           70 BINARY_SUBSCR
+           74 STORE_FAST                       5 (value)
+  44       76 LOAD_GLOBAL                      3 (isinstance + NULL)
+           86 LOAD_FAST                        5 (value)
+           88 LOAD_GLOBAL                      4 (dict)
+           98 CALL                             2
+          106 TO_BOOL
+          114 POP_JUMP_IF_FALSE               62 (to 242)
+  45      118 LOAD_GLOBAL                      7 (sorted + NULL)
+          128 LOAD_FAST                        5 (value)
+          130 CALL                             1
+          138 GET_ITER
+     >>   140 FOR_ITER                        45 (to 234)
+          144 STORE_FAST                       6 (key)
+  46      146 LOAD_FAST                        0 (out)
+          148 LOAD_ATTR                        9 (write + NULL|self)
+          168 LOAD_FAST                        1 (indent)
+          170 CONVERT_VALUE                    1 (str)
+          172 FORMAT_SIMPLE
+          174 LOAD_FAST                        4 (field)
+          176 CONVERT_VALUE                    1 (str)
+          178 FORMAT_SIMPLE
+          180 LOAD_CONST                       1 ('{')
+          182 LOAD_FAST                        6 (key)
+          184 CONVERT_VALUE                    1 (str)
+          186 FORMAT_SIMPLE
+          188 LOAD_CONST                       2 ('} =')
+          190 BUILD_STRING                     5
+          192 CALL                             1
+          200 POP_TOP
+  47      202 LOAD_GLOBAL                     11 (_dump_value + NULL)
+          212 LOAD_FAST_LOAD_FAST              1 (out, indent)
+          214 LOAD_FAST_LOAD_FAST             86 (value, key)
+          216 BINARY_SUBSCR
+          220 CALL                             3
+          228 POP_TOP
+          230 JUMP_BACKWARD                   47 (to 140)
+  45 >>   234 END_FOR
+          236 POP_TOP
+          238 JUMP_BACKWARD                  118 (to 6)
+  48 >>   242 LOAD_GLOBAL                      3 (isinstance + NULL)
+          252 LOAD_FAST                        5 (value)
+          254 LOAD_GLOBAL                     12 (list)
+          264 CALL                             2
+          272 TO_BOOL
+          280 POP_JUMP_IF_FALSE               56 (to 396)
+  49      284 LOAD_GLOBAL                     15 (enumerate + NULL)
+          294 LOAD_FAST                        5 (value)
+          296 CALL                             1
+          304 GET_ITER
+     >>   306 FOR_ITER                        39 (to 388)
+          310 UNPACK_SEQUENCE                  2
+          314 STORE_FAST_STORE_FAST          120 (i, item)
+  50      316 LOAD_FAST                        0 (out)
+          318 LOAD_ATTR                        9 (write + NULL|self)
+          338 LOAD_CONST                       3 ('%s%s[%d] =')
+          340 LOAD_FAST_LOAD_FAST             20 (indent, field)
+          342 LOAD_FAST                        7 (i)
+          344 BUILD_TUPLE                      3
+          346 BINARY_OP                        6 (%)
+          350 CALL                             1
+          358 POP_TOP
+  51      360 LOAD_GLOBAL                     11 (_dump_value + NULL)
+          370 LOAD_FAST_LOAD_FAST              1 (out, indent)
+          372 LOAD_FAST                        8 (item)
+          374 CALL                             3
+          382 POP_TOP
+          384 JUMP_BACKWARD                   41 (to 306)
+  49 >>   388 END_FOR
+          390 POP_TOP
+          392 JUMP_BACKWARD                  195 (to 6)
+  53 >>   396 LOAD_FAST                        0 (out)
+          398 LOAD_ATTR                        9 (write + NULL|self)
+          418 LOAD_FAST                        1 (indent)
+          420 CONVERT_VALUE                    1 (str)
+          422 FORMAT_SIMPLE
+          424 LOAD_FAST                        4 (field)
+          426 CONVERT_VALUE                    1 (str)
+          428 FORMAT_SIMPLE
+          430 LOAD_CONST                       4 (' =')
+          432 BUILD_STRING                     3
+          434 CALL                             1
+          442 POP_TOP
+  54      444 LOAD_GLOBAL                     11 (_dump_value + NULL)
+          454 LOAD_FAST_LOAD_FAST              1 (out, indent)
+          456 LOAD_FAST                        5 (value)
+          458 CALL                             3
+          466 POP_TOP
+          468 JUMP_BACKWARD                  233 (to 6)
+  40 >>   472 END_FOR
+          474 POP_TOP
+          476 RETURN_CONST                     0 (None)
+
+Disassembly of <code CXDistGlob> (line 63, args=0 posonly=0 kwonly=0, flags=0):
+  63        0 RESUME                           0
+            2 LOAD_NAME                        0 (__name__)
+            4 STORE_NAME                       1 (__module__)
+            6 LOAD_CONST                       0 ('CXDistGlob')
+            8 STORE_NAME                       2 (__qualname__)
+           10 LOAD_CONST                       1 (63)
+           12 STORE_NAME                       3 (__firstlineno__)
+  64       14 LOAD_CONST                       2 ('Contains the information needed to detect a given distribution.')
+           16 STORE_NAME                       4 (__doc__)
+  74       18 LOAD_CONST                       3 (None)
+           20 STORE_NAME                       5 (file_glob)
+  80       22 LOAD_NAME                        6 (tuple)
+           24 PUSH_NULL
+           26 CALL                             0
+           34 STORE_NAME                       7 (patterns)
+  82       36 LOAD_CONST                       8 ((None,))
+           38 LOAD_CONST                       4 (<code CXDistGlob.__init__, line 82>)
+           40 MAKE_FUNCTION
+           42 SET_FUNCTION_ATTRIBUTE           1 (defaults)
+           44 STORE_NAME                       8 (__init__)
+  89       46 LOAD_CONST                       5 (<code CXDistGlob.validate, line 89>)
+           48 MAKE_FUNCTION
+           50 STORE_NAME                       9 (validate)
+  99       52 LOAD_CONST                       9 (('',))
+           54 LOAD_CONST                       6 (<code CXDistGlob.dump, line 99>)
+           56 MAKE_FUNCTION
+           58 SET_FUNCTION_ATTRIBUTE           1 (defaults)
+           60 STORE_NAME                      10 (dump)
+           62 LOAD_CONST                       7 (('file_glob', 'patterns'))
+           64 STORE_NAME                      11 (__static_attributes__)
+           66 RETURN_CONST                     3 (None)
+
+Disassembly of <code CXDistGlob.__init__> (line 82, args=3 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: self, file_glob, patterns
+  82        0 RESUME                           0
+  83        2 LOAD_FAST_LOAD_FAST             16 (file_glob, self)
+            4 STORE_ATTR                       0 (file_glob)
+  84       14 LOAD_FAST                        2 (patterns)
+           16 TO_BOOL
+           24 POP_JUMP_IF_FALSE                7 (to 42)
+  85       28 LOAD_FAST_LOAD_FAST             32 (patterns, self)
+           30 STORE_ATTR                       1 (patterns)
+           40 RETURN_CONST                     0 (None)
+  84 >>    42 RETURN_CONST                     0 (None)
+
+Disassembly of <code CXDistGlob.validate> (line 89, args=2 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: self, distid, pattern
+  89        0 RESUME                           0
+  93        2 LOAD_FAST                        0 (self)
+            4 LOAD_ATTR                        0 (file_glob)
+           24 TO_BOOL
+           32 POP_JUMP_IF_TRUE                14 (to 64)
+  94       36 LOAD_GLOBAL                      3 (AttributeError + NULL)
+           46 LOAD_CONST                       1 ('CXDistGlob.file_glob is not set in %s')
+           48 LOAD_FAST                        1 (distid)
+           50 BINARY_OP                        6 (%)
+           54 CALL                             1
+           62 RAISE_VARARGS                    1
+  95 >>    64 LOAD_FAST                        0 (self)
+           66 LOAD_ATTR                        4 (patterns)
+           86 GET_ITER
+     >>    88 FOR_ITER                        18 (to 128)
+           92 STORE_FAST                       2 (pattern)
+  96       94 LOAD_GLOBAL                      7 (_validate_regular_expression + NULL)
+          104 LOAD_FAST                        2 (pattern)
+          106 LOAD_CONST                       2 ('the CXDistGlob.patterns field of %s')
+          108 LOAD_FAST                        1 (distid)
+          110 BINARY_OP                        6 (%)
+          114 CALL                             2
+          122 POP_TOP
+          124 JUMP_BACKWARD                   20 (to 88)
+  95 >>   128 END_FOR
+          130 POP_TOP
+  97      132 RETURN_CONST                     3 (True)
+
+Disassembly of <code CXDistGlob.dump> (line 99, args=3 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: self, out, indent
+  99        0 RESUME                           0
+ 100        2 LOAD_GLOBAL                      1 (_dump_fields + NULL)
+           12 LOAD_FAST_LOAD_FAST             18 (out, indent)
+           14 LOAD_FAST                        0 (self)
+           16 LOAD_CONST                       1 (('file_glob', 'patterns'))
+           18 CALL                             4
+           26 POP_TOP
+           28 RETURN_CONST                     0 (None)
+
+Disassembly of <code CXDistribution> (line 103, args=0 posonly=0 kwonly=0, flags=0):
+ 103        0 RESUME                           0
+            2 LOAD_NAME                        0 (__name__)
+            4 STORE_NAME                       1 (__module__)
+            6 LOAD_CONST                       0 ('CXDistribution')
+            8 STORE_NAME                       2 (__qualname__)
+           10 LOAD_CONST                       1 (103)
+           12 STORE_NAME                       3 (__firstlineno__)
+ 104       14 LOAD_CONST                       2 ('Describes a distribution: its name, how to install packages, etc.')
+           16 STORE_NAME                       4 (__doc__)
+ 113       18 LOAD_CONST                       3 (None)
+           20 STORE_NAME                       5 (distid)
+ 117       22 LOAD_CONST                       3 (None)
+           24 STORE_NAME                       6 (name)
+ 121       26 LOAD_CONST                       4 (0)
+           28 STORE_NAME                       7 (priority)
+ 125       30 LOAD_CONST                       3 (None)
+           32 STORE_NAME                       8 (updatecmd)
+ 130       34 LOAD_CONST                       3 (None)
+           36 STORE_NAME                       9 (lockcmd)
+ 135       38 LOAD_CONST                       3 (None)
+           40 STORE_NAME                      10 (packagecmd)
+ 139       42 LOAD_CONST                       3 (None)
+           44 STORE_NAME                      11 (globs)
+ 143       46 LOAD_CONST                       3 (None)
+           48 STORE_NAME                      12 (fallback)
+ 145       50 LOAD_CONST                       5 (<code CXDistribution.__init__, line 145>)
+           52 MAKE_FUNCTION
+           54 STORE_NAME                      13 (__init__)
+ 150       56 LOAD_CONST                       6 (<code CXDistribution.add_glob, line 150>)
+           58 MAKE_FUNCTION
+           60 STORE_NAME                      14 (add_glob)
+ 158       62 LOAD_CONST                       7 (<code CXDistribution.validate, line 158>)
+           64 MAKE_FUNCTION
+           66 STORE_NAME                      15 (validate)
+ 177       68 LOAD_CONST                      10 (('',))
+           70 LOAD_CONST                       8 (<code CXDistribution.dump, line 177>)
+           72 MAKE_FUNCTION
+           74 SET_FUNCTION_ATTRIBUTE           1 (defaults)
+           76 STORE_NAME                      16 (dump)
+           78 LOAD_CONST                       9 (('distid', 'globs', 'name', 'priority'))
+           80 STORE_NAME                      17 (__static_attributes__)
+           82 RETURN_CONST                     3 (None)
+
+Disassembly of <code CXDistribution.__init__> (line 145, args=4 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: self, distid, name, priority
+ 145        0 RESUME                           0
+ 146        2 LOAD_FAST_LOAD_FAST             16 (distid, self)
+            4 STORE_ATTR                       0 (distid)
+ 147       14 LOAD_FAST_LOAD_FAST             32 (name, self)
+           16 STORE_ATTR                       1 (name)
+ 148       26 LOAD_FAST_LOAD_FAST             48 (priority, self)
+           28 STORE_ATTR                       2 (priority)
+           38 RETURN_CONST                     0 (None)
+
+Disassembly of <code CXDistribution.add_glob> (line 150, args=2 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: self, glob
+ 150        0 RESUME                           0
+ 151        2 LOAD_FAST                        0 (self)
+            4 LOAD_ATTR                        0 (globs)
+           24 POP_JUMP_IF_NOT_NONE             9 (to 46)
+ 152       28 LOAD_FAST                        1 (glob)
+           30 BUILD_LIST                       1
+           32 LOAD_FAST                        0 (self)
+           34 STORE_ATTR                       0 (globs)
+           44 RETURN_CONST                     0 (None)
+ 154 >>    46 LOAD_FAST                        0 (self)
+           48 LOAD_ATTR                        0 (globs)
+           68 LOAD_ATTR                        3 (append + NULL|self)
+           88 LOAD_FAST                        1 (glob)
+           90 CALL                             1
+           98 POP_TOP
+          100 RETURN_CONST                     0 (None)
+
+Disassembly of <code CXDistribution.validate> (line 158, args=1 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: self, glob
+ 158        0 RESUME                           0
+ 165        2 LOAD_FAST                        0 (self)
+            4 LOAD_ATTR                        0 (distid)
+           24 TO_BOOL
+           32 POP_JUMP_IF_TRUE                11 (to 58)
+ 166       36 LOAD_GLOBAL                      3 (AttributeError + NULL)
+           46 LOAD_CONST                       1 ('CXDistribution.distid is not set')
+           48 CALL                             1
+           56 RAISE_VARARGS                    1
+ 167 >>    58 LOAD_FAST                        0 (self)
+           60 LOAD_ATTR                        4 (name)
+           80 TO_BOOL
+           88 POP_JUMP_IF_TRUE                11 (to 114)
+ 168       92 LOAD_GLOBAL                      3 (AttributeError + NULL)
+          102 LOAD_CONST                       2 ('CXDistribution.name is not set')
+          104 CALL                             1
+          112 RAISE_VARARGS                    1
+ 173 >>   114 LOAD_FAST                        0 (self)
+          116 LOAD_ATTR                        6 (globs)
+          136 GET_ITER
+     >>   138 FOR_ITER                        30 (to 202)
+          142 STORE_FAST                       1 (glob)
+ 174      144 LOAD_FAST                        1 (glob)
+          146 LOAD_ATTR                        9 (validate + NULL|self)
+          166 LOAD_FAST                        0 (self)
+          168 LOAD_ATTR                        0 (distid)
+          188 CALL                             1
+          196 POP_TOP
+          198 JUMP_BACKWARD                   32 (to 138)
+ 173 >>   202 END_FOR
+          204 POP_TOP
+ 175      206 RETURN_CONST                     3 (True)
+
+Disassembly of <code CXDistribution.dump> (line 177, args=3 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: self, out, indent
+ 177        0 RESUME                           0
+ 178        2 LOAD_GLOBAL                      1 (_dump_fields + NULL)
+           12 LOAD_FAST_LOAD_FAST             18 (out, indent)
+           14 LOAD_FAST                        0 (self)
+           16 LOAD_CONST                       1 (('distid', 'name', 'priority', 'updatecmd', 'lockcmd', 'packagecmd', 'globs', 'fallback'))
+           18 CALL                             4
+           26 POP_TOP
+           28 RETURN_CONST                     0 (None)
+
+Disassembly of <code CXProduct> (line 181, args=0 posonly=0 kwonly=0, flags=0):
+ 181        0 RESUME                           0
+            2 LOAD_NAME                        0 (__name__)
+            4 STORE_NAME                       1 (__module__)
+            6 LOAD_CONST                       0 ('CXProduct')
+            8 STORE_NAME                       2 (__qualname__)
+           10 LOAD_CONST                       1 (181)
+           12 STORE_NAME                       3 (__firstlineno__)
+ 182       14 LOAD_CONST                       2 ('Identifies a CrossOver product so fixes can be assigned priority\nlevels for it.')
+           16 STORE_NAME                       4 (__doc__)
+ 192       18 LOAD_CONST                       3 (None)
+           20 STORE_NAME                       5 (cxid)
+ 196       22 LOAD_CONST                       3 (None)
+           24 STORE_NAME                       6 (fallback)
+ 200       26 LOAD_CONST                       3 (None)
+           28 STORE_NAME                       7 (productid)
+ 204       30 LOAD_CONST                       3 (None)
+           32 STORE_NAME                       8 (version)
+ 208       34 LOAD_CONST                       4 (0)
+           36 STORE_NAME                       9 (priority)
+ 210       38 LOAD_CONST                       5 (<code CXProduct.__init__, line 210>)
+           40 MAKE_FUNCTION
+           42 STORE_NAME                      10 (__init__)
+ 219       44 LOAD_CONST                       6 (<code CXProduct.validate, line 219>)
+           46 MAKE_FUNCTION
+           48 STORE_NAME                      11 (validate)
+ 234       50 LOAD_CONST                       9 (('',))
+           52 LOAD_CONST                       7 (<code CXProduct.dump, line 234>)
+           54 MAKE_FUNCTION
+           56 SET_FUNCTION_ATTRIBUTE           1 (defaults)
+           58 STORE_NAME                      12 (dump)
+           60 LOAD_CONST                       8 (('cxid', 'fallback', 'priority', 'productid', 'version'))
+           62 STORE_NAME                      13 (__static_attributes__)
+           64 RETURN_CONST                     3 (None)
+
+Disassembly of <code CXProduct.__init__> (line 210, args=6 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: self, cxid, fallback, productid, version, priority
+ 210        0 RESUME                           0
+ 211        2 LOAD_FAST_LOAD_FAST             16 (cxid, self)
+            4 STORE_ATTR                       0 (cxid)
+ 212       14 LOAD_FAST_LOAD_FAST             32 (fallback, self)
+           16 STORE_ATTR                       1 (fallback)
+ 213       26 LOAD_FAST_LOAD_FAST             48 (productid, self)
+           28 STORE_ATTR                       2 (productid)
+ 214       38 LOAD_FAST_LOAD_FAST             64 (version, self)
+           40 STORE_ATTR                       3 (version)
+ 215       50 LOAD_FAST_LOAD_FAST             80 (priority, self)
+           52 STORE_ATTR                       4 (priority)
+           62 RETURN_CONST                     0 (None)
+
+Disassembly of <code CXProduct.validate> (line 219, args=1 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: self
+ 219        0 RESUME                           0
+ 226        2 LOAD_FAST                        0 (self)
+            4 LOAD_ATTR                        0 (cxid)
+           24 TO_BOOL
+           32 POP_JUMP_IF_TRUE                11 (to 58)
+ 227       36 LOAD_GLOBAL                      3 (AttributeError + NULL)
+           46 LOAD_CONST                       1 ('CXProduct.cxid is not set')
+           48 CALL                             1
+           56 RAISE_VARARGS                    1
+ 228 >>    58 LOAD_FAST                        0 (self)
+           60 LOAD_ATTR                        4 (productid)
+           80 TO_BOOL
+           88 POP_JUMP_IF_FALSE               35 (to 162)
+ 229       92 LOAD_GLOBAL                      7 (_validate_regular_expression + NULL)
+          102 LOAD_FAST                        0 (self)
+          104 LOAD_ATTR                        4 (productid)
+          124 LOAD_CONST                       2 ('the CXProduct.productid field of %s')
+          126 LOAD_FAST                        0 (self)
+          128 LOAD_ATTR                        0 (cxid)
+          148 BINARY_OP                        6 (%)
+          152 CALL                             2
+          160 POP_TOP
+ 230 >>   162 LOAD_FAST                        0 (self)
+          164 LOAD_ATTR                        8 (version)
+          184 TO_BOOL
+          192 POP_JUMP_IF_FALSE               35 (to 266)
+ 231      196 LOAD_GLOBAL                      7 (_validate_regular_expression + NULL)
+          206 LOAD_FAST                        0 (self)
+          208 LOAD_ATTR                        8 (version)
+          228 LOAD_CONST                       3 ('the CXProduct.version field of %s')
+          230 LOAD_FAST                        0 (self)
+          232 LOAD_ATTR                        0 (cxid)
+          252 BINARY_OP                        6 (%)
+          256 CALL                             2
+          264 POP_TOP
+ 232 >>   266 RETURN_CONST                     4 (True)
+
+Disassembly of <code CXProduct.dump> (line 234, args=3 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: self, out, indent
+ 234        0 RESUME                           0
+ 235        2 LOAD_GLOBAL                      1 (_dump_fields + NULL)
+           12 LOAD_FAST_LOAD_FAST             18 (out, indent)
+           14 LOAD_FAST                        0 (self)
+           16 LOAD_CONST                       1 (('cxid', 'fallback', 'productid', 'version', 'priority'))
+           18 CALL                             4
+           26 POP_TOP
+           28 RETURN_CONST                     0 (None)
+
+Disassembly of <code CXDistFix> (line 244, args=0 posonly=0 kwonly=0, flags=0):
+ 244        0 RESUME                           0
+            2 LOAD_NAME                        0 (__name__)
+            4 STORE_NAME                       1 (__module__)
+            6 LOAD_CONST                       0 ('CXDistFix')
+            8 STORE_NAME                       2 (__qualname__)
+           10 LOAD_CONST                       1 (244)
+           12 STORE_NAME                       3 (__firstlineno__)
+ 245       14 LOAD_CONST                       2 ('Describes how to fix a specific issue on the specified platform.')
+           16 STORE_NAME                       4 (__doc__)
+ 254       18 LOAD_CONST                       3 (None)
+           20 STORE_NAME                       5 (distid)
+ 258       22 LOAD_CONST                       3 (None)
+           24 STORE_NAME                       6 (bitness)
+ 263       26 LOAD_NAME                        7 (frozenset)
+           28 PUSH_NULL
+           30 CALL                             0
+           38 STORE_NAME                       8 (prepackages)
+ 268       40 LOAD_NAME                        7 (frozenset)
+           42 PUSH_NULL
+           44 CALL                             0
+           52 STORE_NAME                       9 (packages)
+ 271       54 LOAD_NAME                        7 (frozenset)
+           56 PUSH_NULL
+           58 CALL                             0
+           66 STORE_NAME                      10 (commands)
+ 273       68 LOAD_CONST                       4 (<code CXDistFix.__init__, line 273>)
+           70 MAKE_FUNCTION
+           72 STORE_NAME                      11 (__init__)
+ 279       74 LOAD_NAME                        7 (frozenset)
+           76 PUSH_NULL
+           78 LOAD_CONST                       5 ((None, '32', '64'))
+           80 CALL                             1
+           88 STORE_NAME                      12 (BITNESSES)
+ 282       90 LOAD_NAME                       13 (re)
+           92 LOAD_ATTR                       28 (compile)
+          112 PUSH_NULL
+          114 LOAD_CONST                       6 ('^[a-zA-Z0-9+_.:-]+$')
+          116 CALL                             1
+          124 STORE_NAME                      15 (_PACKAGE_RE)
+ 284      126 LOAD_CONST                       7 (<code CXDistFix.display_name, line 284>)
+          128 MAKE_FUNCTION
+          130 STORE_NAME                      16 (display_name)
+ 293      132 LOAD_CONST                       8 (<code CXDistFix.validate, line 293>)
+          134 MAKE_FUNCTION
+          136 STORE_NAME                      17 (validate)
+ 311      138 LOAD_CONST                      11 (('',))
+          140 LOAD_CONST                       9 (<code CXDistFix.dump, line 311>)
+          142 MAKE_FUNCTION
+          144 SET_FUNCTION_ATTRIBUTE           1 (defaults)
+          146 STORE_NAME                      18 (dump)
+          148 LOAD_CONST                      10 (('bitness', 'distid'))
+          150 STORE_NAME                      19 (__static_attributes__)
+          152 RETURN_CONST                     3 (None)
+
+Disassembly of <code CXDistFix.__init__> (line 273, args=3 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: self, distid, bitness
+ 273        0 RESUME                           0
+ 274        2 LOAD_FAST_LOAD_FAST             16 (distid, self)
+            4 STORE_ATTR                       0 (distid)
+ 275       14 LOAD_FAST_LOAD_FAST             32 (bitness, self)
+           16 STORE_ATTR                       1 (bitness)
+           26 RETURN_CONST                     0 (None)
+
+Disassembly of <code CXDistFix.display_name> (line 284, args=2 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: self, errid, name
+ 284        0 RESUME                           0
+ 285        2 LOAD_FAST                        1 (errid)
+            4 TO_BOOL
+           12 POP_JUMP_IF_FALSE               19 (to 54)
+ 286       16 LOAD_FAST                        1 (errid)
+           18 LOAD_CONST                       1 ('/')
+           20 BINARY_OP                        0 (+)
+           24 LOAD_FAST                        0 (self)
+           26 LOAD_ATTR                        0 (distid)
+           46 BINARY_OP                        0 (+)
+           50 STORE_FAST                       2 (name)
+           52 JUMP_FORWARD                    12 (to 78)
+ 288 >>    54 LOAD_FAST                        0 (self)
+           56 LOAD_ATTR                        0 (distid)
+           76 STORE_FAST                       2 (name)
+ 289 >>    78 LOAD_FAST                        0 (self)
+           80 LOAD_ATTR                        2 (bitness)
+          100 TO_BOOL
+          108 POP_JUMP_IF_FALSE               18 (to 148)
+ 290      112 LOAD_FAST                        2 (name)
+          114 LOAD_CONST                       2 (':')
+          116 LOAD_FAST                        0 (self)
+          118 LOAD_ATTR                        2 (bitness)
+          138 BINARY_OP                        0 (+)
+          142 BINARY_OP                       13 (+=)
+          146 STORE_FAST                       2 (name)
+ 291 >>   148 LOAD_FAST                        2 (name)
+          150 RETURN_VALUE
+
+Disassembly of <code CXDistFix.validate> (line 293, args=2 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: self, errid, package
+ 293        0 RESUME                           0
+ 300        2 LOAD_FAST                        0 (self)
+            4 LOAD_ATTR                        0 (distid)
+           24 TO_BOOL
+           32 POP_JUMP_IF_TRUE                14 (to 64)
+ 301       36 LOAD_GLOBAL                      3 (AttributeError + NULL)
+           46 LOAD_CONST                       1 ('CXDistFix.distid is not set in issue %s')
+           48 LOAD_FAST                        1 (errid)
+           50 BINARY_OP                        6 (%)
+           54 CALL                             1
+           62 RAISE_VARARGS                    1
+ 302 >>    64 LOAD_FAST                        0 (self)
+           66 LOAD_ATTR                        4 (bitness)
+           86 LOAD_GLOBAL                      6 (CXDistFix)
+           96 LOAD_ATTR                        8 (BITNESSES)
+          116 CONTAINS_OP                      1 (not in)
+          120 POP_JUMP_IF_FALSE               44 (to 212)
+ 303      124 LOAD_GLOBAL                      3 (AttributeError + NULL)
+          134 LOAD_CONST                       2 ('Invalid bitness value ')
+          136 LOAD_FAST                        0 (self)
+          138 LOAD_ATTR                        4 (bitness)
+          158 CONVERT_VALUE                    1 (str)
+          160 FORMAT_SIMPLE
+          162 LOAD_CONST                       3 (' for ')
+          164 LOAD_FAST                        0 (self)
+          166 LOAD_ATTR                       11 (display_name + NULL|self)
+          186 LOAD_FAST                        1 (errid)
+          188 CALL                             1
+          196 CONVERT_VALUE                    1 (str)
+          198 FORMAT_SIMPLE
+          200 BUILD_STRING                     4
+          202 CALL                             1
+          210 RAISE_VARARGS                    1
+ 304 >>   212 LOAD_FAST                        0 (self)
+          214 LOAD_ATTR                        4 (bitness)
+          234 TO_BOOL
+          242 POP_JUMP_IF_FALSE               90 (to 426)
+          246 LOAD_FAST                        0 (self)
+          248 LOAD_ATTR                        4 (bitness)
+          268 LOAD_CONST                       4 ('64')
+          270 COMPARE_OP                     119 (!= bool)
+          274 POP_JUMP_IF_FALSE               74 (to 426)
+          278 LOAD_FAST                        1 (errid)
+          280 LOAD_ATTR                       13 (endswith + NULL|self)
+          300 LOAD_CONST                       5 ('.amd64')
+          302 CALL                             1
+          310 TO_BOOL
+          318 POP_JUMP_IF_TRUE                22 (to 366)
+          322 LOAD_FAST                        1 (errid)
+          324 LOAD_ATTR                       13 (endswith + NULL|self)
+          344 LOAD_CONST                       6 ('.arm64')
+          346 CALL                             1
+          354 TO_BOOL
+          362 POP_JUMP_IF_FALSE               30 (to 426)
+ 305 >>   366 LOAD_GLOBAL                      3 (AttributeError + NULL)
+          376 LOAD_CONST                       7 ('The ')
+          378 LOAD_FAST                        1 (errid)
+          380 CONVERT_VALUE                    1 (str)
+          382 FORMAT_SIMPLE
+          384 LOAD_CONST                       8 (' error cannot happen on the 32-bit ')
+          386 LOAD_FAST                        0 (self)
+          388 LOAD_ATTR                        0 (distid)
+          408 CONVERT_VALUE                    1 (str)
+          410 FORMAT_SIMPLE
+          412 LOAD_CONST                       9 (' distribution')
+          414 BUILD_STRING                     5
+          416 CALL                             1
+          424 RAISE_VARARGS                    1
+ 306 >>   426 LOAD_FAST                        0 (self)
+          428 LOAD_ATTR                       14 (packages)
+          448 GET_ITER
+     >>   450 FOR_ITER                        73 (to 600)
+          454 STORE_FAST                       2 (package)
+ 307      456 LOAD_GLOBAL                      6 (CXDistFix)
+          466 LOAD_ATTR                       16 (_PACKAGE_RE)
+          486 LOAD_ATTR                       19 (search + NULL|self)
+          506 LOAD_FAST                        2 (package)
+          508 CALL                             1
+          516 TO_BOOL
+          524 POP_JUMP_IF_FALSE                2 (to 532)
+          528 JUMP_BACKWARD                   41 (to 450)
+ 308 >>   532 LOAD_GLOBAL                      3 (AttributeError + NULL)
+          542 LOAD_CONST                      10 ("invalid package name '")
+          544 LOAD_FAST                        2 (package)
+          546 CONVERT_VALUE                    1 (str)
+          548 FORMAT_SIMPLE
+          550 LOAD_CONST                      11 ("' in ")
+          552 LOAD_FAST                        0 (self)
+          554 LOAD_ATTR                       11 (display_name + NULL|self)
+          574 LOAD_FAST                        1 (errid)
+          576 CALL                             1
+          584 CONVERT_VALUE                    1 (str)
+          586 FORMAT_SIMPLE
+          588 BUILD_STRING                     4
+          590 CALL                             1
+          598 RAISE_VARARGS                    1
+ 306 >>   600 END_FOR
+          602 POP_TOP
+ 309      604 RETURN_CONST                    12 (True)
+
+Disassembly of <code CXDistFix.dump> (line 311, args=3 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: self, out, indent
+ 311        0 RESUME                           0
+ 312        2 LOAD_GLOBAL                      1 (_dump_fields + NULL)
+           12 LOAD_FAST_LOAD_FAST             18 (out, indent)
+           14 LOAD_FAST                        0 (self)
+           16 LOAD_CONST                       1 (('distid', 'bitness', 'packages', 'commands'))
+           18 CALL                             4
+           26 POP_TOP
+           28 RETURN_CONST                     0 (None)
+
+Disassembly of <code CXFix> (line 315, args=0 posonly=0 kwonly=0, flags=0):
+ 315        0 RESUME                           0
+            2 LOAD_NAME                        0 (__name__)
+            4 STORE_NAME                       1 (__module__)
+            6 LOAD_CONST                       0 ('CXFix')
+            8 STORE_NAME                       2 (__qualname__)
+           10 LOAD_CONST                       1 (315)
+           12 STORE_NAME                       3 (__firstlineno__)
+ 316       14 LOAD_CONST                       2 ('Groups the known fixes for a given error.')
+           16 STORE_NAME                       4 (__doc__)
+ 325       18 LOAD_CONST                       3 (None)
+           20 STORE_NAME                       5 (errid)
+ 330       22 LOAD_CONST                       3 (None)
+           24 STORE_NAME                       6 (fallback)
+ 335       26 LOAD_CONST                       3 (None)
+           28 STORE_NAME                       7 (lib)
+ 340       30 LOAD_CONST                       3 (None)
+           32 STORE_NAME                       8 (title)
+ 344       34 LOAD_CONST                       3 (None)
+           36 STORE_NAME                       9 (description)
+ 349       38 LOAD_NAME                       10 (frozenset)
+           40 PUSH_NULL
+           42 CALL                             0
+           50 STORE_NAME                      11 (maskedby)
+ 353       52 BUILD_MAP                        0
+           54 STORE_NAME                      12 (cxlevels)
+ 358       56 BUILD_MAP                        0
+           58 STORE_NAME                      13 (distfixes)
+ 360       60 LOAD_CONST                       4 (<code CXFix.__init__, line 360>)
+           62 MAKE_FUNCTION
+           64 STORE_NAME                      14 (__init__)
+ 371       66 LOAD_CONST                       5 (<code CXFix.add_distfix, line 371>)
+           68 MAKE_FUNCTION
+           70 STORE_NAME                      15 (add_distfix)
+ 378       72 LOAD_NAME                       16 (staticmethod)
+ 379       74 LOAD_CONST                       6 (<code CXFix._suffix, line 378>)
+           76 MAKE_FUNCTION
+ 378       78 CALL                             0
+ 379       86 STORE_NAME                      17 (_suffix)
+ 386       88 LOAD_CONST                       7 (<code CXFix.validate, line 386>)
+           90 MAKE_FUNCTION
+           92 STORE_NAME                      18 (validate)
+ 406       94 LOAD_CONST                      10 (('',))
+           96 LOAD_CONST                       8 (<code CXFix.dump, line 406>)
+           98 MAKE_FUNCTION
+          100 SET_FUNCTION_ATTRIBUTE           1 (defaults)
+          102 STORE_NAME                      19 (dump)
+          104 LOAD_CONST                       9 (('description', 'distfixes', 'errid', 'fallback', 'lib', 'title'))
+          106 STORE_NAME                      20 (__static_attributes__)
+          108 RETURN_CONST                     3 (None)
+
+Disassembly of <code CXFix.__init__> (line 360, args=6 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: self, errid, fallback, lib, title, description
+ 360        0 RESUME                           0
+ 361        2 LOAD_FAST_LOAD_FAST             16 (errid, self)
+            4 STORE_ATTR                       0 (errid)
+ 362       14 LOAD_FAST                        2 (fallback)
+           16 TO_BOOL
+           24 POP_JUMP_IF_FALSE                6 (to 40)
+ 363       28 LOAD_FAST_LOAD_FAST             32 (fallback, self)
+           30 STORE_ATTR                       1 (fallback)
+ 364 >>    40 LOAD_FAST                        3 (lib)
+           42 TO_BOOL
+           50 POP_JUMP_IF_FALSE                6 (to 66)
+ 365       54 LOAD_FAST_LOAD_FAST             48 (lib, self)
+           56 STORE_ATTR                       2 (lib)
+ 366 >>    66 LOAD_FAST                        4 (title)
+           68 TO_BOOL
+           76 POP_JUMP_IF_FALSE                6 (to 92)
+ 367       80 LOAD_FAST_LOAD_FAST             64 (title, self)
+           82 STORE_ATTR                       3 (title)
+ 368 >>    92 LOAD_FAST                        5 (description)
+           94 TO_BOOL
+          102 POP_JUMP_IF_FALSE                7 (to 120)
+ 369      106 LOAD_FAST_LOAD_FAST             80 (description, self)
+          108 STORE_ATTR                       4 (description)
+          118 RETURN_CONST                     0 (None)
+ 368 >>   120 RETURN_CONST                     0 (None)
+
+Disassembly of <code CXFix.add_distfix> (line 371, args=2 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: self, distfix
+ 371        0 RESUME                           0
+ 372        2 LOAD_CONST                       1 ('distfixes')
+            4 LOAD_FAST                        0 (self)
+            6 LOAD_ATTR                        0 (__dict__)
+           26 CONTAINS_OP                      1 (not in)
+           30 POP_JUMP_IF_FALSE                7 (to 48)
+ 373       34 BUILD_MAP                        0
+           36 LOAD_FAST                        0 (self)
+           38 STORE_ATTR                       1 (distfixes)
+ 374 >>    48 LOAD_FAST_LOAD_FAST             16 (distfix, self)
+           50 LOAD_ATTR                        2 (distfixes)
+           70 LOAD_FAST                        1 (distfix)
+           72 LOAD_ATTR                        4 (distid)
+           92 LOAD_FAST                        1 (distfix)
+           94 LOAD_ATTR                        6 (bitness)
+          114 BUILD_TUPLE                      2
+          116 STORE_SUBSCR
+          120 RETURN_CONST                     0 (None)
+
+Disassembly of <code CXFix._suffix> (line 378, args=1 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: errid
+ 378        0 RESUME                           0
+ 380        2 LOAD_FAST                        0 (errid)
+            4 LOAD_ATTR                        1 (endswith + NULL|self)
+           24 LOAD_CONST                       1 ('.amd64')
+           26 CALL                             1
+           34 TO_BOOL
+           42 POP_JUMP_IF_FALSE                1 (to 48)
+ 381       46 RETURN_CONST                     2 ('amd64')
+ 382 >>    48 LOAD_FAST                        0 (errid)
+           50 LOAD_ATTR                        1 (endswith + NULL|self)
+           70 LOAD_CONST                       3 ('.arm64')
+           72 CALL                             1
+           80 TO_BOOL
+           88 POP_JUMP_IF_FALSE                1 (to 94)
+ 383       92 RETURN_CONST                     4 ('arm64')
+ 384 >>    94 RETURN_CONST                     5 ('')
+
+Disassembly of <code CXFix.validate> (line 386, args=1 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: self, suffix, maskedby, distfix
+ 386        0 RESUME                           0
+ 392        2 LOAD_FAST                        0 (self)
+            4 LOAD_ATTR                        0 (errid)
+           24 TO_BOOL
+           32 POP_JUMP_IF_TRUE                11 (to 58)
+ 393       36 LOAD_GLOBAL                      3 (AttributeError + NULL)
+           46 LOAD_CONST                       1 ('CXFix.errid is not set')
+           48 CALL                             1
+           56 RAISE_VARARGS                    1
+ 394 >>    58 LOAD_FAST                        0 (self)
+           60 LOAD_ATTR                        4 (distfixes)
+           80 TO_BOOL
+           88 POP_JUMP_IF_TRUE                41 (to 174)
+           92 LOAD_FAST                        0 (self)
+           94 LOAD_ATTR                        6 (fallback)
+          114 TO_BOOL
+          122 POP_JUMP_IF_TRUE                24 (to 174)
+ 395      126 LOAD_GLOBAL                      3 (AttributeError + NULL)
+          136 LOAD_CONST                       2 ('No actual fixes are present for CXFix %s')
+          138 LOAD_FAST                        0 (self)
+          140 LOAD_ATTR                        0 (errid)
+          160 BINARY_OP                        6 (%)
+          164 CALL                             1
+          172 RAISE_VARARGS                    1
+ 396 >>   174 LOAD_FAST                        0 (self)
+          176 LOAD_ATTR                        9 (_suffix + NULL|self)
+          196 LOAD_FAST                        0 (self)
+          198 LOAD_ATTR                        0 (errid)
+          218 CALL                             1
+          226 STORE_FAST                       1 (suffix)
+ 397      228 LOAD_FAST                        0 (self)
+          230 LOAD_ATTR                        6 (fallback)
+          250 TO_BOOL
+          258 POP_JUMP_IF_FALSE               70 (to 402)
+          262 LOAD_FAST                        0 (self)
+          264 LOAD_ATTR                        9 (_suffix + NULL|self)
+          284 LOAD_FAST                        0 (self)
+          286 LOAD_ATTR                        6 (fallback)
+          306 CALL                             1
+          314 LOAD_FAST                        1 (suffix)
+          316 COMPARE_OP                     119 (!= bool)
+          320 POP_JUMP_IF_FALSE               39 (to 402)
+ 398      324 LOAD_GLOBAL                      3 (AttributeError + NULL)
+          334 LOAD_CONST                       3 ('Architecture mismatch in fallback: ')
+          336 LOAD_FAST                        0 (self)
+          338 LOAD_ATTR                        0 (errid)
+          358 CONVERT_VALUE                    1 (str)
+          360 FORMAT_SIMPLE
+          362 LOAD_CONST                       4 (' vs. ')
+          364 LOAD_FAST                        0 (self)
+          366 LOAD_ATTR                        6 (fallback)
+          386 CONVERT_VALUE                    1 (str)
+          388 FORMAT_SIMPLE
+          390 BUILD_STRING                     4
+          392 CALL                             1
+          400 RAISE_VARARGS                    1
+ 399 >>   402 LOAD_FAST                        0 (self)
+          404 LOAD_ATTR                       10 (maskedby)
+          424 GET_ITER
+     >>   426 FOR_ITER                        53 (to 536)
+          430 STORE_FAST                       2 (maskedby)
+ 400      432 LOAD_FAST                        0 (self)
+          434 LOAD_ATTR                        9 (_suffix + NULL|self)
+          454 LOAD_FAST                        2 (maskedby)
+          456 CALL                             1
+          464 LOAD_FAST                        1 (suffix)
+          466 COMPARE_OP                     119 (!= bool)
+          470 POP_JUMP_IF_TRUE                 2 (to 478)
+          474 JUMP_BACKWARD                   26 (to 426)
+ 401 >>   478 LOAD_GLOBAL                      3 (AttributeError + NULL)
+          488 LOAD_CONST                       5 ('Architecture mismatch in <tiedto> or <maskedby>: ')
+          490 LOAD_FAST                        0 (self)
+          492 LOAD_ATTR                        0 (errid)
+          512 CONVERT_VALUE                    1 (str)
+          514 FORMAT_SIMPLE
+          516 LOAD_CONST                       4 (' vs. ')
+          518 LOAD_FAST                        2 (maskedby)
+          520 CONVERT_VALUE                    1 (str)
+          522 FORMAT_SIMPLE
+          524 BUILD_STRING                     4
+          526 CALL                             1
+          534 RAISE_VARARGS                    1
+ 399 >>   536 END_FOR
+          538 POP_TOP
+ 402      540 LOAD_FAST                        0 (self)
+          542 LOAD_ATTR                        4 (distfixes)
+          562 LOAD_ATTR                       13 (values + NULL|self)
+          582 CALL                             0
+          590 GET_ITER
+     >>   592 FOR_ITER                        30 (to 656)
+          596 STORE_FAST                       3 (distfix)
+ 403      598 LOAD_FAST                        3 (distfix)
+          600 LOAD_ATTR                       15 (validate + NULL|self)
+          620 LOAD_FAST                        0 (self)
+          622 LOAD_ATTR                        0 (errid)
+          642 CALL                             1
+          650 POP_TOP
+          652 JUMP_BACKWARD                   32 (to 592)
+ 402 >>   656 END_FOR
+          658 POP_TOP
+ 404      660 RETURN_CONST                     6 (True)
+
+Disassembly of <code CXFix.dump> (line 406, args=3 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: self, out, indent
+ 406        0 RESUME                           0
+ 407        2 LOAD_GLOBAL                      1 (_dump_fields + NULL)
+           12 LOAD_FAST_LOAD_FAST             18 (out, indent)
+           14 LOAD_FAST                        0 (self)
+           16 LOAD_CONST                       1 (('errid', 'fallback', 'lib', 'title', 'description', 'maskedby', 'distfixes'))
+           18 CALL                             4
+           26 POP_TOP
+           28 RETURN_CONST                     0 (None)
+
+Disassembly of <code CXFixes> (line 416, args=0 posonly=0 kwonly=0, flags=0):
+ 416        0 RESUME                           0
+            2 LOAD_NAME                        0 (__name__)
+            4 STORE_NAME                       1 (__module__)
+            6 LOAD_CONST                       0 ('CXFixes')
+            8 STORE_NAME                       2 (__qualname__)
+           10 LOAD_CONST                       1 (416)
+           12 STORE_NAME                       3 (__firstlineno__)
+ 417       14 LOAD_CONST                       2 ('All the data from a CXFixes file.')
+           16 STORE_NAME                       4 (__doc__)
+ 419       18 LOAD_CONST                       3 (<code CXFixes.__init__, line 419>)
+           20 MAKE_FUNCTION
+           22 STORE_NAME                       5 (__init__)
+ 427       24 LOAD_NAME                        6 (classmethod)
+ 428       26 LOAD_CONST                       4 (<code CXFixes._fallback_check, line 427>)
+           28 MAKE_FUNCTION
+ 427       30 CALL                             0
+ 428       38 STORE_NAME                       7 (_fallback_check)
+ 446       40 LOAD_CONST                       5 (<code CXFixes.validate, line 446>)
+           42 MAKE_FUNCTION
+           44 STORE_NAME                       8 (validate)
+ 480       46 LOAD_CONST                       6 (<code CXFixes._fill_in, line 480>)
+           48 MAKE_FUNCTION
+           50 STORE_NAME                       9 (_fill_in)
+ 495       52 LOAD_CONST                       7 (<code CXFixes._prepare_fix, line 495>)
+           54 MAKE_FUNCTION
+           56 STORE_NAME                      10 (_prepare_fix)
+ 535       58 LOAD_CONST                       8 (<code CXFixes.prepare, line 535>)
+           60 MAKE_FUNCTION
+           62 STORE_NAME                      11 (prepare)
+ 543       64 LOAD_CONST                       9 (<code CXFixes.get_fix_level, line 543>)
+           66 MAKE_FUNCTION
+           68 STORE_NAME                      12 (get_fix_level)
+           70 LOAD_CONST                      10 (('cxproducts', 'distributions', 'fixes', 'maskedby', 'release'))
+           72 STORE_NAME                      13 (__static_attributes__)
+           74 RETURN_CONST                    11 (None)
+
+Disassembly of <code CXFixes.__init__> (line 419, args=1 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: self
+ 419        0 RESUME                           0
+ 420        2 LOAD_CONST                       1 (0)
+            4 LOAD_FAST                        0 (self)
+            6 STORE_ATTR                       0 (release)
+ 421       16 BUILD_MAP                        0
+           18 LOAD_FAST                        0 (self)
+           20 STORE_ATTR                       1 (distributions)
+ 422       30 BUILD_MAP                        0
+           32 LOAD_FAST                        0 (self)
+           34 STORE_ATTR                       2 (cxproducts)
+ 423       44 BUILD_MAP                        0
+           46 LOAD_FAST                        0 (self)
+           48 STORE_ATTR                       3 (fixes)
+ 425       58 LOAD_CONST                       0 (None)
+           60 LOAD_FAST                        0 (self)
+           62 STORE_ATTR                       4 (maskedby)
+           72 RETURN_CONST                     0 (None)
+
+Disassembly of <code CXFixes._fallback_check> (line 427, args=7 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: cls, objlabel, objmap, obj, keyfield, checked, errors, seed, seen, key, has_loop
+ 427        0 RESUME                           0
+ 430        2 LOAD_FAST                        3 (obj)
+            4 LOAD_ATTR                        0 (__dict__)
+           24 LOAD_FAST                        4 (keyfield)
+           26 BINARY_SUBSCR
+           30 STORE_FAST                       7 (seed)
+ 431       32 LOAD_FAST_LOAD_FAST            117 (seed, checked)
+           34 CONTAINS_OP                      1 (not in)
+           38 POP_JUMP_IF_FALSE              236 (to 514)
+           42 LOAD_FAST                        3 (obj)
+           44 LOAD_ATTR                        2 (fallback)
+           64 TO_BOOL
+           72 POP_JUMP_IF_FALSE              218 (to 512)
+ 432       76 LOAD_GLOBAL                      5 (set + NULL)
+           86 LOAD_FAST                        7 (seed)
+           88 BUILD_TUPLE                      1
+           90 CALL                             1
+           98 STORE_FAST                       8 (seen)
+ 433      100 LOAD_FAST                        3 (obj)
+          102 LOAD_ATTR                        2 (fallback)
+          122 TO_BOOL
+          130 POP_JUMP_IF_FALSE              171 (to 476)
+ 434 >>   134 LOAD_FAST                        3 (obj)
+          136 LOAD_ATTR                        0 (__dict__)
+          156 LOAD_FAST                        4 (keyfield)
+          158 BINARY_SUBSCR
+          162 STORE_FAST                       9 (key)
+ 435      164 LOAD_FAST                        3 (obj)
+          166 LOAD_ATTR                        2 (fallback)
+          186 LOAD_FAST                        8 (seen)
+          188 CONTAINS_OP                      0 (in)
+          192 STORE_FAST                      10 (has_loop)
+ 436      194 LOAD_FAST                        8 (seen)
+          196 LOAD_ATTR                        7 (add + NULL|self)
+          216 LOAD_FAST                        9 (key)
+          218 CALL                             1
+          226 POP_TOP
+ 437      228 LOAD_FAST                       10 (has_loop)
+          230 TO_BOOL
+          238 POP_JUMP_IF_FALSE               29 (to 300)
+ 438      242 LOAD_FAST                        6 (errors)
+          244 LOAD_ATTR                        9 (append + NULL|self)
+          264 LOAD_FAST                        9 (key)
+          266 CONVERT_VALUE                    1 (str)
+          268 FORMAT_SIMPLE
+          270 LOAD_CONST                       1 (' introduces a loop in the fallbacks of the ')
+          272 LOAD_FAST                        7 (seed)
+          274 CONVERT_VALUE                    1 (str)
+          276 FORMAT_SIMPLE
+          278 LOAD_CONST                       2 (' ')
+          280 LOAD_FAST                        1 (objlabel)
+          282 CONVERT_VALUE                    1 (str)
+          284 FORMAT_SIMPLE
+          286 BUILD_STRING                     5
+          288 CALL                             1
+          296 POP_TOP
+ 439      298 JUMP_FORWARD                    88 (to 476)
+ 440 >>   300 LOAD_FAST                        3 (obj)
+          302 LOAD_ATTR                        2 (fallback)
+          322 LOAD_FAST                        2 (objmap)
+          324 CONTAINS_OP                      1 (not in)
+          328 POP_JUMP_IF_FALSE               39 (to 410)
+ 441      332 LOAD_FAST                        6 (errors)
+          334 LOAD_ATTR                        9 (append + NULL|self)
+          354 LOAD_FAST                        9 (key)
+          356 CONVERT_VALUE                    1 (str)
+          358 FORMAT_SIMPLE
+          360 LOAD_CONST                       3 (' falls back to the nonexistent ')
+          362 LOAD_FAST                        3 (obj)
+          364 LOAD_ATTR                        2 (fallback)
+          384 CONVERT_VALUE                    1 (str)
+          386 FORMAT_SIMPLE
+          388 LOAD_CONST                       2 (' ')
+          390 LOAD_FAST                        1 (objlabel)
+          392 CONVERT_VALUE                    1 (str)
+          394 FORMAT_SIMPLE
+          396 BUILD_STRING                     5
+          398 CALL                             1
+          406 POP_TOP
+ 442      408 JUMP_FORWARD                    33 (to 476)
+ 443 >>   410 LOAD_FAST_LOAD_FAST             35 (objmap, obj)
+          412 LOAD_ATTR                        2 (fallback)
+          432 BINARY_SUBSCR
+          436 STORE_FAST                       3 (obj)
+ 433      438 LOAD_FAST                        3 (obj)
+          440 LOAD_ATTR                        2 (fallback)
+          460 TO_BOOL
+          468 POP_JUMP_IF_FALSE                2 (to 476)
+          472 JUMP_BACKWARD                  171 (to 134)
+ 444 >>   476 LOAD_FAST                        5 (checked)
+          478 LOAD_ATTR                       11 (update + NULL|self)
+          498 LOAD_FAST                        8 (seen)
+          500 CALL                             1
+          508 POP_TOP
+          510 RETURN_CONST                     4 (None)
+ 431 >>   512 RETURN_CONST                     4 (None)
+     >>   514 RETURN_CONST                     4 (None)
+
+Disassembly of <code CXFixes.validate> (line 446, args=1 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: self, errors, checked, distribution, cxproduct, fix, errid, cxid, distid, _bitness
+ 446        0 RESUME                           0
+ 447        2 BUILD_LIST                       0
+            4 STORE_FAST                       1 (errors)
+ 449        6 LOAD_GLOBAL                      1 (set + NULL)
+           16 CALL                             0
+           24 STORE_FAST                       2 (checked)
+ 450       26 LOAD_FAST                        0 (self)
+           28 LOAD_ATTR                        2 (distributions)
+           48 LOAD_ATTR                        5 (values + NULL|self)
+           68 CALL                             0
+           76 GET_ITER
+     >>    78 FOR_ITER                        38 (to 158)
+           82 STORE_FAST                       3 (distribution)
+ 451       84 LOAD_GLOBAL                      6 (CXFixes)
+           94 LOAD_ATTR                        9 (_fallback_check + NULL|self)
+          114 LOAD_CONST                       1 ('distribution')
+          116 LOAD_FAST                        0 (self)
+          118 LOAD_ATTR                        2 (distributions)
+          138 LOAD_FAST                        3 (distribution)
+          140 LOAD_CONST                       2 ('distid')
+          142 LOAD_FAST_LOAD_FAST             33 (checked, errors)
+          144 CALL                             6
+          152 POP_TOP
+          154 JUMP_BACKWARD                   40 (to 78)
+ 450 >>   158 END_FOR
+          160 POP_TOP
+ 453      162 LOAD_GLOBAL                      1 (set + NULL)
+          172 CALL                             0
+          180 STORE_FAST                       2 (checked)
+ 454      182 LOAD_FAST                        0 (self)
+          184 LOAD_ATTR                       10 (cxproducts)
+          204 LOAD_ATTR                        5 (values + NULL|self)
+          224 CALL                             0
+          232 GET_ITER
+     >>   234 FOR_ITER                        38 (to 314)
+          238 STORE_FAST                       4 (cxproduct)
+ 455      240 LOAD_GLOBAL                      6 (CXFixes)
+          250 LOAD_ATTR                        9 (_fallback_check + NULL|self)
+          270 LOAD_CONST                       3 ('cxproduct')
+          272 LOAD_FAST                        0 (self)
+          274 LOAD_ATTR                       10 (cxproducts)
+          294 LOAD_FAST                        4 (cxproduct)
+          296 LOAD_CONST                       4 ('cxid')
+          298 LOAD_FAST_LOAD_FAST             33 (checked, errors)
+          300 CALL                             6
+          308 POP_TOP
+          310 JUMP_BACKWARD                   40 (to 234)
+ 454 >>   314 END_FOR
+          316 POP_TOP
+ 457      318 BUILD_MAP                        0
+          320 LOAD_FAST                        0 (self)
+          322 STORE_ATTR                       6 (maskedby)
+ 458      332 LOAD_GLOBAL                      1 (set + NULL)
+          342 CALL                             0
+          350 STORE_FAST                       2 (checked)
+ 459      352 LOAD_FAST                        0 (self)
+          354 LOAD_ATTR                       14 (fixes)
+          374 LOAD_ATTR                        5 (values + NULL|self)
+          394 CALL                             0
+          402 GET_ITER
+     >>   404 FOR_ITER                       375 (to 1160)
+          410 STORE_FAST                       5 (fix)
+ 460      412 LOAD_GLOBAL                      6 (CXFixes)
+          422 LOAD_ATTR                        9 (_fallback_check + NULL|self)
+          442 LOAD_CONST                       5 ('fix')
+          444 LOAD_FAST                        0 (self)
+          446 LOAD_ATTR                       14 (fixes)
+          466 LOAD_FAST                        5 (fix)
+          468 LOAD_CONST                       6 ('errid')
+          470 LOAD_FAST_LOAD_FAST             33 (checked, errors)
+          472 CALL                             6
+          480 POP_TOP
+ 462      482 LOAD_FAST                        5 (fix)
+          484 LOAD_ATTR                       12 (maskedby)
+          504 GET_ITER
+     >>   506 FOR_ITER                       147 (to 804)
+          510 STORE_FAST                       6 (errid)
+ 463      512 LOAD_FAST_LOAD_FAST             96 (errid, self)
+          514 LOAD_ATTR                       14 (fixes)
+          534 CONTAINS_OP                      1 (not in)
+          538 POP_JUMP_IF_FALSE               37 (to 616)
+ 464      542 LOAD_FAST                        1 (errors)
+          544 LOAD_ATTR                       17 (append + NULL|self)
+          564 LOAD_CONST                       7 ('The ')
+          566 LOAD_FAST                        5 (fix)
+          568 LOAD_ATTR                       18 (errid)
+          588 CONVERT_VALUE                    1 (str)
+          590 FORMAT_SIMPLE
+          592 LOAD_CONST                       8 (' fix is masked by a nonexistent error: ')
+          594 LOAD_FAST                        6 (errid)
+          596 CONVERT_VALUE                    1 (str)
+          598 FORMAT_SIMPLE
+          600 BUILD_STRING                     4
+          602 CALL                             1
+          610 POP_TOP
+          612 JUMP_BACKWARD                   55 (to 506)
+ 465 >>   616 LOAD_FAST_LOAD_FAST             96 (errid, self)
+          618 LOAD_ATTR                       12 (maskedby)
+          638 CONTAINS_OP                      1 (not in)
+          642 POP_JUMP_IF_FALSE               37 (to 720)
+ 466      646 LOAD_GLOBAL                      1 (set + NULL)
+          656 LOAD_FAST                        5 (fix)
+          658 LOAD_ATTR                       18 (errid)
+          678 BUILD_TUPLE                      1
+          680 CALL                             1
+          688 LOAD_FAST                        0 (self)
+          690 LOAD_ATTR                       12 (maskedby)
+          710 LOAD_FAST                        6 (errid)
+          712 STORE_SUBSCR
+          716 JUMP_BACKWARD                  107 (to 506)
+ 468 >>   720 LOAD_FAST                        0 (self)
+          722 LOAD_ATTR                       12 (maskedby)
+          742 LOAD_FAST                        6 (errid)
+          744 BINARY_SUBSCR
+          748 LOAD_ATTR                       21 (add + NULL|self)
+          768 LOAD_FAST                        5 (fix)
+          770 LOAD_ATTR                       18 (errid)
+          790 CALL                             1
+          798 POP_TOP
+          800 JUMP_BACKWARD                  149 (to 506)
+ 462 >>   804 END_FOR
+          806 POP_TOP
+ 470      808 LOAD_FAST                        5 (fix)
+          810 LOAD_ATTR                       22 (cxlevels)
+          830 LOAD_ATTR                       25 (keys + NULL|self)
+          850 CALL                             0
+          858 GET_ITER
+     >>   860 FOR_ITER                        56 (to 976)
+          864 STORE_FAST                       7 (cxid)
+ 471      866 LOAD_FAST_LOAD_FAST            112 (cxid, self)
+          868 LOAD_ATTR                       10 (cxproducts)
+          888 CONTAINS_OP                      1 (not in)
+          892 POP_JUMP_IF_TRUE                 2 (to 900)
+          896 JUMP_BACKWARD                   20 (to 860)
+ 472 >>   900 LOAD_FAST                        1 (errors)
+          902 LOAD_ATTR                       17 (append + NULL|self)
+          922 LOAD_CONST                       7 ('The ')
+          924 LOAD_FAST                        5 (fix)
+          926 LOAD_ATTR                       18 (errid)
+          946 CONVERT_VALUE                    1 (str)
+          948 FORMAT_SIMPLE
+          950 LOAD_CONST                       9 (' error has properties for the nonexistent ')
+          952 LOAD_FAST                        7 (cxid)
+          954 CONVERT_VALUE                    1 (str)
+          956 FORMAT_SIMPLE
+          958 LOAD_CONST                      10 (' product')
+          960 BUILD_STRING                     5
+          962 CALL                             1
+          970 POP_TOP
+          972 JUMP_BACKWARD                   58 (to 860)
+ 470 >>   976 END_FOR
+          978 POP_TOP
+ 474      980 LOAD_FAST                        5 (fix)
+          982 LOAD_ATTR                       26 (distfixes)
+         1002 LOAD_ATTR                       25 (keys + NULL|self)
+         1022 CALL                             0
+         1030 GET_ITER
+     >>  1032 FOR_ITER                        57 (to 1150)
+         1036 UNPACK_SEQUENCE                  2
+         1040 STORE_FAST_STORE_FAST          137 (distid, _bitness)
+ 475     1042 LOAD_FAST_LOAD_FAST            128 (distid, self)
+         1044 LOAD_ATTR                        2 (distributions)
+         1064 CONTAINS_OP                      1 (not in)
+         1068 POP_JUMP_IF_TRUE                 2 (to 1076)
+         1072 JUMP_BACKWARD                   22 (to 1032)
+ 476 >>  1076 LOAD_FAST                        1 (errors)
+         1078 LOAD_ATTR                       17 (append + NULL|self)
+         1098 LOAD_CONST                       7 ('The ')
+         1100 LOAD_FAST                        5 (fix)
+         1102 LOAD_ATTR                       18 (errid)
+         1122 CONVERT_VALUE                    1 (str)
+         1124 FORMAT_SIMPLE
+         1126 LOAD_CONST                      11 (' error has a fix for a nonexistent distribution: ')
+         1128 LOAD_FAST                        8 (distid)
+         1130 CONVERT_VALUE                    1 (str)
+         1132 FORMAT_SIMPLE
+         1134 BUILD_STRING                     4
+         1136 CALL                             1
+         1144 POP_TOP
+         1146 JUMP_BACKWARD                   59 (to 1032)
+ 474 >>  1150 END_FOR
+         1152 POP_TOP
+         1154 JUMP_BACKWARD                  378 (to 404)
+ 459 >>  1160 END_FOR
+         1162 POP_TOP
+ 478     1164 LOAD_FAST                        1 (errors)
+         1166 RETURN_VALUE
+
+Disassembly of <code CXFixes._fill_in> (line 480, args=4 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: self, prepared, dst, srcid, src, copied
+ 480        0 RESUME                           0
+ 481        2 LOAD_FAST_LOAD_FAST             48 (srcid, self)
+            4 LOAD_ATTR                        0 (fixes)
+           24 CONTAINS_OP                      1 (not in)
+           28 POP_JUMP_IF_FALSE                1 (to 34)
+ 482       32 RETURN_CONST                     1 (0)
+ 483 >>    34 LOAD_FAST                        0 (self)
+           36 LOAD_ATTR                        0 (fixes)
+           56 LOAD_FAST                        3 (srcid)
+           58 BINARY_SUBSCR
+           62 STORE_FAST                       4 (src)
+ 484       64 LOAD_FAST_LOAD_FAST             49 (srcid, prepared)
+           66 CONTAINS_OP                      1 (not in)
+           70 POP_JUMP_IF_FALSE               17 (to 108)
+ 485       74 LOAD_FAST                        0 (self)
+           76 LOAD_ATTR                        3 (_prepare_fix + NULL|self)
+           96 LOAD_FAST_LOAD_FAST             20 (prepared, src)
+           98 CALL                             2
+          106 POP_TOP
+ 486 >>   108 LOAD_CONST                       1 (0)
+          110 STORE_FAST                       5 (copied)
+ 487      112 LOAD_FAST                        2 (dst)
+          114 LOAD_ATTR                        4 (title)
+          134 POP_JUMP_IF_NOT_NONE            35 (to 208)
+          138 LOAD_FAST                        4 (src)
+          140 LOAD_ATTR                        4 (title)
+          160 POP_JUMP_IF_NONE                22 (to 208)
+ 488      164 LOAD_FAST                        4 (src)
+          166 LOAD_ATTR                        4 (title)
+          186 LOAD_FAST                        2 (dst)
+          188 STORE_ATTR                       2 (title)
+ 489      198 LOAD_FAST                        5 (copied)
+          200 LOAD_CONST                       2 (1)
+          202 BINARY_OP                       13 (+=)
+          206 STORE_FAST                       5 (copied)
+ 490 >>   208 LOAD_FAST                        2 (dst)
+          210 LOAD_ATTR                        6 (description)
+          230 POP_JUMP_IF_NOT_NONE            35 (to 304)
+          234 LOAD_FAST                        4 (src)
+          236 LOAD_ATTR                        6 (description)
+          256 POP_JUMP_IF_NONE                22 (to 304)
+ 491      260 LOAD_FAST                        4 (src)
+          262 LOAD_ATTR                        6 (description)
+          282 LOAD_FAST                        2 (dst)
+          284 STORE_ATTR                       3 (description)
+ 492      294 LOAD_FAST                        5 (copied)
+          296 LOAD_CONST                       2 (1)
+          298 BINARY_OP                       13 (+=)
+          302 STORE_FAST                       5 (copied)
+ 493 >>   304 LOAD_FAST                        5 (copied)
+          306 RETURN_VALUE
+
+Disassembly of <code CXFixes._prepare_fix> (line 495, args=3 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: self, prepared, fix, errid, bitness, missing, lib, gst, brokenid, brokentitle
+ 495        0 RESUME                           0
+ 496        2 LOAD_FAST                        1 (prepared)
+            4 LOAD_ATTR                        1 (add + NULL|self)
+           24 LOAD_FAST                        2 (fix)
+           26 LOAD_ATTR                        2 (errid)
+           46 CALL                             1
+           54 POP_TOP
+ 498       56 LOAD_FAST                        2 (fix)
+           58 LOAD_ATTR                        2 (errid)
+           78 LOAD_ATTR                        5 (replace + NULL|self)
+           98 LOAD_CONST                       1 ('.amd64')
+          100 LOAD_CONST                       2 ('')
+          102 CALL                             2
+          110 LOAD_ATTR                        5 (replace + NULL|self)
+          130 LOAD_CONST                       3 ('.arm64')
+          132 LOAD_CONST                       2 ('')
+          134 CALL                             2
+          142 STORE_FAST                       3 (errid)
+ 499      144 LOAD_FAST                        2 (fix)
+          146 LOAD_ATTR                        2 (errid)
+          166 LOAD_FAST                        3 (errid)
+          168 COMPARE_OP                      88 (== bool)
+          172 POP_JUMP_IF_FALSE                2 (to 180)
+          176 LOAD_CONST                       4 (32)
+          178 JUMP_FORWARD                     1 (to 182)
+     >>   180 LOAD_CONST                       5 (64)
+     >>   182 STORE_FAST                       4 (bitness)
+ 500      184 LOAD_CONST                       6 (0)
+          186 STORE_FAST                       5 (missing)
+ 501      188 LOAD_FAST                        2 (fix)
+          190 LOAD_ATTR                        6 (title)
+          210 POP_JUMP_IF_NOT_NONE           170 (to 554)
+ 502      214 LOAD_FAST                        2 (fix)
+          216 LOAD_ATTR                        8 (lib)
+          236 STORE_FAST                       6 (lib)
+ 503      238 LOAD_FAST                        3 (errid)
+          240 LOAD_ATTR                       11 (startswith + NULL|self)
+          260 LOAD_CONST                       7 ('missinglib')
+          262 CALL                             1
+          270 TO_BOOL
+          278 POP_JUMP_IF_FALSE               30 (to 342)
+ 504      282 LOAD_FAST                        6 (lib)
+          284 POP_JUMP_IF_NOT_NONE             5 (to 298)
+ 505      288 LOAD_FAST                        3 (errid)
+          290 LOAD_CONST                       8 (7)
+          292 LOAD_CONST                       0 (None)
+          294 BINARY_SLICE
+          296 STORE_FAST                       6 (lib)
+ 506 >>   298 LOAD_GLOBAL                     13 (_ + NULL)
+          308 LOAD_CONST                       9 ('Missing %(bitness)s-bit %(library)s library')
+          310 CALL                             1
+          318 LOAD_FAST_LOAD_FAST             70 (bitness, lib)
+          320 LOAD_CONST                      10 (('bitness', 'library'))
+          322 BUILD_CONST_KEY_MAP              2
+          324 BINARY_OP                        6 (%)
+          328 LOAD_FAST                        2 (fix)
+          330 STORE_ATTR                       3 (title)
+          340 JUMP_FORWARD                   106 (to 554)
+ 507 >>   342 LOAD_FAST                        3 (errid)
+          344 LOAD_ATTR                       11 (startswith + NULL|self)
+          364 LOAD_CONST                      11 ('brokenlib')
+          366 CALL                             1
+          374 TO_BOOL
+          382 POP_JUMP_IF_FALSE               30 (to 446)
+ 508      386 LOAD_FAST                        6 (lib)
+          388 POP_JUMP_IF_NOT_NONE             5 (to 402)
+ 509      392 LOAD_FAST                        3 (errid)
+          394 LOAD_CONST                      12 (6)
+          396 LOAD_CONST                       0 (None)
+          398 BINARY_SLICE
+          400 STORE_FAST                       6 (lib)
+ 510 >>   402 LOAD_GLOBAL                     13 (_ + NULL)
+          412 LOAD_CONST                      13 ('Broken %(bitness)s-bit %(library)s library')
+          414 CALL                             1
+          422 LOAD_FAST_LOAD_FAST             70 (bitness, lib)
+          424 LOAD_CONST                      10 (('bitness', 'library'))
+          426 BUILD_CONST_KEY_MAP              2
+          428 BINARY_OP                        6 (%)
+          432 LOAD_FAST                        2 (fix)
+          434 STORE_ATTR                       3 (title)
+          444 JUMP_FORWARD                    54 (to 554)
+ 511 >>   446 LOAD_FAST                        3 (errid)
+          448 LOAD_ATTR                       11 (startswith + NULL|self)
+          468 LOAD_CONST                      14 ('missinggstreamer1')
+          470 CALL                             1
+          478 TO_BOOL
+          486 POP_JUMP_IF_FALSE               27 (to 544)
+ 512      490 LOAD_FAST                        3 (errid)
+          492 LOAD_CONST                      15 (17)
+          494 LOAD_CONST                       0 (None)
+          496 BINARY_SLICE
+          498 STORE_FAST                       7 (gst)
+ 513      500 LOAD_GLOBAL                     13 (_ + NULL)
+          510 LOAD_CONST                      16 ('Missing %(bitness)s-bit gst-plugins-%(plugin)s GStreamer plugins')
+          512 CALL                             1
+          520 LOAD_FAST_LOAD_FAST             71 (bitness, gst)
+          522 LOAD_CONST                      17 (('bitness', 'plugin'))
+          524 BUILD_CONST_KEY_MAP              2
+          526 BINARY_OP                        6 (%)
+          530 LOAD_FAST                        2 (fix)
+          532 STORE_ATTR                       3 (title)
+          542 JUMP_FORWARD                     5 (to 554)
+ 515 >>   544 LOAD_FAST                        5 (missing)
+          546 LOAD_CONST                      18 (1)
+          548 BINARY_OP                       13 (+=)
+          552 STORE_FAST                       5 (missing)
+ 516 >>   554 LOAD_FAST                        2 (fix)
+          556 LOAD_ATTR                       14 (description)
+          576 POP_JUMP_IF_NOT_NONE             5 (to 590)
+ 517      580 LOAD_FAST                        5 (missing)
+          582 LOAD_CONST                      18 (1)
+          584 BINARY_OP                       13 (+=)
+          588 STORE_FAST                       5 (missing)
+ 519 >>   590 LOAD_FAST                        5 (missing)
+          592 TO_BOOL
+          600 POP_JUMP_IF_FALSE               26 (to 656)
+          604 LOAD_FAST                        4 (bitness)
+          606 LOAD_CONST                       5 (64)
+          608 COMPARE_OP                      88 (== bool)
+          612 POP_JUMP_IF_FALSE               20 (to 656)
+ 520      616 LOAD_FAST_LOAD_FAST             80 (missing, self)
+          618 LOAD_ATTR                       17 (_fill_in + NULL|self)
+          638 LOAD_FAST_LOAD_FAST             18 (prepared, fix)
+          640 LOAD_FAST                        3 (errid)
+          642 CALL                             3
+          650 BINARY_OP                       23 (-=)
+          654 STORE_FAST                       5 (missing)
+ 522 >>   656 LOAD_FAST                        5 (missing)
+          658 TO_BOOL
+          666 POP_JUMP_IF_FALSE               45 (to 760)
+          670 LOAD_FAST                        2 (fix)
+          672 LOAD_ATTR                       18 (fallback)
+          692 TO_BOOL
+          700 POP_JUMP_IF_FALSE               28 (to 760)
+ 523      704 LOAD_FAST                        0 (self)
+          706 LOAD_ATTR                       17 (_fill_in + NULL|self)
+          726 LOAD_FAST_LOAD_FAST             18 (prepared, fix)
+          728 LOAD_FAST                        2 (fix)
+          730 LOAD_ATTR                       18 (fallback)
+          750 CALL                             3
+          758 POP_TOP
+ 526 >>   760 LOAD_FAST                        2 (fix)
+          762 LOAD_ATTR                        2 (errid)
+          782 LOAD_ATTR                       11 (startswith + NULL|self)
+          802 LOAD_CONST                       7 ('missinglib')
+          804 CALL                             1
+          812 TO_BOOL
+          820 POP_JUMP_IF_FALSE              118 (to 1060)
+ 527      824 LOAD_CONST                      19 ('broken')
+          826 LOAD_FAST                        2 (fix)
+          828 LOAD_ATTR                        2 (errid)
+          848 LOAD_CONST                       8 (7)
+          850 LOAD_CONST                       0 (None)
+          852 BINARY_SLICE
+          854 BINARY_OP                        0 (+)
+          858 STORE_FAST                       8 (brokenid)
+ 528      860 LOAD_FAST_LOAD_FAST            128 (brokenid, self)
+          862 LOAD_ATTR                       20 (fixes)
+          882 CONTAINS_OP                      1 (not in)
+          886 POP_JUMP_IF_FALSE               84 (to 1058)
+ 529      890 LOAD_FAST                        2 (fix)
+          892 LOAD_ATTR                        8 (lib)
+          912 STORE_FAST                       6 (lib)
+ 530      914 LOAD_FAST                        6 (lib)
+          916 POP_JUMP_IF_NOT_NONE             5 (to 930)
+ 531      920 LOAD_FAST                        3 (errid)
+          922 LOAD_CONST                       8 (7)
+          924 LOAD_CONST                       0 (None)
+          926 BINARY_SLICE
+          928 STORE_FAST                       6 (lib)
+ 532 >>   930 LOAD_GLOBAL                     13 (_ + NULL)
+          940 LOAD_CONST                      13 ('Broken %(bitness)s-bit %(library)s library')
+          942 CALL                             1
+          950 LOAD_FAST_LOAD_FAST             70 (bitness, lib)
+          952 LOAD_CONST                      10 (('bitness', 'library'))
+          954 BUILD_CONST_KEY_MAP              2
+          956 BINARY_OP                        6 (%)
+          960 STORE_FAST                       9 (brokentitle)
+ 533      962 LOAD_GLOBAL                     23 (CXFix + NULL)
+          972 LOAD_FAST                        8 (brokenid)
+          974 LOAD_CONST                       0 (None)
+          976 LOAD_FAST                        2 (fix)
+          978 LOAD_ATTR                        8 (lib)
+          998 LOAD_FAST_LOAD_FAST            146 (brokentitle, fix)
+         1000 LOAD_ATTR                       14 (description)
+         1020 CALL                             5
+         1028 LOAD_FAST                        0 (self)
+         1030 LOAD_ATTR                       20 (fixes)
+         1050 LOAD_FAST                        8 (brokenid)
+         1052 STORE_SUBSCR
+         1056 RETURN_CONST                     0 (None)
+ 528 >>  1058 RETURN_CONST                     0 (None)
+ 526 >>  1060 RETURN_CONST                     0 (None)
+
+Disassembly of <code CXFixes.prepare> (line 535, args=1 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: self, prepared, errids, errid
+ 535        0 RESUME                           0
+ 536        2 LOAD_GLOBAL                      1 (set + NULL)
+           12 CALL                             0
+           20 STORE_FAST                       1 (prepared)
+ 538       22 LOAD_GLOBAL                      3 (list + NULL)
+           32 LOAD_FAST                        0 (self)
+           34 LOAD_ATTR                        4 (fixes)
+           54 LOAD_ATTR                        7 (keys + NULL|self)
+           74 CALL                             0
+           82 CALL                             1
+           90 STORE_FAST                       2 (errids)
+ 539       92 LOAD_FAST                        2 (errids)
+           94 GET_ITER
+     >>    96 FOR_ITER                        40 (to 180)
+          100 STORE_FAST                       3 (errid)
+ 540      102 LOAD_FAST_LOAD_FAST             49 (errid, prepared)
+          104 CONTAINS_OP                      1 (not in)
+          108 POP_JUMP_IF_TRUE                 2 (to 116)
+          112 JUMP_BACKWARD                   10 (to 96)
+ 541 >>   116 LOAD_FAST                        0 (self)
+          118 LOAD_ATTR                        9 (_prepare_fix + NULL|self)
+          138 LOAD_FAST_LOAD_FAST             16 (prepared, self)
+          140 LOAD_ATTR                        4 (fixes)
+          160 LOAD_FAST                        3 (errid)
+          162 BINARY_SUBSCR
+          166 CALL                             2
+          174 POP_TOP
+          176 JUMP_BACKWARD                   42 (to 96)
+ 539 >>   180 END_FOR
+          182 POP_TOP
+          184 RETURN_CONST                     0 (None)
+
+Disassembly of <code CXFixes.get_fix_level> (line 543, args=3 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: self, fix, cxid
+ 543        0 RESUME                           0
+ 544        2 LOAD_FAST                        1 (fix)
+            4 POP_JUMP_IF_NOT_NONE             1 (to 10)
+ 545        8 RETURN_CONST                     0 (None)
+ 546 >>    10 LOAD_FAST_LOAD_FAST             32 (cxid, self)
+           12 LOAD_ATTR                        0 (cxproducts)
+           32 CONTAINS_OP                      0 (in)
+           36 POP_JUMP_IF_FALSE               63 (to 166)
+ 547       40 LOAD_FAST                        2 (cxid)
+           42 POP_JUMP_IF_NONE                60 (to 166)
+           46 LOAD_FAST_LOAD_FAST             33 (cxid, fix)
+           48 LOAD_ATTR                        2 (cxlevels)
+           68 CONTAINS_OP                      1 (not in)
+           72 POP_JUMP_IF_FALSE               45 (to 166)
+ 548 >>    76 LOAD_FAST                        0 (self)
+           78 LOAD_ATTR                        0 (cxproducts)
+           98 LOAD_FAST                        2 (cxid)
+          100 BINARY_SUBSCR
+          104 LOAD_ATTR                        4 (fallback)
+          124 STORE_FAST                       2 (cxid)
+ 547      126 LOAD_FAST                        2 (cxid)
+          128 POP_JUMP_IF_NONE                17 (to 166)
+          132 LOAD_FAST_LOAD_FAST             33 (cxid, fix)
+          134 LOAD_ATTR                        2 (cxlevels)
+          154 CONTAINS_OP                      1 (not in)
+          158 POP_JUMP_IF_FALSE                2 (to 166)
+          162 JUMP_BACKWARD                   45 (to 76)
+ 549 >>   166 LOAD_FAST                        2 (cxid)
+          168 POP_JUMP_IF_NOT_NONE             2 (to 176)
+          172 LOAD_CONST                       0 (None)
+          174 RETURN_VALUE
+     >>   176 LOAD_FAST                        1 (fix)
+          178 LOAD_ATTR                        2 (cxlevels)
+          198 LOAD_FAST                        2 (cxid)
+          200 BINARY_SUBSCR
+          204 RETURN_VALUE

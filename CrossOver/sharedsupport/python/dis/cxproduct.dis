@@ -1,0 +1,1039 @@
+# cxproduct — CPython 3.13 bytecode listing of lib/python/cxproduct.pyc
+# sha256 475567cdeed613754d9865ac5d028274f1f29ab3d75ccd04a1d7fc832aa80abe, pyc flags 3, co_filename /Volumes/gitlab_data/gitlab/builds/j911ygmXM/0/crossover/crossover/macosx/CrossOver/build/Build/Products/Release/CrossOver.app/Contents/SharedSupport/CrossOver/lib/python/cxproduct.py
+
+Disassembly of <code <module>> (line 1, args=0 posonly=0 kwonly=0, flags=0):
+   0        0 RESUME                           0
+   3        2 LOAD_CONST                       0 (0)
+            4 LOAD_CONST                       1 (None)
+            6 IMPORT_NAME                      0 (os.path)
+            8 STORE_NAME                       1 (os)
+   4       10 LOAD_CONST                       0 (0)
+           12 LOAD_CONST                       1 (None)
+           14 IMPORT_NAME                      2 (re)
+           16 STORE_NAME                       2 (re)
+   6       18 LOAD_CONST                       0 (0)
+           20 LOAD_CONST                       1 (None)
+           22 IMPORT_NAME                      3 (cxconfig)
+           24 STORE_NAME                       3 (cxconfig)
+   7       26 LOAD_CONST                       0 (0)
+           28 LOAD_CONST                       1 (None)
+           30 IMPORT_NAME                      4 (cxobservable)
+           32 STORE_NAME                       4 (cxobservable)
+   8       34 LOAD_CONST                       0 (0)
+           36 LOAD_CONST                       1 (None)
+           38 IMPORT_NAME                      5 (cxutils)
+           40 STORE_NAME                       5 (cxutils)
+   9       42 LOAD_CONST                       0 (0)
+           44 LOAD_CONST                       1 (None)
+           46 IMPORT_NAME                      6 (distversion)
+           48 STORE_NAME                       6 (distversion)
+  11       50 NOP
+  12       52 LOAD_CONST                       0 (0)
+           54 LOAD_CONST                       1 (None)
+           56 IMPORT_NAME                      7 (Foundation)
+           58 STORE_NAME                       7 (Foundation)
+  22 >>    60 LOAD_CONST                       1 (None)
+           62 STORE_GLOBAL                     9 (_PRODUCT_ID)
+  23       64 LOAD_CONST                       2 (<code get_product_id, line 23>)
+           66 MAKE_FUNCTION
+           68 STORE_NAME                      10 (get_product_id)
+  48       70 LOAD_CONST                       1 (None)
+           72 STORE_GLOBAL                    11 (_CELLAR_ID)
+  49       74 LOAD_CONST                       3 (<code get_cellar_id, line 49>)
+           76 MAKE_FUNCTION
+           78 STORE_NAME                      12 (get_cellar_id)
+  79       80 LOAD_CONST                       4 (<code get_home_dir, line 79>)
+           82 MAKE_FUNCTION
+           84 STORE_NAME                      13 (get_home_dir)
+  97       86 LOAD_CONST                       5 (<code get_user_dir, line 97>)
+           88 MAKE_FUNCTION
+           90 STORE_NAME                      14 (get_user_dir)
+ 105       92 LOAD_CONST                       6 (<code get_icons_dir, line 105>)
+           94 MAKE_FUNCTION
+           96 STORE_NAME                      15 (get_icons_dir)
+ 112       98 LOAD_CONST                       7 (<code get_installer_dir, line 112>)
+          100 MAKE_FUNCTION
+          102 STORE_NAME                      16 (get_installer_dir)
+ 119      104 LOAD_CONST                       8 (<code get_managed_dir, line 119>)
+          106 MAKE_FUNCTION
+          108 STORE_NAME                      17 (get_managed_dir)
+ 126      110 LOAD_CONST                       9 (<code is_root_install, line 126>)
+          112 MAKE_FUNCTION
+          114 STORE_NAME                      18 (is_root_install)
+ 134      116 LOAD_CONST                      10 (<code is_arm64_install, line 134>)
+          118 MAKE_FUNCTION
+          120 STORE_NAME                      19 (is_arm64_install)
+ 141      122 LOAD_CONST                      11 (<code is_wow64_install, line 141>)
+          124 MAKE_FUNCTION
+          126 STORE_NAME                      20 (is_wow64_install)
+ 151      128 LOAD_CONST                      12 (<code is_crostini, line 151>)
+          130 MAKE_FUNCTION
+          132 STORE_NAME                      21 (is_crostini)
+ 164      134 LOAD_CONST                       1 (None)
+          136 STORE_GLOBAL                    22 (_CONFIG)
+ 166      138 LOAD_CONST                      13 (<code get_config, line 166>)
+          140 MAKE_FUNCTION
+          142 STORE_NAME                      23 (get_config)
+ 217      144 LOAD_CONST                      14 (<code get_config_string, line 217>)
+          146 MAKE_FUNCTION
+          148 STORE_NAME                      24 (get_config_string)
+ 227      150 LOAD_CONST                      15 (<code set_config_string, line 227>)
+          152 MAKE_FUNCTION
+          154 STORE_NAME                      25 (set_config_string)
+ 245      156 LOAD_CONST                      16 (<code get_config_boolean, line 245>)
+          158 MAKE_FUNCTION
+          160 STORE_NAME                      26 (get_config_boolean)
+ 254      162 LOAD_CONST                      17 (<code set_config_boolean, line 254>)
+          164 MAKE_FUNCTION
+          166 STORE_NAME                      27 (set_config_boolean)
+ 274      168 LOAD_CONST                       1 (None)
+          170 STORE_GLOBAL                    28 (_ENVIRON)
+ 276      172 LOAD_CONST                      18 (<code refresh_environment, line 276>)
+          174 MAKE_FUNCTION
+          176 STORE_NAME                      29 (refresh_environment)
+ 281      178 LOAD_CONST                      19 (<code _refresh_environment, line 281>)
+          180 MAKE_FUNCTION
+          182 STORE_NAME                      30 (_refresh_environment)
+ 328      184 LOAD_CONST                      20 (<code get_bottle_path, line 328>)
+          186 MAKE_FUNCTION
+          188 STORE_NAME                      31 (get_bottle_path)
+ 334      190 LOAD_CONST                      21 (<code set_bottle_path, line 334>)
+          192 MAKE_FUNCTION
+          194 STORE_NAME                      32 (set_bottle_path)
+ 342      196 LOAD_CONST                      22 (<code get_managed_bottle_path, line 342>)
+          198 MAKE_FUNCTION
+          200 STORE_NAME                      33 (get_managed_bottle_path)
+ 354      202 LOAD_CONST                       1 (None)
+          204 STORE_GLOBAL                    34 (_CROSS_PRODUCT_CONFIG)
+ 356      206 LOAD_CONST                      23 (<code get_cross_product_config, line 356>)
+          208 MAKE_FUNCTION
+          210 STORE_NAME                      35 (get_cross_product_config)
+ 377      212 LOAD_CONST                      24 (<code this_product, line 377>)
+          214 MAKE_FUNCTION
+          216 STORE_NAME                      36 (this_product)
+          218 RETURN_CONST                     1 (None)
+     >>   220 PUSH_EXC_INFO
+  13      222 LOAD_NAME                        8 (ImportError)
+          224 CHECK_EXC_MATCH
+          226 POP_JUMP_IF_FALSE                3 (to 236)
+          230 POP_TOP
+  14      232 POP_EXCEPT
+          234 JUMP_BACKWARD_NO_INTERRUPT      88 (to 60)
+  13 >>   236 RERAISE                          0
+     >>   238 COPY                             3
+          240 POP_EXCEPT
+          242 RERAISE                          1
+  ExceptionTable:
+    52 to 60 -> 220 [0]
+    220 to 232 -> 238 [1] lasti
+    236 to 238 -> 238 [1] lasti
+
+Disassembly of <code get_product_id> (line 23, args=0 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: filename, thisfile, ose
+  23        0 RESUME                           0
+  30        2 LOAD_GLOBAL                      0 (_PRODUCT_ID)
+           12 POP_JUMP_IF_NOT_NONE           237 (to 490)
+  31       16 LOAD_GLOBAL                      2 (os)
+           26 LOAD_ATTR                        4 (path)
+           46 LOAD_ATTR                        7 (join + NULL|self)
+           66 LOAD_GLOBAL                      8 (cxutils)
+           76 LOAD_ATTR                       10 (CX_ROOT)
+           96 LOAD_CONST                       2 ('.productid')
+           98 CALL                             2
+          106 STORE_FAST                       0 (filename)
+  32      108 LOAD_GLOBAL                      2 (os)
+          118 LOAD_ATTR                        4 (path)
+          138 LOAD_ATTR                       13 (exists + NULL|self)
+          158 LOAD_FAST                        0 (filename)
+          160 CALL                             1
+          168 TO_BOOL
+          176 POP_JUMP_IF_FALSE               52 (to 284)
+  33      180 NOP
+  34      182 LOAD_GLOBAL                     15 (open + NULL)
+          192 LOAD_FAST                        0 (filename)
+          194 LOAD_CONST                       3 ('r')
+          196 LOAD_CONST                       4 ('utf8')
+          198 LOAD_CONST                       5 (('encoding',))
+          200 CALL_KW                          3
+          202 BEFORE_WITH
+          204 STORE_FAST                       1 (thisfile)
+  35      206 LOAD_FAST                        1 (thisfile)
+          208 LOAD_ATTR                       17 (readline + NULL|self)
+          228 CALL                             0
+          236 LOAD_ATTR                       19 (rstrip + NULL|self)
+          256 CALL                             0
+          264 STORE_GLOBAL                     0 (_PRODUCT_ID)
+  34      266 LOAD_CONST                       1 (None)
+          268 LOAD_CONST                       1 (None)
+          270 LOAD_CONST                       1 (None)
+          272 CALL                             2
+          280 POP_TOP
+          282 JUMP_FORWARD                    16 (to 316)
+  39 >>   284 LOAD_GLOBAL                     24 (distversion)
+          294 LOAD_ATTR                       26 (BUILTIN_PRODUCT_ID)
+          314 STORE_GLOBAL                     0 (_PRODUCT_ID)
+  40 >>   316 LOAD_GLOBAL                     29 (len + NULL)
+          326 LOAD_GLOBAL                      0 (_PRODUCT_ID)
+          336 CALL                             1
+          344 LOAD_CONST                       7 (4)
+          346 COMPARE_OP                      18 (< bool)
+          350 POP_JUMP_IF_FALSE               18 (to 390)
+  41      354 LOAD_GLOBAL                     23 (RuntimeError + NULL)
+          364 LOAD_CONST                       8 ("product id '%s' is too short")
+          366 LOAD_GLOBAL                      0 (_PRODUCT_ID)
+          376 BINARY_OP                        6 (%)
+          380 CALL                             1
+          388 RAISE_VARARGS                    1
+  43 >>   390 LOAD_GLOBAL                     30 (re)
+          400 LOAD_ATTR                       32 (search)
+          420 PUSH_NULL
+          422 LOAD_CONST                       9 ('^[a-zA-Z0-9_][a-zA-Z0-9_][a-zA-Z0-9_][a-zA-Z0-9_][a-zA-Z0-9_]*$')
+          424 LOAD_GLOBAL                      0 (_PRODUCT_ID)
+          434 CALL                             2
+          442 TO_BOOL
+          450 POP_JUMP_IF_TRUE                18 (to 490)
+  44      454 LOAD_GLOBAL                     23 (RuntimeError + NULL)
+          464 LOAD_CONST                      10 ("product id '%s' contains bad characters")
+          466 LOAD_GLOBAL                      0 (_PRODUCT_ID)
+          476 BINARY_OP                        6 (%)
+          480 CALL                             1
+          488 RAISE_VARARGS                    1
+  45 >>   490 LOAD_GLOBAL                      0 (_PRODUCT_ID)
+          500 RETURN_VALUE
+  34 >>   502 PUSH_EXC_INFO
+          504 WITH_EXCEPT_START                0
+          506 TO_BOOL
+          514 POP_JUMP_IF_TRUE                 1 (to 520)
+          518 RERAISE                          2
+     >>   520 POP_TOP
+          522 POP_EXCEPT
+          524 POP_TOP
+          526 POP_TOP
+          528 JUMP_BACKWARD_NO_INTERRUPT     107 (to 316)
+     >>   530 COPY                             3
+          532 POP_EXCEPT
+          534 RERAISE                          1
+     >>   536 PUSH_EXC_INFO
+  36      538 LOAD_GLOBAL                     20 (OSError)
+          548 CHECK_EXC_MATCH
+          550 POP_JUMP_IF_FALSE               20 (to 594)
+          554 STORE_FAST                       2 (ose)
+  37      556 LOAD_GLOBAL                     23 (RuntimeError + NULL)
+          566 LOAD_CONST                       6 ("unable to open, read or close '%s'")
+          568 LOAD_FAST                        0 (filename)
+          570 BINARY_OP                        6 (%)
+          574 CALL                             1
+          582 LOAD_FAST                        2 (ose)
+          584 RAISE_VARARGS                    2
+     >>   586 LOAD_CONST                       1 (None)
+          588 STORE_FAST                       2 (ose)
+          590 DELETE_FAST                      2 (ose)
+          592 RERAISE                          1
+  36 >>   594 RERAISE                          0
+     >>   596 COPY                             3
+          598 POP_EXCEPT
+          600 RERAISE                          1
+  ExceptionTable:
+    182 to 204 -> 536 [0]
+    204 to 266 -> 502 [1] lasti
+    266 to 282 -> 536 [0]
+    502 to 522 -> 530 [3] lasti
+    522 to 528 -> 536 [0]
+    530 to 536 -> 536 [0]
+    536 to 556 -> 596 [1] lasti
+    556 to 586 -> 586 [1] lasti
+    586 to 596 -> 596 [1] lasti
+
+Disassembly of <code get_cellar_id> (line 49, args=0 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  49        0 RESUME                           0
+  62        2 LOAD_GLOBAL                      0 (_CELLAR_ID)
+           12 POP_JUMP_IF_NOT_NONE           103 (to 222)
+  63       16 LOAD_GLOBAL                      3 (get_product_id + NULL)
+           26 CALL                             0
+           34 STORE_GLOBAL                     0 (_CELLAR_ID)
+  64       36 LOAD_GLOBAL                      4 (distversion)
+           46 LOAD_ATTR                        6 (IS_PREVIEW)
+           66 TO_BOOL
+           74 POP_JUMP_IF_FALSE               12 (to 102)
+           78 LOAD_GLOBAL                      0 (_CELLAR_ID)
+           88 LOAD_CONST                       1 ('cxpreview')
+           90 COMPARE_OP                      88 (== bool)
+           94 POP_JUMP_IF_FALSE                2 (to 102)
+  65       98 LOAD_CONST                       2 ('cxoffice')
+          100 STORE_GLOBAL                     0 (_CELLAR_ID)
+  66 >>   102 LOAD_GLOBAL                      4 (distversion)
+          112 LOAD_ATTR                        8 (IS_MACOSX)
+          132 TO_BOOL
+          140 POP_JUMP_IF_FALSE               39 (to 222)
+  67      144 LOAD_GLOBAL                      4 (distversion)
+          154 LOAD_ATTR                       10 (PRODUCT_NAME)
+          174 STORE_GLOBAL                     0 (_CELLAR_ID)
+  68      176 LOAD_GLOBAL                      4 (distversion)
+          186 LOAD_ATTR                        6 (IS_PREVIEW)
+          206 TO_BOOL
+          214 POP_JUMP_IF_FALSE                2 (to 222)
+  69      218 LOAD_CONST                       3 ('CrossOver')
+          220 STORE_GLOBAL                     0 (_CELLAR_ID)
+  70 >>   222 LOAD_GLOBAL                      0 (_CELLAR_ID)
+          232 RETURN_VALUE
+
+Disassembly of <code get_home_dir> (line 79, args=0 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: home, stat, euid, ose, errno
+  79        0 RESUME                           0
+  80        2 NOP
+  81        4 LOAD_GLOBAL                      0 (os)
+           14 LOAD_ATTR                        2 (environ)
+           34 LOAD_CONST                       1 ('HOME')
+           36 BINARY_SUBSCR
+           40 STORE_FAST                       0 (home)
+  82       42 LOAD_GLOBAL                      0 (os)
+           52 LOAD_ATTR                        4 (stat)
+           72 PUSH_NULL
+           74 LOAD_FAST                        0 (home)
+           76 CALL                             1
+           84 STORE_FAST                       1 (stat)
+  83       86 LOAD_GLOBAL                      0 (os)
+           96 LOAD_ATTR                        6 (geteuid)
+          116 PUSH_NULL
+          118 CALL                             0
+          126 STORE_FAST                       2 (euid)
+  84      128 LOAD_FAST                        2 (euid)
+          130 LOAD_CONST                       2 (0)
+          132 COMPARE_OP                      88 (== bool)
+          136 POP_JUMP_IF_FALSE               30 (to 200)
+          140 LOAD_FAST                        1 (stat)
+          142 LOAD_ATTR                        8 (st_uid)
+          162 LOAD_FAST                        2 (euid)
+          164 COMPARE_OP                     119 (!= bool)
+          168 POP_JUMP_IF_FALSE               14 (to 200)
+  85      172 LOAD_GLOBAL                     11 (RuntimeError + NULL)
+          182 LOAD_CONST                       3 ('$HOME (%s) does not belong to root')
+          184 LOAD_FAST                        0 (home)
+          186 BINARY_OP                        6 (%)
+          190 CALL                             1
+          198 RAISE_VARARGS                    1
+  94 >>   200 LOAD_FAST                        0 (home)
+          202 RETURN_VALUE
+     >>   204 PUSH_EXC_INFO
+  86      206 LOAD_GLOBAL                     12 (KeyError)
+          216 CHECK_EXC_MATCH
+          218 POP_JUMP_IF_FALSE               12 (to 246)
+          222 POP_TOP
+  87      224 LOAD_GLOBAL                     11 (RuntimeError + NULL)
+          234 LOAD_CONST                       4 ('$HOME is not set!')
+          236 CALL                             1
+          244 RAISE_VARARGS                    1
+  88 >>   246 LOAD_GLOBAL                     14 (OSError)
+          256 CHECK_EXC_MATCH
+          258 POP_JUMP_IF_FALSE               50 (to 362)
+          262 STORE_FAST                       3 (ose)
+  89      264 LOAD_CONST                       2 (0)
+          266 LOAD_CONST                       0 (None)
+          268 IMPORT_NAME                      8 (errno)
+          270 STORE_FAST                       4 (errno)
+  90      272 LOAD_FAST                        3 (ose)
+          274 LOAD_ATTR                       16 (errno)
+          294 LOAD_FAST                        4 (errno)
+          296 LOAD_ATTR                       18 (ENOENT)
+          316 COMPARE_OP                      88 (== bool)
+          320 POP_JUMP_IF_FALSE               14 (to 352)
+  91      324 LOAD_GLOBAL                     11 (RuntimeError + NULL)
+          334 LOAD_CONST                       5 ('$HOME (%s) does not exist!')
+          336 LOAD_FAST_CHECK                  0 (home)
+          338 BINARY_OP                        6 (%)
+          342 CALL                             1
+          350 RAISE_VARARGS                    1
+  92 >>   352 RAISE_VARARGS                    0
+     >>   354 LOAD_CONST                       0 (None)
+          356 STORE_FAST                       3 (ose)
+          358 DELETE_FAST                      3 (ose)
+          360 RERAISE                          1
+  88 >>   362 RERAISE                          0
+     >>   364 COPY                             3
+          366 POP_EXCEPT
+          368 RERAISE                          1
+  ExceptionTable:
+    4 to 200 -> 204 [0]
+    204 to 264 -> 364 [1] lasti
+    264 to 354 -> 354 [1] lasti
+    354 to 364 -> 364 [1] lasti
+
+Disassembly of <code get_user_dir> (line 97, args=0 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: home
+  97        0 RESUME                           0
+  98        2 LOAD_GLOBAL                      1 (get_home_dir + NULL)
+           12 CALL                             0
+           20 STORE_FAST                       0 (home)
+  99       22 LOAD_GLOBAL                      2 (distversion)
+           32 LOAD_ATTR                        4 (IS_MACOSX)
+           52 TO_BOOL
+           60 POP_JUMP_IF_FALSE               41 (to 146)
+ 100       64 LOAD_GLOBAL                      6 (os)
+           74 LOAD_ATTR                        8 (path)
+           94 LOAD_ATTR                       11 (join + NULL|self)
+          114 LOAD_FAST                        0 (home)
+          116 LOAD_CONST                       1 ('Library/Application Support/')
+          118 LOAD_GLOBAL                     13 (get_cellar_id + NULL)
+          128 CALL                             0
+          136 CALL                             3
+          144 RETURN_VALUE
+ 102 >>   146 LOAD_GLOBAL                      6 (os)
+          156 LOAD_ATTR                        8 (path)
+          176 LOAD_ATTR                       11 (join + NULL|self)
+          196 LOAD_FAST                        0 (home)
+          198 LOAD_CONST                       2 ('.')
+          200 LOAD_GLOBAL                     13 (get_cellar_id + NULL)
+          210 CALL                             0
+          218 BINARY_OP                        0 (+)
+          222 CALL                             2
+          230 RETURN_VALUE
+
+Disassembly of <code get_icons_dir> (line 105, args=0 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+ 105        0 RESUME                           0
+ 106        2 LOAD_GLOBAL                      0 (distversion)
+           12 LOAD_ATTR                        2 (IS_MACOSX)
+           32 TO_BOOL
+           40 POP_JUMP_IF_FALSE               53 (to 150)
+ 107       44 LOAD_GLOBAL                      4 (os)
+           54 LOAD_ATTR                        6 (path)
+           74 LOAD_ATTR                        9 (join + NULL|self)
+           94 LOAD_GLOBAL                     11 (get_home_dir + NULL)
+          104 CALL                             0
+          112 LOAD_CONST                       1 ('Library/Caches/')
+          114 LOAD_CONST                       2 ('com.codeweavers.%s')
+          116 LOAD_GLOBAL                     13 (get_cellar_id + NULL)
+          126 CALL                             0
+          134 BINARY_OP                        6 (%)
+          138 LOAD_CONST                       3 ('icons')
+          140 CALL                             4
+          148 RETURN_VALUE
+ 109 >>   150 LOAD_GLOBAL                      4 (os)
+          160 LOAD_ATTR                        6 (path)
+          180 LOAD_ATTR                        9 (join + NULL|self)
+          200 LOAD_GLOBAL                     15 (get_user_dir + NULL)
+          210 CALL                             0
+          218 LOAD_CONST                       3 ('icons')
+          220 CALL                             2
+          228 RETURN_VALUE
+
+Disassembly of <code get_installer_dir> (line 112, args=0 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+ 112        0 RESUME                           0
+ 113        2 LOAD_GLOBAL                      0 (distversion)
+           12 LOAD_ATTR                        2 (IS_MACOSX)
+           32 TO_BOOL
+           40 POP_JUMP_IF_FALSE               53 (to 150)
+ 114       44 LOAD_GLOBAL                      4 (os)
+           54 LOAD_ATTR                        6 (path)
+           74 LOAD_ATTR                        9 (join + NULL|self)
+           94 LOAD_GLOBAL                     11 (get_home_dir + NULL)
+          104 CALL                             0
+          112 LOAD_CONST                       1 ('Library/Caches/')
+          114 LOAD_CONST                       2 ('com.codeweavers.%s')
+          116 LOAD_GLOBAL                     13 (get_cellar_id + NULL)
+          126 CALL                             0
+          134 BINARY_OP                        6 (%)
+          138 LOAD_CONST                       3 ('installers')
+          140 CALL                             4
+          148 RETURN_VALUE
+ 116 >>   150 LOAD_GLOBAL                      4 (os)
+          160 LOAD_ATTR                        6 (path)
+          180 LOAD_ATTR                        9 (join + NULL|self)
+          200 LOAD_GLOBAL                     15 (get_user_dir + NULL)
+          210 CALL                             0
+          218 LOAD_CONST                       3 ('installers')
+          220 CALL                             2
+          228 RETURN_VALUE
+
+Disassembly of <code get_managed_dir> (line 119, args=0 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+ 119        0 RESUME                           0
+ 120        2 LOAD_GLOBAL                      0 (distversion)
+           12 LOAD_ATTR                        2 (IS_MACOSX)
+           32 TO_BOOL
+           40 POP_JUMP_IF_FALSE               40 (to 124)
+ 121       44 LOAD_GLOBAL                      4 (os)
+           54 LOAD_ATTR                        6 (path)
+           74 LOAD_ATTR                        9 (join + NULL|self)
+           94 LOAD_CONST                       1 ('/Library/Application Support')
+           96 LOAD_GLOBAL                     11 (get_cellar_id + NULL)
+          106 CALL                             0
+          114 CALL                             2
+          122 RETURN_VALUE
+ 123 >>   124 LOAD_GLOBAL                      4 (os)
+          134 LOAD_ATTR                        6 (path)
+          154 LOAD_ATTR                        9 (join + NULL|self)
+          174 LOAD_GLOBAL                     12 (cxutils)
+          184 LOAD_ATTR                       14 (CX_ROOT)
+          204 LOAD_CONST                       2 ('support')
+          206 CALL                             2
+          214 RETURN_VALUE
+
+Disassembly of <code is_root_install> (line 126, args=0 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: stat
+ 126        0 RESUME                           0
+ 130        2 LOAD_GLOBAL                      0 (os)
+           12 LOAD_ATTR                        2 (stat)
+           32 PUSH_NULL
+           34 LOAD_GLOBAL                      4 (cxutils)
+           44 LOAD_ATTR                        6 (CX_ROOT)
+           64 CALL                             1
+           72 STORE_FAST                       0 (stat)
+ 131       74 LOAD_FAST                        0 (stat)
+           76 LOAD_ATTR                        8 (st_uid)
+           96 LOAD_CONST                       1 (0)
+           98 COMPARE_OP                      72 (==)
+          102 RETURN_VALUE
+
+Disassembly of <code is_arm64_install> (line 134, args=0 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+ 134        0 RESUME                           0
+ 135        2 LOAD_GLOBAL                      0 (os)
+           12 LOAD_ATTR                        2 (path)
+           32 LOAD_ATTR                        5 (exists + NULL|self)
+           52 LOAD_GLOBAL                      0 (os)
+           62 LOAD_ATTR                        2 (path)
+           82 LOAD_ATTR                        7 (join + NULL|self)
+          102 LOAD_GLOBAL                      8 (cxutils)
+          112 LOAD_ATTR                       10 (CX_ROOT)
+          132 LOAD_CONST                       1 ('lib')
+          134 LOAD_CONST                       2 ('wine')
+          136 LOAD_CONST                       3 ('aarch64-unix')
+          138 CALL                             4
+          146 CALL                             1
+          154 TO_BOOL
+          162 POP_JUMP_IF_FALSE                1 (to 168)
+ 136      166 RETURN_CONST                     4 (True)
+ 138 >>   168 RETURN_CONST                     5 (False)
+
+Disassembly of <code is_wow64_install> (line 141, args=0 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+ 141        0 RESUME                           0
+ 142        2 LOAD_GLOBAL                      0 (os)
+           12 LOAD_ATTR                        2 (path)
+           32 LOAD_ATTR                        5 (exists + NULL|self)
+           52 LOAD_GLOBAL                      0 (os)
+           62 LOAD_ATTR                        2 (path)
+           82 LOAD_ATTR                        7 (join + NULL|self)
+          102 LOAD_GLOBAL                      8 (cxutils)
+          112 LOAD_ATTR                       10 (CX_ROOT)
+          132 LOAD_CONST                       1 ('lib')
+          134 LOAD_CONST                       2 ('wine')
+          136 LOAD_CONST                       3 ('i386-unix')
+          138 CALL                             4
+          146 CALL                             1
+          154 TO_BOOL
+          162 POP_JUMP_IF_FALSE                1 (to 168)
+ 143      166 RETURN_CONST                     4 (False)
+ 145 >>   168 LOAD_GLOBAL                      0 (os)
+          178 LOAD_ATTR                        2 (path)
+          198 LOAD_ATTR                        5 (exists + NULL|self)
+          218 LOAD_GLOBAL                      0 (os)
+          228 LOAD_ATTR                        2 (path)
+          248 LOAD_ATTR                        7 (join + NULL|self)
+          268 LOAD_GLOBAL                      8 (cxutils)
+          278 LOAD_ATTR                       10 (CX_ROOT)
+          298 LOAD_CONST                       1 ('lib')
+          300 LOAD_CONST                       2 ('wine')
+          302 LOAD_CONST                       5 ('i386-windows')
+          304 CALL                             4
+          312 CALL                             1
+          320 TO_BOOL
+          328 POP_JUMP_IF_FALSE                1 (to 334)
+ 146      332 RETURN_CONST                     6 (True)
+ 148 >>   334 RETURN_CONST                     4 (False)
+
+Disassembly of <code is_crostini> (line 151, args=0 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+ 151        0 RESUME                           0
+ 155        2 LOAD_GLOBAL                      0 (os)
+           12 LOAD_ATTR                        2 (path)
+           32 LOAD_ATTR                        5 (isfile + NULL|self)
+           52 LOAD_CONST                       1 ('/etc/sudoers.d/10-cros-nopasswd')
+           54 CALL                             1
+           62 RETURN_VALUE
+
+Disassembly of <code get_config> (line 166, args=0 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: global_config_file, user_config_file
+ 166        0 RESUME                           0
+ 199        2 LOAD_GLOBAL                      0 (_CONFIG)
+           12 POP_JUMP_IF_NOT_NONE           179 (to 374)
+ 200       16 LOAD_GLOBAL                      2 (cxconfig)
+           26 LOAD_ATTR                        4 (Stack)
+           46 PUSH_NULL
+           48 CALL                             0
+           56 STORE_GLOBAL                     0 (_CONFIG)
+ 202       58 LOAD_GLOBAL                      6 (os)
+           68 LOAD_ATTR                        8 (path)
+           88 LOAD_ATTR                       11 (join + NULL|self)
+          108 LOAD_GLOBAL                     12 (cxutils)
+          118 LOAD_ATTR                       14 (CX_ROOT)
+          138 LOAD_CONST                       1 ('etc')
+          140 LOAD_GLOBAL                     17 (get_product_id + NULL)
+          150 CALL                             0
+          158 LOAD_CONST                       2 ('.conf')
+          160 BINARY_OP                        0 (+)
+          164 CALL                             3
+          172 STORE_FAST                       0 (global_config_file)
+ 203      174 LOAD_GLOBAL                      0 (_CONFIG)
+          184 LOAD_ATTR                       19 (addconfig + NULL|self)
+          204 LOAD_FAST                        0 (global_config_file)
+          206 CALL                             1
+          214 POP_TOP
+ 205      216 NOP
+ 206      218 LOAD_GLOBAL                      6 (os)
+          228 LOAD_ATTR                        8 (path)
+          248 LOAD_ATTR                       11 (join + NULL|self)
+          268 LOAD_GLOBAL                     21 (get_user_dir + NULL)
+          278 CALL                             0
+          286 LOAD_GLOBAL                     23 (get_cellar_id + NULL)
+          296 CALL                             0
+          304 LOAD_CONST                       2 ('.conf')
+          306 BINARY_OP                        0 (+)
+          310 CALL                             2
+          318 STORE_FAST                       1 (user_config_file)
+ 207      320 LOAD_GLOBAL                      0 (_CONFIG)
+          330 LOAD_ATTR                       19 (addconfig + NULL|self)
+          350 LOAD_FAST                        1 (user_config_file)
+          352 CALL                             1
+          360 POP_TOP
+ 214      362 LOAD_GLOBAL                      0 (_CONFIG)
+          372 RETURN_VALUE
+     >>   374 LOAD_GLOBAL                      0 (_CONFIG)
+          384 RETURN_VALUE
+     >>   386 PUSH_EXC_INFO
+ 208      388 LOAD_GLOBAL                     24 (KeyError)
+          398 CHECK_EXC_MATCH
+          400 POP_JUMP_IF_FALSE                8 (to 420)
+          404 POP_TOP
+ 210      406 POP_EXCEPT
+ 214      408 LOAD_GLOBAL                      0 (_CONFIG)
+          418 RETURN_VALUE
+ 211 >>   420 LOAD_GLOBAL                     26 (RuntimeError)
+          430 CHECK_EXC_MATCH
+          432 POP_JUMP_IF_FALSE                8 (to 452)
+          436 POP_TOP
+ 213      438 POP_EXCEPT
+ 214      440 LOAD_GLOBAL                      0 (_CONFIG)
+          450 RETURN_VALUE
+ 211 >>   452 RERAISE                          0
+     >>   454 COPY                             3
+          456 POP_EXCEPT
+          458 RERAISE                          1
+  ExceptionTable:
+    218 to 362 -> 386 [0]
+    386 to 406 -> 454 [1] lasti
+    420 to 438 -> 454 [1] lasti
+    452 to 454 -> 454 [1] lasti
+
+Disassembly of <code get_config_string> (line 217, args=3 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: section, name, default, defaults, config
+ 217        0 RESUME                           0
+ 219        2 LOAD_GLOBAL                      0 (distversion)
+           12 LOAD_ATTR                        2 (IS_MACOSX)
+           32 TO_BOOL
+           40 POP_JUMP_IF_FALSE               47 (to 138)
+ 220       44 LOAD_GLOBAL                      4 (Foundation)
+           54 LOAD_ATTR                        6 (NSUserDefaults)
+           74 LOAD_ATTR                        9 (standardUserDefaults + NULL|self)
+           94 CALL                             0
+          102 STORE_FAST                       3 (defaults)
+ 221      104 LOAD_FAST                        3 (defaults)
+          106 LOAD_ATTR                       11 (stringForKey_ + NULL|self)
+          126 LOAD_FAST                        1 (name)
+          128 CALL                             1
+          136 RETURN_VALUE
+ 223 >>   138 LOAD_GLOBAL                     13 (get_config + NULL)
+          148 CALL                             0
+          156 STORE_FAST                       4 (config)
+ 224      158 LOAD_FAST_LOAD_FAST             64 (config, section)
+          160 BINARY_SUBSCR
+          164 LOAD_ATTR                       15 (get + NULL|self)
+          184 LOAD_FAST_LOAD_FAST             18 (name, default)
+          186 CALL                             2
+          194 RETURN_VALUE
+
+Disassembly of <code set_config_string> (line 227, args=3 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: section, name, value, defaults, config, wconfig
+ 227        0 RESUME                           0
+ 233        2 LOAD_GLOBAL                      0 (distversion)
+           12 LOAD_ATTR                        2 (IS_MACOSX)
+           32 TO_BOOL
+           40 POP_JUMP_IF_FALSE               48 (to 140)
+ 234       44 LOAD_GLOBAL                      4 (Foundation)
+           54 LOAD_ATTR                        6 (NSUserDefaults)
+           74 LOAD_ATTR                        9 (standardUserDefaults + NULL|self)
+           94 CALL                             0
+          102 STORE_FAST                       3 (defaults)
+ 235      104 LOAD_FAST                        3 (defaults)
+          106 LOAD_ATTR                       11 (setObject_forKey_ + NULL|self)
+          126 LOAD_FAST_LOAD_FAST             33 (value, name)
+          128 CALL                             2
+          136 POP_TOP
+ 236      138 RETURN_CONST                     1 (None)
+ 238 >>   140 LOAD_GLOBAL                     13 (get_config + NULL)
+          150 CALL                             0
+          158 STORE_FAST                       4 (config)
+ 239      160 LOAD_FAST                        4 (config)
+          162 LOAD_ATTR                       15 (get_save_config + NULL|self)
+          182 CALL                             0
+          190 STORE_FAST                       5 (wconfig)
+ 240      192 LOAD_FAST                        5 (wconfig)
+          194 LOAD_ATTR                       17 (lock_file + NULL|self)
+          214 CALL                             0
+          222 POP_TOP
+ 241      224 LOAD_FAST_LOAD_FAST             37 (value, wconfig)
+          226 LOAD_FAST                        0 (section)
+          228 BINARY_SUBSCR
+          232 LOAD_FAST                        1 (name)
+          234 STORE_SUBSCR
+ 242      238 LOAD_FAST                        5 (wconfig)
+          240 LOAD_ATTR                       19 (save_and_unlock_file + NULL|self)
+          260 CALL                             0
+          268 POP_TOP
+          270 RETURN_CONST                     1 (None)
+
+Disassembly of <code get_config_boolean> (line 245, args=3 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: section, name, default, defaults
+ 245        0 RESUME                           0
+ 247        2 LOAD_GLOBAL                      0 (distversion)
+           12 LOAD_ATTR                        2 (IS_MACOSX)
+           32 TO_BOOL
+           40 POP_JUMP_IF_FALSE               47 (to 138)
+ 248       44 LOAD_GLOBAL                      4 (Foundation)
+           54 LOAD_ATTR                        6 (NSUserDefaults)
+           74 LOAD_ATTR                        9 (standardUserDefaults + NULL|self)
+           94 CALL                             0
+          102 STORE_FAST                       3 (defaults)
+ 249      104 LOAD_FAST                        3 (defaults)
+          106 LOAD_ATTR                       11 (boolForKey_ + NULL|self)
+          126 LOAD_FAST                        1 (name)
+          128 CALL                             1
+          136 RETURN_VALUE
+ 251 >>   138 LOAD_GLOBAL                     13 (get_config_string + NULL)
+          148 LOAD_FAST_LOAD_FAST              1 (section, name)
+          150 LOAD_FAST                        2 (default)
+          152 TO_BOOL
+          160 POP_JUMP_IF_FALSE                9 (to 182)
+          164 LOAD_CONST                       1 ('1')
+          166 CALL                             3
+          174 LOAD_CONST                       2 ('0')
+          176 COMPARE_OP                     103 (!=)
+          180 RETURN_VALUE
+     >>   182 LOAD_CONST                       2 ('0')
+          184 CALL                             3
+          192 LOAD_CONST                       2 ('0')
+          194 COMPARE_OP                     103 (!=)
+          198 RETURN_VALUE
+
+Disassembly of <code set_config_boolean> (line 254, args=3 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: section, name, value, defaults
+ 254        0 RESUME                           0
+ 260        2 LOAD_GLOBAL                      0 (distversion)
+           12 LOAD_ATTR                        2 (IS_MACOSX)
+           32 TO_BOOL
+           40 POP_JUMP_IF_FALSE               48 (to 140)
+ 261       44 LOAD_GLOBAL                      4 (Foundation)
+           54 LOAD_ATTR                        6 (NSUserDefaults)
+           74 LOAD_ATTR                        9 (standardUserDefaults + NULL|self)
+           94 CALL                             0
+          102 STORE_FAST                       3 (defaults)
+ 262      104 LOAD_FAST                        3 (defaults)
+          106 LOAD_ATTR                       11 (setBool_forKey_ + NULL|self)
+          126 LOAD_FAST_LOAD_FAST             33 (value, name)
+          128 CALL                             2
+          136 POP_TOP
+ 263      138 RETURN_CONST                     1 (None)
+ 265 >>   140 LOAD_GLOBAL                     13 (set_config_string + NULL)
+          150 LOAD_FAST_LOAD_FAST              1 (section, name)
+          152 LOAD_FAST                        2 (value)
+          154 TO_BOOL
+          162 POP_JUMP_IF_FALSE                7 (to 180)
+          166 LOAD_CONST                       2 ('1')
+          168 CALL                             3
+          176 POP_TOP
+          178 RETURN_CONST                     1 (None)
+     >>   180 LOAD_CONST                       3 ('0')
+          182 CALL                             3
+          190 POP_TOP
+          192 RETURN_CONST                     1 (None)
+
+Disassembly of <code refresh_environment> (line 276, args=0 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+ 276        0 RESUME                           0
+ 279        2 LOAD_CONST                       0 (None)
+            4 STORE_GLOBAL                     0 (_ENVIRON)
+            6 RETURN_CONST                     0 (None)
+
+Disassembly of <code _refresh_environment> (line 281, args=1 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS|VARARGS):
+  locals+cells+free: config, _args, configs, conffile, section, key, name, bottle_path
+ 281        0 RESUME                           0
+ 285        2 LOAD_CONST                       1 ('CX_ROOT')
+            4 LOAD_GLOBAL                      0 (os)
+           14 LOAD_ATTR                        2 (environ)
+           34 CONTAINS_OP                      1 (not in)
+           38 POP_JUMP_IF_FALSE               33 (to 108)
+ 286       42 LOAD_GLOBAL                      4 (cxutils)
+           52 LOAD_ATTR                        6 (CX_ROOT)
+           72 LOAD_GLOBAL                      0 (os)
+           82 LOAD_ATTR                        2 (environ)
+          102 LOAD_CONST                       1 ('CX_ROOT')
+          104 STORE_SUBSCR
+ 288 >>   108 LOAD_CONST                       2 ('CX_BOTTLE_PATH')
+          110 LOAD_GLOBAL                      0 (os)
+          120 LOAD_ATTR                        2 (environ)
+          140 CONTAINS_OP                      1 (not in)
+          144 POP_JUMP_IF_FALSE              106 (to 360)
+ 289      148 LOAD_GLOBAL                      8 (distversion)
+          158 LOAD_ATTR                       10 (IS_MACOSX)
+          178 TO_BOOL
+          186 POP_JUMP_IF_FALSE               58 (to 306)
+ 290      190 LOAD_GLOBAL                      0 (os)
+          200 LOAD_ATTR                       12 (path)
+          220 LOAD_ATTR                       15 (join + NULL|self)
+          240 LOAD_GLOBAL                     17 (get_user_dir + NULL)
+          250 CALL                             0
+          258 LOAD_CONST                       3 ('Bottles')
+          260 CALL                             2
+          268 LOAD_GLOBAL                      0 (os)
+          278 LOAD_ATTR                        2 (environ)
+          298 LOAD_CONST                       2 ('CX_BOTTLE_PATH')
+          300 STORE_SUBSCR
+          304 JUMP_FORWARD                    27 (to 360)
+ 292 >>   306 LOAD_GLOBAL                     17 (get_user_dir + NULL)
+          316 CALL                             0
+          324 LOAD_GLOBAL                      0 (os)
+          334 LOAD_ATTR                        2 (environ)
+          354 LOAD_CONST                       2 ('CX_BOTTLE_PATH')
+          356 STORE_SUBSCR
+ 294 >>   360 LOAD_CONST                       4 ('CX_MANAGED_BOTTLE_PATH')
+          362 LOAD_GLOBAL                      0 (os)
+          372 LOAD_ATTR                        2 (environ)
+          392 CONTAINS_OP                      1 (not in)
+          396 POP_JUMP_IF_FALSE              106 (to 612)
+ 295      400 LOAD_GLOBAL                      8 (distversion)
+          410 LOAD_ATTR                       10 (IS_MACOSX)
+          430 TO_BOOL
+          438 POP_JUMP_IF_FALSE               58 (to 558)
+ 296      442 LOAD_GLOBAL                      0 (os)
+          452 LOAD_ATTR                       12 (path)
+          472 LOAD_ATTR                       15 (join + NULL|self)
+          492 LOAD_GLOBAL                     19 (get_managed_dir + NULL)
+          502 CALL                             0
+          510 LOAD_CONST                       3 ('Bottles')
+          512 CALL                             2
+          520 LOAD_GLOBAL                      0 (os)
+          530 LOAD_ATTR                        2 (environ)
+          550 LOAD_CONST                       4 ('CX_MANAGED_BOTTLE_PATH')
+          552 STORE_SUBSCR
+          556 JUMP_FORWARD                    27 (to 612)
+ 298 >>   558 LOAD_GLOBAL                     19 (get_managed_dir + NULL)
+          568 CALL                             0
+          576 LOAD_GLOBAL                      0 (os)
+          586 LOAD_ATTR                        2 (environ)
+          606 LOAD_CONST                       4 ('CX_MANAGED_BOTTLE_PATH')
+          608 STORE_SUBSCR
+ 300 >>   612 LOAD_FAST                        0 (config)
+          614 POP_JUMP_IF_NOT_NONE            46 (to 710)
+ 301      618 LOAD_GLOBAL                     21 (get_config + NULL)
+          628 CALL                             0
+          636 STORE_FAST                       0 (config)
+ 304      638 LOAD_FAST                        0 (config)
+          640 LOAD_ATTR                       23 (add_observer + NULL|self)
+          660 LOAD_GLOBAL                     24 (cxobservable)
+          670 LOAD_ATTR                       26 (ANY_EVENT)
+          690 LOAD_GLOBAL                     28 (_refresh_environment)
+          700 CALL                             2
+          708 POP_TOP
+ 308 >>   710 LOAD_FAST                        0 (config)
+          712 LOAD_ATTR                       31 (configs + NULL|self)
+          732 CALL                             0
+          740 STORE_FAST                       2 (configs)
+ 309      742 LOAD_GLOBAL                     33 (reversed + NULL)
+          752 LOAD_FAST                        2 (configs)
+          754 CALL                             1
+          762 GET_ITER
+     >>   764 FOR_ITER                       104 (to 976)
+          768 STORE_FAST                       3 (conffile)
+ 310      770 LOAD_FAST                        3 (conffile)
+          772 LOAD_CONST                       6 ('EnvironmentVariables')
+          774 BINARY_SUBSCR
+          778 STORE_FAST                       4 (section)
+ 314      780 LOAD_FAST                        4 (section)
+          782 LOAD_ATTR                       35 (sortedkeys + NULL|self)
+          802 CALL                             0
+          810 GET_ITER
+     >>   812 FOR_ITER                        76 (to 968)
+          816 STORE_FAST                       5 (key)
+ 315      818 LOAD_FAST                        4 (section)
+          820 LOAD_ATTR                       37 (fieldname + NULL|self)
+          840 LOAD_FAST                        5 (key)
+          842 CALL                             1
+          850 STORE_FAST                       6 (name)
+ 316      852 LOAD_GLOBAL                      4 (cxutils)
+          862 LOAD_ATTR                       38 (expand_unix_string)
+          882 PUSH_NULL
+          884 LOAD_GLOBAL                      0 (os)
+          894 LOAD_ATTR                        2 (environ)
+          914 LOAD_FAST_LOAD_FAST             69 (section, key)
+          916 BINARY_SUBSCR
+          920 CALL                             2
+          928 LOAD_GLOBAL                      0 (os)
+          938 LOAD_ATTR                        2 (environ)
+          958 LOAD_FAST                        6 (name)
+          960 STORE_SUBSCR
+          964 JUMP_BACKWARD                   78 (to 812)
+ 314 >>   968 END_FOR
+          970 POP_TOP
+          972 JUMP_BACKWARD                  106 (to 764)
+ 309 >>   976 END_FOR
+          978 POP_TOP
+ 319      980 LOAD_FAST                        0 (config)
+          982 LOAD_CONST                       7 ('CrossOver')
+          984 BINARY_SUBSCR
+          988 LOAD_ATTR                       41 (get + NULL|self)
+         1008 LOAD_CONST                       8 ('BottlePath')
+         1010 CALL                             1
+         1018 STORE_FAST                       7 (bottle_path)
+ 320     1020 LOAD_FAST                        7 (bottle_path)
+         1022 TO_BOOL
+         1030 POP_JUMP_IF_FALSE               19 (to 1072)
+ 321     1034 LOAD_FAST                        7 (bottle_path)
+         1036 LOAD_GLOBAL                      0 (os)
+         1046 LOAD_ATTR                        2 (environ)
+         1066 LOAD_CONST                       2 ('CX_BOTTLE_PATH')
+         1068 STORE_SUBSCR
+ 325 >>  1072 LOAD_GLOBAL                      0 (os)
+         1082 LOAD_ATTR                        2 (environ)
+         1102 LOAD_ATTR                       43 (copy + NULL|self)
+         1122 CALL                             0
+         1130 STORE_GLOBAL                    22 (_ENVIRON)
+         1132 RETURN_CONST                     5 (None)
+
+Disassembly of <code get_bottle_path> (line 328, args=0 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+ 328        0 RESUME                           0
+ 329        2 LOAD_GLOBAL                      0 (_ENVIRON)
+           12 POP_JUMP_IF_NOT_NONE            11 (to 38)
+ 330       16 LOAD_GLOBAL                      3 (_refresh_environment + NULL)
+           26 LOAD_CONST                       0 (None)
+           28 CALL                             1
+           36 POP_TOP
+ 331 >>    38 LOAD_GLOBAL                      0 (_ENVIRON)
+           48 LOAD_CONST                       1 ('CX_BOTTLE_PATH')
+           50 BINARY_SUBSCR
+           54 RETURN_VALUE
+
+Disassembly of <code set_bottle_path> (line 334, args=1 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: path
+ 334        0 RESUME                           0
+ 335        2 LOAD_CONST                       1 ('CX_BOTTLE_PATH')
+            4 LOAD_GLOBAL                      0 (os)
+           14 LOAD_ATTR                        2 (environ)
+           34 CONTAINS_OP                      0 (in)
+           38 POP_JUMP_IF_FALSE               17 (to 76)
+ 336       42 LOAD_GLOBAL                      0 (os)
+           52 LOAD_ATTR                        2 (environ)
+           72 LOAD_CONST                       1 ('CX_BOTTLE_PATH')
+           74 DELETE_SUBSCR
+ 338 >>    76 LOAD_GLOBAL                      5 (set_config_string + NULL)
+           86 LOAD_CONST                       2 ('CrossOver')
+           88 LOAD_CONST                       3 ('BottlePath')
+           90 LOAD_FAST                        0 (path)
+           92 CALL                             3
+          100 POP_TOP
+ 339      102 LOAD_GLOBAL                      7 (refresh_environment + NULL)
+          112 CALL                             0
+          120 POP_TOP
+          122 RETURN_CONST                     0 (None)
+
+Disassembly of <code get_managed_bottle_path> (line 342, args=0 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+ 342        0 RESUME                           0
+ 343        2 LOAD_GLOBAL                      0 (_ENVIRON)
+           12 POP_JUMP_IF_NOT_NONE            11 (to 38)
+ 344       16 LOAD_GLOBAL                      3 (_refresh_environment + NULL)
+           26 LOAD_CONST                       0 (None)
+           28 CALL                             1
+           36 POP_TOP
+ 345 >>    38 LOAD_GLOBAL                      0 (_ENVIRON)
+           48 LOAD_CONST                       1 ('CX_MANAGED_BOTTLE_PATH')
+           50 BINARY_SUBSCR
+           54 RETURN_VALUE
+
+Disassembly of <code get_cross_product_config> (line 356, args=0 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+ 356        0 RESUME                           0
+ 361        2 LOAD_GLOBAL                      0 (_CROSS_PRODUCT_CONFIG)
+           12 POP_JUMP_IF_NOT_NONE           208 (to 432)
+ 362       16 LOAD_GLOBAL                      2 (cxconfig)
+           26 LOAD_ATTR                        4 (Stack)
+           46 PUSH_NULL
+           48 CALL                             0
+           56 STORE_GLOBAL                     0 (_CROSS_PRODUCT_CONFIG)
+ 363       58 LOAD_GLOBAL                      0 (_CROSS_PRODUCT_CONFIG)
+           68 LOAD_ATTR                        7 (addconfig + NULL|self)
+           88 LOAD_CONST                       1 ('/etc/crossover.conf')
+           90 CALL                             1
+           98 POP_TOP
+ 364      100 LOAD_CONST                       2 ('HOME')
+          102 LOAD_GLOBAL                      8 (os)
+          112 LOAD_ATTR                       10 (environ)
+          132 CONTAINS_OP                      0 (in)
+          136 POP_JUMP_IF_FALSE              146 (to 432)
+          140 LOAD_GLOBAL                      8 (os)
+          150 LOAD_ATTR                       12 (geteuid)
+          170 PUSH_NULL
+          172 CALL                             0
+          180 LOAD_CONST                       3 (0)
+          182 COMPARE_OP                     119 (!= bool)
+          186 POP_JUMP_IF_TRUE                53 (to 296)
+ 365      190 LOAD_GLOBAL                     14 (cxutils)
+          200 LOAD_ATTR                       16 (CX_ROOT)
+          220 LOAD_ATTR                       19 (startswith + NULL|self)
+          240 LOAD_GLOBAL                      8 (os)
+          250 LOAD_ATTR                       10 (environ)
+          270 LOAD_CONST                       2 ('HOME')
+          272 BINARY_SUBSCR
+          276 CALL                             1
+          284 TO_BOOL
+          292 POP_JUMP_IF_FALSE               68 (to 432)
+ 366 >>   296 LOAD_GLOBAL                      0 (_CROSS_PRODUCT_CONFIG)
+          306 LOAD_ATTR                        7 (addconfig + NULL|self)
+          326 LOAD_GLOBAL                      8 (os)
+          336 LOAD_ATTR                       20 (path)
+          356 LOAD_ATTR                       23 (join + NULL|self)
+          376 LOAD_GLOBAL                      8 (os)
+          386 LOAD_ATTR                       10 (environ)
+          406 LOAD_CONST                       2 ('HOME')
+          408 BINARY_SUBSCR
+ 367      412 LOAD_CONST                       4 ('.crossover.conf')
+ 366      414 CALL                             2
+          422 CALL                             1
+          430 POP_TOP
+ 368 >>   432 LOAD_GLOBAL                      0 (_CROSS_PRODUCT_CONFIG)
+          442 RETURN_VALUE
+
+Disassembly of <code this_product> (line 377, args=0 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: result
+ 377        0 RESUME                           0
+ 386        2 BUILD_MAP                        0
+            4 STORE_FAST                       0 (result)
+ 387        6 LOAD_GLOBAL                      0 (cxutils)
+           16 LOAD_ATTR                        2 (CX_ROOT)
+           36 LOAD_FAST                        0 (result)
+           38 LOAD_CONST                       1 ('root')
+           40 STORE_SUBSCR
+ 388       44 LOAD_GLOBAL                      4 (distversion)
+           54 LOAD_ATTR                        6 (PRODUCT_NAME)
+           74 LOAD_FAST                        0 (result)
+           76 LOAD_CONST                       2 ('name')
+           78 STORE_SUBSCR
+ 389       82 LOAD_GLOBAL                      4 (distversion)
+           92 LOAD_ATTR                        8 (BUILTIN_PRODUCT_ID)
+          112 LOAD_FAST                        0 (result)
+          114 LOAD_CONST                       3 ('productid')
+          116 STORE_SUBSCR
+ 390      120 LOAD_GLOBAL                      4 (distversion)
+          130 LOAD_ATTR                       10 (CX_VERSION)
+          150 LOAD_FAST                        0 (result)
+          152 LOAD_CONST                       4 ('productversion')
+          154 STORE_SUBSCR
+ 391      158 LOAD_GLOBAL                      4 (distversion)
+          168 LOAD_ATTR                       12 (PUBLIC_VERSION)
+          188 LOAD_FAST                        0 (result)
+          190 LOAD_CONST                       5 ('publicversion')
+          192 STORE_SUBSCR
+ 392      196 LOAD_FAST                        0 (result)
+          198 RETURN_VALUE

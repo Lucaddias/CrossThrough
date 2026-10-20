@@ -1,0 +1,303 @@
+# webutils — CPython 3.13 bytecode listing of lib/python/webutils.pyc
+# sha256 07ca9b7cff072733a5095ca3a713d639186624972449e67e2d9182b467d362c4, pyc flags 3, co_filename /Volumes/gitlab_data/gitlab/builds/j911ygmXM/0/crossover/crossover/macosx/CrossOver/build/Build/Products/Release/CrossOver.app/Contents/SharedSupport/CrossOver/lib/python/webutils.py
+
+Disassembly of <code <module>> (line 1, args=0 posonly=0 kwonly=0, flags=0):
+   0        0 RESUME                           0
+   3        2 LOAD_CONST                       0 (0)
+            4 LOAD_CONST                       1 (None)
+            6 IMPORT_NAME                      0 (cxlog)
+            8 STORE_NAME                       0 (cxlog)
+   4       10 LOAD_CONST                       0 (0)
+           12 LOAD_CONST                       1 (None)
+           14 IMPORT_NAME                      1 (cxobjc)
+           16 STORE_NAME                       1 (cxobjc)
+   5       18 LOAD_CONST                       0 (0)
+           20 LOAD_CONST                       1 (None)
+           22 IMPORT_NAME                      2 (cxproduct)
+           24 STORE_NAME                       2 (cxproduct)
+   6       26 LOAD_CONST                       0 (0)
+           28 LOAD_CONST                       1 (None)
+           30 IMPORT_NAME                      3 (cxurlget)
+           32 STORE_NAME                       3 (cxurlget)
+   7       34 LOAD_CONST                       0 (0)
+           36 LOAD_CONST                       1 (None)
+           38 IMPORT_NAME                      4 (cxutils)
+           40 STORE_NAME                       4 (cxutils)
+   8       42 LOAD_CONST                       0 (0)
+           44 LOAD_CONST                       1 (None)
+           46 IMPORT_NAME                      5 (distversion)
+           48 STORE_NAME                       5 (distversion)
+   9       50 LOAD_CONST                       0 (0)
+           52 LOAD_CONST                       1 (None)
+           54 IMPORT_NAME                      6 (fileupdate)
+           56 STORE_NAME                       6 (fileupdate)
+  10       58 LOAD_CONST                       0 (0)
+           60 LOAD_CONST                       1 (None)
+           62 IMPORT_NAME                      7 (proxyinfo)
+           64 STORE_NAME                       7 (proxyinfo)
+  12       66 LOAD_CONST                       0 (0)
+           68 LOAD_CONST                       1 (None)
+           70 IMPORT_NAME                      8 (hashlib)
+           72 STORE_NAME                       8 (hashlib)
+  13       74 LOAD_CONST                       0 (0)
+           76 LOAD_CONST                       1 (None)
+           78 IMPORT_NAME                      9 (json)
+           80 STORE_NAME                       9 (json)
+  14       82 LOAD_CONST                       0 (0)
+           84 LOAD_CONST                       1 (None)
+           86 IMPORT_NAME                     10 (os)
+           88 STORE_NAME                      10 (os)
+  16       90 LOAD_CONST                       0 (0)
+           92 LOAD_CONST                       2 (('urlencode',))
+           94 IMPORT_NAME                     11 (urllib.parse)
+           96 IMPORT_FROM                     12 (urlencode)
+           98 STORE_NAME                      12 (urlencode)
+          100 POP_TOP
+  19      102 LOAD_BUILD_CLASS
+          104 PUSH_NULL
+          106 LOAD_CONST                       3 (<code WebUtils, line 19>)
+          108 MAKE_FUNCTION
+          110 LOAD_CONST                       4 ('WebUtils')
+          112 LOAD_NAME                        1 (cxobjc)
+          114 LOAD_ATTR                       26 (Proxy)
+          134 CALL                             3
+          142 STORE_NAME                      14 (WebUtils)
+  23      144 LOAD_CONST                       5 (<code get_version, line 23>)
+          146 MAKE_FUNCTION
+          148 STORE_NAME                      15 (get_version)
+  28      150 LOAD_CONST                       6 (<code get_token, line 28>)
+          152 MAKE_FUNCTION
+          154 STORE_NAME                      16 (get_token)
+  41      156 LOAD_NAME                        1 (cxobjc)
+          158 LOAD_ATTR                       34 (method)
+          178 PUSH_NULL
+          180 LOAD_NAME                       14 (WebUtils)
+          182 LOAD_CONST                       7 ('createToken_password_')
+          184 CALL                             2
+  42      192 LOAD_CONST                       8 (<code create_token, line 41>)
+          194 MAKE_FUNCTION
+  41      196 CALL                             0
+  42      204 STORE_NAME                      18 (create_token)
+  70      206 LOAD_NAME                        1 (cxobjc)
+          208 LOAD_ATTR                       34 (method)
+          228 PUSH_NULL
+          230 LOAD_NAME                       14 (WebUtils)
+          232 LOAD_CONST                       9 ('updateCompatDB')
+          234 CALL                             2
+  71      242 LOAD_CONST                      10 (<code update_compatdb, line 70>)
+          244 MAKE_FUNCTION
+  70      246 CALL                             0
+  71      254 STORE_NAME                      19 (update_compatdb)
+          256 RETURN_CONST                     1 (None)
+
+Disassembly of <code WebUtils> (line 19, args=0 posonly=0 kwonly=0, flags=0):
+  19        0 RESUME                           0
+            2 LOAD_NAME                        0 (__name__)
+            4 STORE_NAME                       1 (__module__)
+            6 LOAD_CONST                       0 ('WebUtils')
+            8 STORE_NAME                       2 (__qualname__)
+           10 LOAD_CONST                       1 (19)
+           12 STORE_NAME                       3 (__firstlineno__)
+  20       14 LOAD_CONST                       2 (())
+           16 STORE_NAME                       4 (__static_attributes__)
+           18 RETURN_CONST                     3 (None)
+
+Disassembly of <code get_version> (line 23, args=0 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  23        0 RESUME                           0
+  25        2 LOAD_CONST                       1 ('.')
+            4 LOAD_ATTR                        1 (join + NULL|self)
+           24 LOAD_GLOBAL                      2 (distversion)
+           34 LOAD_ATTR                        4 (CX_VERSION)
+           54 LOAD_ATTR                        7 (split + NULL|self)
+           74 LOAD_CONST                       1 ('.')
+           76 CALL                             1
+           84 LOAD_CONST                       2 (0)
+           86 LOAD_CONST                       3 (3)
+           88 BINARY_SLICE
+           90 CALL                             1
+           98 RETURN_VALUE
+
+Disassembly of <code get_token> (line 28, args=0 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: token, config
+  28        0 RESUME                           0
+  29        2 LOAD_GLOBAL                      0 (cxproduct)
+           12 LOAD_ATTR                        2 (get_config_string)
+           32 PUSH_NULL
+           34 LOAD_CONST                       1 ('CrossOver')
+           36 LOAD_CONST                       2 ('Token')
+           38 LOAD_CONST                       0 (None)
+           40 CALL                             3
+           48 STORE_FAST                       0 (token)
+  31       50 LOAD_FAST                        0 (token)
+           52 TO_BOOL
+           60 POP_JUMP_IF_TRUE                73 (to 210)
+  33       64 LOAD_GLOBAL                      0 (cxproduct)
+           74 LOAD_ATTR                        4 (get_config)
+           94 PUSH_NULL
+           96 CALL                             0
+          104 STORE_FAST                       1 (config)
+  34      106 LOAD_FAST                        1 (config)
+          108 LOAD_CONST                       1 ('CrossOver')
+          110 BINARY_SUBSCR
+          114 LOAD_ATTR                        7 (get + NULL|self)
+          134 LOAD_CONST                       2 ('Token')
+          136 LOAD_CONST                       0 (None)
+          138 CALL                             2
+          146 STORE_FAST                       0 (token)
+  35      148 LOAD_FAST                        0 (token)
+          150 TO_BOOL
+          158 POP_JUMP_IF_FALSE               24 (to 210)
+  36      162 LOAD_GLOBAL                      0 (cxproduct)
+          172 LOAD_ATTR                        8 (set_config_string)
+          192 PUSH_NULL
+          194 LOAD_CONST                       1 ('CrossOver')
+          196 LOAD_CONST                       2 ('Token')
+          198 LOAD_FAST                        0 (token)
+          200 CALL                             3
+          208 POP_TOP
+  38 >>   210 LOAD_FAST                        0 (token)
+          212 RETURN_VALUE
+
+Disassembly of <code create_token> (line 41, args=2 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: login, password, url, md5_hasher, md5_password, token, data, e
+  41        0 RESUME                           0
+  43        2 LOAD_CONST                       1 ('https://www.codeweavers.com/bin/rest/create_token')
+            4 STORE_FAST                       2 (url)
+  46        6 LOAD_GLOBAL                      0 (hashlib)
+           16 LOAD_ATTR                        2 (md5)
+           36 PUSH_NULL
+           38 CALL                             0
+           46 STORE_FAST                       3 (md5_hasher)
+  47       48 LOAD_FAST                        3 (md5_hasher)
+           50 LOAD_ATTR                        5 (update + NULL|self)
+           70 LOAD_GLOBAL                      6 (cxutils)
+           80 LOAD_ATTR                        8 (string_to_utf8)
+          100 PUSH_NULL
+          102 LOAD_FAST                        1 (password)
+          104 CALL                             1
+          112 CALL                             1
+          120 POP_TOP
+  48      122 LOAD_FAST                        3 (md5_hasher)
+          124 LOAD_ATTR                       11 (hexdigest + NULL|self)
+          144 CALL                             0
+          152 STORE_FAST                       4 (md5_password)
+  50      154 LOAD_CONST                       0 (None)
+          156 STORE_FAST                       5 (token)
+  52      158 NOP
+  53      160 LOAD_GLOBAL                     12 (proxyinfo)
+          170 LOAD_ATTR                       14 (install_default_opener)
+          190 PUSH_NULL
+          192 CALL                             0
+          200 POP_TOP
+  55      202 LOAD_GLOBAL                     16 (cxurlget)
+          212 LOAD_ATTR                       18 (fetch_content)
+          232 PUSH_NULL
+          234 LOAD_FAST                        2 (url)
+          236 LOAD_CONST                       2 (5)
+  56      238 LOAD_FAST_LOAD_FAST              4 (login, md5_password)
+          240 LOAD_CONST                       3 (('username', 'password'))
+          242 BUILD_CONST_KEY_MAP              2
+  55      244 LOAD_CONST                       4 (('timeout', 'data'))
+          246 CALL_KW                          3
+          248 STORE_FAST                       6 (data)
+  57      250 LOAD_GLOBAL                     20 (json)
+          260 LOAD_ATTR                       22 (loads)
+          280 PUSH_NULL
+          282 LOAD_GLOBAL                      6 (cxutils)
+          292 LOAD_ATTR                       24 (string_to_unicode)
+          312 PUSH_NULL
+          314 LOAD_FAST                        6 (data)
+          316 CALL                             1
+          324 CALL                             1
+          332 STORE_FAST                       5 (token)
+  63      334 LOAD_FAST                        5 (token)
+          336 POP_JUMP_IF_NONE                25 (to 390)
+  64      340 LOAD_GLOBAL                     34 (cxproduct)
+          350 LOAD_ATTR                       36 (set_config_string)
+          370 PUSH_NULL
+          372 LOAD_CONST                       6 ('CrossOver')
+          374 LOAD_CONST                       7 ('Token')
+          376 LOAD_FAST                        5 (token)
+          378 CALL                             3
+          386 POP_TOP
+  65      388 RETURN_CONST                     8 (True)
+  67 >>   390 RETURN_CONST                     5 (False)
+     >>   392 PUSH_EXC_INFO
+  58      394 LOAD_GLOBAL                     16 (cxurlget)
+          404 LOAD_ATTR                       26 (UrlError)
+          424 CHECK_EXC_MATCH
+          426 POP_JUMP_IF_FALSE               42 (to 514)
+          430 STORE_FAST                       7 (e)
+  60      432 LOAD_GLOBAL                     28 (cxlog)
+          442 LOAD_ATTR                       30 (log)
+          462 PUSH_NULL
+          464 LOAD_FAST                        7 (e)
+          466 LOAD_ATTR                       32 (reason)
+          486 CALL                             1
+          494 POP_TOP
+  61      496 POP_EXCEPT
+          498 LOAD_CONST                       0 (None)
+          500 STORE_FAST                       7 (e)
+          502 DELETE_FAST                      7 (e)
+          504 RETURN_CONST                     5 (False)
+     >>   506 LOAD_CONST                       0 (None)
+          508 STORE_FAST                       7 (e)
+          510 DELETE_FAST                      7 (e)
+          512 RERAISE                          1
+  58 >>   514 RERAISE                          0
+     >>   516 COPY                             3
+          518 POP_EXCEPT
+          520 RERAISE                          1
+  ExceptionTable:
+    160 to 334 -> 392 [0]
+    392 to 432 -> 516 [1] lasti
+    432 to 496 -> 506 [1] lasti
+    506 to 516 -> 516 [1] lasti
+
+Disassembly of <code update_compatdb> (line 70, args=0 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: major_version, compatdb_dat, url, data
+  70        0 RESUME                           0
+  72        2 LOAD_GLOBAL                      1 (get_version + NULL)
+           12 CALL                             0
+           20 LOAD_ATTR                        3 (split + NULL|self)
+           40 LOAD_CONST                       1 ('.')
+           42 LOAD_CONST                       2 (1)
+           44 LOAD_CONST                       3 (('maxsplit',))
+           46 CALL_KW                          2
+           48 LOAD_CONST                       4 (0)
+           50 BINARY_SUBSCR
+           54 STORE_FAST                       0 (major_version)
+  73       56 LOAD_GLOBAL                      4 (os)
+           66 LOAD_ATTR                        6 (path)
+           86 LOAD_ATTR                        9 (join + NULL|self)
+          106 LOAD_GLOBAL                     10 (cxproduct)
+          116 LOAD_ATTR                       12 (get_user_dir)
+          136 PUSH_NULL
+          138 CALL                             0
+          146 LOAD_CONST                       5 ('compatdb-')
+          148 LOAD_FAST                        0 (major_version)
+          150 FORMAT_SIMPLE
+          152 LOAD_CONST                       6 ('.dat')
+          154 BUILD_STRING                     3
+          156 CALL                             2
+          164 STORE_FAST                       1 (compatdb_dat)
+  74      166 LOAD_CONST                       7 ('https://www.codeweavers.com/bin/rest/compatdb')
+          168 STORE_FAST                       2 (url)
+  75      170 LOAD_GLOBAL                     15 (urlencode + NULL)
+          180 LOAD_CONST                       8 ('version')
+          182 LOAD_GLOBAL                      1 (get_version + NULL)
+          192 CALL                             0
+          200 BUILD_MAP                        1
+          202 CALL                             1
+          210 STORE_FAST                       3 (data)
+  76      212 LOAD_GLOBAL                     16 (fileupdate)
+          222 LOAD_ATTR                       18 (update)
+          242 PUSH_NULL
+          244 LOAD_FAST_LOAD_FAST             18 (compatdb_dat, url)
+          246 LOAD_CONST                       9 ('?')
+          248 BINARY_OP                        0 (+)
+          252 LOAD_FAST                        3 (data)
+          254 BINARY_OP                        0 (+)
+          258 LOAD_CONST                      10 (True)
+          260 CALL                             3
+          268 RETURN_VALUE

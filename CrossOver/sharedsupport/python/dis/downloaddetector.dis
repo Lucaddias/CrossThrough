@@ -1,0 +1,243 @@
+# downloaddetector — CPython 3.13 bytecode listing of lib/python/downloaddetector.pyc
+# sha256 db2e9b670e7ccc859d6bec3e70edc8e346400c810f9250918999a011904f21fb, pyc flags 3, co_filename /Volumes/gitlab_data/gitlab/builds/j911ygmXM/0/crossover/crossover/macosx/CrossOver/build/Build/Products/Release/CrossOver.app/Contents/SharedSupport/CrossOver/lib/python/downloaddetector.py
+
+Disassembly of <code <module>> (line 1, args=0 posonly=0 kwonly=0, flags=0):
+   0        0 RESUME                           0
+   3        2 LOAD_CONST                       0 (0)
+            4 LOAD_CONST                       1 (None)
+            6 IMPORT_NAME                      0 (os)
+            8 STORE_NAME                       0 (os)
+   5       10 LOAD_CONST                       0 (0)
+           12 LOAD_CONST                       1 (None)
+           14 IMPORT_NAME                      1 (globtree)
+           16 STORE_NAME                       1 (globtree)
+   8       18 LOAD_BUILD_CLASS
+           20 PUSH_NULL
+           22 LOAD_CONST                       2 (<code ConstGlobTree, line 8>)
+           24 MAKE_FUNCTION
+           26 LOAD_CONST                       3 ('ConstGlobTree')
+           28 LOAD_NAME                        1 (globtree)
+           30 LOAD_ATTR                        4 (GlobTree)
+           50 CALL                             3
+           58 STORE_NAME                       3 (ConstGlobTree)
+  25       60 LOAD_CONST                       4 (<code _get_downloads, line 25>)
+           62 MAKE_FUNCTION
+           64 STORE_NAME                       4 (_get_downloads)
+  38       66 LOAD_CONST                       5 (<code find_installers, line 38>)
+           68 MAKE_FUNCTION
+           70 STORE_NAME                       5 (find_installers)
+  53       72 LOAD_CONST                       6 (<code find_profiles, line 53>)
+           74 MAKE_FUNCTION
+           76 STORE_NAME                       6 (find_profiles)
+           78 RETURN_CONST                     1 (None)
+
+Disassembly of <code ConstGlobTree> (line 8, args=0 posonly=0 kwonly=0, flags=0):
+   8        0 RESUME                           0
+            2 LOAD_NAME                        0 (__name__)
+            4 STORE_NAME                       1 (__module__)
+            6 LOAD_CONST                       0 ('ConstGlobTree')
+            8 STORE_NAME                       2 (__qualname__)
+           10 LOAD_CONST                       1 (8)
+           12 STORE_NAME                       3 (__firstlineno__)
+   9       14 LOAD_CONST                       2 ("A globtree object for searching a constant list.\n\nUse matches('', sequence_of_filenames) to do a search.")
+           16 STORE_NAME                       4 (__doc__)
+  12       18 LOAD_CONST                       3 (True)
+           20 STORE_NAME                       5 (case_sensitive)
+  14       22 LOAD_CONST                       4 (<code ConstGlobTree.listdir, line 14>)
+           24 MAKE_FUNCTION
+           26 STORE_NAME                       6 (listdir)
+  20       28 LOAD_CONST                       5 (<code ConstGlobTree.exists, line 20>)
+           30 MAKE_FUNCTION
+           32 STORE_NAME                       7 (exists)
+           34 LOAD_CONST                       6 (())
+           36 STORE_NAME                       8 (__static_attributes__)
+           38 RETURN_CONST                     7 (None)
+
+Disassembly of <code ConstGlobTree.listdir> (line 14, args=3 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: self, path, filenames
+  14        0 RESUME                           0
+  16        2 LOAD_FAST                        1 (path)
+            4 LOAD_CONST                       1 (b'')
+            6 COMPARE_OP                      88 (== bool)
+           10 POP_JUMP_IF_FALSE                4 (to 22)
+  17       14 LOAD_CONST                       2 (())
+           16 LOAD_FAST                        2 (filenames)
+           18 BUILD_TUPLE                      2
+           20 RETURN_VALUE
+  18 >>    22 RETURN_CONST                     3 (((), ()))
+
+Disassembly of <code ConstGlobTree.exists> (line 20, args=3 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: self, path, filenames
+  20        0 RESUME                           0
+  22        2 LOAD_FAST_LOAD_FAST             18 (path, filenames)
+            4 CONTAINS_OP                      0 (in)
+            8 RETURN_VALUE
+
+Disassembly of <code _get_downloads> (line 25, args=2 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: filenames, profiles, downloadglob, profile, glob
+  25        0 RESUME                           0
+  27        2 LOAD_CONST                       1 ('DownloadGlobTree')
+            4 LOAD_FAST                        1 (profiles)
+            6 LOAD_ATTR                        0 (userdata)
+           26 CONTAINS_OP                      1 (not in)
+           30 POP_JUMP_IF_FALSE              107 (to 248)
+  28       34 LOAD_GLOBAL                      3 (ConstGlobTree + NULL)
+           44 CALL                             0
+           52 STORE_FAST                       2 (downloadglob)
+  29       54 LOAD_FAST                        1 (profiles)
+           56 LOAD_ATTR                        5 (values + NULL|self)
+           76 CALL                             0
+           84 GET_ITER
+     >>    86 FOR_ITER                        49 (to 188)
+           90 STORE_FAST                       3 (profile)
+  30       92 LOAD_FAST                        3 (profile)
+           94 LOAD_ATTR                        6 (app_profile)
+          114 LOAD_ATTR                        8 (download_globs)
+          134 GET_ITER
+     >>   136 FOR_ITER                        20 (to 180)
+          140 STORE_FAST                       4 (glob)
+  31      142 LOAD_FAST                        2 (downloadglob)
+          144 LOAD_ATTR                       11 (add_glob + NULL|self)
+          164 LOAD_FAST_LOAD_FAST             67 (glob, profile)
+          166 CALL                             2
+          174 POP_TOP
+          176 JUMP_BACKWARD                   22 (to 136)
+  30 >>   180 END_FOR
+          182 POP_TOP
+          184 JUMP_BACKWARD                   51 (to 86)
+  29 >>   188 END_FOR
+          190 POP_TOP
+  32      192 LOAD_FAST                        1 (profiles)
+          194 LOAD_ATTR                        0 (userdata)
+          214 LOAD_ATTR                       13 (setdefault + NULL|self)
+          234 LOAD_CONST                       1 ('DownloadGlobTree')
+          236 LOAD_FAST                        2 (downloadglob)
+          238 CALL                             2
+          246 POP_TOP
+  33 >>   248 LOAD_FAST                        1 (profiles)
+          250 LOAD_ATTR                        0 (userdata)
+          270 LOAD_CONST                       1 ('DownloadGlobTree')
+          272 BINARY_SUBSCR
+          276 STORE_FAST                       2 (downloadglob)
+  35      278 LOAD_FAST                        2 (downloadglob)
+          280 LOAD_ATTR                       15 (matches + NULL|self)
+          300 LOAD_CONST                       2 ('')
+          302 LOAD_FAST                        0 (filenames)
+          304 CALL                             2
+          312 RETURN_VALUE
+
+Disassembly of <code find_installers> (line 38, args=2 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: dirs, profiles, matches, directory, filenames, filename, _profile, path
+  38        0 RESUME                           0
+  39        2 LOAD_GLOBAL                      1 (set + NULL)
+           12 LOAD_FAST                        0 (dirs)
+           14 CALL                             1
+           22 STORE_FAST                       0 (dirs)
+  40       24 BUILD_LIST                       0
+           26 STORE_FAST                       2 (matches)
+  41       28 LOAD_FAST                        0 (dirs)
+           30 GET_ITER
+     >>    32 FOR_ITER                       132 (to 300)
+           36 STORE_FAST                       3 (directory)
+  42       38 NOP
+  43       40 LOAD_GLOBAL                      2 (os)
+           50 LOAD_ATTR                        4 (listdir)
+           70 PUSH_NULL
+           72 LOAD_FAST                        3 (directory)
+           74 CALL                             1
+           82 STORE_FAST                       4 (filenames)
+  46       84 LOAD_GLOBAL                      9 (_get_downloads + NULL)
+           94 LOAD_FAST_LOAD_FAST             65 (filenames, profiles)
+           96 CALL                             2
+          104 GET_ITER
+     >>   106 FOR_ITER                        91 (to 292)
+          110 UNPACK_SEQUENCE                  2
+          114 STORE_FAST_STORE_FAST           86 (filename, _profile)
+  47      116 LOAD_GLOBAL                      2 (os)
+          126 LOAD_ATTR                       10 (path)
+          146 LOAD_ATTR                       13 (join + NULL|self)
+          166 LOAD_FAST_LOAD_FAST             53 (directory, filename)
+          168 CALL                             2
+          176 STORE_FAST                       7 (path)
+  48      178 LOAD_GLOBAL                      2 (os)
+          188 LOAD_ATTR                       10 (path)
+          208 LOAD_ATTR                       15 (isfile + NULL|self)
+          228 LOAD_FAST                        7 (path)
+          230 CALL                             1
+          238 TO_BOOL
+          246 POP_JUMP_IF_TRUE                 2 (to 254)
+          250 JUMP_BACKWARD                   74 (to 106)
+  49 >>   254 LOAD_FAST                        2 (matches)
+          256 LOAD_ATTR                       17 (append + NULL|self)
+          276 LOAD_FAST                        7 (path)
+          278 CALL                             1
+          286 POP_TOP
+          288 JUMP_BACKWARD                   93 (to 106)
+  46 >>   292 END_FOR
+          294 POP_TOP
+          296 JUMP_BACKWARD                  134 (to 32)
+  41 >>   300 END_FOR
+          302 POP_TOP
+  50      304 LOAD_FAST                        2 (matches)
+          306 RETURN_VALUE
+     >>   308 PUSH_EXC_INFO
+  44      310 LOAD_GLOBAL                      6 (OSError)
+          320 CHECK_EXC_MATCH
+          322 POP_JUMP_IF_FALSE                4 (to 334)
+          326 POP_TOP
+  45      328 POP_EXCEPT
+          330 JUMP_BACKWARD                  151 (to 32)
+  44 >>   334 RERAISE                          0
+     >>   336 COPY                             3
+          338 POP_EXCEPT
+          340 RERAISE                          1
+  ExceptionTable:
+    40 to 84 -> 308 [1]
+    308 to 328 -> 336 [2] lasti
+    334 to 336 -> 336 [2] lasti
+
+Disassembly of <code find_profiles> (line 53, args=2 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: filename, profiles, _dirname, basename, matches, _path, profile
+  53        0 RESUME                           0
+  54        2 LOAD_GLOBAL                      0 (os)
+           12 LOAD_ATTR                        2 (path)
+           32 LOAD_ATTR                        5 (isfile + NULL|self)
+           52 LOAD_FAST                        0 (filename)
+           54 CALL                             1
+           62 TO_BOOL
+           70 POP_JUMP_IF_TRUE                 1 (to 76)
+  55       74 RETURN_CONST                     1 (())
+  56 >>    76 LOAD_GLOBAL                      0 (os)
+           86 LOAD_ATTR                        2 (path)
+          106 LOAD_ATTR                        7 (split + NULL|self)
+          126 LOAD_FAST                        0 (filename)
+          128 CALL                             1
+          136 UNPACK_SEQUENCE                  2
+          140 STORE_FAST_STORE_FAST           35 (_dirname, basename)
+  57      142 BUILD_MAP                        0
+          144 STORE_FAST                       4 (matches)
+  58      146 LOAD_GLOBAL                      9 (_get_downloads + NULL)
+          156 LOAD_FAST                        3 (basename)
+          158 BUILD_TUPLE                      1
+          160 LOAD_FAST                        1 (profiles)
+          162 CALL                             2
+          170 GET_ITER
+     >>   172 FOR_ITER                        50 (to 276)
+          176 UNPACK_SEQUENCE                  2
+          180 STORE_FAST_STORE_FAST           86 (_path, profile)
+  59      182 LOAD_FAST_LOAD_FAST             22 (profiles, profile)
+          184 LOAD_ATTR                       10 (appid)
+          204 BINARY_SUBSCR
+          208 LOAD_ATTR                       12 (is_for_current_product)
+          228 TO_BOOL
+          236 POP_JUMP_IF_TRUE                 2 (to 244)
+          240 JUMP_BACKWARD                   36 (to 172)
+  60 >>   244 LOAD_FAST_LOAD_FAST            100 (profile, matches)
+          246 LOAD_FAST                        6 (profile)
+          248 LOAD_ATTR                       10 (appid)
+          268 STORE_SUBSCR
+          272 JUMP_BACKWARD                   52 (to 172)
+  58 >>   276 END_FOR
+          278 POP_TOP
+  61      280 LOAD_FAST                        4 (matches)
+          282 RETURN_VALUE

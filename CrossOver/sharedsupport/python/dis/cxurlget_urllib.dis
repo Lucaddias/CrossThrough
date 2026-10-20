@@ -1,0 +1,1360 @@
+# cxurlget_urllib — CPython 3.13 bytecode listing of lib/python/cxurlget_urllib.pyc
+# sha256 7f8717382845fc82718e3b3f66297ae3fba62e6e0b5445160518ec91a190d099, pyc flags 3, co_filename /Volumes/gitlab_data/gitlab/builds/j911ygmXM/0/crossover/crossover/macosx/CrossOver/build/Build/Products/Release/CrossOver.app/Contents/SharedSupport/CrossOver/lib/python/cxurlget_urllib.py
+
+Disassembly of <code <module>> (line 1, args=0 posonly=0 kwonly=0, flags=0):
+   0        0 RESUME                           0
+   3        2 LOAD_CONST                       0 (0)
+            4 LOAD_CONST                       1 (None)
+            6 IMPORT_NAME                      0 (errno)
+            8 STORE_NAME                       0 (errno)
+   4       10 LOAD_CONST                       0 (0)
+           12 LOAD_CONST                       1 (None)
+           14 IMPORT_NAME                      1 (ftplib)
+           16 STORE_NAME                       1 (ftplib)
+   5       18 LOAD_CONST                       0 (0)
+           20 LOAD_CONST                       1 (None)
+           22 IMPORT_NAME                      2 (gzip)
+           24 STORE_NAME                       2 (gzip)
+   6       26 LOAD_CONST                       0 (0)
+           28 LOAD_CONST                       1 (None)
+           30 IMPORT_NAME                      3 (http.cookiejar)
+           32 IMPORT_FROM                      4 (cookiejar)
+           34 STORE_NAME                       5 (cookielib)
+           36 POP_TOP
+   7       38 LOAD_CONST                       0 (0)
+           40 LOAD_CONST                       1 (None)
+           42 IMPORT_NAME                      6 (os)
+           44 STORE_NAME                       6 (os)
+   8       46 LOAD_CONST                       0 (0)
+           48 LOAD_CONST                       1 (None)
+           50 IMPORT_NAME                      7 (socket)
+           52 STORE_NAME                       7 (socket)
+   9       54 LOAD_CONST                       0 (0)
+           56 LOAD_CONST                       1 (None)
+           58 IMPORT_NAME                      8 (threading)
+           60 STORE_NAME                       8 (threading)
+  10       62 LOAD_CONST                       0 (0)
+           64 LOAD_CONST                       1 (None)
+           66 IMPORT_NAME                      9 (traceback)
+           68 STORE_NAME                       9 (traceback)
+  11       70 LOAD_CONST                       0 (0)
+           72 LOAD_CONST                       1 (None)
+           74 IMPORT_NAME                     10 (time)
+           76 STORE_NAME                      10 (time)
+  13       78 LOAD_CONST                       0 (0)
+           80 LOAD_CONST                       1 (None)
+           82 IMPORT_NAME                     11 (urllib.request)
+           84 IMPORT_FROM                     12 (request)
+           86 STORE_NAME                      13 (urllib2)
+           88 POP_TOP
+  14       90 LOAD_CONST                       0 (0)
+           92 LOAD_CONST                       1 (None)
+           94 IMPORT_NAME                     14 (urllib.parse)
+           96 IMPORT_FROM                     15 (parse)
+           98 STORE_NAME                      16 (urlparse)
+          100 POP_TOP
+  15      102 LOAD_CONST                       0 (0)
+          104 LOAD_CONST                       1 (None)
+          106 IMPORT_NAME                     17 (urllib.error)
+          108 IMPORT_FROM                     18 (error)
+          110 STORE_NAME                      19 (urllib_error)
+          112 POP_TOP
+  17      114 LOAD_CONST                       0 (0)
+          116 LOAD_CONST                       1 (None)
+          118 IMPORT_NAME                     20 (proxyinfo)
+          120 STORE_NAME                      20 (proxyinfo)
+  18      122 LOAD_CONST                       0 (0)
+          124 LOAD_CONST                       1 (None)
+          126 IMPORT_NAME                     21 (cxlog)
+          128 STORE_NAME                      21 (cxlog)
+  19      130 LOAD_CONST                       0 (0)
+          132 LOAD_CONST                       1 (None)
+          134 IMPORT_NAME                     22 (cxurlget_base)
+          136 STORE_NAME                      22 (cxurlget_base)
+  21      138 LOAD_NAME                       20 (proxyinfo)
+          140 LOAD_ATTR                       46 (install_default_opener)
+          160 PUSH_NULL
+          162 CALL                             0
+          170 POP_TOP
+  23      172 LOAD_CONST                       2 (<code _get_rfc822_value, line 23>)
+          174 MAKE_FUNCTION
+          176 STORE_NAME                      24 (_get_rfc822_value)
+  38      178 LOAD_CONST                       3 (<code wrap_exception, line 38>)
+          180 MAKE_FUNCTION
+          182 STORE_NAME                      25 (wrap_exception)
+  45      184 LOAD_BUILD_CLASS
+          186 PUSH_NULL
+          188 LOAD_CONST                       4 (<code DownloadError, line 45>)
+          190 MAKE_FUNCTION
+          192 LOAD_CONST                       5 ('DownloadError')
+          194 LOAD_NAME                       26 (Exception)
+          196 CALL                             3
+          204 STORE_NAME                      27 (DownloadError)
+  48      206 LOAD_BUILD_CLASS
+          208 PUSH_NULL
+          210 LOAD_CONST                       6 (<code UrlGetter, line 48>)
+          212 MAKE_FUNCTION
+          214 LOAD_CONST                       7 ('UrlGetter')
+          216 LOAD_NAME                       22 (cxurlget_base)
+          218 LOAD_ATTR                       56 (UrlGetterBase)
+          238 CALL                             3
+          246 STORE_NAME                      29 (UrlGetter)
+          248 RETURN_CONST                     1 (None)
+
+Disassembly of <code _get_rfc822_value> (line 23, args=1 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: string, is_token_breaker, chars, c
+  23        0 RESUME                           0
+  24        2 LOAD_FAST                        0 (string)
+            4 LOAD_ATTR                        1 (startswith + NULL|self)
+           24 LOAD_CONST                       1 ('"')
+           26 CALL                             1
+           34 TO_BOOL
+           42 POP_JUMP_IF_FALSE               21 (to 88)
+  26       46 LOAD_FAST                        0 (string)
+           48 LOAD_ATTR                        3 (split + NULL|self)
+           68 LOAD_CONST                       1 ('"')
+           70 LOAD_CONST                       2 (2)
+           72 CALL                             2
+           80 LOAD_CONST                       3 (1)
+           82 BINARY_SUBSCR
+           86 RETURN_VALUE
+  29 >>    88 LOAD_CONST                       4 (<code _get_rfc822_value.<locals>.is_token_breaker, line 29>)
+           90 MAKE_FUNCTION
+           92 STORE_FAST                       1 (is_token_breaker)
+  31       94 BUILD_LIST                       0
+           96 STORE_FAST                       2 (chars)
+  32       98 LOAD_FAST                        0 (string)
+          100 GET_ITER
+     >>   102 FOR_ITER                        35 (to 176)
+          106 STORE_FAST                       3 (c)
+  33      108 LOAD_FAST                        1 (is_token_breaker)
+          110 PUSH_NULL
+          112 LOAD_FAST                        3 (c)
+          114 CALL                             1
+          122 TO_BOOL
+          130 POP_JUMP_IF_FALSE                2 (to 138)
+  34      134 POP_TOP
+          136 JUMP_FORWARD                    21 (to 180)
+  35 >>   138 LOAD_FAST                        2 (chars)
+          140 LOAD_ATTR                        5 (append + NULL|self)
+          160 LOAD_FAST                        3 (c)
+          162 CALL                             1
+          170 POP_TOP
+          172 JUMP_BACKWARD                   37 (to 102)
+  32 >>   176 END_FOR
+          178 POP_TOP
+  36 >>   180 LOAD_CONST                       5 ('')
+          182 LOAD_ATTR                        7 (join + NULL|self)
+          202 LOAD_FAST                        2 (chars)
+          204 CALL                             1
+          212 RETURN_VALUE
+
+Disassembly of <code _get_rfc822_value.<locals>.is_token_breaker> (line 29, args=1 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS|NESTED):
+  locals+cells+free: c
+  29        0 RESUME                           0
+  30        2 LOAD_FAST                        0 (c)
+            4 LOAD_CONST                       1 (' ()<>@,;:\\"/[]?=')
+            6 CONTAINS_OP                      0 (in)
+           10 COPY                             1
+           12 TO_BOOL
+           20 POP_JUMP_IF_TRUE                35 (to 94)
+           24 POP_TOP
+           26 LOAD_CONST                       2 (31)
+           28 LOAD_GLOBAL                      1 (ord + NULL)
+           38 LOAD_FAST                        0 (c)
+           40 CALL                             1
+           48 SWAP                             2
+           50 COPY                             2
+           52 COMPARE_OP                       2 (<)
+           56 COPY                             1
+           58 TO_BOOL
+           66 POP_JUMP_IF_FALSE                5 (to 80)
+           70 POP_TOP
+           72 LOAD_CONST                       3 (127)
+           74 COMPARE_OP                       2 (<)
+           78 JUMP_FORWARD                     2 (to 84)
+     >>    80 SWAP                             2
+           82 POP_TOP
+     >>    84 TO_BOOL
+           92 UNARY_NOT
+     >>    94 RETURN_VALUE
+
+Disassembly of <code wrap_exception> (line 38, args=1 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: exception
+  38        0 RESUME                           0
+  39        2 LOAD_GLOBAL                      1 (isinstance + NULL)
+           12 LOAD_FAST                        0 (exception)
+           14 LOAD_GLOBAL                      2 (urllib_error)
+           24 LOAD_ATTR                        4 (HTTPError)
+           44 CALL                             2
+           52 TO_BOOL
+           60 POP_JUMP_IF_FALSE               43 (to 150)
+  40       64 LOAD_GLOBAL                      6 (cxurlget_base)
+           74 LOAD_ATTR                        8 (HttpError)
+           94 PUSH_NULL
+           96 LOAD_FAST                        0 (exception)
+           98 LOAD_ATTR                       10 (code)
+          118 LOAD_FAST                        0 (exception)
+          120 LOAD_ATTR                       12 (reason)
+          140 CALL                             2
+          148 RETURN_VALUE
+  41 >>   150 LOAD_GLOBAL                      1 (isinstance + NULL)
+          160 LOAD_FAST                        0 (exception)
+          162 LOAD_GLOBAL                      2 (urllib_error)
+          172 LOAD_ATTR                       14 (URLError)
+          192 CALL                             2
+          200 TO_BOOL
+          208 POP_JUMP_IF_FALSE               32 (to 276)
+  42      212 LOAD_GLOBAL                      6 (cxurlget_base)
+          222 LOAD_ATTR                       16 (UrlError)
+          242 PUSH_NULL
+          244 LOAD_FAST                        0 (exception)
+          246 LOAD_ATTR                       12 (reason)
+          266 CALL                             1
+          274 RETURN_VALUE
+  43 >>   276 LOAD_FAST                        0 (exception)
+          278 RETURN_VALUE
+
+Disassembly of <code DownloadError> (line 45, args=0 posonly=0 kwonly=0, flags=0):
+  45        0 RESUME                           0
+            2 LOAD_NAME                        0 (__name__)
+            4 STORE_NAME                       1 (__module__)
+            6 LOAD_CONST                       0 ('DownloadError')
+            8 STORE_NAME                       2 (__qualname__)
+           10 LOAD_CONST                       1 (45)
+           12 STORE_NAME                       3 (__firstlineno__)
+  46       14 LOAD_CONST                       2 (())
+           16 STORE_NAME                       4 (__static_attributes__)
+           18 RETURN_CONST                     3 (None)
+
+Disassembly of <code UrlGetter> (line 48, args=0 posonly=0 kwonly=0, flags=0):
+  48        0 RESUME                           0
+            2 LOAD_NAME                        0 (__name__)
+            4 STORE_NAME                       1 (__module__)
+            6 LOAD_CONST                       0 ('UrlGetter')
+            8 STORE_NAME                       2 (__qualname__)
+           10 LOAD_CONST                       1 (48)
+           12 STORE_NAME                       3 (__firstlineno__)
+  49       14 LOAD_NAME                        4 (classmethod)
+  50       16 LOAD_CONST                       2 (<code UrlGetter.make_cookie_storage, line 49>)
+           18 MAKE_FUNCTION
+  49       20 CALL                             0
+  50       28 STORE_NAME                       5 (make_cookie_storage)
+  53       30 LOAD_CONST                       3 (<code UrlGetter.__init__, line 53>)
+           32 MAKE_FUNCTION
+           34 STORE_NAME                       6 (__init__)
+  64       36 LOAD_NAME                        7 (staticmethod)
+  65       38 LOAD_CONST                      12 ((None,))
+           40 LOAD_CONST                       5 (<code UrlGetter.getfield, line 64>)
+           42 MAKE_FUNCTION
+           44 SET_FUNCTION_ATTRIBUTE           1 (defaults)
+  64       46 CALL                             0
+  65       54 STORE_NAME                       8 (getfield)
+  74       56 LOAD_CONST                       6 (<code UrlGetter._gzip_decoding_thread, line 74>)
+           58 MAKE_FUNCTION
+           60 STORE_NAME                       9 (_gzip_decoding_thread)
+  93       62 LOAD_CONST                       7 (<code UrlGetter._setup_gzip_decoding, line 93>)
+           64 MAKE_FUNCTION
+           66 STORE_NAME                      10 (_setup_gzip_decoding)
+ 105       68 LOAD_CONST                       8 (<code UrlGetter._analyze_headers, line 105>)
+           70 MAKE_FUNCTION
+           72 STORE_NAME                      11 (_analyze_headers)
+ 143       74 LOAD_CONST                      13 ((0, -1))
+           76 LOAD_CONST                       9 (<code UrlGetter._fetch_chunk, line 143>)
+           78 MAKE_FUNCTION
+           80 SET_FUNCTION_ATTRIBUTE           1 (defaults)
+           82 STORE_NAME                      12 (_fetch_chunk)
+ 203       84 LOAD_CONST                      10 (<code UrlGetter.fetch, line 203>)
+           86 MAKE_FUNCTION
+           88 STORE_NAME                      13 (fetch)
+           90 LOAD_CONST                      11 (('basename', 'bytes_downloaded', 'bytes_total', 'content_encoding', 'decoding_event', 'decoding_exception', 'etag', 'finished', 'infile', 'last_modified', 'opener', 'outfile', 'try_count'))
+           92 STORE_NAME                      14 (__static_attributes__)
+           94 RETURN_CONST                     4 (None)
+
+Disassembly of <code UrlGetter.make_cookie_storage> (line 49, args=1 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: cls
+  49        0 RESUME                           0
+  51        2 LOAD_GLOBAL                      0 (cookielib)
+           12 LOAD_ATTR                        2 (CookieJar)
+           32 PUSH_NULL
+           34 CALL                             0
+           42 RETURN_VALUE
+
+Disassembly of <code UrlGetter.__init__> (line 53, args=1 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS|VARARGS|VARKEYWORDS):
+  locals+cells+free: self, args, kwargs, cookie_processor
+  53        0 RESUME                           0
+  54        2 LOAD_FAST                        2 (kwargs)
+            4 LOAD_ATTR                        1 (pop + NULL|self)
+           24 LOAD_CONST                       1 ('opener')
+           26 LOAD_CONST                       0 (None)
+           28 CALL                             2
+           36 LOAD_FAST                        0 (self)
+           38 STORE_ATTR                       1 (opener)
+  55       48 LOAD_GLOBAL                      4 (cxurlget_base)
+           58 LOAD_ATTR                        6 (UrlGetterBase)
+           78 LOAD_ATTR                        8 (__init__)
+           98 PUSH_NULL
+          100 LOAD_FAST                        0 (self)
+          102 BUILD_LIST                       1
+          104 LOAD_FAST                        1 (args)
+          106 LIST_EXTEND                      1
+          108 CALL_INTRINSIC_1                 6 (INTRINSIC_LIST_TO_TUPLE)
+          110 BUILD_MAP                        0
+          112 LOAD_FAST                        2 (kwargs)
+          114 DICT_MERGE                       1
+          116 CALL_FUNCTION_EX                 1
+          118 POP_TOP
+  57      120 LOAD_FAST                        0 (self)
+          122 LOAD_ATTR                       10 (cookie_storage)
+          142 TO_BOOL
+          150 POP_JUMP_IF_FALSE              105 (to 364)
+  58      154 LOAD_GLOBAL                     12 (urllib2)
+          164 LOAD_ATTR                       14 (HTTPCookieProcessor)
+          184 PUSH_NULL
+          186 LOAD_FAST                        0 (self)
+          188 LOAD_ATTR                       10 (cookie_storage)
+          208 CALL                             1
+          216 STORE_FAST                       3 (cookie_processor)
+  59      218 LOAD_FAST                        0 (self)
+          220 LOAD_ATTR                        2 (opener)
+          240 TO_BOOL
+          248 POP_JUMP_IF_FALSE               28 (to 308)
+  60      252 LOAD_FAST                        0 (self)
+          254 LOAD_ATTR                        2 (opener)
+          274 LOAD_ATTR                       17 (add_handler + NULL|self)
+          294 LOAD_FAST                        3 (cookie_processor)
+          296 CALL                             1
+          304 POP_TOP
+          306 RETURN_CONST                     0 (None)
+  62 >>   308 LOAD_GLOBAL                     12 (urllib2)
+          318 LOAD_ATTR                       18 (build_opener)
+          338 PUSH_NULL
+          340 LOAD_FAST                        3 (cookie_processor)
+          342 CALL                             1
+          350 LOAD_FAST                        0 (self)
+          352 STORE_ATTR                       1 (opener)
+          362 RETURN_CONST                     0 (None)
+  57 >>   364 RETURN_CONST                     0 (None)
+
+Disassembly of <code UrlGetter.getfield> (line 64, args=3 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: headers, name, default, values
+  64        0 RESUME                           0
+  69        2 LOAD_FAST                        0 (headers)
+            4 LOAD_ATTR                        1 (get_all + NULL|self)
+           24 LOAD_FAST                        1 (name)
+           26 CALL                             1
+           34 STORE_FAST                       3 (values)
+  70       36 LOAD_FAST                        3 (values)
+           38 POP_JUMP_IF_NOT_NONE             2 (to 46)
+  71       42 LOAD_FAST                        2 (default)
+           44 RETURN_VALUE
+  72 >>    46 LOAD_FAST                        3 (values)
+           48 LOAD_CONST                       1 (0)
+           50 BINARY_SUBSCR
+           54 LOAD_ATTR                        3 (strip + NULL|self)
+           74 CALL                             0
+           82 RETURN_VALUE
+
+Disassembly of <code UrlGetter._gzip_decoding_thread> (line 74, args=3 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: self, infile, outfile, gzipfile, data, e
+  74        0 RESUME                           0
+  75        2 NOP
+  76        4 LOAD_GLOBAL                      0 (gzip)
+           14 LOAD_ATTR                        2 (GzipFile)
+           34 PUSH_NULL
+           36 LOAD_CONST                       1 ('rb')
+           38 LOAD_FAST                        1 (infile)
+           40 LOAD_CONST                       2 (('mode', 'fileobj'))
+           42 CALL_KW                          2
+           44 STORE_FAST                       3 (gzipfile)
+  77       46 NOP
+  78       48 NOP
+  79 >>    50 LOAD_FAST                        3 (gzipfile)
+           52 LOAD_ATTR                        5 (read + NULL|self)
+           72 LOAD_CONST                       3 (4096)
+           74 CALL                             1
+           82 STORE_FAST                       4 (data)
+  80       84 LOAD_FAST                        4 (data)
+           86 TO_BOOL
+           94 POP_JUMP_IF_TRUE                 1 (to 100)
+  81       98 JUMP_FORWARD                    19 (to 138)
+  82 >>   100 LOAD_FAST                        2 (outfile)
+          102 LOAD_ATTR                        7 (write + NULL|self)
+          122 LOAD_FAST                        4 (data)
+          124 CALL                             1
+          132 POP_TOP
+  78      134 JUMP_BACKWARD                   44 (to 50)
+  84 >>   138 LOAD_FAST                        3 (gzipfile)
+          140 LOAD_ATTR                        9 (close + NULL|self)
+          160 CALL                             0
+          168 POP_TOP
+  89 >>   170 LOAD_FAST                        1 (infile)
+          172 LOAD_ATTR                        9 (close + NULL|self)
+          192 CALL                             0
+          200 POP_TOP
+  90      202 LOAD_FAST                        2 (outfile)
+          204 LOAD_ATTR                        9 (close + NULL|self)
+          224 CALL                             0
+          232 POP_TOP
+  91      234 LOAD_FAST                        0 (self)
+          236 LOAD_ATTR                       26 (decoding_event)
+          256 LOAD_ATTR                       29 (set + NULL|self)
+          276 CALL                             0
+          284 POP_TOP
+          286 RETURN_CONST                     0 (None)
+     >>   288 PUSH_EXC_INFO
+  84      290 LOAD_FAST                        3 (gzipfile)
+          292 LOAD_ATTR                        9 (close + NULL|self)
+          312 CALL                             0
+          320 POP_TOP
+          322 RERAISE                          0
+     >>   324 COPY                             3
+          326 POP_EXCEPT
+          328 RERAISE                          1
+     >>   330 PUSH_EXC_INFO
+  85      332 LOAD_GLOBAL                     10 (Exception)
+          342 CHECK_EXC_MATCH
+          344 POP_JUMP_IF_FALSE               95 (to 538)
+          348 STORE_FAST                       5 (e)
+  86      350 LOAD_GLOBAL                     12 (cxlog)
+          360 LOAD_ATTR                       14 (log)
+          380 PUSH_NULL
+          382 LOAD_CONST                       4 ('failed to decode gzip data from ')
+          384 LOAD_GLOBAL                     12 (cxlog)
+          394 LOAD_ATTR                       16 (to_str)
+          414 PUSH_NULL
+          416 LOAD_FAST                        0 (self)
+          418 LOAD_ATTR                       18 (url)
+          438 CALL                             1
+          446 CONVERT_VALUE                    1 (str)
+          448 FORMAT_SIMPLE
+          450 LOAD_CONST                       5 (':\n')
+          452 LOAD_GLOBAL                     20 (traceback)
+          462 LOAD_ATTR                       22 (format_exc)
+          482 PUSH_NULL
+          484 CALL                             0
+          492 CONVERT_VALUE                    1 (str)
+          494 FORMAT_SIMPLE
+          496 BUILD_STRING                     4
+          498 CALL                             1
+          506 POP_TOP
+  87      508 LOAD_FAST_LOAD_FAST             80 (e, self)
+          510 STORE_ATTR                      12 (decoding_exception)
+          520 POP_EXCEPT
+          522 LOAD_CONST                       0 (None)
+          524 STORE_FAST                       5 (e)
+          526 DELETE_FAST                      5 (e)
+          528 JUMP_BACKWARD_NO_INTERRUPT     180 (to 170)
+     >>   530 LOAD_CONST                       0 (None)
+          532 STORE_FAST                       5 (e)
+          534 DELETE_FAST                      5 (e)
+          536 RERAISE                          1
+  85 >>   538 RERAISE                          0
+     >>   540 COPY                             3
+          542 POP_EXCEPT
+          544 RERAISE                          1
+     >>   546 PUSH_EXC_INFO
+  89      548 LOAD_FAST                        1 (infile)
+          550 LOAD_ATTR                        9 (close + NULL|self)
+          570 CALL                             0
+          578 POP_TOP
+  90      580 LOAD_FAST                        2 (outfile)
+          582 LOAD_ATTR                        9 (close + NULL|self)
+          602 CALL                             0
+          610 POP_TOP
+  91      612 LOAD_FAST                        0 (self)
+          614 LOAD_ATTR                       26 (decoding_event)
+          634 LOAD_ATTR                       29 (set + NULL|self)
+          654 CALL                             0
+          662 POP_TOP
+          664 RERAISE                          0
+     >>   666 COPY                             3
+          668 POP_EXCEPT
+          670 RERAISE                          1
+  ExceptionTable:
+    4 to 46 -> 330 [0]
+    48 to 138 -> 288 [0]
+    138 to 170 -> 330 [0]
+    288 to 324 -> 324 [1] lasti
+    324 to 330 -> 330 [0]
+    330 to 350 -> 540 [1] lasti
+    350 to 520 -> 530 [1] lasti
+    520 to 530 -> 546 [0]
+    530 to 540 -> 540 [1] lasti
+    540 to 546 -> 546 [0]
+    546 to 666 -> 666 [1] lasti
+
+Disassembly of <code UrlGetter._setup_gzip_decoding> (line 93, args=1 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: self, rd, wd, readfile, writefile, outfile, worker
+  93        0 RESUME                           0
+  94        2 LOAD_GLOBAL                      0 (os)
+           12 LOAD_ATTR                        2 (pipe)
+           32 PUSH_NULL
+           34 CALL                             0
+           42 UNPACK_SEQUENCE                  2
+           46 STORE_FAST_STORE_FAST           18 (rd, wd)
+  95       48 LOAD_GLOBAL                      0 (os)
+           58 LOAD_ATTR                        4 (fdopen)
+           78 PUSH_NULL
+           80 LOAD_FAST                        1 (rd)
+           82 LOAD_CONST                       1 ('rb')
+           84 CALL                             2
+           92 STORE_FAST                       3 (readfile)
+  96       94 LOAD_GLOBAL                      0 (os)
+          104 LOAD_ATTR                        4 (fdopen)
+          124 PUSH_NULL
+          126 LOAD_FAST                        2 (wd)
+          128 LOAD_CONST                       2 ('wb')
+          130 CALL                             2
+          138 STORE_FAST                       4 (writefile)
+  97      140 LOAD_FAST                        0 (self)
+          142 LOAD_ATTR                        6 (outfile)
+          162 STORE_FAST                       5 (outfile)
+  99      164 LOAD_FAST_LOAD_FAST             64 (writefile, self)
+          166 STORE_ATTR                       3 (outfile)
+ 100      176 LOAD_GLOBAL                      8 (threading)
+          186 LOAD_ATTR                       10 (Event)
+          206 PUSH_NULL
+          208 CALL                             0
+          216 LOAD_FAST                        0 (self)
+          218 STORE_ATTR                       6 (decoding_event)
+ 102      228 LOAD_GLOBAL                      8 (threading)
+          238 LOAD_ATTR                       14 (Thread)
+          258 PUSH_NULL
+          260 LOAD_FAST                        0 (self)
+          262 LOAD_ATTR                       16 (_gzip_decoding_thread)
+          282 LOAD_FAST_LOAD_FAST             53 (readfile, outfile)
+          284 BUILD_TUPLE                      2
+          286 LOAD_CONST                       3 (('target', 'args'))
+          288 CALL_KW                          2
+          290 STORE_FAST                       6 (worker)
+ 103      292 LOAD_FAST                        6 (worker)
+          294 LOAD_ATTR                       19 (start + NULL|self)
+          314 CALL                             0
+          322 POP_TOP
+          324 RETURN_CONST                     0 (None)
+
+Disassembly of <code UrlGetter._analyze_headers> (line 105, args=2 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: self, headers, res, ftp, size, _exception, basename, _unused, filenamevalue
+ 105        0 RESUME                           0
+ 106        2 LOAD_GLOBAL                      1 (int + NULL)
+           12 LOAD_FAST                        0 (self)
+           14 LOAD_ATTR                        3 (getfield + NULL|self)
+           34 LOAD_FAST                        1 (headers)
+           36 LOAD_CONST                       1 ('content-length')
+           38 LOAD_CONST                       2 ('-1')
+           40 CALL                             3
+           48 CALL                             1
+           56 LOAD_FAST                        0 (self)
+           58 STORE_ATTR                       2 (bytes_total)
+ 107       68 LOAD_FAST                        0 (self)
+           70 LOAD_ATTR                        3 (getfield + NULL|self)
+           90 LOAD_FAST                        1 (headers)
+           92 LOAD_CONST                       3 ('Last-Modified')
+           94 CALL                             2
+          102 LOAD_FAST                        0 (self)
+          104 STORE_ATTR                       3 (last_modified)
+ 108      114 LOAD_FAST                        0 (self)
+          116 LOAD_ATTR                        3 (getfield + NULL|self)
+          136 LOAD_FAST                        1 (headers)
+          138 LOAD_CONST                       4 ('ETag')
+          140 CALL                             2
+          148 LOAD_FAST                        0 (self)
+          150 STORE_ATTR                       4 (etag)
+ 109      160 LOAD_FAST                        0 (self)
+          162 LOAD_ATTR                        3 (getfield + NULL|self)
+          182 LOAD_FAST                        1 (headers)
+          184 LOAD_CONST                       5 ('Content-Encoding')
+          186 LOAD_CONST                       6 ('identity')
+          188 CALL                             3
+          196 LOAD_FAST                        0 (self)
+          198 STORE_ATTR                       5 (content_encoding)
+ 110      208 LOAD_FAST                        0 (self)
+          210 LOAD_ATTR                       13 (notify_headers + NULL|self)
+          230 LOAD_FAST_LOAD_FAST              0 (self, self)
+          232 LOAD_ATTR                       14 (infile)
+          252 LOAD_ATTR                       17 (geturl + NULL|self)
+          272 CALL                             0
+          280 LOAD_FAST                        1 (headers)
+          282 CALL                             3
+          290 POP_TOP
+ 112      292 LOAD_FAST                        0 (self)
+          294 LOAD_ATTR                       10 (content_encoding)
+          314 LOAD_CONST                       7 ('gzip')
+          316 COMPARE_OP                      88 (== bool)
+          320 POP_JUMP_IF_FALSE               17 (to 358)
+ 113      324 LOAD_FAST                        0 (self)
+          326 LOAD_ATTR                       19 (_setup_gzip_decoding + NULL|self)
+          346 CALL                             0
+          354 POP_TOP
+          356 JUMP_FORWARD                    40 (to 438)
+ 114 >>   358 LOAD_FAST                        0 (self)
+          360 LOAD_ATTR                       10 (content_encoding)
+          380 LOAD_CONST                       6 ('identity')
+          382 COMPARE_OP                     119 (!= bool)
+          386 POP_JUMP_IF_FALSE               24 (to 438)
+ 115      390 LOAD_GLOBAL                     21 (NotImplementedError + NULL)
+          400 LOAD_CONST                       8 ('Unsupported Content-Encoding: %s')
+          402 LOAD_FAST                        0 (self)
+          404 LOAD_ATTR                       10 (content_encoding)
+          424 BINARY_OP                        6 (%)
+          428 CALL                             1
+          436 RAISE_VARARGS                    1
+ 117 >>   438 LOAD_FAST                        0 (self)
+          440 LOAD_ATTR                        4 (bytes_total)
+          460 LOAD_CONST                       9 (-1)
+          462 COMPARE_OP                      88 (== bool)
+          466 POP_JUMP_IF_FALSE              154 (to 778)
+ 118      470 LOAD_GLOBAL                     22 (urlparse)
+          480 LOAD_ATTR                       22 (urlparse)
+          500 PUSH_NULL
+          502 LOAD_FAST                        0 (self)
+          504 LOAD_ATTR                       24 (url)
+          524 CALL                             1
+          532 STORE_FAST                       2 (res)
+ 119      534 LOAD_FAST                        2 (res)
+          536 LOAD_ATTR                       26 (scheme)
+          556 LOAD_CONST                      10 ('ftp')
+          558 COMPARE_OP                      88 (== bool)
+          562 POP_JUMP_IF_FALSE              106 (to 778)
+ 120      566 NOP
+ 121      568 LOAD_GLOBAL                     28 (ftplib)
+          578 LOAD_ATTR                       30 (FTP)
+          598 PUSH_NULL
+          600 LOAD_FAST                        2 (res)
+          602 LOAD_ATTR                       32 (netloc)
+          622 CALL                             1
+          630 STORE_FAST                       3 (ftp)
+ 122      632 NOP
+ 123      634 LOAD_FAST                        3 (ftp)
+          636 LOAD_ATTR                       35 (login + NULL|self)
+          656 CALL                             0
+          664 POP_TOP
+ 124      666 LOAD_FAST                        3 (ftp)
+          668 LOAD_ATTR                       37 (size + NULL|self)
+          688 LOAD_FAST                        2 (res)
+          690 LOAD_ATTR                       38 (path)
+          710 CALL                             1
+          718 STORE_FAST                       4 (size)
+ 125      720 LOAD_FAST                        4 (size)
+          722 TO_BOOL
+          730 POP_JUMP_IF_FALSE                6 (to 746)
+ 126      734 LOAD_FAST_LOAD_FAST             64 (size, self)
+          736 STORE_ATTR                       2 (bytes_total)
+ 128 >>   746 LOAD_FAST                        3 (ftp)
+          748 LOAD_ATTR                       41 (close + NULL|self)
+          768 CALL                             0
+          776 POP_TOP
+ 133 >>   778 LOAD_CONST                      13 ('')
+          780 STORE_FAST                       6 (basename)
+ 134      782 LOAD_CONST                      14 ('filename=')
+          784 LOAD_FAST                        1 (headers)
+          786 LOAD_ATTR                       55 (get + NULL|self)
+          806 LOAD_CONST                      15 ('content-disposition')
+          808 LOAD_CONST                      16 (())
+          810 CALL                             2
+          818 CONTAINS_OP                      0 (in)
+          822 POP_JUMP_IF_FALSE               54 (to 934)
+ 136      826 LOAD_FAST                        1 (headers)
+          828 LOAD_CONST                      15 ('content-disposition')
+          830 BINARY_SUBSCR
+          834 LOAD_ATTR                       57 (split + NULL|self)
+          854 LOAD_CONST                      14 ('filename=')
+          856 LOAD_CONST                      17 (1)
+          858 CALL                             2
+          866 UNPACK_SEQUENCE                  2
+          870 STORE_FAST_STORE_FAST          120 (_unused, filenamevalue)
+ 137      872 LOAD_GLOBAL                     58 (cxurlget_base)
+          882 LOAD_ATTR                       60 (url_to_sanitized_basename)
+          902 PUSH_NULL
+          904 LOAD_GLOBAL                     63 (_get_rfc822_value + NULL)
+          914 LOAD_FAST                        8 (filenamevalue)
+          916 CALL                             1
+          924 CALL                             1
+          932 STORE_FAST                       6 (basename)
+ 138 >>   934 LOAD_FAST                        6 (basename)
+          936 TO_BOOL
+          944 POP_JUMP_IF_TRUE                46 (to 1040)
+ 140      948 LOAD_GLOBAL                     58 (cxurlget_base)
+          958 LOAD_ATTR                       60 (url_to_sanitized_basename)
+          978 PUSH_NULL
+          980 LOAD_FAST                        0 (self)
+          982 LOAD_ATTR                       14 (infile)
+         1002 LOAD_ATTR                       17 (geturl + NULL|self)
+         1022 CALL                             0
+         1030 CALL                             1
+         1038 STORE_FAST                       6 (basename)
+ 141 >>  1040 LOAD_FAST_LOAD_FAST             96 (basename, self)
+         1042 STORE_ATTR                      32 (basename)
+         1052 RETURN_CONST                     0 (None)
+     >>  1054 PUSH_EXC_INFO
+ 128     1056 LOAD_FAST                        3 (ftp)
+         1058 LOAD_ATTR                       41 (close + NULL|self)
+         1078 CALL                             0
+         1086 POP_TOP
+         1088 RERAISE                          0
+     >>  1090 COPY                             3
+         1092 POP_EXCEPT
+         1094 RERAISE                          1
+     >>  1096 PUSH_EXC_INFO
+ 129     1098 LOAD_GLOBAL                     42 (Exception)
+         1108 CHECK_EXC_MATCH
+         1110 POP_JUMP_IF_FALSE               89 (to 1292)
+         1114 STORE_FAST                       5 (_exception)
+ 130     1116 LOAD_GLOBAL                     44 (cxlog)
+         1126 LOAD_ATTR                       46 (log)
+         1146 PUSH_NULL
+         1148 LOAD_CONST                      11 ('failed to read size of url ')
+         1150 LOAD_GLOBAL                     44 (cxlog)
+         1160 LOAD_ATTR                       48 (to_str)
+         1180 PUSH_NULL
+         1182 LOAD_FAST                        0 (self)
+         1184 LOAD_ATTR                       24 (url)
+         1204 CALL                             1
+         1212 CONVERT_VALUE                    1 (str)
+         1214 FORMAT_SIMPLE
+         1216 LOAD_CONST                      12 (':\n')
+         1218 LOAD_GLOBAL                     50 (traceback)
+         1228 LOAD_ATTR                       52 (format_exc)
+         1248 PUSH_NULL
+         1250 CALL                             0
+         1258 CONVERT_VALUE                    1 (str)
+         1260 FORMAT_SIMPLE
+         1262 BUILD_STRING                     4
+         1264 CALL                             1
+         1272 POP_TOP
+         1274 POP_EXCEPT
+         1276 LOAD_CONST                       0 (None)
+         1278 STORE_FAST                       5 (_exception)
+         1280 DELETE_FAST                      5 (_exception)
+         1282 JUMP_BACKWARD_NO_INTERRUPT     253 (to 778)
+     >>  1284 LOAD_CONST                       0 (None)
+         1286 STORE_FAST                       5 (_exception)
+         1288 DELETE_FAST                      5 (_exception)
+         1290 RERAISE                          1
+ 129 >>  1292 RERAISE                          0
+     >>  1294 COPY                             3
+         1296 POP_EXCEPT
+         1298 RERAISE                          1
+  ExceptionTable:
+    568 to 632 -> 1096 [0]
+    634 to 746 -> 1054 [0]
+    746 to 778 -> 1096 [0]
+    1054 to 1090 -> 1090 [1] lasti
+    1090 to 1096 -> 1096 [0]
+    1096 to 1116 -> 1294 [1] lasti
+    1116 to 1274 -> 1284 [1] lasti
+    1284 to 1294 -> 1294 [1] lasti
+
+Disassembly of <code UrlGetter._fetch_chunk> (line 143, args=4 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: self, start_time, start, end, req, byte_range, headers, size, content_encoding, data
+ 143        0 RESUME                           0
+ 144        2 LOAD_GLOBAL                      0 (cxlog)
+           12 LOAD_ATTR                        2 (log)
+           32 PUSH_NULL
+           34 LOAD_CONST                       1 ('fetching url %s from %d to %d')
+           36 LOAD_GLOBAL                      0 (cxlog)
+           46 LOAD_ATTR                        4 (to_str)
+           66 PUSH_NULL
+           68 LOAD_FAST                        0 (self)
+           70 LOAD_ATTR                        6 (url)
+           90 CALL                             1
+ 145       98 LOAD_FAST_LOAD_FAST             35 (start, end)
+ 144      100 BUILD_TUPLE                      3
+          102 BINARY_OP                        6 (%)
+          106 CALL                             1
+          114 POP_TOP
+ 147      116 LOAD_GLOBAL                      8 (urllib2)
+          126 LOAD_ATTR                       10 (Request)
+          146 PUSH_NULL
+          148 LOAD_FAST                        0 (self)
+          150 LOAD_ATTR                        6 (url)
+          170 LOAD_FAST                        0 (self)
+          172 LOAD_ATTR                       12 (data)
+          192 CALL                             2
+          200 STORE_FAST                       4 (req)
+ 150      202 LOAD_FAST                        4 (req)
+          204 LOAD_ATTR                       15 (add_header + NULL|self)
+          224 LOAD_CONST                       2 ('Accept')
+          226 LOAD_CONST                       3 ('*/*')
+          228 CALL                             2
+          236 POP_TOP
+ 151      238 LOAD_FAST                        0 (self)
+          240 LOAD_ATTR                       16 (user_agent)
+          260 POP_JUMP_IF_NONE                28 (to 320)
+ 152      264 LOAD_FAST                        4 (req)
+          266 LOAD_ATTR                       15 (add_header + NULL|self)
+          286 LOAD_CONST                       4 ('User-Agent')
+          288 LOAD_FAST                        0 (self)
+          290 LOAD_ATTR                       16 (user_agent)
+          310 CALL                             2
+          318 POP_TOP
+ 153 >>   320 LOAD_FAST                        2 (start)
+          322 LOAD_CONST                       5 (0)
+          324 COMPARE_OP                     119 (!= bool)
+          328 POP_JUMP_IF_TRUE                 6 (to 344)
+          332 LOAD_FAST                        3 (end)
+          334 LOAD_CONST                       6 (-1)
+          336 COMPARE_OP                     119 (!= bool)
+          340 POP_JUMP_IF_FALSE              108 (to 560)
+ 154 >>   344 LOAD_CONST                       7 ('bytes=%d-')
+          346 LOAD_FAST                        2 (start)
+          348 BINARY_OP                        6 (%)
+          352 STORE_FAST                       5 (byte_range)
+ 155      354 LOAD_FAST                        3 (end)
+          356 LOAD_CONST                       6 (-1)
+          358 COMPARE_OP                     119 (!= bool)
+          362 POP_JUMP_IF_FALSE                8 (to 382)
+ 156      366 LOAD_FAST                        5 (byte_range)
+          368 LOAD_CONST                       8 ('%d')
+          370 LOAD_FAST                        3 (end)
+          372 BINARY_OP                        6 (%)
+          376 BINARY_OP                       13 (+=)
+          380 STORE_FAST                       5 (byte_range)
+ 157 >>   382 LOAD_FAST                        4 (req)
+          384 LOAD_ATTR                       15 (add_header + NULL|self)
+          404 LOAD_CONST                       9 ('Range')
+          406 LOAD_FAST                        5 (byte_range)
+          408 CALL                             2
+          416 POP_TOP
+ 159      418 LOAD_FAST                        0 (self)
+          420 LOAD_ATTR                       18 (content_encoding)
+          440 LOAD_CONST                      10 ('identity')
+          442 COMPARE_OP                      88 (== bool)
+          446 POP_JUMP_IF_FALSE               19 (to 488)
+ 160      450 LOAD_FAST                        4 (req)
+          452 LOAD_ATTR                       15 (add_header + NULL|self)
+          472 LOAD_CONST                      11 ('Accept-Encoding')
+          474 LOAD_CONST                      10 ('identity')
+          476 CALL                             2
+          484 POP_TOP
+          486 JUMP_FORWARD                   144 (to 776)
+ 161 >>   488 LOAD_FAST                        0 (self)
+          490 LOAD_ATTR                       18 (content_encoding)
+          510 TO_BOOL
+          518 POP_JUMP_IF_FALSE               18 (to 558)
+ 162      522 LOAD_FAST                        4 (req)
+          524 LOAD_ATTR                       15 (add_header + NULL|self)
+          544 LOAD_CONST                      11 ('Accept-Encoding')
+          546 LOAD_CONST                      12 ('%s, *;q=0')
+          548 CALL                             2
+          556 POP_TOP
+     >>   558 JUMP_FORWARD                   108 (to 776)
+ 164 >>   560 LOAD_FAST                        0 (self)
+          562 LOAD_ATTR                       20 (last_modified)
+          582 TO_BOOL
+          590 POP_JUMP_IF_FALSE               28 (to 650)
+ 165      594 LOAD_FAST                        4 (req)
+          596 LOAD_ATTR                       23 (add_unredirected_header + NULL|self)
+          616 LOAD_CONST                      13 ('If-Modified-Since')
+          618 LOAD_FAST                        0 (self)
+          620 LOAD_ATTR                       20 (last_modified)
+          640 CALL                             2
+          648 POP_TOP
+ 166 >>   650 LOAD_FAST                        0 (self)
+          652 LOAD_ATTR                       24 (etag)
+          672 TO_BOOL
+          680 POP_JUMP_IF_FALSE               28 (to 740)
+ 167      684 LOAD_FAST                        4 (req)
+          686 LOAD_ATTR                       23 (add_unredirected_header + NULL|self)
+          706 LOAD_CONST                      14 ('If-None-Match')
+          708 LOAD_FAST                        0 (self)
+          710 LOAD_ATTR                       24 (etag)
+          730 CALL                             2
+          738 POP_TOP
+ 168 >>   740 LOAD_FAST                        4 (req)
+          742 LOAD_ATTR                       15 (add_header + NULL|self)
+          762 LOAD_CONST                      11 ('Accept-Encoding')
+          764 LOAD_CONST                      15 ('gzip')
+          766 CALL                             2
+          774 POP_TOP
+ 170 >>   776 LOAD_FAST                        0 (self)
+          778 LOAD_ATTR                       26 (opener)
+          798 TO_BOOL
+          806 POP_JUMP_IF_FALSE               45 (to 900)
+ 171      810 LOAD_FAST                        0 (self)
+          812 LOAD_ATTR                       26 (opener)
+          832 LOAD_ATTR                       29 (open + NULL|self)
+          852 LOAD_FAST                        4 (req)
+          854 LOAD_CONST                       0 (None)
+          856 LOAD_FAST                        0 (self)
+          858 LOAD_ATTR                       30 (timeout)
+          878 CALL                             3
+          886 LOAD_FAST                        0 (self)
+          888 STORE_ATTR                      16 (infile)
+          898 JUMP_FORWARD                    39 (to 978)
+ 173 >>   900 LOAD_GLOBAL                      8 (urllib2)
+          910 LOAD_ATTR                       34 (urlopen)
+          930 PUSH_NULL
+          932 LOAD_FAST                        4 (req)
+          934 LOAD_CONST                       0 (None)
+          936 LOAD_FAST                        0 (self)
+          938 LOAD_ATTR                       30 (timeout)
+          958 CALL                             3
+          966 LOAD_FAST                        0 (self)
+          968 STORE_ATTR                      16 (infile)
+ 174 >>   978 LOAD_FAST                        0 (self)
+          980 LOAD_ATTR                       32 (infile)
+         1000 LOAD_ATTR                       37 (info + NULL|self)
+         1020 CALL                             0
+         1028 STORE_FAST                       6 (headers)
+ 175     1030 LOAD_FAST                        0 (self)
+         1032 LOAD_ATTR                       38 (try_count)
+         1052 LOAD_CONST                       5 (0)
+         1054 COMPARE_OP                      88 (== bool)
+         1058 POP_JUMP_IF_FALSE               18 (to 1098)
+ 176     1062 LOAD_FAST                        0 (self)
+         1064 LOAD_ATTR                       41 (_analyze_headers + NULL|self)
+         1084 LOAD_FAST                        6 (headers)
+         1086 CALL                             1
+         1094 POP_TOP
+         1096 JUMP_FORWARD                   163 (to 1424)
+ 178 >>  1098 LOAD_GLOBAL                     43 (int + NULL)
+         1108 LOAD_FAST                        0 (self)
+         1110 LOAD_ATTR                       45 (getfield + NULL|self)
+         1130 LOAD_FAST                        6 (headers)
+         1132 LOAD_CONST                      16 ('content-length')
+         1134 LOAD_CONST                      17 ('-1')
+         1136 CALL                             3
+         1144 CALL                             1
+         1152 STORE_FAST                       7 (size)
+ 179     1154 LOAD_FAST                        7 (size)
+         1156 LOAD_CONST                       6 (-1)
+         1158 COMPARE_OP                     119 (!= bool)
+         1162 POP_JUMP_IF_FALSE               66 (to 1298)
+         1166 LOAD_FAST_LOAD_FAST            112 (size, self)
+         1168 LOAD_ATTR                       46 (bytes_downloaded)
+         1188 BINARY_OP                        0 (+)
+         1192 LOAD_FAST                        0 (self)
+         1194 LOAD_ATTR                       48 (bytes_total)
+         1214 COMPARE_OP                     119 (!= bool)
+         1218 POP_JUMP_IF_FALSE               38 (to 1298)
+ 180     1222 LOAD_GLOBAL                     51 (DownloadError + NULL)
+         1232 LOAD_CONST                      18 ('Download size changed from %d to %d')
+         1234 LOAD_FAST                        0 (self)
+         1236 LOAD_ATTR                       48 (bytes_total)
+         1256 LOAD_FAST_LOAD_FAST            112 (size, self)
+         1258 LOAD_ATTR                       46 (bytes_downloaded)
+         1278 BINARY_OP                        0 (+)
+         1282 BUILD_TUPLE                      2
+         1284 BINARY_OP                        6 (%)
+         1288 CALL                             1
+         1296 RAISE_VARARGS                    1
+ 181 >>  1298 LOAD_FAST                        0 (self)
+         1300 LOAD_ATTR                       45 (getfield + NULL|self)
+         1320 LOAD_FAST                        6 (headers)
+         1322 LOAD_CONST                      19 ('Content-Encoding')
+         1324 LOAD_CONST                      10 ('identity')
+         1326 CALL                             3
+         1334 STORE_FAST                       8 (content_encoding)
+ 182     1336 LOAD_FAST_LOAD_FAST            128 (content_encoding, self)
+         1338 LOAD_ATTR                       18 (content_encoding)
+         1358 COMPARE_OP                     119 (!= bool)
+         1362 POP_JUMP_IF_FALSE               29 (to 1424)
+ 183     1366 LOAD_GLOBAL                     51 (DownloadError + NULL)
+         1376 LOAD_CONST                      20 ('Server changed encoding from ')
+         1378 LOAD_FAST                        0 (self)
+         1380 LOAD_ATTR                       18 (content_encoding)
+         1400 CONVERT_VALUE                    1 (str)
+         1402 FORMAT_SIMPLE
+         1404 LOAD_CONST                      21 (' to ')
+         1406 LOAD_FAST                        8 (content_encoding)
+         1408 CONVERT_VALUE                    1 (str)
+         1410 FORMAT_SIMPLE
+         1412 BUILD_STRING                     4
+         1414 CALL                             1
+         1422 RAISE_VARARGS                    1
+ 185 >>  1424 LOAD_FAST                        0 (self)
+         1426 LOAD_ATTR                       53 (notify_progress + NULL|self)
+         1446 LOAD_FAST                        0 (self)
+         1448 CALL                             1
+         1456 POP_TOP
+ 187     1458 NOP
+ 188 >>  1460 LOAD_FAST                        0 (self)
+         1462 LOAD_ATTR                       32 (infile)
+         1482 LOAD_ATTR                       55 (read + NULL|self)
+         1502 LOAD_FAST                        0 (self)
+         1504 LOAD_ATTR                       56 (blocksize)
+         1524 CALL                             1
+         1532 STORE_FAST                       9 (data)
+ 189     1534 LOAD_FAST                        9 (data)
+         1536 LOAD_CONST                      23 (b'')
+         1538 COMPARE_OP                      88 (== bool)
+         1542 POP_JUMP_IF_FALSE                1 (to 1548)
+ 190     1546 JUMP_FORWARD                    75 (to 1698)
+ 191 >>  1548 LOAD_FAST                        0 (self)
+         1550 LOAD_ATTR                       58 (outfile)
+         1570 LOAD_ATTR                       61 (write + NULL|self)
+         1590 LOAD_FAST                        9 (data)
+         1592 CALL                             1
+         1600 POP_TOP
+ 193     1602 LOAD_FAST                        0 (self)
+         1604 LOAD_ATTR                       46 (bytes_downloaded)
+         1624 LOAD_GLOBAL                     63 (len + NULL)
+         1634 LOAD_FAST                        9 (data)
+         1636 CALL                             1
+         1644 BINARY_OP                        0 (+)
+         1648 LOAD_FAST                        0 (self)
+         1650 STORE_ATTR                      23 (bytes_downloaded)
+ 194     1660 LOAD_FAST                        0 (self)
+         1662 LOAD_ATTR                       53 (notify_progress + NULL|self)
+         1682 LOAD_FAST                        0 (self)
+         1684 CALL                             1
+         1692 POP_TOP
+ 187     1694 JUMP_BACKWARD                  119 (to 1460)
+ 195 >>  1698 LOAD_FAST                        0 (self)
+         1700 LOAD_ATTR                       48 (bytes_total)
+         1720 LOAD_CONST                       6 (-1)
+         1722 COMPARE_OP                     119 (!= bool)
+         1726 POP_JUMP_IF_FALSE               62 (to 1854)
+         1730 LOAD_FAST                        0 (self)
+         1732 LOAD_ATTR                       46 (bytes_downloaded)
+         1752 LOAD_FAST                        0 (self)
+         1754 LOAD_ATTR                       48 (bytes_total)
+         1774 COMPARE_OP                     119 (!= bool)
+         1778 POP_JUMP_IF_FALSE               36 (to 1854)
+ 196     1782 LOAD_GLOBAL                     51 (DownloadError + NULL)
+         1792 LOAD_CONST                      24 ('expected to download %i bytes, got %i')
+         1794 LOAD_FAST                        0 (self)
+         1796 LOAD_ATTR                       48 (bytes_total)
+         1816 LOAD_FAST                        0 (self)
+         1818 LOAD_ATTR                       46 (bytes_downloaded)
+         1838 BUILD_TUPLE                      2
+         1840 BINARY_OP                        6 (%)
+         1844 CALL                             1
+         1852 RAISE_VARARGS                    1
+ 199 >>  1854 LOAD_CONST                      22 (True)
+         1856 LOAD_FAST                        0 (self)
+         1858 STORE_ATTR                      32 (finished)
+ 200     1868 LOAD_GLOBAL                      0 (cxlog)
+         1878 LOAD_ATTR                        2 (log)
+         1898 PUSH_NULL
+         1900 LOAD_CONST                      25 ('fetched url %s (%i bytes) in %0.3fs\n')
+         1902 LOAD_GLOBAL                      0 (cxlog)
+         1912 LOAD_ATTR                        4 (to_str)
+         1932 PUSH_NULL
+         1934 LOAD_FAST                        0 (self)
+         1936 LOAD_ATTR                        6 (url)
+         1956 CALL                             1
+         1964 LOAD_FAST                        0 (self)
+         1966 LOAD_ATTR                       46 (bytes_downloaded)
+         1986 LOAD_GLOBAL                     66 (time)
+         1996 LOAD_ATTR                       66 (time)
+         2016 PUSH_NULL
+         2018 CALL                             0
+         2026 LOAD_FAST                        1 (start_time)
+         2028 BINARY_OP                       10 (-)
+         2032 BUILD_TUPLE                      3
+         2034 BINARY_OP                        6 (%)
+         2038 CALL                             1
+         2046 POP_TOP
+ 201     2048 LOAD_FAST                        0 (self)
+         2050 LOAD_ATTR                       69 (notify_finished + NULL|self)
+         2070 LOAD_FAST                        0 (self)
+         2072 CALL                             1
+         2080 POP_TOP
+         2082 RETURN_CONST                     0 (None)
+
+Disassembly of <code UrlGetter.fetch> (line 203, args=1 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: self, start_time, last_position, sockerr, exception
+ 203        0 RESUME                           0
+ 204        2 LOAD_FAST                        0 (self)
+            4 LOAD_ATTR                        0 (infile)
+           24 TO_BOOL
+           32 POP_JUMP_IF_FALSE               11 (to 58)
+ 205       36 LOAD_GLOBAL                      3 (DownloadError + NULL)
+           46 LOAD_CONST                       1 ('fetch() has already been called')
+           48 CALL                             1
+           56 RAISE_VARARGS                    1
+ 206 >>    58 LOAD_GLOBAL                      4 (time)
+           68 LOAD_ATTR                        4 (time)
+           88 PUSH_NULL
+           90 CALL                             0
+           98 STORE_FAST                       1 (start_time)
+ 207      100 NOP
+ 208      102 NOP
+ 209      104 LOAD_CONST                       2 (-1)
+          106 STORE_FAST                       2 (last_position)
+ 210      108 LOAD_FAST                        0 (self)
+          110 LOAD_ATTR                        6 (finished)
+          130 TO_BOOL
+          138 POP_JUMP_IF_TRUE               105 (to 352)
+ 211 >>   142 LOAD_FAST                        0 (self)
+          144 LOAD_ATTR                        8 (bytes_downloaded)
+          164 STORE_FAST                       2 (last_position)
+ 212      166 NOP
+ 213      168 LOAD_FAST                        0 (self)
+          170 LOAD_ATTR                       11 (_fetch_chunk + NULL|self)
+          190 LOAD_FAST_LOAD_FAST             16 (start_time, self)
+          192 LOAD_ATTR                        8 (bytes_downloaded)
+          212 CALL                             2
+          220 POP_TOP
+ 223 >>   222 LOAD_FAST                        0 (self)
+          224 LOAD_ATTR                        0 (infile)
+          244 LOAD_ATTR                       29 (close + NULL|self)
+          264 CALL                             0
+          272 POP_TOP
+ 225      274 LOAD_FAST                        0 (self)
+          276 LOAD_ATTR                       26 (try_count)
+          296 LOAD_CONST                       5 (1)
+          298 BINARY_OP                        0 (+)
+          302 LOAD_FAST                        0 (self)
+          304 STORE_ATTR                      13 (try_count)
+ 210      314 LOAD_FAST                        0 (self)
+          316 LOAD_ATTR                        6 (finished)
+          336 TO_BOOL
+          344 POP_JUMP_IF_TRUE                 2 (to 352)
+          348 JUMP_BACKWARD                  105 (to 142)
+ 239 >>   352 LOAD_FAST                        0 (self)
+          354 LOAD_ATTR                       34 (outfile)
+          374 LOAD_ATTR                       29 (close + NULL|self)
+          394 CALL                             0
+          402 POP_TOP
+ 240      404 LOAD_CONST                       0 (None)
+          406 LOAD_FAST                        0 (self)
+          408 STORE_ATTR                      17 (outfile)
+ 241      418 LOAD_FAST                        0 (self)
+          420 LOAD_ATTR                       56 (content_encoding)
+          440 LOAD_CONST                       9 ('gzip')
+          442 COMPARE_OP                      88 (== bool)
+          446 POP_JUMP_IF_FALSE               56 (to 562)
+ 242      450 LOAD_FAST                        0 (self)
+          452 LOAD_ATTR                       58 (decoding_event)
+          472 LOAD_ATTR                       61 (wait + NULL|self)
+          492 CALL                             0
+          500 POP_TOP
+ 243      502 LOAD_FAST                        0 (self)
+          504 LOAD_ATTR                       62 (decoding_exception)
+          524 TO_BOOL
+          532 POP_JUMP_IF_FALSE               12 (to 560)
+ 244      536 LOAD_FAST                        0 (self)
+          538 LOAD_ATTR                       62 (decoding_exception)
+          558 RAISE_VARARGS                    1
+ 243 >>   560 RETURN_CONST                     0 (None)
+ 241 >>   562 RETURN_CONST                     0 (None)
+     >>   564 PUSH_EXC_INFO
+ 214      566 LOAD_GLOBAL                     12 (socket)
+          576 LOAD_ATTR                       14 (error)
+          596 CHECK_EXC_MATCH
+          598 POP_JUMP_IF_FALSE              119 (to 840)
+          602 STORE_FAST                       3 (sockerr)
+ 215      604 LOAD_GLOBAL                     16 (cxlog)
+          614 LOAD_ATTR                       18 (log)
+          634 PUSH_NULL
+          636 LOAD_CONST                       3 ('caught %s last_position=%s bytes_downloaded=%d')
+          638 LOAD_GLOBAL                     21 (repr + NULL)
+          648 LOAD_FAST                        3 (sockerr)
+          650 CALL                             1
+          658 LOAD_FAST_LOAD_FAST             32 (last_position, self)
+          660 LOAD_ATTR                        8 (bytes_downloaded)
+          680 BUILD_TUPLE                      3
+          682 BINARY_OP                        6 (%)
+          686 CALL                             1
+          694 POP_TOP
+ 216      696 LOAD_FAST                        3 (sockerr)
+          698 LOAD_ATTR                       22 (errno)
+          718 LOAD_GLOBAL                     22 (errno)
+          728 LOAD_ATTR                       24 (ECONNRESET)
+          748 COMPARE_OP                     119 (!= bool)
+          752 POP_JUMP_IF_TRUE                31 (to 818)
+ 217      756 LOAD_FAST_LOAD_FAST             32 (last_position, self)
+          758 LOAD_ATTR                        8 (bytes_downloaded)
+          778 COMPARE_OP                      88 (== bool)
+          782 POP_JUMP_IF_TRUE                16 (to 818)
+ 218      786 LOAD_FAST                        0 (self)
+          788 LOAD_ATTR                       26 (try_count)
+          808 LOAD_CONST                       4 (12)
+          810 COMPARE_OP                     188 (>= bool)
+          814 POP_JUMP_IF_FALSE                1 (to 820)
+ 222 >>   818 RAISE_VARARGS                    0
+ 218 >>   820 POP_EXCEPT
+          822 LOAD_CONST                       0 (None)
+          824 STORE_FAST                       3 (sockerr)
+          826 DELETE_FAST                      3 (sockerr)
+          828 JUMP_BACKWARD_NO_INTERRUPT     305 (to 222)
+     >>   832 LOAD_CONST                       0 (None)
+          834 STORE_FAST                       3 (sockerr)
+          836 DELETE_FAST                      3 (sockerr)
+          838 RERAISE                          1
+ 214 >>   840 RERAISE                          0
+     >>   842 COPY                             3
+          844 POP_EXCEPT
+          846 RERAISE                          1
+     >>   848 PUSH_EXC_INFO
+ 226      850 LOAD_GLOBAL                     30 (cxurlget_base)
+          860 LOAD_ATTR                       32 (StopDownload)
+          880 CHECK_EXC_MATCH
+          882 POP_JUMP_IF_FALSE               36 (to 958)
+          886 POP_TOP
+ 227      888 POP_EXCEPT
+ 239      890 LOAD_FAST                        0 (self)
+          892 LOAD_ATTR                       34 (outfile)
+          912 LOAD_ATTR                       29 (close + NULL|self)
+          932 CALL                             0
+          940 POP_TOP
+ 240      942 LOAD_CONST                       0 (None)
+          944 LOAD_FAST                        0 (self)
+          946 STORE_ATTR                      17 (outfile)
+          956 RETURN_CONST                     0 (None)
+ 228 >>   958 LOAD_GLOBAL                     36 (urllib_error)
+          968 LOAD_ATTR                       38 (HTTPError)
+          988 CHECK_EXC_MATCH
+          990 POP_JUMP_IF_FALSE              265 (to 1526)
+          996 STORE_FAST                       4 (exception)
+ 229      998 LOAD_FAST                        4 (exception)
+         1000 LOAD_ATTR                       40 (code)
+         1020 LOAD_CONST                       6 (304)
+         1022 COMPARE_OP                      88 (== bool)
+         1026 POP_JUMP_IF_FALSE               80 (to 1190)
+ 230     1030 LOAD_GLOBAL                     16 (cxlog)
+         1040 LOAD_ATTR                       18 (log)
+         1060 PUSH_NULL
+         1062 LOAD_CONST                       7 ('%s has not changed (%0.3fs)')
+         1064 LOAD_GLOBAL                     16 (cxlog)
+         1074 LOAD_ATTR                       42 (to_str)
+         1094 PUSH_NULL
+         1096 LOAD_FAST                        0 (self)
+         1098 LOAD_ATTR                       44 (url)
+         1118 CALL                             1
+         1126 LOAD_GLOBAL                      4 (time)
+         1136 LOAD_ATTR                        4 (time)
+         1156 PUSH_NULL
+         1158 CALL                             0
+         1166 LOAD_FAST                        1 (start_time)
+         1168 BINARY_OP                       10 (-)
+         1172 BUILD_TUPLE                      2
+         1174 BINARY_OP                        6 (%)
+         1178 CALL                             1
+         1186 POP_TOP
+         1188 JUMP_FORWARD                   126 (to 1442)
+ 232 >>  1190 LOAD_GLOBAL                     16 (cxlog)
+         1200 LOAD_ATTR                       18 (log)
+         1220 PUSH_NULL
+         1222 LOAD_CONST                       8 ('failed to fetch url %s (%0.3fs):\n%s')
+         1224 LOAD_GLOBAL                     16 (cxlog)
+         1234 LOAD_ATTR                       42 (to_str)
+         1254 PUSH_NULL
+         1256 LOAD_FAST                        0 (self)
+         1258 LOAD_ATTR                       44 (url)
+         1278 CALL                             1
+         1286 LOAD_GLOBAL                      4 (time)
+         1296 LOAD_ATTR                        4 (time)
+         1316 PUSH_NULL
+         1318 CALL                             0
+         1326 LOAD_FAST                        1 (start_time)
+         1328 BINARY_OP                       10 (-)
+         1332 LOAD_GLOBAL                     46 (traceback)
+         1342 LOAD_ATTR                       48 (format_exc)
+         1362 PUSH_NULL
+         1364 CALL                             0
+         1372 BUILD_TUPLE                      3
+         1374 BINARY_OP                        6 (%)
+         1378 CALL                             1
+         1386 POP_TOP
+ 233     1388 LOAD_FAST                        0 (self)
+         1390 LOAD_ATTR                       51 (notify_failed + NULL|self)
+         1410 LOAD_FAST                        0 (self)
+         1412 LOAD_GLOBAL                     53 (wrap_exception + NULL)
+         1422 LOAD_FAST                        4 (exception)
+         1424 CALL                             1
+         1432 CALL                             2
+         1440 POP_TOP
+ 234 >>  1442 POP_EXCEPT
+         1444 LOAD_CONST                       0 (None)
+         1446 STORE_FAST                       4 (exception)
+         1448 DELETE_FAST                      4 (exception)
+ 239     1450 LOAD_FAST                        0 (self)
+         1452 LOAD_ATTR                       34 (outfile)
+         1472 LOAD_ATTR                       29 (close + NULL|self)
+         1492 CALL                             0
+         1500 POP_TOP
+ 240     1502 LOAD_CONST                       0 (None)
+         1504 LOAD_FAST                        0 (self)
+         1506 STORE_ATTR                      17 (outfile)
+         1516 RETURN_CONST                     0 (None)
+     >>  1518 LOAD_CONST                       0 (None)
+         1520 STORE_FAST                       4 (exception)
+         1522 DELETE_FAST                      4 (exception)
+         1524 RERAISE                          1
+ 235 >>  1526 LOAD_GLOBAL                     54 (Exception)
+         1536 CHECK_EXC_MATCH
+         1538 POP_JUMP_IF_FALSE              137 (to 1816)
+         1542 STORE_FAST                       4 (exception)
+ 236     1544 LOAD_GLOBAL                     16 (cxlog)
+         1554 LOAD_ATTR                       18 (log)
+         1574 PUSH_NULL
+         1576 LOAD_CONST                       8 ('failed to fetch url %s (%0.3fs):\n%s')
+         1578 LOAD_GLOBAL                     16 (cxlog)
+         1588 LOAD_ATTR                       42 (to_str)
+         1608 PUSH_NULL
+         1610 LOAD_FAST                        0 (self)
+         1612 LOAD_ATTR                       44 (url)
+         1632 CALL                             1
+         1640 LOAD_GLOBAL                      4 (time)
+         1650 LOAD_ATTR                        4 (time)
+         1670 PUSH_NULL
+         1672 CALL                             0
+         1680 LOAD_FAST                        1 (start_time)
+         1682 BINARY_OP                       10 (-)
+         1686 LOAD_GLOBAL                     46 (traceback)
+         1696 LOAD_ATTR                       48 (format_exc)
+         1716 PUSH_NULL
+         1718 CALL                             0
+         1726 BUILD_TUPLE                      3
+         1728 BINARY_OP                        6 (%)
+         1732 CALL                             1
+         1740 POP_TOP
+ 237     1742 LOAD_FAST                        0 (self)
+         1744 LOAD_ATTR                       51 (notify_failed + NULL|self)
+         1764 LOAD_FAST                        0 (self)
+         1766 LOAD_GLOBAL                     53 (wrap_exception + NULL)
+         1776 LOAD_FAST                        4 (exception)
+         1778 CALL                             1
+         1786 CALL                             2
+         1794 POP_TOP
+         1796 POP_EXCEPT
+         1798 LOAD_CONST                       0 (None)
+         1800 STORE_FAST                       4 (exception)
+         1802 DELETE_FAST                      4 (exception)
+         1804 JUMP_BACKWARD_NO_INTERRUPT     728 (to 352)
+     >>  1808 LOAD_CONST                       0 (None)
+         1810 STORE_FAST                       4 (exception)
+         1812 DELETE_FAST                      4 (exception)
+         1814 RERAISE                          1
+ 235 >>  1816 RERAISE                          0
+     >>  1818 COPY                             3
+         1820 POP_EXCEPT
+         1822 RERAISE                          1
+     >>  1824 PUSH_EXC_INFO
+ 239     1826 LOAD_FAST                        0 (self)
+         1828 LOAD_ATTR                       34 (outfile)
+         1848 LOAD_ATTR                       29 (close + NULL|self)
+         1868 CALL                             0
+         1876 POP_TOP
+ 240     1878 LOAD_CONST                       0 (None)
+         1880 LOAD_FAST                        0 (self)
+         1882 STORE_ATTR                      17 (outfile)
+         1892 RERAISE                          0
+     >>  1894 COPY                             3
+         1896 POP_EXCEPT
+         1898 RERAISE                          1
+  ExceptionTable:
+    104 to 166 -> 848 [0]
+    168 to 222 -> 564 [0]
+    222 to 348 -> 848 [0]
+    564 to 604 -> 842 [1] lasti
+    604 to 820 -> 832 [1] lasti
+    820 to 832 -> 848 [0]
+    832 to 842 -> 842 [1] lasti
+    842 to 848 -> 848 [0]
+    848 to 888 -> 1818 [1] lasti
+    888 to 890 -> 1824 [0]
+    958 to 998 -> 1818 [1] lasti
+    998 to 1442 -> 1518 [1] lasti
+    1442 to 1450 -> 1824 [0]
+    1518 to 1544 -> 1818 [1] lasti
+    1544 to 1796 -> 1808 [1] lasti
+    1796 to 1808 -> 1824 [0]
+    1808 to 1818 -> 1818 [1] lasti
+    1818 to 1824 -> 1824 [0]
+    1824 to 1894 -> 1894 [1] lasti

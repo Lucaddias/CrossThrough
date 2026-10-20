@@ -1,0 +1,542 @@
+# systeminfo — CPython 3.13 bytecode listing of lib/python/systeminfo.pyc
+# sha256 2673e079df5c3cb5683e0d6e0f43ba330ccd7a83e0f077b27a46f8c12fb3f57c, pyc flags 3, co_filename /Volumes/gitlab_data/gitlab/builds/j911ygmXM/0/crossover/crossover/macosx/CrossOver/build/Build/Products/Release/CrossOver.app/Contents/SharedSupport/CrossOver/lib/python/systeminfo.py
+
+Disassembly of <code <module>> (line 1, args=0 posonly=0 kwonly=0, flags=0):
+   0        0 RESUME                           0
+   3        2 LOAD_CONST                       0 (0)
+            4 LOAD_CONST                       1 (None)
+            6 IMPORT_NAME                      0 (os)
+            8 STORE_NAME                       0 (os)
+   4       10 LOAD_CONST                       0 (0)
+           12 LOAD_CONST                       1 (None)
+           14 IMPORT_NAME                      1 (struct)
+           16 STORE_NAME                       1 (struct)
+   6       18 LOAD_CONST                       0 (0)
+           20 LOAD_CONST                       1 (None)
+           22 IMPORT_NAME                      2 (cxdiag)
+           24 STORE_NAME                       2 (cxdiag)
+   7       26 LOAD_CONST                       0 (0)
+           28 LOAD_CONST                       1 (None)
+           30 IMPORT_NAME                      3 (cxobjc)
+           32 STORE_NAME                       3 (cxobjc)
+   8       34 LOAD_CONST                       0 (0)
+           36 LOAD_CONST                       1 (None)
+           38 IMPORT_NAME                      4 (cxutils)
+           40 STORE_NAME                       4 (cxutils)
+   9       42 LOAD_CONST                       0 (0)
+           44 LOAD_CONST                       1 (None)
+           46 IMPORT_NAME                      5 (distversion)
+           48 STORE_NAME                       5 (distversion)
+  12       50 LOAD_BUILD_CLASS
+           52 PUSH_NULL
+           54 LOAD_CONST                       2 (<code SystemInfo, line 12>)
+           56 MAKE_FUNCTION
+           58 LOAD_CONST                       3 ('SystemInfo')
+           60 LOAD_NAME                        3 (cxobjc)
+           62 LOAD_ATTR                       12 (Proxy)
+           82 CALL                             3
+           90 STORE_NAME                       7 (SystemInfo)
+  16       92 LOAD_CONST                       4 (<code get_bottle_information, line 16>)
+           94 MAKE_FUNCTION
+           96 STORE_NAME                       8 (get_bottle_information)
+  37       98 LOAD_CONST                      10 ((None, False))
+          100 LOAD_CONST                       5 (<code get_system_information, line 37>)
+          102 MAKE_FUNCTION
+          104 SET_FUNCTION_ATTRIBUTE           1 (defaults)
+          106 STORE_NAME                       9 (get_system_information)
+  97      108 LOAD_NAME                        3 (cxobjc)
+          110 LOAD_ATTR                       20 (method)
+          130 PUSH_NULL
+          132 LOAD_NAME                        7 (SystemInfo)
+          134 LOAD_CONST                       6 ('systemInformationString')
+          136 CALL                             2
+  98      144 LOAD_CONST                      11 ((None,))
+          146 LOAD_CONST                       7 (<code system_info_string, line 97>)
+          148 MAKE_FUNCTION
+          150 SET_FUNCTION_ATTRIBUTE           1 (defaults)
+  97      152 CALL                             0
+  98      160 STORE_NAME                      11 (system_info_string)
+ 114      162 LOAD_NAME                        3 (cxobjc)
+          164 LOAD_ATTR                       20 (method)
+          184 PUSH_NULL
+          186 LOAD_NAME                        7 (SystemInfo)
+          188 LOAD_CONST                       8 ('systemInformationStringForBottle_')
+          190 CALL                             2
+ 115      198 LOAD_CONST                       9 (<code _system_info_string_for_bottle, line 114>)
+          200 MAKE_FUNCTION
+ 114      202 CALL                             0
+ 115      210 STORE_NAME                      12 (_system_info_string_for_bottle)
+          212 RETURN_CONST                     1 (None)
+
+Disassembly of <code SystemInfo> (line 12, args=0 posonly=0 kwonly=0, flags=0):
+  12        0 RESUME                           0
+            2 LOAD_NAME                        0 (__name__)
+            4 STORE_NAME                       1 (__module__)
+            6 LOAD_CONST                       0 ('SystemInfo')
+            8 STORE_NAME                       2 (__qualname__)
+           10 LOAD_CONST                       1 (12)
+           12 STORE_NAME                       3 (__firstlineno__)
+  13       14 LOAD_CONST                       2 (())
+           16 STORE_NAME                       4 (__static_attributes__)
+           18 RETURN_CONST                     3 (None)
+
+Disassembly of <code get_bottle_information> (line 16, args=1 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: bottle, toggles, info, k, v
+  16        0 RESUME                           0
+  18        2 LOAD_FAST                        0 (bottle)
+            4 LOAD_ATTR                        0 (graphics_backend_state)
+  19       24 LOAD_FAST                        0 (bottle)
+           26 LOAD_ATTR                        2 (vulkan_backend_state)
+  20       46 LOAD_FAST                        0 (bottle)
+           48 LOAD_ATTR                        4 (is_dlss_enabled_state)
+  21       68 LOAD_FAST                        0 (bottle)
+           70 LOAD_ATTR                        6 (is_high_resolution_enabled_state)
+  22       90 LOAD_FAST                        0 (bottle)
+           92 LOAD_ATTR                        8 (is_msync_enabled_state)
+  23      112 LOAD_FAST                        0 (bottle)
+          114 LOAD_ATTR                       10 (is_preview_enabled_state)
+  17      134 BUILD_LIST                       6
+          136 STORE_FAST                       1 (toggles)
+  26      138 LOAD_FAST                        0 (bottle)
+          140 LOAD_ATTR                       12 (name)
+  27      160 LOAD_FAST                        0 (bottle)
+          162 LOAD_ATTR                       14 (template)
+  28      182 LOAD_FAST                        0 (bottle)
+          184 LOAD_ATTR                       16 (windows_version)
+  29      204 LOAD_GLOBAL                     19 (str + NULL)
+          214 LOAD_FAST                        0 (bottle)
+          216 LOAD_ATTR                       20 (is_managed)
+          236 CALL                             1
+  30      244 LOAD_FAST                        0 (bottle)
+          246 LOAD_ATTR                       22 (arch)
+  26      266 LOAD_CONST                       1 (('Name', 'Template', 'Windows Version', 'Managed', 'Arch'))
+          268 BUILD_CONST_KEY_MAP              5
+          270 STORE_FAST                       2 (info)
+  32      272 LOAD_FAST                        2 (info)
+          274 LOAD_ATTR                       25 (update + NULL|self)
+          294 LOAD_CONST                       2 (<code get_bottle_information.<locals>.<genexpr>, line 32>)
+          296 MAKE_FUNCTION
+          298 LOAD_FAST                        1 (toggles)
+          300 GET_ITER
+          302 CALL                             0
+          310 GET_ITER
+          312 LOAD_FAST_AND_CLEAR              3 (k)
+          314 LOAD_FAST_AND_CLEAR              4 (v)
+          316 SWAP                             3
+          318 BUILD_MAP                        0
+          320 SWAP                             2
+          322 GET_ITER
+     >>   324 FOR_ITER                        36 (to 400)
+          328 UNPACK_SEQUENCE                  2
+          332 STORE_FAST_STORE_FAST           52 (k, v)
+          334 LOAD_FAST                        3 (k)
+          336 LOAD_ATTR                       27 (strip + NULL|self)
+          356 CALL                             0
+          364 LOAD_FAST                        4 (v)
+          366 LOAD_ATTR                       27 (strip + NULL|self)
+          386 CALL                             0
+          394 MAP_ADD                          2
+          396 JUMP_BACKWARD                   38 (to 324)
+     >>   400 END_FOR
+          402 POP_TOP
+          404 SWAP                             3
+          406 STORE_FAST                       4 (v)
+          408 STORE_FAST                       3 (k)
+          410 CALL                             1
+          418 POP_TOP
+  34      420 LOAD_FAST                        2 (info)
+          422 RETURN_VALUE
+     >>   424 SWAP                             2
+          426 POP_TOP
+  32      428 SWAP                             3
+          430 STORE_FAST                       4 (v)
+          432 STORE_FAST                       3 (k)
+          434 RERAISE                          0
+  ExceptionTable:
+    318 to 404 -> 424 [5]
+
+Disassembly of <code get_bottle_information.<locals>.<genexpr>> (line 32, args=1 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS|NESTED|GENERATOR):
+  locals+cells+free: .0, i
+  32        0 RETURN_GENERATOR
+            2 POP_TOP
+            4 RESUME                           0
+            6 LOAD_FAST                        0 (.0)
+            8 GET_ITER
+     >>    10 FOR_ITER                        21 (to 56)
+           14 STORE_FAST_LOAD_FAST            17 (i, i)
+           16 LOAD_ATTR                        1 (split + NULL|self)
+           36 LOAD_CONST                       0 (':')
+           38 CALL                             1
+           46 YIELD_VALUE                      0
+           48 RESUME                           5
+           50 POP_TOP
+           52 JUMP_BACKWARD                   23 (to 10)
+     >>    56 END_FOR
+           58 POP_TOP
+           60 RETURN_CONST                     1 (None)
+     >>    62 CALL_INTRINSIC_1                 3 (INTRINSIC_STOPITERATION_ERROR)
+           64 RERAISE                          1
+  ExceptionTable:
+    4 to 62 -> 62 [0] lasti
+
+Disassembly of <code get_system_information> (line 37, args=2 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: bottle, include_cxdiag, info, Gdk, lang, var, fname, f, line, key, _part, value, cmd, retcode, out, _err, cxdiag_info
+  37        0 RESUME                           0
+  39        2 BUILD_MAP                        0
+            4 STORE_FAST                       2 (info)
+  41        6 LOAD_FAST                        0 (bottle)
+            8 TO_BOOL
+           16 POP_JUMP_IF_FALSE               14 (to 48)
+  42       20 LOAD_GLOBAL                      1 (get_bottle_information + NULL)
+           30 LOAD_FAST                        0 (bottle)
+           32 CALL                             1
+           40 LOAD_FAST                        2 (info)
+           42 LOAD_CONST                       1 ('Bottle')
+           44 STORE_SUBSCR
+  44 >>    48 LOAD_GLOBAL                      2 (distversion)
+           58 LOAD_ATTR                        4 (PRODUCT_NAME)
+           78 LOAD_FAST                        2 (info)
+           80 LOAD_CONST                       2 ('Product')
+           82 STORE_SUBSCR
+  45       86 LOAD_GLOBAL                      2 (distversion)
+           96 LOAD_ATTR                        6 (PUBLIC_VERSION)
+          116 LOAD_FAST                        2 (info)
+          118 LOAD_CONST                       3 ('Version')
+          120 STORE_SUBSCR
+  46      124 LOAD_GLOBAL                      8 (cxutils)
+          134 LOAD_ATTR                       10 (CX_ROOT)
+          154 LOAD_FAST                        2 (info)
+          156 LOAD_CONST                       4 ('Install location')
+          158 STORE_SUBSCR
+  47      162 LOAD_CONST                       5 ('%s-bit')
+          164 LOAD_GLOBAL                     12 (struct)
+          174 LOAD_ATTR                       14 (calcsize)
+          194 PUSH_NULL
+          196 LOAD_CONST                       6 ('P')
+          198 CALL                             1
+          206 LOAD_CONST                       7 (8)
+          208 BINARY_OP                        5 (*)
+          212 BINARY_OP                        6 (%)
+          216 LOAD_FAST                        2 (info)
+          218 LOAD_CONST                       8 ('Bitness')
+          220 STORE_SUBSCR
+  48      224 LOAD_GLOBAL                     16 (os)
+          234 LOAD_ATTR                       18 (environ)
+          254 LOAD_ATTR                       21 (get + NULL|self)
+          274 LOAD_CONST                       9 ('DESKTOP_SESSION')
+          276 LOAD_CONST                      10 ('')
+          278 CALL                             2
+          286 LOAD_FAST                        2 (info)
+          288 LOAD_CONST                      11 ('Desktop session')
+          290 STORE_SUBSCR
+  50      294 NOP
+  51      296 LOAD_CONST                      12 (0)
+          298 LOAD_CONST                      13 (('Gdk',))
+          300 IMPORT_NAME                     11 (gi.repository)
+          302 IMPORT_FROM                     12 (Gdk)
+          304 STORE_FAST                       3 (Gdk)
+          306 POP_TOP
+  52      308 LOAD_GLOBAL                     27 (hasattr + NULL)
+          318 LOAD_FAST                        3 (Gdk)
+          320 LOAD_ATTR                       28 (Screen)
+          340 LOAD_ATTR                       31 (get_default + NULL|self)
+          360 CALL                             0
+          368 LOAD_CONST                      14 ('get_window_manager_name')
+          370 CALL                             2
+          378 TO_BOOL
+          386 POP_JUMP_IF_FALSE               43 (to 476)
+  53      390 LOAD_FAST                        3 (Gdk)
+          392 LOAD_ATTR                       28 (Screen)
+          412 LOAD_ATTR                       31 (get_default + NULL|self)
+          432 CALL                             0
+          440 LOAD_ATTR                       33 (get_window_manager_name + NULL|self)
+          460 CALL                             0
+          468 LOAD_FAST                        2 (info)
+          470 LOAD_CONST                      15 ('Window manager')
+          472 STORE_SUBSCR
+  57 >>   476 BUILD_MAP                        0
+          478 LOAD_FAST                        2 (info)
+          480 LOAD_CONST                      16 ('Locale')
+          482 STORE_SUBSCR
+  58      486 LOAD_GLOBAL                     16 (os)
+          496 LOAD_ATTR                       18 (environ)
+          516 LOAD_ATTR                       21 (get + NULL|self)
+          536 LOAD_CONST                      17 ('LANG')
+          538 LOAD_CONST                      10 ('')
+          540 CALL                             2
+          548 STORE_FAST                       4 (lang)
+  59      550 LOAD_FAST_LOAD_FAST             66 (lang, info)
+          552 LOAD_CONST                      16 ('Locale')
+          554 BINARY_SUBSCR
+          558 LOAD_CONST                      16 ('Locale')
+          560 STORE_SUBSCR
+  60      564 LOAD_CONST                      18 (('LC_ADDRESS', 'LC_COLLATE', 'LC_CTYPE', 'LC_IDENTIFICATION', 'LC_MONETARY', 'LC_MESSAGES', 'LC_MEASUREMENT', 'LC_NAME', 'LC_NUMERIC', 'LC_PAPER', 'LC_TELEPHONE', 'LC_TIME', 'LC_ALL'))
+          566 GET_ITER
+     >>   568 FOR_ITER                        75 (to 722)
+          572 STORE_FAST                       5 (var)
+  63      574 LOAD_FAST                        5 (var)
+          576 LOAD_GLOBAL                     16 (os)
+          586 LOAD_ATTR                       18 (environ)
+          606 CONTAINS_OP                      0 (in)
+          610 POP_JUMP_IF_TRUE                 2 (to 618)
+          614 JUMP_BACKWARD                   25 (to 568)
+     >>   618 LOAD_GLOBAL                     16 (os)
+          628 LOAD_ATTR                       18 (environ)
+          648 LOAD_FAST                        5 (var)
+          650 BINARY_SUBSCR
+          654 LOAD_FAST                        4 (lang)
+          656 COMPARE_OP                     119 (!= bool)
+          660 POP_JUMP_IF_TRUE                 2 (to 668)
+          664 JUMP_BACKWARD                   50 (to 568)
+  64 >>   668 LOAD_GLOBAL                     16 (os)
+          678 LOAD_ATTR                       18 (environ)
+          698 LOAD_FAST                        5 (var)
+          700 BINARY_SUBSCR
+          704 LOAD_FAST                        2 (info)
+          706 LOAD_CONST                      16 ('Locale')
+          708 BINARY_SUBSCR
+          712 LOAD_FAST                        5 (var)
+          714 STORE_SUBSCR
+          718 JUMP_BACKWARD                   77 (to 568)
+  60 >>   722 END_FOR
+          724 POP_TOP
+  66      726 BUILD_MAP                        0
+          728 LOAD_FAST                        2 (info)
+          730 LOAD_CONST                      19 ('System Information')
+          732 STORE_SUBSCR
+  69      736 LOAD_CONST                      20 (('/etc/os-release', '/etc/lsb-release'))
+          738 GET_ITER
+     >>   740 FOR_ITER                       143 (to 1030)
+          744 STORE_FAST                       6 (fname)
+  70      746 LOAD_GLOBAL                     16 (os)
+          756 LOAD_ATTR                       36 (path)
+          776 LOAD_ATTR                       39 (exists + NULL|self)
+          796 LOAD_FAST                        6 (fname)
+          798 CALL                             1
+          806 TO_BOOL
+          814 POP_JUMP_IF_TRUE                 2 (to 822)
+  71      818 JUMP_BACKWARD                   41 (to 740)
+  73 >>   822 LOAD_GLOBAL                     41 (open + NULL)
+          832 LOAD_FAST                        6 (fname)
+          834 LOAD_CONST                      21 ('r')
+          836 LOAD_CONST                      22 ('utf8')
+          838 LOAD_CONST                      23 ('surrogateescape')
+          840 LOAD_CONST                      24 (('encoding', 'errors'))
+          842 CALL_KW                          4
+          844 BEFORE_WITH
+          846 STORE_FAST                       7 (f)
+  74      848 LOAD_FAST                        7 (f)
+          850 GET_ITER
+     >>   852 FOR_ITER                        75 (to 1006)
+          856 STORE_FAST                       8 (line)
+  75      858 LOAD_FAST                        8 (line)
+          860 LOAD_ATTR                       43 (strip + NULL|self)
+          880 CALL                             0
+          888 LOAD_ATTR                       45 (partition + NULL|self)
+          908 LOAD_CONST                      25 ('=')
+          910 CALL                             1
+          918 UNPACK_SEQUENCE                  3
+          922 STORE_FAST_STORE_FAST          154 (key, _part)
+          924 STORE_FAST                      11 (value)
+  76      926 LOAD_FAST                       11 (value)
+          928 LOAD_ATTR                       43 (strip + NULL|self)
+          948 LOAD_CONST                      26 ('"')
+          950 CALL                             1
+          958 LOAD_FAST                        2 (info)
+          960 LOAD_CONST                      19 ('System Information')
+          962 BINARY_SUBSCR
+          966 LOAD_FAST                        9 (key)
+          968 LOAD_ATTR                       43 (strip + NULL|self)
+          988 LOAD_CONST                      26 ('"')
+          990 CALL                             1
+          998 STORE_SUBSCR
+         1002 JUMP_BACKWARD                   77 (to 852)
+  74 >>  1006 END_FOR
+         1008 POP_TOP
+  73     1010 LOAD_CONST                      27 (None)
+         1012 LOAD_CONST                      27 (None)
+         1014 LOAD_CONST                      27 (None)
+         1016 CALL                             2
+         1024 POP_TOP
+  77 >>  1026 POP_TOP
+         1028 JUMP_FORWARD                     2 (to 1034)
+  69 >>  1030 END_FOR
+         1032 POP_TOP
+  80 >>  1034 LOAD_CONST                      28 (('system_profiler', '-detailLevel', 'mini', '-timeout', '1', 'SPDisplaysDataType', 'SPHardwareDataType', 'SPSoftwareDataType'))
+         1036 STORE_FAST                      12 (cmd)
+  81     1038 LOAD_GLOBAL                      8 (cxutils)
+         1048 LOAD_ATTR                       46 (run)
+         1068 PUSH_NULL
+         1070 LOAD_FAST                       12 (cmd)
+         1072 LOAD_GLOBAL                      8 (cxutils)
+         1082 LOAD_ATTR                       48 (GRAB)
+         1102 LOAD_CONST                      29 (('stdout',))
+         1104 CALL_KW                          2
+         1106 UNPACK_SEQUENCE                  3
+         1110 STORE_FAST_STORE_FAST          222 (retcode, out)
+         1112 STORE_FAST                      15 (_err)
+  82     1114 LOAD_FAST                       13 (retcode)
+         1116 LOAD_CONST                      12 (0)
+         1118 COMPARE_OP                      88 (== bool)
+         1122 POP_JUMP_IF_FALSE              102 (to 1330)
+  83     1126 LOAD_FAST                       14 (out)
+         1128 LOAD_ATTR                       51 (splitlines + NULL|self)
+         1148 CALL                             0
+         1156 GET_ITER
+     >>  1158 FOR_ITER                        82 (to 1326)
+         1162 STORE_FAST                       8 (line)
+  84     1164 LOAD_FAST                        8 (line)
+         1166 LOAD_ATTR                       43 (strip + NULL|self)
+         1186 CALL                             0
+         1194 LOAD_ATTR                       45 (partition + NULL|self)
+         1214 LOAD_CONST                      30 (':')
+         1216 CALL                             1
+         1224 UNPACK_SEQUENCE                  3
+         1228 STORE_FAST_STORE_FAST          154 (key, _part)
+         1230 STORE_FAST                      11 (value)
+  85     1232 LOAD_FAST                       11 (value)
+         1234 TO_BOOL
+         1242 POP_JUMP_IF_TRUE                 2 (to 1250)
+         1246 JUMP_BACKWARD                   46 (to 1158)
+  86 >>  1250 LOAD_FAST                       11 (value)
+         1252 LOAD_ATTR                       43 (strip + NULL|self)
+         1272 CALL                             0
+         1280 LOAD_FAST                        2 (info)
+         1282 LOAD_CONST                      19 ('System Information')
+         1284 BINARY_SUBSCR
+         1288 LOAD_FAST                        9 (key)
+         1290 LOAD_ATTR                       43 (strip + NULL|self)
+         1310 CALL                             0
+         1318 STORE_SUBSCR
+         1322 JUMP_BACKWARD                   84 (to 1158)
+  83 >>  1326 END_FOR
+         1328 POP_TOP
+  88 >>  1330 LOAD_FAST                        1 (include_cxdiag)
+         1332 TO_BOOL
+         1340 POP_JUMP_IF_FALSE               66 (to 1476)
+  89     1344 LOAD_GLOBAL                     52 (cxdiag)
+         1354 LOAD_ATTR                       20 (get)
+         1374 PUSH_NULL
+         1376 CALL                             0
+         1384 STORE_FAST                      16 (cxdiag_info)
+  90     1386 LOAD_FAST                       16 (cxdiag_info)
+         1388 LOAD_ATTR                       54 (warnings)
+         1408 LOAD_FAST                        2 (info)
+         1410 LOAD_CONST                      31 ('Warnings')
+         1412 STORE_SUBSCR
+  91     1416 LOAD_FAST                       16 (cxdiag_info)
+         1418 LOAD_ATTR                       56 (properties)
+         1438 LOAD_FAST                        2 (info)
+         1440 LOAD_CONST                      32 ('Properties')
+         1442 STORE_SUBSCR
+  92     1446 LOAD_FAST                       16 (cxdiag_info)
+         1448 LOAD_ATTR                       58 (libs)
+         1468 LOAD_FAST                        2 (info)
+         1470 LOAD_CONST                      33 ('Libraries')
+         1472 STORE_SUBSCR
+  94 >>  1476 LOAD_FAST                        2 (info)
+         1478 RETURN_VALUE
+     >>  1480 PUSH_EXC_INFO
+  54     1482 LOAD_GLOBAL                     34 (ImportError)
+         1492 CHECK_EXC_MATCH
+         1494 POP_JUMP_IF_FALSE                4 (to 1506)
+         1498 POP_TOP
+  55     1500 POP_EXCEPT
+         1502 JUMP_BACKWARD_NO_INTERRUPT     515 (to 476)
+  54 >>  1506 RERAISE                          0
+     >>  1508 COPY                             3
+         1510 POP_EXCEPT
+         1512 RERAISE                          1
+  73 >>  1514 PUSH_EXC_INFO
+         1516 WITH_EXCEPT_START                0
+         1518 TO_BOOL
+         1526 POP_JUMP_IF_TRUE                 1 (to 1532)
+         1530 RERAISE                          2
+     >>  1532 POP_TOP
+         1534 POP_EXCEPT
+         1536 POP_TOP
+         1538 POP_TOP
+         1540 JUMP_BACKWARD_NO_INTERRUPT     259 (to 1026)
+     >>  1544 COPY                             3
+         1546 POP_EXCEPT
+         1548 RERAISE                          1
+  ExceptionTable:
+    296 to 476 -> 1480 [0]
+    846 to 1010 -> 1514 [2] lasti
+    1480 to 1500 -> 1508 [1] lasti
+    1506 to 1508 -> 1508 [1] lasti
+    1514 to 1534 -> 1544 [4] lasti
+
+Disassembly of <code system_info_string> (line 97, args=1 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: bottle, ret, key, value, inner_key, inner_value
+  97        0 RESUME                           0
+  99        2 LOAD_CONST                       1 ('')
+            4 STORE_FAST                       1 (ret)
+ 100        6 LOAD_GLOBAL                      1 (get_system_information + NULL)
+           16 LOAD_FAST                        0 (bottle)
+           18 LOAD_CONST                       2 (True)
+           20 LOAD_CONST                       3 (('bottle', 'include_cxdiag'))
+           22 CALL_KW                          2
+           24 LOAD_ATTR                        3 (items + NULL|self)
+           44 CALL                             0
+           52 GET_ITER
+     >>    54 FOR_ITER                        85 (to 228)
+           58 UNPACK_SEQUENCE                  2
+           62 STORE_FAST_STORE_FAST           35 (key, value)
+ 101       64 LOAD_FAST                        1 (ret)
+           66 LOAD_CONST                       4 ('%s:\n')
+           68 LOAD_FAST                        2 (key)
+           70 BINARY_OP                        6 (%)
+           74 BINARY_OP                       13 (+=)
+           78 STORE_FAST                       1 (ret)
+ 103       80 LOAD_GLOBAL                      5 (isinstance + NULL)
+           90 LOAD_FAST                        3 (value)
+           92 LOAD_GLOBAL                      6 (dict)
+          102 CALL                             2
+          110 TO_BOOL
+          118 POP_JUMP_IF_FALSE               38 (to 198)
+ 104      122 LOAD_FAST                        3 (value)
+          124 LOAD_ATTR                        3 (items + NULL|self)
+          144 CALL                             0
+          152 GET_ITER
+     >>   154 FOR_ITER                        17 (to 192)
+          158 UNPACK_SEQUENCE                  2
+          162 STORE_FAST_STORE_FAST           69 (inner_key, inner_value)
+ 105      164 LOAD_FAST_LOAD_FAST             20 (ret, inner_key)
+          166 CONVERT_VALUE                    1 (str)
+          168 FORMAT_SIMPLE
+          170 LOAD_CONST                       5 (': ')
+          172 LOAD_FAST                        5 (inner_value)
+          174 CONVERT_VALUE                    1 (str)
+          176 FORMAT_SIMPLE
+          178 LOAD_CONST                       6 ('\n')
+          180 BUILD_STRING                     4
+          182 BINARY_OP                       13 (+=)
+          186 STORE_FAST                       1 (ret)
+          188 JUMP_BACKWARD                   19 (to 154)
+ 104 >>   192 END_FOR
+          194 POP_TOP
+          196 JUMP_FORWARD                     8 (to 214)
+ 107 >>   198 LOAD_FAST                        1 (ret)
+          200 LOAD_CONST                       7 ('%s\n')
+          202 LOAD_FAST                        3 (value)
+          204 BINARY_OP                        6 (%)
+          208 BINARY_OP                       13 (+=)
+          212 STORE_FAST                       1 (ret)
+ 109 >>   214 LOAD_FAST                        1 (ret)
+          216 LOAD_CONST                       6 ('\n')
+          218 BINARY_OP                       13 (+=)
+          222 STORE_FAST                       1 (ret)
+          224 JUMP_BACKWARD                   87 (to 54)
+ 100 >>   228 END_FOR
+          230 POP_TOP
+ 111      232 LOAD_FAST                        1 (ret)
+          234 RETURN_VALUE
+
+Disassembly of <code _system_info_string_for_bottle> (line 114, args=1 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: bottle
+ 114        0 RESUME                           0
+ 116        2 LOAD_GLOBAL                      1 (system_info_string + NULL)
+           12 LOAD_FAST                        0 (bottle)
+           14 CALL                             1
+           22 RETURN_VALUE

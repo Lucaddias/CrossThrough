@@ -1,0 +1,636 @@
+# cxlog — CPython 3.13 bytecode listing of lib/python/cxlog.pyc
+# sha256 03a684e64e5801eae4262dfb34987bf484eab714b60f5631098393ac6ff75fe7, pyc flags 3, co_filename /Volumes/gitlab_data/gitlab/builds/j911ygmXM/0/crossover/crossover/macosx/CrossOver/build/Build/Products/Release/CrossOver.app/Contents/SharedSupport/CrossOver/lib/python/cxlog.py
+
+Disassembly of <code <module>> (line 1, args=0 posonly=0 kwonly=0, flags=0):
+   0        0 RESUME                           0
+   3        2 LOAD_CONST                       0 ('Handles logging and error reporting.')
+            4 STORE_NAME                       0 (__doc__)
+   5        6 LOAD_CONST                       1 (0)
+            8 LOAD_CONST                       2 (None)
+           10 IMPORT_NAME                      1 (atexit)
+           12 STORE_NAME                       1 (atexit)
+   6       14 LOAD_CONST                       1 (0)
+           16 LOAD_CONST                       2 (None)
+           18 IMPORT_NAME                      2 (os)
+           20 STORE_NAME                       2 (os)
+   7       22 LOAD_CONST                       1 (0)
+           24 LOAD_CONST                       2 (None)
+           26 IMPORT_NAME                      3 (sys)
+           28 STORE_NAME                       3 (sys)
+   8       30 LOAD_CONST                       1 (0)
+           32 LOAD_CONST                       2 (None)
+           34 IMPORT_NAME                      4 (time)
+           36 STORE_NAME                       4 (time)
+   9       38 LOAD_CONST                       1 (0)
+           40 LOAD_CONST                       2 (None)
+           42 IMPORT_NAME                      5 (threading)
+           44 STORE_NAME                       5 (threading)
+  15       46 LOAD_CONST                       2 (None)
+           48 STORE_GLOBAL                     6 (_all_on)
+  16       50 BUILD_MAP                        0
+           52 STORE_NAME                       7 (_channels)
+  17       54 LOAD_CONST                       2 (None)
+           56 STORE_GLOBAL                     8 (_log_file)
+  18       58 LOAD_CONST                       3 (False)
+           60 STORE_GLOBAL                     9 (_close_log_file)
+  19       62 LOAD_CONST                       2 (None)
+           64 STORE_GLOBAL                    10 (_start)
+  28       66 LOAD_CONST                      20 ((True,))
+           68 LOAD_CONST                       4 (<code log_to, line 28>)
+           70 MAKE_FUNCTION
+           72 SET_FUNCTION_ATTRIBUTE           1 (defaults)
+           74 STORE_NAME                      11 (log_to)
+  52       76 LOAD_CONST                       5 (<code get_file, line 52>)
+           78 MAKE_FUNCTION
+           80 STORE_NAME                      12 (get_file)
+  57       82 LOAD_CONST                       6 (<code get_filename, line 57>)
+           84 MAKE_FUNCTION
+           86 STORE_NAME                      13 (get_filename)
+  77       88 LOAD_CONST                      21 ((None,))
+           90 LOAD_CONST                       7 (<code is_on, line 77>)
+           92 MAKE_FUNCTION
+           94 SET_FUNCTION_ATTRIBUTE           1 (defaults)
+           96 STORE_NAME                      14 (is_on)
+  91       98 LOAD_CONST                       8 (<code _exit_logging, line 91>)
+          100 MAKE_FUNCTION
+          102 STORE_NAME                      15 (_exit_logging)
+  99      104 LOAD_CONST                       9 (<code _init_logging, line 99>)
+          106 MAKE_FUNCTION
+          108 STORE_NAME                      16 (_init_logging)
+ 133      110 LOAD_CONST                      10 (<code _tid_prefix, line 133>)
+          112 MAKE_FUNCTION
+          114 STORE_NAME                      17 (_tid_prefix)
+ 138      116 LOAD_CONST                      11 (<code _timestamp_prefix, line 138>)
+          118 MAKE_FUNCTION
+          120 STORE_NAME                      18 (_timestamp_prefix)
+ 143      122 LOAD_CONST                      12 (<code _to_str, line 143>)
+          124 MAKE_FUNCTION
+          126 STORE_NAME                      19 (_to_str)
+ 154      128 LOAD_CONST                      13 (<code to_str, line 154>)
+          130 MAKE_FUNCTION
+          132 STORE_NAME                      20 (to_str)
+ 165      134 LOAD_CONST                      14 (<code debug_str, line 165>)
+          136 MAKE_FUNCTION
+          138 STORE_NAME                      21 (debug_str)
+ 177      140 LOAD_CONST                      15 (<code log, line 177>)
+          142 MAKE_FUNCTION
+          144 STORE_NAME                      22 (log)
+ 186      146 LOAD_CONST                      16 (<code log_, line 186>)
+          148 MAKE_FUNCTION
+          150 STORE_NAME                      23 (log_)
+ 201      152 LOAD_CONST                      17 (<code name0, line 201>)
+          154 MAKE_FUNCTION
+          156 STORE_NAME                      24 (name0)
+ 206      158 LOAD_CONST                      18 (<code warn, line 206>)
+          160 MAKE_FUNCTION
+          162 STORE_NAME                      25 (warn)
+ 217      164 LOAD_CONST                      19 (<code err, line 217>)
+          166 MAKE_FUNCTION
+          168 STORE_NAME                      26 (err)
+ 228      170 LOAD_NAME                       16 (_init_logging)
+          172 PUSH_NULL
+          174 CALL                             0
+          182 POP_TOP
+          184 RETURN_CONST                     2 (None)
+
+Disassembly of <code log_to> (line 28, args=2 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: out, append, mode
+  28        0 RESUME                           0
+  36        2 LOAD_GLOBAL                      0 (_close_log_file)
+           12 TO_BOOL
+           20 POP_JUMP_IF_FALSE               20 (to 64)
+  37       24 LOAD_GLOBAL                      2 (_log_file)
+           34 LOAD_ATTR                        5 (close + NULL|self)
+           54 CALL                             0
+           62 POP_TOP
+  38 >>    64 LOAD_FAST                        1 (append)
+           66 TO_BOOL
+           74 POP_JUMP_IF_FALSE                3 (to 84)
+  39       78 LOAD_CONST                       1 ('at')
+           80 STORE_FAST                       2 (mode)
+           82 JUMP_FORWARD                     2 (to 88)
+  41 >>    84 LOAD_CONST                       2 ('wt')
+           86 STORE_FAST                       2 (mode)
+  42 >>    88 LOAD_GLOBAL                      7 (hasattr + NULL)
+           98 LOAD_FAST                        0 (out)
+          100 LOAD_CONST                       3 ('write')
+          102 CALL                             2
+          110 TO_BOOL
+          118 POP_JUMP_IF_FALSE                5 (to 132)
+  44      122 LOAD_FAST                        0 (out)
+          124 STORE_GLOBAL                     1 (_log_file)
+  45      126 LOAD_CONST                       4 (False)
+          128 STORE_GLOBAL                     0 (_close_log_file)
+          130 RETURN_CONST                    10 (None)
+  48 >>   132 LOAD_GLOBAL                      9 (open + NULL)
+          142 LOAD_FAST_LOAD_FAST              2 (out, mode)
+          144 LOAD_CONST                       5 (1)
+          146 LOAD_CONST                       6 ('utf8')
+          148 LOAD_CONST                       7 ('backslashreplace')
+          150 LOAD_CONST                       8 (('encoding', 'errors'))
+          152 CALL_KW                          5
+          154 STORE_GLOBAL                     1 (_log_file)
+  49      156 LOAD_CONST                       9 (True)
+          158 STORE_GLOBAL                     0 (_close_log_file)
+          160 RETURN_CONST                    10 (None)
+
+Disassembly of <code get_file> (line 52, args=0 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  52        0 RESUME                           0
+  54        2 LOAD_GLOBAL                      0 (_log_file)
+           12 RETURN_VALUE
+
+Disassembly of <code get_filename> (line 57, args=0 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: name
+  57        0 RESUME                           0
+  67        2 LOAD_GLOBAL                      0 (_log_file)
+           12 TO_BOOL
+           20 POP_JUMP_IF_TRUE                 1 (to 26)
+  68       24 RETURN_CONST                     1 (None)
+  69 >>    26 NOP
+  70       28 LOAD_GLOBAL                      0 (_log_file)
+           38 LOAD_ATTR                        2 (name)
+           58 STORE_FAST                       0 (name)
+  71       60 LOAD_FAST                        0 (name)
+           62 LOAD_CONST                       2 ('<fdopen>')
+           64 COMPARE_OP                      88 (== bool)
+           68 POP_JUMP_IF_FALSE               23 (to 118)
+  72       72 LOAD_CONST                       3 ('&%s')
+           74 LOAD_GLOBAL                      0 (_log_file)
+           84 LOAD_ATTR                        5 (fileno + NULL|self)
+          104 CALL                             0
+          112 BINARY_OP                        6 (%)
+          116 STORE_FAST                       0 (name)
+  75 >>   118 LOAD_FAST                        0 (name)
+          120 RETURN_VALUE
+     >>   122 PUSH_EXC_INFO
+  73      124 LOAD_GLOBAL                      6 (AttributeError)
+          134 CHECK_EXC_MATCH
+          136 POP_JUMP_IF_FALSE               19 (to 178)
+          140 POP_TOP
+  74      142 LOAD_GLOBAL                      9 (repr + NULL)
+          152 LOAD_GLOBAL                      0 (_log_file)
+          162 CALL                             1
+          170 STORE_FAST                       0 (name)
+          172 POP_EXCEPT
+  75      174 LOAD_FAST                        0 (name)
+          176 RETURN_VALUE
+  73 >>   178 RERAISE                          0
+     >>   180 COPY                             3
+          182 POP_EXCEPT
+          184 RERAISE                          1
+  ExceptionTable:
+    28 to 118 -> 122 [0]
+    122 to 172 -> 180 [1] lasti
+    178 to 180 -> 180 [1] lasti
+
+Disassembly of <code is_on> (line 77, args=1 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: channel
+  77        0 RESUME                           0
+  83        2 LOAD_GLOBAL                      0 (_log_file)
+           12 POP_JUMP_IF_NOT_NONE             1 (to 18)
+  84       16 RETURN_CONST                     1 (False)
+  85 >>    18 LOAD_FAST                        0 (channel)
+           20 POP_JUMP_IF_NOT_NONE             8 (to 40)
+  86       24 LOAD_GLOBAL                      2 (_all_on)
+           34 LOAD_CONST                       1 (False)
+           36 IS_OP                            1 (not is)
+           38 RETURN_VALUE
+  87 >>    40 LOAD_FAST                        0 (channel)
+           42 LOAD_GLOBAL                      4 (_channels)
+           52 CONTAINS_OP                      0 (in)
+           56 POP_JUMP_IF_FALSE                9 (to 78)
+  88       60 LOAD_GLOBAL                      4 (_channels)
+           70 LOAD_FAST                        0 (channel)
+           72 BINARY_SUBSCR
+           76 RETURN_VALUE
+  89 >>    78 LOAD_GLOBAL                      2 (_all_on)
+           88 LOAD_CONST                       2 (True)
+           90 IS_OP                            0 (is)
+           92 RETURN_VALUE
+
+Disassembly of <code _exit_logging> (line 91, args=0 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  91        0 RESUME                           0
+  93        2 LOAD_GLOBAL                      0 (_close_log_file)
+           12 TO_BOOL
+           20 POP_JUMP_IF_FALSE               25 (to 74)
+  95       24 LOAD_GLOBAL                      2 (_log_file)
+           34 LOAD_ATTR                        5 (close + NULL|self)
+           54 CALL                             0
+           62 POP_TOP
+  96       64 LOAD_CONST                       0 (None)
+           66 STORE_GLOBAL                     1 (_log_file)
+  97       68 LOAD_CONST                       1 (False)
+           70 STORE_GLOBAL                     0 (_close_log_file)
+           72 RETURN_CONST                     0 (None)
+  93 >>    74 RETURN_CONST                     0 (None)
+
+Disassembly of <code _init_logging> (line 99, args=0 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: ioerror, channel
+  99        0 RESUME                           0
+ 104        2 LOAD_GLOBAL                      0 (atexit)
+           12 LOAD_ATTR                        2 (register)
+           32 PUSH_NULL
+           34 LOAD_GLOBAL                      4 (_exit_logging)
+           44 CALL                             1
+           52 POP_TOP
+ 105       54 LOAD_CONST                       1 ('CX_LOG')
+           56 LOAD_GLOBAL                      6 (os)
+           66 LOAD_ATTR                        8 (environ)
+           86 CONTAINS_OP                      0 (in)
+           90 POP_JUMP_IF_FALSE               79 (to 252)
+ 106       94 LOAD_GLOBAL                      6 (os)
+          104 LOAD_ATTR                        8 (environ)
+          124 LOAD_CONST                       1 ('CX_LOG')
+          126 BINARY_SUBSCR
+          130 LOAD_CONST                       2 ('-')
+          132 COMPARE_OP                      88 (== bool)
+          136 POP_JUMP_IF_FALSE               26 (to 192)
+ 107      140 LOAD_GLOBAL                     11 (log_to + NULL)
+          150 LOAD_GLOBAL                     12 (sys)
+          160 LOAD_ATTR                       14 (stderr)
+          180 CALL                             1
+          188 POP_TOP
+          190 JUMP_FORWARD                    75 (to 342)
+ 109 >>   192 NOP
+ 110      194 LOAD_GLOBAL                     11 (log_to + NULL)
+          204 LOAD_GLOBAL                      6 (os)
+          214 LOAD_ATTR                        8 (environ)
+          234 LOAD_CONST                       1 ('CX_LOG')
+          236 BINARY_SUBSCR
+          240 CALL                             1
+          248 POP_TOP
+          250 JUMP_FORWARD                    45 (to 342)
+ 113 >>   252 LOAD_CONST                       5 ('CX_DEBUGMSG')
+          254 LOAD_GLOBAL                      6 (os)
+          264 LOAD_ATTR                        8 (environ)
+          284 CONTAINS_OP                      0 (in)
+          288 POP_JUMP_IF_FALSE               25 (to 342)
+ 114      292 LOAD_GLOBAL                     11 (log_to + NULL)
+          302 LOAD_GLOBAL                     12 (sys)
+          312 LOAD_ATTR                       14 (stderr)
+          332 CALL                             1
+          340 POP_TOP
+ 116 >>   342 LOAD_CONST                       5 ('CX_DEBUGMSG')
+          344 LOAD_GLOBAL                      6 (os)
+          354 LOAD_ATTR                        8 (environ)
+          374 CONTAINS_OP                      0 (in)
+          378 POP_JUMP_IF_FALSE              172 (to 726)
+ 119      382 LOAD_GLOBAL                      6 (os)
+          392 LOAD_ATTR                        8 (environ)
+          412 LOAD_CONST                       5 ('CX_DEBUGMSG')
+          414 BINARY_SUBSCR
+          418 LOAD_ATTR                       23 (split + NULL|self)
+          438 LOAD_CONST                       6 (',')
+          440 CALL                             1
+          448 GET_ITER
+     >>   450 FOR_ITER                        95 (to 644)
+          454 STORE_FAST                       1 (channel)
+ 120      456 LOAD_FAST                        1 (channel)
+          458 LOAD_CONST                       7 ('+all')
+          460 COMPARE_OP                      88 (== bool)
+          464 POP_JUMP_IF_FALSE                4 (to 476)
+ 121      468 LOAD_CONST                       8 (True)
+          470 STORE_GLOBAL                    12 (_all_on)
+          472 JUMP_BACKWARD                   13 (to 450)
+ 122 >>   476 LOAD_FAST                        1 (channel)
+          478 LOAD_CONST                       9 ('-all')
+          480 COMPARE_OP                      88 (== bool)
+          484 POP_JUMP_IF_FALSE                4 (to 496)
+ 123      488 LOAD_CONST                      10 (False)
+          490 STORE_GLOBAL                    12 (_all_on)
+          492 JUMP_BACKWARD                   23 (to 450)
+ 124 >>   496 LOAD_FAST                        1 (channel)
+          498 LOAD_ATTR                       27 (startswith + NULL|self)
+          518 LOAD_CONST                       2 ('-')
+          520 CALL                             1
+          528 TO_BOOL
+          536 POP_JUMP_IF_FALSE               26 (to 592)
+ 125      540 LOAD_CONST                      10 (False)
+          542 LOAD_GLOBAL                     28 (_channels)
+          552 LOAD_FAST                        1 (channel)
+          554 LOAD_ATTR                       31 (lstrip + NULL|self)
+          574 LOAD_CONST                       2 ('-')
+          576 CALL                             1
+          584 STORE_SUBSCR
+          588 JUMP_BACKWARD                   71 (to 450)
+ 127 >>   592 LOAD_CONST                       8 (True)
+          594 LOAD_GLOBAL                     28 (_channels)
+          604 LOAD_FAST                        1 (channel)
+          606 LOAD_ATTR                       31 (lstrip + NULL|self)
+          626 LOAD_CONST                      11 ('+')
+          628 CALL                             1
+          636 STORE_SUBSCR
+          640 JUMP_BACKWARD                   97 (to 450)
+ 119 >>   644 END_FOR
+          646 POP_TOP
+ 128      648 LOAD_GLOBAL                     33 (is_on + NULL)
+          658 LOAD_CONST                      12 ('timestamp')
+          660 CALL                             1
+          668 TO_BOOL
+          676 POP_JUMP_IF_FALSE               22 (to 724)
+ 130      680 LOAD_GLOBAL                     34 (time)
+          690 LOAD_ATTR                       34 (time)
+          710 PUSH_NULL
+          712 CALL                             0
+          720 STORE_GLOBAL                    18 (_start)
+          722 RETURN_CONST                     4 (None)
+ 128 >>   724 RETURN_CONST                     4 (None)
+ 116 >>   726 RETURN_CONST                     4 (None)
+     >>   728 PUSH_EXC_INFO
+ 111      730 LOAD_GLOBAL                     16 (IOError)
+          740 CHECK_EXC_MATCH
+          742 POP_JUMP_IF_FALSE               33 (to 812)
+          746 STORE_FAST                       0 (ioerror)
+ 112      748 LOAD_GLOBAL                     19 (warn + NULL)
+          758 LOAD_CONST                       3 ('could not open log output file: ')
+          760 LOAD_GLOBAL                     21 (str + NULL)
+          770 LOAD_FAST                        0 (ioerror)
+          772 CALL                             1
+          780 BINARY_OP                        0 (+)
+          784 CALL                             1
+          792 POP_TOP
+          794 POP_EXCEPT
+          796 LOAD_CONST                       4 (None)
+          798 STORE_FAST                       0 (ioerror)
+          800 DELETE_FAST                      0 (ioerror)
+          802 JUMP_BACKWARD_NO_INTERRUPT     231 (to 342)
+     >>   804 LOAD_CONST                       4 (None)
+          806 STORE_FAST                       0 (ioerror)
+          808 DELETE_FAST                      0 (ioerror)
+          810 RERAISE                          1
+ 111 >>   812 RERAISE                          0
+     >>   814 COPY                             3
+          816 POP_EXCEPT
+          818 RERAISE                          1
+  ExceptionTable:
+    194 to 250 -> 728 [0]
+    728 to 748 -> 814 [1] lasti
+    748 to 794 -> 804 [1] lasti
+    804 to 814 -> 814 [1] lasti
+
+Disassembly of <code _tid_prefix> (line 133, args=0 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+ 133        0 RESUME                           0
+ 134        2 LOAD_GLOBAL                      1 (is_on + NULL)
+           12 LOAD_CONST                       1 ('tid')
+           14 CALL                             1
+           22 TO_BOOL
+           30 POP_JUMP_IF_FALSE               24 (to 82)
+ 135       34 LOAD_CONST                       2 ('%s:')
+           36 LOAD_GLOBAL                      2 (threading)
+           46 LOAD_ATTR                        4 (get_ident)
+           66 PUSH_NULL
+           68 CALL                             0
+           76 BINARY_OP                        6 (%)
+           80 RETURN_VALUE
+ 136 >>    82 RETURN_CONST                     3 ('')
+
+Disassembly of <code _timestamp_prefix> (line 138, args=0 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+ 138        0 RESUME                           0
+ 139        2 LOAD_GLOBAL                      0 (_start)
+           12 POP_JUMP_IF_NOT_NONE             1 (to 18)
+ 140       16 RETURN_CONST                     1 ('')
+ 141 >>    18 LOAD_CONST                       2 ('%.3f:')
+           20 LOAD_GLOBAL                      2 (time)
+           30 LOAD_ATTR                        2 (time)
+           50 PUSH_NULL
+           52 CALL                             0
+           60 LOAD_GLOBAL                      0 (_start)
+           70 BINARY_OP                       10 (-)
+           74 BINARY_OP                        6 (%)
+           78 RETURN_VALUE
+
+Disassembly of <code _to_str> (line 143, args=2 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: string, always_repr, result
+ 143        0 RESUME                           0
+ 144        2 LOAD_FAST                        1 (always_repr)
+            4 TO_BOOL
+           12 POP_JUMP_IF_FALSE               12 (to 40)
+ 145       16 LOAD_GLOBAL                      1 (repr + NULL)
+           26 LOAD_FAST                        0 (string)
+           28 CALL                             1
+           36 STORE_FAST                       2 (result)
+           38 JUMP_FORWARD                    34 (to 108)
+ 146 >>    40 LOAD_GLOBAL                      3 (isinstance + NULL)
+           50 LOAD_FAST                        0 (string)
+           52 LOAD_GLOBAL                      4 (str)
+           62 CALL                             2
+           70 TO_BOOL
+           78 POP_JUMP_IF_FALSE                2 (to 86)
+ 147       82 LOAD_FAST                        0 (string)
+           84 RETURN_VALUE
+ 149 >>    86 LOAD_GLOBAL                      1 (repr + NULL)
+           96 LOAD_FAST                        0 (string)
+           98 CALL                             1
+          106 STORE_FAST                       2 (result)
+ 150 >>   108 LOAD_GLOBAL                      3 (isinstance + NULL)
+          118 LOAD_FAST                        2 (result)
+          120 LOAD_GLOBAL                      4 (str)
+          130 CALL                             2
+          138 TO_BOOL
+          146 POP_JUMP_IF_FALSE                2 (to 154)
+ 151      150 LOAD_FAST                        2 (result)
+          152 RETURN_VALUE
+ 152 >>   154 LOAD_CONST                       1 ('<object of type %s could not be converted to a string>')
+          156 LOAD_GLOBAL                      7 (_to_str + NULL)
+          166 LOAD_GLOBAL                      9 (type + NULL)
+          176 LOAD_FAST                        0 (string)
+          178 CALL                             1
+          186 LOAD_CONST                       2 (True)
+          188 CALL                             2
+          196 BINARY_OP                        6 (%)
+          200 RETURN_VALUE
+
+Disassembly of <code to_str> (line 154, args=1 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: string
+ 154        0 RESUME                           0
+ 160        2 NOP
+ 161        4 LOAD_GLOBAL                      1 (_to_str + NULL)
+           14 LOAD_FAST                        0 (string)
+           16 LOAD_CONST                       1 (False)
+           18 CALL                             2
+           26 RETURN_VALUE
+     >>    28 PUSH_EXC_INFO
+ 162       30 POP_TOP
+ 163       32 POP_EXCEPT
+           34 RETURN_CONST                     2 ('<exception raised while converting an object to string>')
+     >>    36 COPY                             3
+           38 POP_EXCEPT
+           40 RERAISE                          1
+  ExceptionTable:
+    4 to 26 -> 28 [0]
+    28 to 32 -> 36 [1] lasti
+
+Disassembly of <code debug_str> (line 165, args=1 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: string
+ 165        0 RESUME                           0
+ 171        2 NOP
+ 172        4 LOAD_GLOBAL                      1 (_to_str + NULL)
+           14 LOAD_FAST                        0 (string)
+           16 LOAD_CONST                       1 (True)
+           18 CALL                             2
+           26 RETURN_VALUE
+     >>    28 PUSH_EXC_INFO
+ 173       30 POP_TOP
+ 174       32 POP_EXCEPT
+           34 RETURN_CONST                     2 ('<exception raised while converting an object to string>')
+     >>    36 COPY                             3
+           38 POP_EXCEPT
+           40 RERAISE                          1
+  ExceptionTable:
+    4 to 26 -> 28 [0]
+    28 to 32 -> 36 [1] lasti
+
+Disassembly of <code log> (line 177, args=1 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: message
+ 177        0 RESUME                           0
+ 182        2 LOAD_GLOBAL                      0 (_log_file)
+           12 TO_BOOL
+           20 POP_JUMP_IF_FALSE               67 (to 158)
+           24 LOAD_GLOBAL                      2 (_all_on)
+           34 LOAD_CONST                       1 (False)
+           36 IS_OP                            1 (not is)
+           38 POP_JUMP_IF_FALSE               57 (to 156)
+ 183       42 LOAD_GLOBAL                      0 (_log_file)
+           52 LOAD_ATTR                        5 (write + NULL|self)
+           72 LOAD_GLOBAL                      7 (_timestamp_prefix + NULL)
+           82 CALL                             0
+           90 CONVERT_VALUE                    1 (str)
+           92 FORMAT_SIMPLE
+           94 LOAD_GLOBAL                      9 (_tid_prefix + NULL)
+          104 CALL                             0
+          112 CONVERT_VALUE                    1 (str)
+          114 FORMAT_SIMPLE
+          116 LOAD_GLOBAL                     11 (to_str + NULL)
+          126 LOAD_FAST                        0 (message)
+          128 CALL                             1
+          136 CONVERT_VALUE                    1 (str)
+          138 FORMAT_SIMPLE
+          140 LOAD_CONST                       2 ('\n')
+          142 BUILD_STRING                     4
+          144 CALL                             1
+          152 POP_TOP
+          154 RETURN_CONST                     3 (None)
+ 182 >>   156 RETURN_CONST                     3 (None)
+     >>   158 RETURN_CONST                     3 (None)
+
+Disassembly of <code log_> (line 186, args=2 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: channel, message
+ 186        0 RESUME                           0
+ 190        2 LOAD_GLOBAL                      1 (is_on + NULL)
+           12 LOAD_FAST                        0 (channel)
+           14 CALL                             1
+           22 TO_BOOL
+           30 POP_JUMP_IF_FALSE               70 (to 174)
+ 191       34 LOAD_GLOBAL                      2 (_log_file)
+           44 LOAD_ATTR                        5 (write + NULL|self)
+           64 LOAD_GLOBAL                      7 (_timestamp_prefix + NULL)
+           74 CALL                             0
+           82 CONVERT_VALUE                    1 (str)
+           84 FORMAT_SIMPLE
+           86 LOAD_GLOBAL                      9 (_tid_prefix + NULL)
+           96 CALL                             0
+          104 CONVERT_VALUE                    1 (str)
+          106 FORMAT_SIMPLE
+          108 LOAD_GLOBAL                     11 (to_str + NULL)
+          118 LOAD_FAST                        0 (channel)
+          120 CALL                             1
+          128 CONVERT_VALUE                    1 (str)
+          130 FORMAT_SIMPLE
+          132 LOAD_CONST                       1 (':')
+          134 LOAD_GLOBAL                     11 (to_str + NULL)
+          144 LOAD_FAST                        1 (message)
+          146 CALL                             1
+          154 CONVERT_VALUE                    1 (str)
+          156 FORMAT_SIMPLE
+          158 LOAD_CONST                       2 ('\n')
+          160 BUILD_STRING                     6
+          162 CALL                             1
+          170 POP_TOP
+          172 RETURN_CONST                     3 (None)
+ 190 >>   174 RETURN_CONST                     3 (None)
+
+Disassembly of <code name0> (line 201, args=0 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+ 201        0 RESUME                           0
+ 203        2 LOAD_GLOBAL                      0 (os)
+           12 LOAD_ATTR                        2 (path)
+           32 LOAD_ATTR                        5 (basename + NULL|self)
+           52 LOAD_GLOBAL                      6 (sys)
+           62 LOAD_ATTR                        8 (argv)
+           82 LOAD_CONST                       1 (0)
+           84 BINARY_SUBSCR
+           88 CALL                             1
+           96 RETURN_VALUE
+
+Disassembly of <code warn> (line 206, args=1 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: message, msg
+ 206        0 RESUME                           0
+ 211        2 LOAD_GLOBAL                      1 (name0 + NULL)
+           12 CALL                             0
+           20 LOAD_CONST                       1 (':warning: ')
+           22 BINARY_OP                        0 (+)
+           26 LOAD_GLOBAL                      3 (to_str + NULL)
+           36 LOAD_FAST                        0 (message)
+           38 CALL                             1
+           46 BINARY_OP                        0 (+)
+           50 LOAD_CONST                       2 ('\n')
+           52 BINARY_OP                        0 (+)
+           56 STORE_FAST                       1 (msg)
+ 212       58 LOAD_GLOBAL                      4 (sys)
+           68 LOAD_ATTR                        6 (stderr)
+           88 LOAD_ATTR                        9 (write + NULL|self)
+          108 LOAD_FAST                        1 (msg)
+          110 CALL                             1
+          118 POP_TOP
+ 213      120 LOAD_GLOBAL                     10 (_log_file)
+          130 TO_BOOL
+          138 POP_JUMP_IF_FALSE               47 (to 236)
+          142 LOAD_GLOBAL                     10 (_log_file)
+          152 LOAD_GLOBAL                      4 (sys)
+          162 LOAD_ATTR                        6 (stderr)
+          182 COMPARE_OP                     119 (!= bool)
+          186 POP_JUMP_IF_FALSE               22 (to 234)
+ 214      190 LOAD_GLOBAL                     10 (_log_file)
+          200 LOAD_ATTR                        9 (write + NULL|self)
+          220 LOAD_FAST                        1 (msg)
+          222 CALL                             1
+          230 POP_TOP
+          232 RETURN_CONST                     3 (None)
+ 213 >>   234 RETURN_CONST                     3 (None)
+     >>   236 RETURN_CONST                     3 (None)
+
+Disassembly of <code err> (line 217, args=1 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: message, msg
+ 217        0 RESUME                           0
+ 222        2 LOAD_GLOBAL                      1 (name0 + NULL)
+           12 CALL                             0
+           20 LOAD_CONST                       1 (':error: ')
+           22 BINARY_OP                        0 (+)
+           26 LOAD_GLOBAL                      3 (to_str + NULL)
+           36 LOAD_FAST                        0 (message)
+           38 CALL                             1
+           46 BINARY_OP                        0 (+)
+           50 LOAD_CONST                       2 ('\n')
+           52 BINARY_OP                        0 (+)
+           56 STORE_FAST                       1 (msg)
+ 223       58 LOAD_GLOBAL                      4 (sys)
+           68 LOAD_ATTR                        6 (stderr)
+           88 LOAD_ATTR                        9 (write + NULL|self)
+          108 LOAD_FAST                        1 (msg)
+          110 CALL                             1
+          118 POP_TOP
+ 224      120 LOAD_GLOBAL                     10 (_log_file)
+          130 TO_BOOL
+          138 POP_JUMP_IF_FALSE               47 (to 236)
+          142 LOAD_GLOBAL                     10 (_log_file)
+          152 LOAD_GLOBAL                      4 (sys)
+          162 LOAD_ATTR                        6 (stderr)
+          182 COMPARE_OP                     119 (!= bool)
+          186 POP_JUMP_IF_FALSE               22 (to 234)
+ 225      190 LOAD_GLOBAL                     10 (_log_file)
+          200 LOAD_ATTR                        9 (write + NULL|self)
+          220 LOAD_FAST                        1 (msg)
+          222 CALL                             1
+          230 POP_TOP
+          232 RETURN_CONST                     3 (None)
+ 224 >>   234 RETURN_CONST                     3 (None)
+     >>   236 RETURN_CONST                     3 (None)

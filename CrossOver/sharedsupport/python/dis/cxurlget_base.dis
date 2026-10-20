@@ -1,0 +1,499 @@
+# cxurlget_base — CPython 3.13 bytecode listing of lib/python/cxurlget_base.pyc
+# sha256 60bd7ef418e8cede125f442716c313a97a4222b0d7cca2f00bfad72a7d1e7c7b, pyc flags 3, co_filename /Volumes/gitlab_data/gitlab/builds/j911ygmXM/0/crossover/crossover/macosx/CrossOver/build/Build/Products/Release/CrossOver.app/Contents/SharedSupport/CrossOver/lib/python/cxurlget_base.py
+
+Disassembly of <code <module>> (line 1, args=0 posonly=0 kwonly=0, flags=0):
+   0        0 RESUME                           0
+   3        2 LOAD_CONST                       0 (0)
+            4 LOAD_CONST                       1 (None)
+            6 IMPORT_NAME                      0 (urllib.request)
+            8 IMPORT_FROM                      1 (request)
+           10 STORE_NAME                       2 (urllib)
+           12 POP_TOP
+   4       14 LOAD_CONST                       0 (0)
+           16 LOAD_CONST                       2 (('urlencode',))
+           18 IMPORT_NAME                      3 (urllib.parse)
+           20 IMPORT_FROM                      4 (urlencode)
+           22 STORE_NAME                       4 (urlencode)
+           24 POP_TOP
+   6       26 LOAD_CONST                       0 (0)
+           28 LOAD_CONST                       1 (None)
+           30 IMPORT_NAME                      5 (cxutils)
+           32 STORE_NAME                       5 (cxutils)
+   8       34 LOAD_CONST                       3 ('Mozilla/5.0 (like Gecko) CrossOver')
+           36 STORE_NAME                       6 (USER_AGENT)
+  10       38 BUILD_LIST                       0
+           40 LOAD_CONST                       4 (('Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'))
+           42 LIST_EXTEND                      1
+           44 STORE_NAME                       7 (_WEEKDAY_NAMES)
+  11       46 BUILD_LIST                       0
+           48 LOAD_CONST                       5 (('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'))
+           50 LIST_EXTEND                      1
+           52 STORE_NAME                       8 (_MONTH_NAMES)
+  14       54 LOAD_CONST                       6 (<code format_http_date, line 14>)
+           56 MAKE_FUNCTION
+           58 STORE_NAME                       9 (format_http_date)
+  29       60 LOAD_CONST                       7 (<code url_to_basename, line 29>)
+           62 MAKE_FUNCTION
+           64 STORE_NAME                      10 (url_to_basename)
+  40       66 LOAD_CONST                       8 (<code url_to_sanitized_basename, line 40>)
+           68 MAKE_FUNCTION
+           70 STORE_NAME                      11 (url_to_sanitized_basename)
+  43       72 LOAD_BUILD_CLASS
+           74 PUSH_NULL
+           76 LOAD_CONST                       9 (<code StopDownload, line 43>)
+           78 MAKE_FUNCTION
+           80 LOAD_CONST                      10 ('StopDownload')
+           82 LOAD_NAME                       12 (Exception)
+           84 CALL                             3
+           92 STORE_NAME                      13 (StopDownload)
+  48       94 LOAD_BUILD_CLASS
+           96 PUSH_NULL
+           98 LOAD_CONST                      11 (<code UrlError, line 48>)
+          100 MAKE_FUNCTION
+          102 LOAD_CONST                      12 ('UrlError')
+          104 LOAD_NAME                       12 (Exception)
+          106 CALL                             3
+          114 STORE_NAME                      14 (UrlError)
+  63      116 LOAD_BUILD_CLASS
+          118 PUSH_NULL
+          120 LOAD_CONST                      13 (<code HttpError, line 63>)
+          122 MAKE_FUNCTION
+          124 LOAD_CONST                      14 ('HttpError')
+          126 LOAD_NAME                       14 (UrlError)
+          128 CALL                             3
+          136 STORE_NAME                      15 (HttpError)
+  78      138 LOAD_BUILD_CLASS
+          140 PUSH_NULL
+          142 LOAD_CONST                      15 (<code UrlGetterBase, line 78>)
+          144 MAKE_FUNCTION
+          146 LOAD_CONST                      16 ('UrlGetterBase')
+          148 CALL                             2
+          156 STORE_NAME                      16 (UrlGetterBase)
+          158 RETURN_CONST                     1 (None)
+
+Disassembly of <code format_http_date> (line 14, args=1 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: date_time
+  14        0 RESUME                           0
+  19        2 LOAD_CONST                       1 ('%s, %02d %s %04d %02d:%02d:%02d UTC')
+  20        4 LOAD_GLOBAL                      0 (_WEEKDAY_NAMES)
+           14 LOAD_FAST                        0 (date_time)
+           16 LOAD_ATTR                        3 (weekday + NULL|self)
+           36 CALL                             0
+           44 BINARY_SUBSCR
+  21       48 LOAD_FAST                        0 (date_time)
+           50 LOAD_ATTR                        4 (day)
+  22       70 LOAD_GLOBAL                      6 (_MONTH_NAMES)
+           80 LOAD_FAST                        0 (date_time)
+           82 LOAD_ATTR                        8 (month)
+          102 LOAD_CONST                       2 (1)
+          104 BINARY_OP                       10 (-)
+          108 BINARY_SUBSCR
+  23      112 LOAD_FAST                        0 (date_time)
+          114 LOAD_ATTR                       10 (year)
+  24      134 LOAD_FAST                        0 (date_time)
+          136 LOAD_ATTR                       12 (hour)
+  25      156 LOAD_FAST                        0 (date_time)
+          158 LOAD_ATTR                       14 (minute)
+  26      178 LOAD_FAST                        0 (date_time)
+          180 LOAD_ATTR                       16 (second)
+  19      200 BUILD_TUPLE                      7
+          202 BINARY_OP                        6 (%)
+          206 RETURN_VALUE
+
+Disassembly of <code url_to_basename> (line 29, args=1 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: url, components, basename
+  29        0 RESUME                           0
+  30        2 LOAD_FAST                        0 (url)
+            4 LOAD_ATTR                        1 (split + NULL|self)
+           24 LOAD_CONST                       1 ('#')
+           26 LOAD_CONST                       2 (1)
+           28 CALL                             2
+           36 LOAD_CONST                       3 (0)
+           38 BINARY_SUBSCR
+           42 LOAD_ATTR                        1 (split + NULL|self)
+           62 LOAD_CONST                       4 ('?')
+           64 LOAD_CONST                       2 (1)
+           66 CALL                             2
+           74 LOAD_CONST                       3 (0)
+           76 BINARY_SUBSCR
+           80 STORE_FAST                       0 (url)
+  31       82 LOAD_FAST                        0 (url)
+           84 LOAD_ATTR                        3 (rsplit + NULL|self)
+          104 LOAD_CONST                       5 ('/')
+          106 LOAD_CONST                       6 (4)
+          108 CALL                             2
+          116 STORE_FAST                       1 (components)
+  32      118 LOAD_FAST                        1 (components)
+          120 LOAD_CONST                       7 (-1)
+          122 BINARY_SUBSCR
+          126 LOAD_CONST                       8 ('download')
+          128 COMPARE_OP                      88 (== bool)
+          132 POP_JUMP_IF_FALSE               30 (to 196)
+          136 LOAD_GLOBAL                      5 (len + NULL)
+          146 LOAD_FAST                        1 (components)
+          148 CALL                             1
+          156 LOAD_CONST                       6 (4)
+          158 COMPARE_OP                     148 (> bool)
+          162 POP_JUMP_IF_FALSE               15 (to 196)
+  33      166 LOAD_CONST                       9 ('.')
+          168 LOAD_FAST                        1 (components)
+          170 LOAD_CONST                      10 (-2)
+          172 BINARY_SUBSCR
+          176 CONTAINS_OP                      0 (in)
+          180 POP_JUMP_IF_FALSE                6 (to 196)
+  35      184 LOAD_FAST                        1 (components)
+          186 LOAD_CONST                      10 (-2)
+          188 BINARY_SUBSCR
+          192 STORE_FAST                       2 (basename)
+          194 JUMP_FORWARD                     5 (to 206)
+  37 >>   196 LOAD_FAST                        1 (components)
+          198 LOAD_CONST                       7 (-1)
+          200 BINARY_SUBSCR
+          204 STORE_FAST                       2 (basename)
+  38 >>   206 LOAD_GLOBAL                      6 (urllib)
+          216 LOAD_ATTR                        8 (url2pathname)
+          236 PUSH_NULL
+          238 LOAD_FAST                        2 (basename)
+          240 CALL                             1
+          248 RETURN_VALUE
+
+Disassembly of <code url_to_sanitized_basename> (line 40, args=1 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: url
+  40        0 RESUME                           0
+  41        2 LOAD_GLOBAL                      0 (cxutils)
+           12 LOAD_ATTR                        2 (sanitize_windows_filename)
+           32 PUSH_NULL
+           34 LOAD_GLOBAL                      5 (url_to_basename + NULL)
+           44 LOAD_FAST                        0 (url)
+           46 CALL                             1
+           54 CALL                             1
+           62 RETURN_VALUE
+
+Disassembly of <code StopDownload> (line 43, args=0 posonly=0 kwonly=0, flags=0):
+  43        0 RESUME                           0
+            2 LOAD_NAME                        0 (__name__)
+            4 STORE_NAME                       1 (__module__)
+            6 LOAD_CONST                       0 ('StopDownload')
+            8 STORE_NAME                       2 (__qualname__)
+           10 LOAD_CONST                       1 (43)
+           12 STORE_NAME                       3 (__firstlineno__)
+  44       14 LOAD_CONST                       2 ('Stops the download if raised from a notify_headers or notify_progress\nhandler.\n')
+           16 STORE_NAME                       4 (__doc__)
+           18 LOAD_CONST                       3 (())
+           20 STORE_NAME                       5 (__static_attributes__)
+           22 RETURN_CONST                     4 (None)
+
+Disassembly of <code UrlError> (line 48, args=0 posonly=0 kwonly=0, flags=0):
+  48        0 RESUME                           0
+            2 LOAD_NAME                        0 (__name__)
+            4 STORE_NAME                       1 (__module__)
+            6 LOAD_CONST                       0 ('UrlError')
+            8 STORE_NAME                       2 (__qualname__)
+           10 LOAD_CONST                       1 (48)
+           12 STORE_NAME                       3 (__firstlineno__)
+  49       14 LOAD_CONST                       2 ('Base class for errors raised by UrlGetter.')
+           16 STORE_NAME                       4 (__doc__)
+  51       18 LOAD_CONST                       3 ('')
+           20 STORE_NAME                       5 (reason)
+  53       22 LOAD_CONST                       4 (<code UrlError.__init__, line 53>)
+           24 MAKE_FUNCTION
+           26 STORE_NAME                       6 (__init__)
+  57       28 LOAD_CONST                       5 (<code UrlError.__str__, line 57>)
+           30 MAKE_FUNCTION
+           32 STORE_NAME                       7 (__str__)
+  60       34 LOAD_CONST                       6 (<code UrlError.__repr__, line 60>)
+           36 MAKE_FUNCTION
+           38 STORE_NAME                       8 (__repr__)
+           40 LOAD_CONST                       7 (('reason',))
+           42 STORE_NAME                       9 (__static_attributes__)
+           44 RETURN_CONST                     8 (None)
+
+Disassembly of <code UrlError.__init__> (line 53, args=2 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: self, reason
+  53        0 RESUME                           0
+  54        2 LOAD_GLOBAL                      0 (Exception)
+           12 LOAD_ATTR                        3 (__init__ + NULL|self)
+           32 LOAD_FAST                        0 (self)
+           34 CALL                             1
+           42 POP_TOP
+  55       44 LOAD_FAST_LOAD_FAST             16 (reason, self)
+           46 STORE_ATTR                       2 (reason)
+           56 RETURN_CONST                     0 (None)
+
+Disassembly of <code UrlError.__str__> (line 57, args=1 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: self
+  57        0 RESUME                           0
+  58        2 LOAD_GLOBAL                      1 (str + NULL)
+           12 LOAD_FAST                        0 (self)
+           14 LOAD_ATTR                        2 (reason)
+           34 CALL                             1
+           42 RETURN_VALUE
+
+Disassembly of <code UrlError.__repr__> (line 60, args=1 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: self
+  60        0 RESUME                           0
+  61        2 LOAD_CONST                       1 ('cxurlget.UrlError(%s)')
+            4 LOAD_GLOBAL                      1 (repr + NULL)
+           14 LOAD_FAST                        0 (self)
+           16 LOAD_ATTR                        2 (reason)
+           36 CALL                             1
+           44 BINARY_OP                        6 (%)
+           48 RETURN_VALUE
+
+Disassembly of <code HttpError> (line 63, args=0 posonly=0 kwonly=0, flags=0):
+  63        0 RESUME                           0
+            2 LOAD_NAME                        0 (__name__)
+            4 STORE_NAME                       1 (__module__)
+            6 LOAD_CONST                       0 ('HttpError')
+            8 STORE_NAME                       2 (__qualname__)
+           10 LOAD_CONST                       1 (63)
+           12 STORE_NAME                       3 (__firstlineno__)
+  64       14 LOAD_CONST                       2 ('Exception class for error responses from an HTTP server.')
+           16 STORE_NAME                       4 (__doc__)
+  66       18 LOAD_CONST                       3 (0)
+           20 STORE_NAME                       5 (code)
+  68       22 LOAD_CONST                       4 (<code HttpError.__init__, line 68>)
+           24 MAKE_FUNCTION
+           26 STORE_NAME                       6 (__init__)
+  72       28 LOAD_CONST                       5 (<code HttpError.__str__, line 72>)
+           30 MAKE_FUNCTION
+           32 STORE_NAME                       7 (__str__)
+  75       34 LOAD_CONST                       6 (<code HttpError.__repr__, line 75>)
+           36 MAKE_FUNCTION
+           38 STORE_NAME                       8 (__repr__)
+           40 LOAD_CONST                       7 (('code',))
+           42 STORE_NAME                       9 (__static_attributes__)
+           44 RETURN_CONST                     8 (None)
+
+Disassembly of <code HttpError.__init__> (line 68, args=3 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: self, code, reason
+  68        0 RESUME                           0
+  69        2 LOAD_GLOBAL                      0 (UrlError)
+           12 LOAD_ATTR                        3 (__init__ + NULL|self)
+           32 LOAD_FAST_LOAD_FAST              2 (self, reason)
+           34 CALL                             2
+           42 POP_TOP
+  70       44 LOAD_FAST_LOAD_FAST             16 (code, self)
+           46 STORE_ATTR                       2 (code)
+           56 RETURN_CONST                     0 (None)
+
+Disassembly of <code HttpError.__str__> (line 72, args=1 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: self
+  72        0 RESUME                           0
+  73        2 LOAD_FAST                        0 (self)
+            4 LOAD_ATTR                        0 (code)
+           24 CONVERT_VALUE                    1 (str)
+           26 FORMAT_SIMPLE
+           28 LOAD_CONST                       1 (': ')
+           30 LOAD_FAST                        0 (self)
+           32 LOAD_ATTR                        2 (reason)
+           52 CONVERT_VALUE                    1 (str)
+           54 FORMAT_SIMPLE
+           56 BUILD_STRING                     3
+           58 RETURN_VALUE
+
+Disassembly of <code HttpError.__repr__> (line 75, args=1 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: self
+  75        0 RESUME                           0
+            2 LOAD_CONST                       1 ('cxurlget.HttpError(')
+  76        4 LOAD_GLOBAL                      1 (repr + NULL)
+           14 LOAD_FAST                        0 (self)
+           16 LOAD_ATTR                        2 (code)
+           36 CALL                             1
+           44 CONVERT_VALUE                    1 (str)
+           46 FORMAT_SIMPLE
+           48 LOAD_CONST                       2 (', ')
+           50 LOAD_GLOBAL                      1 (repr + NULL)
+           60 LOAD_FAST                        0 (self)
+           62 LOAD_ATTR                        4 (reason)
+           82 CALL                             1
+           90 CONVERT_VALUE                    1 (str)
+           92 FORMAT_SIMPLE
+           94 LOAD_CONST                       3 (')')
+           96 BUILD_STRING                     5
+           98 RETURN_VALUE
+
+Disassembly of <code UrlGetterBase> (line 78, args=0 posonly=0 kwonly=0, flags=0):
+  78        0 RESUME                           0
+            2 LOAD_NAME                        0 (__name__)
+            4 STORE_NAME                       1 (__module__)
+            6 LOAD_CONST                       0 ('UrlGetterBase')
+            8 STORE_NAME                       2 (__qualname__)
+           10 LOAD_CONST                       1 (78)
+           12 STORE_NAME                       3 (__firstlineno__)
+  79       14 LOAD_CONST                       2 (0)
+           16 STORE_NAME                       4 (bytes_downloaded)
+  80       18 LOAD_CONST                       3 (-1)
+           20 STORE_NAME                       5 (bytes_total)
+  81       22 LOAD_CONST                       4 (None)
+           24 STORE_NAME                       6 (last_modified)
+  82       26 LOAD_CONST                       4 (None)
+           28 STORE_NAME                       7 (etag)
+  83       30 LOAD_CONST                       2 (0)
+           32 STORE_NAME                       8 (try_count)
+  84       34 LOAD_CONST                       5 (False)
+           36 STORE_NAME                       9 (finished)
+  85       38 LOAD_CONST                       6 ('')
+           40 STORE_NAME                      10 (url)
+  86       42 LOAD_CONST                       6 ('')
+           44 STORE_NAME                      11 (basename)
+  87       46 LOAD_CONST                       4 (None)
+           48 STORE_NAME                      12 (outfile)
+  88       50 LOAD_CONST                       4 (None)
+           52 STORE_NAME                      13 (infile)
+  89       54 LOAD_CONST                       4 (None)
+           56 STORE_NAME                      14 (notify_progress)
+  90       58 LOAD_CONST                       4 (None)
+           60 STORE_NAME                      15 (notify_finished)
+  91       62 LOAD_CONST                       4 (None)
+           64 STORE_NAME                      16 (notify_failed)
+  92       66 LOAD_CONST                       4 (None)
+           68 STORE_NAME                      17 (content_encoding)
+  93       70 LOAD_CONST                       4 (None)
+           72 STORE_NAME                      18 (decoding_event)
+  94       74 LOAD_CONST                       4 (None)
+           76 STORE_NAME                      19 (decoding_exception)
+  96       78 LOAD_CONST                       7 (4096)
+           80 STORE_NAME                      20 (blocksize)
+  98       82 LOAD_NAME                       21 (classmethod)
+  99       84 LOAD_CONST                       8 (<code UrlGetterBase.make_cookie_storage, line 98>)
+           86 MAKE_FUNCTION
+  98       88 CALL                             0
+  99       96 STORE_NAME                      22 (make_cookie_storage)
+ 106       98 LOAD_CONST                       9 (<code UrlGetterBase._do_nothing, line 106>)
+          100 MAKE_FUNCTION
+          102 STORE_NAME                      23 (_do_nothing)
+ 109      104 LOAD_NAME                       23 (_do_nothing)
+          106 LOAD_NAME                       23 (_do_nothing)
+          108 LOAD_NAME                       23 (_do_nothing)
+          110 LOAD_NAME                       23 (_do_nothing)
+          112 LOAD_NAME                       24 (USER_AGENT)
+          114 LOAD_CONST                       4 (None)
+          116 LOAD_CONST                       4 (None)
+          118 LOAD_CONST                       4 (None)
+          120 LOAD_CONST                       4 (None)
+          122 LOAD_CONST                       4 (None)
+          124 LOAD_CONST                       4 (None)
+          126 BUILD_TUPLE                     11
+          128 LOAD_CONST                      10 (<code UrlGetterBase.__init__, line 109>)
+          130 MAKE_FUNCTION
+          132 SET_FUNCTION_ATTRIBUTE           1 (defaults)
+          134 STORE_NAME                      25 (__init__)
+ 134      136 LOAD_CONST                      11 (<code UrlGetterBase.fetch, line 134>)
+          138 MAKE_FUNCTION
+          140 STORE_NAME                      26 (fetch)
+ 137      142 LOAD_CONST                      12 (<code UrlGetterBase.flush, line 137>)
+          144 MAKE_FUNCTION
+          146 STORE_NAME                      27 (flush)
+          148 LOAD_CONST                      13 (('basename', 'cookie_storage', 'data', 'etag', 'last_modified', 'notify_failed', 'notify_finished', 'notify_headers', 'notify_progress', 'outfile', 'timeout', 'url', 'user_agent', 'userdata', 'verb'))
+          150 STORE_NAME                      28 (__static_attributes__)
+          152 RETURN_CONST                     4 (None)
+
+Disassembly of <code UrlGetterBase.make_cookie_storage> (line 98, args=1 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: cls
+  98        0 RESUME                           0
+ 104        2 LOAD_GLOBAL                      1 (NotImplementedError + NULL)
+           12 CALL                             0
+           20 RAISE_VARARGS                    1
+
+Disassembly of <code UrlGetterBase._do_nothing> (line 106, args=1 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS|VARARGS):
+  locals+cells+free: self, args
+ 106        0 RESUME                           0
+ 107        2 RETURN_CONST                     0 (None)
+
+Disassembly of <code UrlGetterBase.__init__> (line 109, args=14 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: self, url, outfile, notify_progress, notify_finished, notify_failed, notify_headers, user_agent, last_modified, etag, verb, data, timeout, cookie_storage
+ 109        0 RESUME                           0
+ 111        2 LOAD_FAST                        1 (url)
+            4 LOAD_ATTR                        1 (split + NULL|self)
+           24 LOAD_CONST                       1 ('#')
+           26 LOAD_CONST                       2 (1)
+           28 CALL                             2
+           36 LOAD_CONST                       3 (0)
+           38 BINARY_SUBSCR
+           42 LOAD_FAST                        0 (self)
+           44 STORE_ATTR                       1 (url)
+ 112       54 LOAD_FAST_LOAD_FAST            112 (user_agent, self)
+           56 STORE_ATTR                       2 (user_agent)
+ 113       66 LOAD_FAST_LOAD_FAST            128 (last_modified, self)
+           68 STORE_ATTR                       3 (last_modified)
+ 114       78 LOAD_FAST_LOAD_FAST            144 (etag, self)
+           80 STORE_ATTR                       4 (etag)
+ 115       90 LOAD_GLOBAL                     11 (url_to_sanitized_basename + NULL)
+          100 LOAD_FAST                        1 (url)
+          102 CALL                             1
+          110 LOAD_FAST                        0 (self)
+          112 STORE_ATTR                       6 (basename)
+ 116      122 LOAD_GLOBAL                     15 (hasattr + NULL)
+          132 LOAD_FAST                        2 (outfile)
+          134 LOAD_CONST                       4 ('write')
+          136 CALL                             2
+          144 TO_BOOL
+          152 POP_JUMP_IF_FALSE                7 (to 170)
+ 117      156 LOAD_FAST_LOAD_FAST             32 (outfile, self)
+          158 STORE_ATTR                       8 (outfile)
+          168 JUMP_FORWARD                    17 (to 204)
+ 119 >>   170 LOAD_GLOBAL                     19 (open + NULL)
+          180 LOAD_FAST                        2 (outfile)
+          182 LOAD_CONST                       5 ('wb')
+          184 CALL                             2
+          192 LOAD_FAST                        0 (self)
+          194 STORE_ATTR                       8 (outfile)
+ 120 >>   204 LOAD_FAST_LOAD_FAST             96 (notify_headers, self)
+          206 STORE_ATTR                      10 (notify_headers)
+ 121      216 LOAD_FAST_LOAD_FAST             48 (notify_progress, self)
+          218 STORE_ATTR                      11 (notify_progress)
+ 122      228 LOAD_FAST_LOAD_FAST             64 (notify_finished, self)
+          230 STORE_ATTR                      12 (notify_finished)
+ 123      240 LOAD_FAST_LOAD_FAST             80 (notify_failed, self)
+          242 STORE_ATTR                      13 (notify_failed)
+ 124      252 LOAD_FAST_LOAD_FAST            192 (timeout, self)
+          254 STORE_ATTR                      14 (timeout)
+ 125      264 LOAD_FAST_LOAD_FAST            208 (cookie_storage, self)
+          266 STORE_ATTR                      15 (cookie_storage)
+ 126      276 BUILD_MAP                        0
+          278 LOAD_FAST                        0 (self)
+          280 STORE_ATTR                      16 (userdata)
+ 127      290 LOAD_FAST                       10 (verb)
+          292 POP_JUMP_IF_NOT_NONE             7 (to 310)
+ 128      296 LOAD_FAST                       11 (data)
+          298 POP_JUMP_IF_NOT_NONE             2 (to 306)
+          302 LOAD_CONST                       6 ('GET')
+          304 JUMP_FORWARD                     1 (to 308)
+     >>   306 LOAD_CONST                       7 ('POST')
+     >>   308 STORE_FAST                      10 (verb)
+ 129 >>   310 LOAD_FAST_LOAD_FAST            160 (verb, self)
+          312 STORE_ATTR                      17 (verb)
+ 130      322 LOAD_GLOBAL                     37 (isinstance + NULL)
+          332 LOAD_FAST                       11 (data)
+          334 LOAD_GLOBAL                     38 (dict)
+          344 CALL                             2
+          352 TO_BOOL
+          360 POP_JUMP_IF_FALSE               26 (to 416)
+ 131      364 LOAD_GLOBAL                     41 (urlencode + NULL)
+          374 LOAD_FAST                       11 (data)
+          376 CALL                             1
+          384 LOAD_ATTR                       43 (encode + NULL|self)
+          404 LOAD_CONST                       8 ('ascii')
+          406 CALL                             1
+          414 STORE_FAST                      11 (data)
+ 132 >>   416 LOAD_FAST_LOAD_FAST            176 (data, self)
+          418 STORE_ATTR                      22 (data)
+          428 RETURN_CONST                     0 (None)
+
+Disassembly of <code UrlGetterBase.fetch> (line 134, args=1 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: self
+ 134        0 RESUME                           0
+ 135        2 LOAD_GLOBAL                      1 (NotImplementedError + NULL)
+           12 CALL                             0
+           20 RAISE_VARARGS                    1
+
+Disassembly of <code UrlGetterBase.flush> (line 137, args=1 posonly=0 kwonly=0, flags=OPTIMIZED|NEWLOCALS):
+  locals+cells+free: self
+ 137        0 RESUME                           0
+ 141        2 LOAD_FAST                        0 (self)
+            4 LOAD_ATTR                        0 (outfile)
+           24 LOAD_ATTR                        3 (flush + NULL|self)
+           44 CALL                             0
+           52 POP_TOP
+           54 RETURN_CONST                     1 (None)
