@@ -1,6 +1,6 @@
-# `SharedSupport/CrossOver`: camada de ferramentas
+# `SharedSupport/<Produto>`: camada de ferramentas
 
-`Contents/SharedSupport/CrossOver` guarda o "CrossOver de verdade": as ferramentas de linha de comando em Perl, a biblioteca Python que a GUI usa e o Wine. A GUI em Objective-C (`Contents/MacOS/CrossOver`, descompilada em [`../decompiled`](../decompiled)) quase não toca o Wine diretamente: ela chama classes Python via PyObjC, e essas classes executam os scripts deste diretório.
+`Contents/SharedSupport/<Produto>` guarda o "<Produto> de verdade": as ferramentas de linha de comando em Perl, a biblioteca Python que a GUI usa e o Wine. A GUI em Objective-C (`Contents/MacOS/<Produto>`, descompilada em [`../decompiled`](../decompiled)) quase não toca o Wine diretamente: ela chama classes Python via PyObjC, e essas classes executam os scripts deste diretório.
 
 Esta análise é estática. Nenhum script, `.pyc` ou binário foi executado.
 
@@ -21,10 +21,10 @@ Esta análise é estática. Nenhum script, `.pyc` ou binário foi executado.
 ## Layout
 
 ```
-SharedSupport/CrossOver/
-├── CrossOver-Hosted Application/   # 36 entradas; bin/ é um symlink para cá
-├── bin -> CrossOver-Hosted Application
-├── etc/CrossOver.conf
+SharedSupport/<Produto>/
+├── <Produto>-Hosted Application/   # 36 entradas; bin/ é um symlink para cá
+├── bin -> <Produto>-Hosted Application
+├── etc/<Produto>.conf
 ├── lib/
 │   ├── perl/        # 38 módulos CX*.pm + cópias de XML::DOM/SAX (CPAN)
 │   ├── python/      # 50 módulos, só .pyc (CPython 3.13)
@@ -32,10 +32,10 @@ SharedSupport/CrossOver/
 │   ├── dxvk/  dxmt/ # tradutores Direct3D → Vulkan / Metal
 │   └── cxupgrade/
 ├── lib64/           # 95 dylibs x86_64 (MoltenVK, SDL2, FreeType, GLib, GStreamer…) e apple_gptk/ (D3DMetal)
-└── share/           # crossover/, icons/, images/, locale/, wine/
+└── share/           # <produto>/, icons/, images/, locale/, wine/
 ```
 
-O nome `CrossOver-Hosted Application` parece servir para o processo aparecer com esse nome no macOS. `bin` aponta para ele, então os scripts continuam achando tudo em `$CX_ROOT/bin`.
+O nome `<Produto>-Hosted Application` parece servir para o processo aparecer com esse nome no macOS. `bin` aponta para ele, então os scripts continuam achando tudo em `$CX_ROOT/bin`.
 
 ## Arquitetura dos binários
 
@@ -60,14 +60,14 @@ Todas usam `CXLog`, `CXUtils` e `CXOpts` (log, utilitários, parser de opções)
 
 | Ferramenta | Linhas | Papel |
 |---|---|---|
-| `wine` | 1247 | Launcher principal. Monta o ambiente da bottle (`WINEPREFIX`, `WINEDLLPATH`, `WINELOADER`, `WINESERVER`, `WINEDLLOVERRIDES`, `WINEDEBUG`, GStreamer, D3DMetal/`libd3dshared`, `ROSETTA_ADVERTISE_AVX`) e inicia o programa. Os modos de seleção do alvo são `--ux-app` (programa Unix), `--wl-app`/`--wl32-app` (programa Windows via loader), `--cx-app` e `--start*` (por arquivo, MIME, classe ou verbo). Também tem `--wait-children`, `--new-console`, `--dll`, `--winver`. Antes de executar um arquivo não confiável ou um `.exe`, chama `cxavscan` conforme `[CrossOver] AntiVirusScan` (`start`, `untrusted` ou `never`): código 0 continua, 1 (vírus) aborta, 2 (antivírus quebrado) aborta. `cxstart`, `regedit`, `regsvr32` e `autorun` são symlinks para ele |
+| `wine` | 1247 | Launcher principal. Monta o ambiente da bottle (`WINEPREFIX`, `WINEDLLPATH`, `WINELOADER`, `WINESERVER`, `WINEDLLOVERRIDES`, `WINEDEBUG`, GStreamer, D3DMetal/`libd3dshared`, `ROSETTA_ADVERTISE_AVX`) e inicia o programa. Os modos de seleção do alvo são `--ux-app` (programa Unix), `--wl-app`/`--wl32-app` (programa Windows via loader), `--cx-app` e `--start*` (por arquivo, MIME, classe ou verbo). Também tem `--wait-children`, `--new-console`, `--dll`, `--winver`. Antes de executar um arquivo não confiável ou um `.exe`, chama `cxavscan` conforme `[<Produto>] AntiVirusScan` (`start`, `untrusted` ou `never`): código 0 continua, 1 (vírus) aborta, 2 (antivírus quebrado) aborta. `cxstart`, `regedit`, `regsvr32` e `autorun` são symlinks para ele |
 | `cxbottle` | 1740 | CLI de bottles: criar, apagar, copiar, renomear, restaurar, empacotar (`--tar`, `--cpio`, `--deb`, `--rpm`), marcar como padrão, mudar a descrição e o UUID, `--template`, `--scope` (privada ou gerenciada). Chama `cxmenu` e `cxassoc` para instalar ou remover a integração com o desktop |
 | `cxmenu` | 1509 | Sincroniza os atalhos do menu Iniciar da bottle com o sistema hospedeiro (`--sync`, `--install`, `--uninstall`, `--query`, `--mode`, `--menu-root`, `--mmenu-never`). Backends em `CXMenu*.pm`; no macOS é `CXMenuMacOSX` |
 | `cxassoc` | 1679 | O mesmo para associações de arquivo e MIME (`--sync`, `--mode`, `--mime`, `--tie`). Backend macOS: `CXAssocMacOSX` |
 | `wineshelllink` | 150 | Ponte chamada pelo Wine quando um programa Windows cria um atalho; repassa para `cxmenu` |
 | `wineprefixcreate` | 363 | Cria ou atualiza o prefixo da bottle a partir de um diretório de referência (`--snapshot`, `--copy`, `--ref-dir`, via `CXReplicateDir` e `CXUpgrade`) |
 | `cxreboot` | 186 | Simula o reinício do Windows dentro da bottle, com aviso via `cxmessage` |
-| `cxuninstall` | 445 | Remove o CrossOver e a integração das bottles com o desktop (chama `cxmenu`/`cxassoc`). Avisa que cada usuário precisa rodar o próprio `cxuninstall` antes. Lê `CX_PURGE` e o log do instalador MojoSetup |
+| `cxuninstall` | 445 | Remove o <Produto> e a integração das bottles com o desktop (chama `cxmenu`/`cxassoc`). Avisa que cada usuário precisa rodar o próprio `cxuninstall` antes. Lê `CX_PURGE` e o log do instalador MojoSetup |
 | `cxsu` | 410 | Executa um comando como root, com pedido de senha (`--description`, `--ignore-home`, `--wait`). A biblioteca Python o usa para bottles gerenciadas (`--scope managed`) e para instalar pacotes do sistema |
 | `cxavscan` | 289 | Passa um arquivo pelo antivírus configurado antes da instalação (`--gui`, `--quiet`) |
 | `cxwinassoc` | 291 | Registra classe, extensão ou MIME no registro Windows da bottle |
@@ -86,7 +86,7 @@ Scripts shell: `locate_gui.sh` (descobre o ambiente gráfico e o menu XDG), `cxg
 - **Associações**: `CXAssoc` e backends `CXAssocMacOSX`, `CXAssocWindows`, `CXAssocXDG`, `CXAssocDebian`, `CXAssocCDE`, `CXAssocMailcap`, `CXAssocMcap`, `CXAssocCheck`, `CXMimeMcap`.
 - **Formatos**: `CXPlist` (plist do macOS), `CXTinySAX*` e `CXXMLDOM` (XML), `CXDebian`/`CXRPM` (empacotamento), `CXCDE`.
 
-Boa parte desse código é compartilhada com o CrossOver Linux (backends XDG, Debian, RPM, CDE, Mailcap; `cxselinux`, `cxgetsysinfo`, `locate_gui.sh`). No Mac, os caminhos usados são os backends `MacOSX` e `Windows`.
+Boa parte desse código é compartilhada com o <Produto> Linux (backends XDG, Debian, RPM, CDE, Mailcap; `cxselinux`, `cxgetsysinfo`, `locate_gui.sh`). No Mac, os caminhos usados são os backends `MacOSX` e `Windows`.
 
 ## Biblioteca Python (`lib/python/`)
 
@@ -140,14 +140,14 @@ As chamadas usam `cxutils.run`/`system` com o caminho `CX_ROOT/bin/<ferramenta>`
 ## Método
 
 1. **Inventário** (`analyze_tools.py`): percorre `bin/` e `lib/perl/` e classifica cada arquivo pelo cabeçalho (Mach-O, `#!` perl ou sh, `.pm`, symlink). Para Perl, extrai os pacotes (respeitando blocos `{ package X; … }`), `use`/`require`, subs, `@EXPORT`, `$ENV{…}`, as opções declaradas em `add_options` e os caminhos `{CX_ROOT}/bin/…` usados (ignorando os que só aparecem em testes `-x`/`-f`).
-2. **Bytecode Python** (`pyc313.py`): leitor próprio do formato marshal do CPython 3.13 e do cabeçalho `.pyc`. Ele não usa o `marshal` do Python local, porque o 3.14 tem outro formato de code object. A tabela de opcodes (150 entradas) é reconstruída a partir do `_opcode_metadata.pyc` **embarcado no próprio CrossOver**, então os nomes batem com o interpretador que roda os módulos. O desmontador trata caches inline, `EXTENDED_ARG`, tabela de exceções e tabela de linhas. O esboço vem de uma pilha simbólica sobre o bytecode de nível de módulo e de classe. Isso inclui os decoradores, que no 3.13 aparecem como `CALL 0` com a função no lugar de `self`.
+2. **Bytecode Python** (`pyc313.py`): leitor próprio do formato marshal do CPython 3.13 e do cabeçalho `.pyc`. Ele não usa o `marshal` do Python local, porque o 3.14 tem outro formato de code object. A tabela de opcodes (150 entradas) é reconstruída a partir do `_opcode_metadata.pyc` **embarcado no próprio <Produto>**, então os nomes batem com o interpretador que roda os módulos. O desmontador trata caches inline, `EXTENDED_ARG`, tabela de exceções e tabela de linhas. O esboço vem de uma pilha simbólica sobre o bytecode de nível de módulo e de classe. Isso inclui os decoradores, que no 3.13 aparecem como `CALL 0` com a função no lugar de `self`.
 3. **Fontes `.py`**: lidas com `ast`, só para estrutura.
 4. **Binários**: `inspect_macho` do REA em `wineloader` e `wineserver` (Evidence acima). As arquiteturas de todos os Mach-O vêm do cabeçalho fat ou thin.
 
 Para regenerar (o `ast` precisa de Python ≥ 3.13; a leitura do `.pyc` independe da versão local):
 
 ```bash
-python3 -I .tools/analyze_python.py /Applications/CrossOver.app python && python3 -I .tools/analyze_tools.py /Applications/CrossOver.app . && python3 -I .tools/make_index.py . && python3 -I .tools/bridge.py /Applications/CrossOver.app . ../decompiled
+python3 -I .tools/analyze_python.py /Applications/<Produto>.app python && python3 -I .tools/analyze_tools.py /Applications/<Produto>.app . && python3 -I .tools/make_index.py . && python3 -I .tools/bridge.py /Applications/<Produto>.app . ../decompiled
 ```
 
 ## Limites
