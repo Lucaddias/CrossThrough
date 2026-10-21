@@ -269,60 +269,109 @@
     [self runClient:arg1 inBottle:arg2 withDialog:NO];
 }
 
+// Opens a document handed to CrossOver: installers and volumes go to the
+// install view, archives and CrossTies to their importers, Windows programs
+// run in a bottle (or through the Run Command dialog), and CrossOver helper
+// bundles run their own command.
 - (void)runClient:(id)arg1 inBottle:(id)arg2 withDialog:(BOOL)arg3 {
-    NSString *file = (NSString *)arg1;
-    NSString *bottle = (NSString *)arg2;
-    NSString *ext = [[file pathExtension] lowercaseString];
-    NSString *lastComp = [file lastPathComponent];
-    
-    if (!bottle) {
-        id sharedCollection = [[CXSetupLib bottleCollectionClass] sharedCollection];
-        for (id b in [sharedCollection bottleList]) {
-            if ([b isCanRunCommands] && [[b fileIsInBottle:file] boolValue]) {
-                bottle = [b name];
+    NSString *file = arg1;
+    NSString *bottleName = arg2;
+    CXBundle *bundle = [CXBundle bundleWithURL:[NSURL fileURLWithPath:file]];
+    NSString *ext = [file pathExtension];
+    NSString *lastComponent = [file lastPathComponent];
+    NSString *bottleArg = nil;
+    id bottle = nil;
+
+    if (bottleName) {
+        bottleArg = [NSString stringWithFormat:@"--bottle %@", [bottleName stringQuotedForBash]];
+        bottle = [[[CXSetupLib bottleCollectionClass] sharedCollection] bottleWithName:bottleName];
+    } else {
+        NSArray *bottles = [[[CXSetupLib bottleCollectionClass] sharedCollection] bottleList];
+        for (BottleWrapper *candidate in bottles) {
+            if ([candidate isCanRunCommands] && [[candidate fileIsInBottle:file] boolValue]) {
+                bottleArg = [NSString stringWithFormat:@"--bottle %@", [[candidate name] stringQuotedForBash]];
                 break;
             }
         }
+        if (!bottleArg && ![[NSUserDefaults standardUserDefaults] boolForKey:@"InstallExeFiles"]) {
+            for (BottleWrapper *candidate in bottles) {
+                if ([candidate isIsDefault] && [candidate isCanRunCommands]) {
+                    bottleArg = [NSString stringWithFormat:@"--bottle %@", [[candidate name] stringQuotedForBash]];
+                    break;
+                }
+            }
+            // CrossOver 26.3 also has a single-bottle fallback here, but it
+            // tests a bottle variable it never assigns, so it never applies.
+        }
     }
-    
-    if ([lastComp caseInsensitiveCompare:@"autorun.inf"] == NSOrderedSame) {
-        [self openAutoPlayInstallerForVolume:file inBottle:bottle];
-        [self addToRecentItems:file bottle:bottle];
-        return;
-    }
-    
-    if ([ext isEqualToString:@"c4p"] || [ext isEqualToString:@"tie"]) {
-        [self openAutoPlayInstallerForC4P:file inBottle:bottle];
-        [self addToRecentItems:file bottle:bottle];
-        return;
-    }
-    
-    if ([ext isEqualToString:@"cxarchive"]) {
+
+    BOOL openAsInstaller = NO;
+    if ([[[CXSetupLib c4ProfilesClass] getMatchingProfiles:file] count] == 1 ||
+        [lastComponent caseInsensitiveCompare:@"setup.exe"] == NSOrderedSame ||
+        [lastComponent caseInsensitiveCompare:@"setuppls.exe"] == NSOrderedSame ||
+        [lastComponent caseInsensitiveCompare:@"setupse.exe"] == NSOrderedSame ||
+        [lastComponent caseInsensitiveCompare:@"autorun.inf"] == NSOrderedSame ||
+        [ext caseInsensitiveCompare:@"msi"] == NSOrderedSame) {
+        openAsInstaller = YES;
+    } else if ([ext caseInsensitiveCompare:@"lnk"] == NSOrderedSame || [ext caseInsensitiveCompare:@"exe"] == NSOrderedSame) {
+        if (bottleArg && !arg3) {
+            NSString *mode = [ext caseInsensitiveCompare:@"lnk"] == NSOrderedSame ? @"--start" : @"--";
+            NSString *wine = [[[NSApp crossOverRoot] stringByAppendingPathComponent:@"bin"] stringByAppendingPathComponent:@"wine"];
+            NSString *command = [NSString stringWithFormat:@"%@ %@ %@ %@", [wine stringQuotedForBash], bottleArg, mode, [file stringQuotedForBash]];
+            NSImage *icon = [[NSWorkspace sharedWorkspace] iconForFile:file];
+            NSDictionary *args = [NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:icon, file, [file stringByDeletingLastPathComponent], nil]
+                                                             forKeys:[NSArray arrayWithObjects:@"icon", @"doc", @"workdir", nil]];
+            [self forkExecCommand:command withArgs:args];
+        } else if ([ext caseInsensitiveCompare:@"exe"] == NSOrderedSame &&
+                   [[NSUserDefaults standardUserDefaults] boolForKey:@"InstallExeFiles"] && !arg3) {
+            openAsInstaller = YES;
+        } else if ([[[[CXSetupLib bottleCollectionClass] sharedCollection] bottleList] count] == 0) {
+            NoBottleController *controller = [[[NoBottleController alloc] initWithFileToLaunch:file] autorelease];
+            [controller showWindow:self];
+        } else {
+            RunCommandController *controller = [[[RunCommandController alloc] initWithFileToRun:file] autorelease];
+            [controller window];
+            if (bottle) {
+                [controller setSelectedBottle:bottle];
+            }
+            [controller showWindow:self];
+        }
+    } else if ([ext caseInsensitiveCompare:@"cxarchive"] == NSOrderedSame) {
         [[self mainWindowController] showWindow:self];
         [[self mainWindowController] importBottleArchiveFromURL:[NSURL fileURLWithPath:file]];
-        [self addToRecentItems:file bottle:bottle];
-        return;
-    }
-    
-    if (arg3) {
-        id sharedCollection = [[CXSetupLib bottleCollectionClass] sharedCollection];
-        NSArray *list = [sharedCollection bottleList];
-        if ([list count] > 0) {
-            RunCommandController *rcc = [[[RunCommandController alloc] initWithFileToRun:file] autorelease];
-            if (bottle) {
-                [rcc setSelectedBottle:bottle];
+    } else if ([ext caseInsensitiveCompare:@"c4p"] == NSOrderedSame ||
+               [ext caseInsensitiveCompare:@"tie"] == NSOrderedSame ||
+               [ext caseInsensitiveCompare:@"tie-CrossOver"] == NSOrderedSame) {
+        [self openAutoPlayInstallerForC4P:file inBottle:bottle];
+    } else if (bundle) {
+        if ([bundle objectForInfoDictionaryKey:@"CrossOverHelperMenuPath"]) {
+            // The bottle menu's rating helper: no recent item for it.
+            if (bottleName) {
+                BottleWrapper *rated = [[[CXSetupLib bottleCollectionClass] sharedCollection] bottleWithName:bottleName];
+                NSWindow *window = [[self mainWindowController] isWindowLoaded] ? [[self mainWindowController] window] : nil;
+                [BottleMenuHandler rateBottle:rated withWindow:window isDeleting:NO];
             }
-            [rcc showWindow:self];
-        } else {
-            NoBottleController *nbc = [[[NoBottleController alloc] init] autorelease];
-            [nbc showWindow:self];
+            return;
         }
-        [self addToRecentItems:file bottle:bottle];
-        return;
+        NSString *helperCommand = [bundle objectForInfoDictionaryKey:@"CrossOverHelperCommand"];
+        if (helperCommand) {
+            NSImage *icon = [[NSWorkspace sharedWorkspace] iconForFile:file];
+            NSDictionary *args = [NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:icon, file, nil]
+                                                             forKeys:[NSArray arrayWithObjects:@"icon", @"doc", nil]];
+            [self forkExecCommand:helperCommand withArgs:args];
+        } else {
+            NSLog(@"CrossOver got non-CrossOver bundle as document: %@\n", file);
+        }
+    } else if ([CDTools isValidInstallerVolume:file]) {
+        openAsInstaller = YES;
+    } else {
+        [super runClient:file inBottle:bottleName];
     }
-    
-    [super runClient:file inBottle:bottle];
-    [self addToRecentItems:file bottle:bottle];
+
+    if (openAsInstaller) {
+        [self openAutoPlayInstallerForVolume:file inBottle:bottle];
+    }
+    [self addToRecentItems:file bottle:bottleName];
 }
 
 - (void)continueFromDemoCheck {
@@ -893,63 +942,52 @@
     }
 }
 
+// Mirrors a Programs folder into launcher items. Each file is visited once by
+// identity (links also under their target's), helper bundles become launchers
+// and subfolders with launchers become folders. Bundles and folders keep the
+// path the user sees, not the link target.
 - (void)addLaunchersInDir:(id)arg1 toFolder:(id)arg2 skippingFiles:(id)arg3 {
-    NSFileManager *fm = [NSFileManager defaultManager];
-    NSArray *contents = [fm contentsOfDirectoryAtPath:arg1 error:NULL];
-    
+    NSArray *contents = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:arg1 error:NULL];
     for (NSString *item in contents) {
-        NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-        NSString *fullPath = [arg1 stringByAppendingPathComponent:item];
-        NSURL *url = [NSURL fileURLWithPath:fullPath];
-        
-        NSNumber *resId = nil;
-        NSNumber *isSymlink = nil;
-        NSNumber *isDir = nil;
-        NSNumber *isPkg = nil;
-        
-        [url getResourceValue:&resId forKey:NSURLFileResourceIdentifierKey error:NULL];
-        if (resId && [arg3 containsObject:resId]) {
-            [pool release];
-            continue;
-        }
-        if (resId) {
-            [arg3 addObject:resId];
-        }
-        
-        [url getResourceValue:&isSymlink forKey:NSURLIsSymbolicLinkKey error:NULL];
-        if ([isSymlink boolValue]) {
-            url = [url URLByResolvingSymlinksInPath];
-            [url getResourceValue:&resId forKey:NSURLFileResourceIdentifierKey error:NULL];
-            if (resId && [arg3 containsObject:resId]) {
-                [pool release];
+        @autoreleasepool {
+            NSString *path = [arg1 stringByAppendingPathComponent:item];
+            NSURL *url = [NSURL fileURLWithPath:path];
+            NSArray *keys = [NSArray arrayWithObjects:NSURLFileResourceIdentifierKey, NSURLIsSymbolicLinkKey, NSURLIsDirectoryKey, NSURLIsPackageKey, nil];
+            NSDictionary *values = [url resourceValuesForKeys:keys error:NULL];
+            id identifier = [values objectForKey:NSURLFileResourceIdentifierKey];
+            if (!identifier || [arg3 containsObject:identifier]) {
                 continue;
             }
-            if (resId) {
-                [arg3 addObject:resId];
+            [arg3 addObject:identifier];
+            if ([[values objectForKey:NSURLIsSymbolicLinkKey] boolValue]) {
+                values = [[url URLByResolvingSymlinksInPath] resourceValuesForKeys:keys error:NULL];
+                identifier = [values objectForKey:NSURLFileResourceIdentifierKey];
+                if (!identifier || [arg3 containsObject:identifier]) {
+                    continue;
+                }
+                [arg3 addObject:identifier];
             }
-        }
-        
-        [url getResourceValue:&isDir forKey:NSURLIsDirectoryKey error:NULL];
-        [url getResourceValue:&isPkg forKey:NSURLIsPackageKey error:NULL];
-        
-        if ([isDir boolValue]) {
-            if ([isPkg boolValue]) {
-                CXBundle *b = [CXBundle bundleWithURL:url];
-                if (b && ([b objectForInfoDictionaryKey:@"CrossOverHelperMenuPath"] || [b objectForInfoDictionaryKey:@"CrossOverHelperCommand"])) {
-                    LauncherApp *app = [LauncherApp launcherWithURL:url];
-                    if (app) {
-                        [arg2 addLauncherItem:app];
-                    }
+            if (![[values objectForKey:NSURLIsDirectoryKey] boolValue]) {
+                continue;
+            }
+            if ([[values objectForKey:NSURLIsPackageKey] boolValue]) {
+                CXBundle *bundle = [CXBundle bundleWithURL:url];
+                if (!bundle) {
+                    continue;
+                }
+                BOOL bottleHelper = [bundle objectForInfoDictionaryKey:@"CrossOverHelperMenuPath"] &&
+                                    [bundle objectForInfoDictionaryKey:@"CXHelperAppBottleName"];
+                if (bottleHelper || [bundle objectForInfoDictionaryKey:@"CrossOverHelperCommand"]) {
+                    [arg2 addLauncherItem:[LauncherApp launcherWithURL:url]];
                 }
             } else {
-                LauncherDiskFolder *subfolder = [LauncherDiskFolder launcherWithFolderURL:url];
-                [self addLaunchersInDir:fullPath toFolder:subfolder skippingFiles:arg3];
-                if ([[subfolder items] count] > 0) {
-                    [arg2 addLauncherItem:subfolder];
+                LauncherDiskFolder *folder = [LauncherDiskFolder launcherWithFolderURL:url];
+                [self addLaunchersInDir:path toFolder:folder skippingFiles:arg3];
+                if ([[folder items] count] != 0) {
+                    [arg2 addLauncherItem:folder];
                 }
             }
         }
-        [pool release];
     }
 }
 
