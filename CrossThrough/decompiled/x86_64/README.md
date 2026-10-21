@@ -1,6 +1,6 @@
 # Slice x86_64 × arm64
 
-Mapeamento e comparação das duas slices de `Contents/MacOS/CrossOver` (CrossOver 26.3).
+Mapeamento e comparação das duas slices de `Contents/MacOS/<Produto>` (<Produto> 26.3).
 
 | Slice | Offset no universal | Tamanho | SHA-256 (`lipo -thin`) |
 |---|---|---|---|

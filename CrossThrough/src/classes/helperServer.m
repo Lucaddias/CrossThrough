@@ -3,38 +3,41 @@
 #import "CrossThrough.h"
 #import "HopperCompat.h"
 
-static helperServer *_defaultHelperServerSingleton = nil;
+static helperServer *_singleton = nil;
 
 @implementation helperServer
 
 + (id)defaultHelperServer {
-    @synchronized (self) {
-        if (!_defaultHelperServerSingleton) {
-            _defaultHelperServerSingleton = [[helperServer alloc] init];
+    @synchronized([helperServer class]) {
+        if (!_singleton) {
+            _singleton = [[helperServer alloc] init];
         }
-        return _defaultHelperServerSingleton;
     }
+    return _singleton;
 }
 
 - (id)init {
     self = [super init];
     if (self) {
+        NSPort *port = [NSPort port];
+        self->_theConnection = [[NSConnection alloc] initWithReceivePort:port sendPort:port];
+        // Only the HelperServer protocol is reachable by clients.
+        [self->_theConnection setRootObject:[NSProtocolChecker protocolCheckerWithTarget:self protocol:@protocol(HelperServer)]];
+        if (![self->_theConnection registerName:@"com.codeweavers.CrossOver.HelperServer"]) {
+            NSLog(@"Failed to register our helper server.  What do we do now?\n");
+        }
         self->isReady = NO;
     }
     return self;
 }
 
-- (id)getEnvironmentForXConnection {
-    if (self->isReady) {
-        NSDictionary *env = [[NSProcessInfo processInfo] environment];
-        NSMutableDictionary *mutableEnv = [env mutableCopy];
-        NSString *root = [(CXApplication *)NSApp crossOverRoot];
-        if (root) {
-            [mutableEnv setObject:root forKey:@"CX_ROOT"];
-        }
-        return [mutableEnv autorelease];
+- (bycopy id)getEnvironmentForXConnection {
+    if (!self->isReady) {
+        return nil;
     }
-    return nil;
+    NSMutableDictionary *environment = [[[[NSProcessInfo processInfo] environment] mutableCopy] autorelease];
+    [environment setObject:[(CXApplication *)NSApp crossOverRoot] forKey:@"CX_ROOT"];
+    return environment;
 }
 
 - (void)setIsReady {
@@ -46,58 +49,38 @@ static helperServer *_defaultHelperServerSingleton = nil;
 }
 
 - (BOOL)isServerReadyForBottle:(id)arg1 {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r31 = r31 - 0x40;
-     *   var_20 = r22;
-     *   decomp_var_18 = r21;
-     *   var_10 = r20;
-     *   decomp_var_8 = r19;
-     *   saved_fp = r29;
-     *   decomp_var_m8 = r30;
-     *   r19 = [arg2 retain];
-     *   if (self[0x8] != 0x0) {
-     *   r0 = [CXSetupLib bottleCollectionClass];
-     *   r0 = [r0 sharedCollection];
-     *   r0 = [r0 retain];
-     *   r21 = r0;
-     *   r20 = [[r0 bottleWithName:r19] retain];
-     *   [r21 release];
-     *   if (r20 != 0x0) {
-     *   if ([r20 isIsDisabled] != 0x0) {
-     *   r20 = [[r20 name] retain];
-     *   r19 = [[NSString stringWithFormat:@"Bottle \"%@\" is disabled.", r3] retain];
-     *   [r20 release];
-     *   r0 = [NSException exceptionWithName:@"HelperServerException" reason:r19 userInfo:0x0];
-     *   r0 = [r0 retain];
-     *   r0 = objc_retainAutorelease(r0);
-     *   objc_exception_throw(r0);
-     *   }
-     *   ... (15 more lines)
-     */
-    return NO;
+    if (!self->isReady) {
+        return NO;
+    }
+    BottleWrapper *bottle = [[[CXSetupLib bottleCollectionClass] sharedCollection] bottleWithName:arg1];
+    if (!bottle) {
+        return NO;
+    }
+    if ([bottle isIsDisabled]) {
+        NSString *reason = [NSString stringWithFormat:@"Bottle \"%@\" is disabled.", [bottle name]];
+        @throw [NSException exceptionWithName:@"HelperServerException" reason:reason userInfo:nil];
+    }
+    return [bottle isCanRunCommands];
 }
 
-- (id)raiseWindowsWithTag:(NSInteger)arg1 {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   [**_NSApp arrangeInFront:0x0];
-     *   return;
-     */
-    return nil;
+- (oneway void)raiseWindowsWithTag:(NSInteger)arg1 {
+    [NSApp arrangeInFront:nil];
 }
 
 - (id)theConnection {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_getProperty(self, _cmd, 0x10, 0x1);
-     *   return r0;
-     */
-    return nil;
+    return [[self->_theConnection retain] autorelease];
 }
 
 - (void)setTheConnection:(id)arg1 {
-    return;
+    if (self->_theConnection != arg1) {
+        [self->_theConnection release];
+        self->_theConnection = [arg1 retain];
+    }
+}
+
+- (void)dealloc {
+    [self->_theConnection release];
+    [super dealloc];
 }
 
 @end

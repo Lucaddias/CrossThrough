@@ -6,25 +6,20 @@
 @implementation LauncherIcon
 
 - (id)initWithName:(id)arg1 {
-    self = [super init];
-    if (self) {
-        // Initialized
-    }
-    return self;
+    return [super initWithName:arg1];
+}
+
+- (void)dealloc {
+    [self->_icon release];
+    [self->_bottle release];
+    [super dealloc];
 }
 
 - (id)copyWithZone:(void *)arg1 {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   var_20 = self;
-     *   r0 = [[&var_20 super] copyWithZone:arg2];
-     *   r20 = r0;
-     *   [r0 setIcon:self->_icon];
-     *   [r20 setBottle:self->_bottle];
-     *   r0 = r20;
-     *   return r0;
-     */
-    return nil;
+    LauncherIcon *copy = [super copyWithZone:arg1];
+    [copy setIcon:self->_icon];
+    [copy setBottle:self->_bottle];
+    return copy;
 }
 
 - (id)tooltip {
@@ -36,25 +31,7 @@
 }
 
 - (id)description {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   var_40 = self;
-     *   r0 = [[&var_40 super] description];
-     *   r21 = [r0 retain];
-     *   r22 = [[self icon] retain];
-     *   r0 = [self bottle];
-     *   r0 = [r0 retain];
-     *   r19 = r0;
-     *   r23 = [[r0 name] retain];
-     *   r20 = [[NSString stringWithFormat:@"%@ icon %p bottle name %@", r3, r4, r5] retain];
-     *   [r23 release];
-     *   [r19 release];
-     *   [r22 release];
-     *   [r21 release];
-     *   r0 = [r20 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return [NSString stringWithFormat:@"%@ icon %p bottle name %@", [super description], [self icon], [[self bottle] name]];
 }
 
 - (id)icon {
@@ -62,7 +39,10 @@
 }
 
 - (void)setIcon:(id)arg1 {
-    self->_icon = arg1;
+    if (self->_icon != arg1) {
+        [self->_icon release];
+        self->_icon = [arg1 retain];
+    }
 }
 
 - (id)bottle {
@@ -70,7 +50,10 @@
 }
 
 - (void)setBottle:(id)arg1 {
-    self->_bottle = arg1;
+    if (self->_bottle != arg1) {
+        [self->_bottle release];
+        self->_bottle = [arg1 retain];
+    }
 }
 
 @end

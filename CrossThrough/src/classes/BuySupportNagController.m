@@ -3,340 +3,295 @@
 #import "CrossThrough.h"
 #import "HopperCompat.h"
 
+// Controllers that keep themselves alive until their window closes.
+static NSMutableArray *_selfOwnedControllers = nil;
+
+// Pushes a collapsed element out of view by shrinking its spacer.
+static const CGFloat kCollapsedSpacerOffset = -10000.0;
+
 @implementation BuySupportNagController
 
 - (id)initWithAppcastItem:(id)arg1 {
-    self = [super init];
+    NSString *nibPath = [[NSBundle bundleForClass:[self class]] pathForResource:@"BuySupportNag" ofType:@"nib"];
+    if (!nibPath) {
+        NSString *sparklePath = [[[NSBundle mainBundle] sharedFrameworksPath] stringByAppendingPathComponent:@"Sparkle.framework"];
+        nibPath = [[NSBundle bundleWithPath:sparklePath] pathForResource:@"BuySupportNag" ofType:@"nib"];
+    }
+    self = [super initWithWindowNibPath:nibPath owner:self];
     if (self) {
-        // Initialized
+        self->_updateItem = [arg1 retain];
+        [self setShouldCascadeWindows:NO];
     }
     return self;
 }
 
 - (void)setOwnsSelf:(BOOL)arg1 {
-    return;
+    if (!_selfOwnedControllers) {
+        _selfOwnedControllers = [[NSMutableArray alloc] init];
+    }
+    if (self->ownsSelf && !arg1) {
+        [_selfOwnedControllers removeObject:self];
+    } else if (!self->ownsSelf && arg1) {
+        [_selfOwnedControllers addObject:self];
+    }
+    self->ownsSelf = arg1;
 }
 
 - (id)bundleVersion {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   var_10 = r20;
-     *   decomp_var_8 = r19;
-     *   r31 = r31 + 0xffffffffffffffe0;
-     *   saved_fp = r29;
-     *   decomp_var_m8 = r30;
-     *   r0 = [NSBundle mainBundle];
-     *   r0 = [r0 retain];
-     *   r20 = r0;
-     *   r19 = [[r0 objectForInfoDictionaryKey:**_kCFBundleVersionKey] retain];
-     *   [r20 release];
-     *   r20 = @"";
-     *   if (r19 != 0x0) {
-     *   if ([r19 length] != 0x0) {
-     *   r20 = r19;
-     *   }
-     *   }
-     *   r20 = objc_retainAutoreleaseReturnValue(r20);
-     *   [r19 release];
-     *   r0 = r20;
-     *   return r0;
-     */
-    return nil;
+    NSString *version = [[NSBundle mainBundle] objectForInfoDictionaryKey:(NSString *)kCFBundleVersionKey];
+    return [version length] != 0 ? version : @"";
 }
 
 - (id)bundleDisplayVersion {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   var_20 = r22;
-     *   decomp_var_18 = r21;
-     *   r31 = r31 + 0xffffffffffffffd0;
-     *   var_10 = r20;
-     *   decomp_var_8 = r19;
-     *   saved_fp = r29;
-     *   decomp_var_m8 = r30;
-     *   r20 = self;
-     *   r0 = [NSBundle mainBundle];
-     *   r0 = [r0 retain];
-     *   r21 = r0;
-     *   r19 = [[r0 objectForInfoDictionaryKey:@"CFBundleShortVersionString"] retain];
-     *   [r21 release];
-     *   if (r19 != 0x0) {
-     *   r0 = [r19 retain];
-     *   }
-     *   else {
-     *   r0 = [r20 bundleVersion];
-     *   r0 = [r0 retain];
-     *   }
-     *   [r19 release];
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    NSString *version = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
+    return version ? version : [self bundleVersion];
 }
 
 - (id)bundleName {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   var_20 = r22;
-     *   decomp_var_18 = r21;
-     *   r31 = r31 + 0xffffffffffffffd0;
-     *   var_10 = r20;
-     *   decomp_var_8 = r19;
-     *   saved_fp = r29;
-     *   decomp_var_m8 = r30;
-     *   r0 = [NSBundle mainBundle];
-     *   r0 = [r0 retain];
-     *   r20 = r0;
-     *   r19 = [[r0 objectForInfoDictionaryKey:@"SUBundleName"] retain];
-     *   [r20 release];
-     *   if (r19 != 0x0) {
-     *   if ([r19 length] == 0x0) {
-     *   r0 = [NSBundle mainBundle];
-     *   r0 = [r0 retain];
-     *   r21 = r0;
-     *   r20 = [[r0 objectForInfoDictionaryKey:@"CFBundleDisplayName"] retain];
-     *   [r19 release];
-     *   [r21 release];
-     *   if (r20 != 0x0) {
-     *   if ([r20 length] != 0x0) {
-     *   r19 = r20;
-     *   r0 = [r19 retain];
-     *   r20 = r0;
-     *   ... (105 more lines)
-     */
-    return nil;
+    NSBundle *bundle = [NSBundle mainBundle];
+    NSString *name = [bundle objectForInfoDictionaryKey:@"SUBundleName"];
+    if ([name length] != 0) {
+        return name;
+    }
+    name = [bundle objectForInfoDictionaryKey:@"CFBundleDisplayName"];
+    if ([name length] != 0) {
+        return name;
+    }
+    name = [bundle objectForInfoDictionaryKey:(NSString *)kCFBundleNameKey];
+    return [name length] != 0 ? name : @"";
 }
 
 - (id)descriptionText {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r31 = r31 - 0x70;
-     *   var_40 = r26;
-     *   decomp_var_38 = r25;
-     *   var_30 = r24;
-     *   decomp_var_28 = r23;
-     *   var_20 = r22;
-     *   decomp_var_18 = r21;
-     *   var_10 = r20;
-     *   decomp_var_8 = r19;
-     *   saved_fp = r29;
-     *   decomp_var_m8 = r30;
-     *   r19 = self;
-     *   r0 = [self updateItem];
-     *   r0 = [r0 retain];
-     *   r20 = r0;
-     *   r21 = [[r0 displayVersionString] retain];
-     *   [r20 release];
-     *   r20 = [[r19 bundleDisplayVersion] retain];
-     *   if ([r21 isEqualToString:r20] != 0x0) {
-     *   r0 = [r19 updateItem];
-     *   r0 = [r0 retain];
-     *   r22 = r0;
-     *   r23 = [[r0 versionString] retain];
-     *   r25 = [[r21 stringByAppendingFormat:@" (%@)", r3] retain];
-     *   [r21 release];
-     *   ... (22 more lines)
-     */
-    return nil;
+    NSString *updateVersion = [[self updateItem] displayVersionString];
+    NSString *currentVersion = [self bundleDisplayVersion];
+    // Same marketing version: disambiguate with the build numbers.
+    if ([updateVersion isEqualToString:currentVersion]) {
+        updateVersion = [updateVersion stringByAppendingFormat:@" (%@)", [[self updateItem] versionString]];
+        currentVersion = [currentVersion stringByAppendingFormat:@" (%@)", [self bundleVersion]];
+    }
+    NSString *format = [[NSBundle mainBundle] localizedStringForKey:@"%1$@ %2$@ is now available – you have %3$@." value:@"" table:nil];
+    return [NSString stringWithFormat:format, [self bundleName], updateVersion, currentVersion];
 }
 
 - (void)buyNow:(id)arg1 {
-    return;
+    NSString *renewalURL = [[NSBundle mainBundle] localizedStringForKey:@"https://www.codeweavers.com/store/renewal/" value:@"" table:@"Vendor"];
+    [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:renewalURL]];
 }
 
 - (void)windowDidLoad {
-    return;
+    // The label's text has a "%@" for the refresh button's title.
+    NSMutableAttributedString *labelText = [[[[self notEntitledLabel] attributedStringValue] mutableCopy] autorelease];
+    NSString *text = [NSString stringWithFormat:[labelText string], [[self refreshRegistrationButton] title]];
+    if (![self registrationRefreshEnough]) {
+        NSString *format = [[NSBundle mainBundle] localizedStringForKey:@"If your support has expired, click '%@' to receive this and future upgrades." value:@"" table:nil];
+        text = [[text stringByAppendingString:@" "] stringByAppendingFormat:format, [[self buySupportExtensionButton] title]];
+    }
+    [labelText replaceCharactersInRange:NSMakeRange(0, [labelText length]) withString:text];
+    [[self notEntitledLabel] setAttributedStringValue:labelText];
+
+    if ([self registrationRefreshEnough]) {
+        // Refreshing the license is enough: hide "Buy Support Extension" and
+        // shrink the window by the space it took.
+        [[self window] layoutIfNeeded];
+        NSButton *buyButton = [self buySupportExtensionButton];
+        NSButton *refreshButton = [self refreshRegistrationButton];
+        NSRect buyRect = [buyButton alignmentRectForFrame:[buyButton frame]];
+        NSRect refreshRect = [refreshButton alignmentRectForFrame:[refreshButton frame]];
+        CGFloat adjustment = (buyRect.origin.x + buyRect.size.width) - (refreshRect.origin.x + refreshRect.size.width);
+        if (adjustment < 0.0) {
+            adjustment = refreshRect.origin.x - buyRect.origin.x;
+        }
+        self->_widthAdjustment = adjustment;
+        NSLayoutConstraint *spacer = [self refreshRegistrationToBuySupportSpacer];
+        [spacer setConstant:[spacer constant] + kCollapsedSpacerOffset];
+        NSRect frame = [[self window] frame];
+        frame.size.width -= self->_widthAdjustment;
+        [[self window] setFrame:frame display:YES];
+        [[self window] setDefaultButtonCell:[[self refreshRegistrationButton] cell]];
+    }
+    if (![self showsReleaseNotes]) {
+        NSLayoutConstraint *spacer = [self notEntitledLabelToReleaseNotesBoxSpacer];
+        [spacer setConstant:[spacer constant] + kCollapsedSpacerOffset];
+        [[self notEntitledLabelToDescriptionLabelSpacer] setPriority:700.0f];
+    }
+    if ([NSApp activationPolicy] != NSApplicationActivationPolicyRegular) {
+        [[self window] setLevel:NSFloatingWindowLevel];
+    }
+    [[self window] center];
+    if ([self showsReleaseNotes]) {
+        [self displayReleaseNotes];
+    }
 }
 
 - (BOOL)windowShouldClose:(id)arg1 {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   [self endWithSelection];
-     *   return 0x1;
-     */
-    return NO;
+    [self endWithSelection];
+    return YES;
 }
 
 - (void)windowWillClose:(id)arg1 {
-    return;
+    if ([self registrationRefreshEnough]) {
+        // Restore the nib width so the saved frame stays consistent.
+        [[self window] orderOut:self];
+        NSRect frame = [[self window] frame];
+        frame.size.width += self->_widthAdjustment;
+        [[self window] setFrame:frame display:NO];
+    }
+    if (self->ownsSelf && [self isWindowLoaded] && [arg1 object] == [self window]) {
+        [_selfOwnedControllers removeObject:[[self window] windowController]];
+    }
 }
 
 - (void)remindMeLater:(id)arg1 {
-    return;
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"SUSkippedVersion"];
+    [self endWithSelection];
 }
 
 - (void)refreshRegistration:(id)arg1 {
-    return;
+    DemoRegisterController *registerController = [[DemoRegisterController alloc] init];
+    [registerController setRefreshLicenseMode:YES];
+    [registerController showWindow:self];
+    [self remindMeLater:nil];
 }
 
 - (void)skipThisVersion:(id)arg1 {
-    return;
+    [[NSUserDefaults standardUserDefaults] setObject:[[self updateItem] versionString] forKey:@"SUSkippedVersion"];
+    [self endWithSelection];
 }
 
 - (id)applicationIcon {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = **_NSApp;
-     *   r0 = [r0 applicationIconImage];
-     *   return r0;
-     */
-    return nil;
+    return [NSApp applicationIconImage];
 }
 
 - (BOOL)showsReleaseNotes {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   var_50 = r28;
-     *   decomp_var_48 = r27;
-     *   r31 = r31 + 0xffffffffffffffa0;
-     *   var_40 = r26;
-     *   decomp_var_38 = r25;
-     *   var_30 = r24;
-     *   decomp_var_28 = r23;
-     *   var_20 = r22;
-     *   decomp_var_18 = r21;
-     *   var_10 = r20;
-     *   decomp_var_8 = r19;
-     *   saved_fp = r29;
-     *   decomp_var_m8 = r30;
-     *   r24 = self;
-     *   r0 = [NSBundle mainBundle];
-     *   r0 = [r0 retain];
-     *   r20 = r0;
-     *   r19 = [[r0 objectForInfoDictionaryKey:@"SUShowReleaseNotes"] retain];
-     *   [r20 release];
-     *   if (r19 != 0x0) {
-     *   r24 = [r19 boolValue];
-     *   [r19 release];
-     *   r0 = r24;
-     *   }
-     *   else {
-     *   ... (72 more lines)
-     */
-    return NO;
+    NSNumber *shows = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"SUShowReleaseNotes"];
+    if (shows) {
+        return [shows boolValue];
+    }
+    NSString *description = [[self updateItem] itemDescription];
+    if (description && [[description stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] length] != 0) {
+        return YES;
+    }
+    return [[self updateItem] releaseNotesURL] != nil;
 }
 
 - (id)titleText {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = [NSBundle mainBundle];
-     *   r0 = [r0 retain];
-     *   r21 = r0;
-     *   r22 = [[r0 localizedStringForKey:@"A new version of %@ is available!" value:@"" table:0x0] retain];
-     *   r19 = [[self bundleName] retain];
-     *   r20 = [[NSString stringWithFormat:r22] retain];
-     *   [r19 release];
-     *   [r22 release];
-     *   [r21 release];
-     *   r0 = [r20 autorelease];
-     *   return r0;
-     */
-    return nil;
+    NSString *format = [[NSBundle mainBundle] localizedStringForKey:@"A new version of %@ is available!" value:@"" table:nil];
+    return [NSString stringWithFormat:format, [self bundleName]];
 }
 
 - (void)displayReleaseNotes {
-    return;
+    WebView *webView = [self releaseNotesView];
+    [webView setPreferencesIdentifier:@"org.sparkle-project.Sparkle"];
+    [[webView preferences] setStandardFontFamily:[[NSFont systemFontOfSize:8.0] familyName]];
+    [[webView preferences] setDefaultFontSize:(int)[NSFont systemFontSizeForControlSize:NSControlSizeSmall]];
+    [webView setFrameLoadDelegate:self];
+    [webView setPolicyDelegate:self];
+
+    // A spinner centered over the notes until the page finishes loading.
+    NSProgressIndicator *spinner = [[NSProgressIndicator alloc] initWithFrame:NSMakeRect(0.0, 0.0, 32.0, 32.0)];
+    [self setReleaseNotesSpinner:spinner];
+    [spinner release];
+    [spinner setStyle:NSProgressIndicatorStyleSpinning];
+    [[self releaseNotesSpinner] setTranslatesAutoresizingMaskIntoConstraints:NO];
+    [[self releaseNotesSpinner] startAnimation:self];
+    NSView *container = [webView superview];
+    [container addSubview:[self releaseNotesSpinner]];
+    [container addConstraint:[NSLayoutConstraint constraintWithItem:[self releaseNotesSpinner] attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:32.0]];
+    [container addConstraint:[NSLayoutConstraint constraintWithItem:[self releaseNotesSpinner] attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:[self releaseNotesSpinner] attribute:NSLayoutAttributeHeight multiplier:1.0 constant:0.0]];
+    [container addConstraint:[NSLayoutConstraint constraintWithItem:[self releaseNotesSpinner] attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:container attribute:NSLayoutAttributeCenterX multiplier:1.0 constant:0.0]];
+    [container addConstraint:[NSLayoutConstraint constraintWithItem:[self releaseNotesSpinner] attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:container attribute:NSLayoutAttributeCenterY multiplier:1.0 constant:0.0]];
+
+    self->_webViewFinishedLoading = NO;
+    NSURL *releaseNotesURL = [[self updateItem] releaseNotesURL];
+    if (releaseNotesURL) {
+        if ([releaseNotesURL isFileURL]) {
+            [[webView mainFrame] loadHTMLString:@"Release notes with file:// URLs are not supported for security reasons&mdash;Javascript would be able to read files on your file system." baseURL:nil];
+        } else {
+            [[webView mainFrame] loadRequest:[NSURLRequest requestWithURL:releaseNotesURL cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:30.0]];
+        }
+    } else {
+        [[webView mainFrame] loadHTMLString:[[self updateItem] itemDescription] baseURL:nil];
+    }
 }
 
 - (void)endWithSelection {
-    return;
+    [[self releaseNotesView] stopLoading:self];
+    [[self releaseNotesView] setFrameLoadDelegate:nil];
+    [[self releaseNotesView] setPolicyDelegate:nil];
+    [[self releaseNotesView] removeFromSuperview];
+    [self close];
 }
 
 - (void)webView:(id)arg1 didFinishLoadForFrame:(id)arg2 {
-    return;
+    if (![arg2 parentFrame]) {
+        self->_webViewFinishedLoading = YES;
+        [[self releaseNotesSpinner] setHidden:YES];
+        [(WebView *)arg1 display];
+    }
 }
 
 - (void)webView:(id)arg1 decidePolicyForNavigationAction:(id)arg2 request:(id)arg3 frame:(id)arg4 decisionListener:(id)arg5 {
-    return;
+    // Once the notes are shown, links open in the browser.
+    if (self->_webViewFinishedLoading) {
+        [[NSWorkspace sharedWorkspace] openURL:[arg3 URL]];
+        [arg5 ignore];
+    } else {
+        [arg5 use];
+    }
 }
 
 - (id)webView:(id)arg1 contextMenuItemsForElement:(id)arg2 defaultMenuItems:(id)arg3 {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r31 = r31 - 0x130;
-     *   var_50 = r28;
-     *   decomp_var_48 = r27;
-     *   var_40 = r26;
-     *   decomp_var_38 = r25;
-     *   var_30 = r24;
-     *   decomp_var_28 = r23;
-     *   var_20 = r22;
-     *   decomp_var_18 = r21;
-     *   var_10 = r20;
-     *   decomp_var_8 = r19;
-     *   saved_fp = r29;
-     *   decomp_var_m8 = r30;
-     *   var_58 = **___stack_chk_guard;
-     *   r0 = [arg4 retain];
-     *   r20 = r0;
-     *   r0 = [r0 mutableCopy];
-     *   r19 = r0;
-     *   if (r0 != 0x0) {
-     *   var_120 = q0;
-     *   var_110 = q0;
-     *   r0 = [r20 retain];
-     *   r21 = r0;
-     *   r0 = [r0 countByEnumeratingWithState:&var_120 objects:&decomp_var_d8 count:0x10];
-     *   if (r0 != 0x0) {
-     *   ... (28 more lines)
-     */
-    return nil;
+    NSMutableArray *items = [[arg3 mutableCopy] autorelease];
+    for (NSMenuItem *item in arg3) {
+        switch ([item tag]) {
+            case WebMenuItemTagOpenLinkInNewWindow:
+            case WebMenuItemTagDownloadLinkToDisk:
+            case WebMenuItemTagOpenImageInNewWindow:
+            case WebMenuItemTagDownloadImageToDisk:
+            case WebMenuItemTagOpenFrameInNewWindow:
+            case WebMenuItemTagGoBack:
+            case WebMenuItemTagGoForward:
+            case WebMenuItemTagStop:
+            case WebMenuItemTagReload:
+                [items removeObjectIdenticalTo:item];
+                break;
+            default:
+                break;
+        }
+    }
+    return items;
 }
 
 - (id)notEntitledLabel {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_notEntitledLabel);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return [objc_loadWeakRetained((id *)&self->_notEntitledLabel) autorelease];
 }
 
 - (void)setNotEntitledLabel:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_notEntitledLabel, arg1);
 }
 
 - (id)refreshRegistrationButton {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_refreshRegistrationButton);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return [objc_loadWeakRetained((id *)&self->_refreshRegistrationButton) autorelease];
 }
 
 - (void)setRefreshRegistrationButton:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_refreshRegistrationButton, arg1);
 }
 
 - (id)buySupportExtensionButton {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_buySupportExtensionButton);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return [objc_loadWeakRetained((id *)&self->_buySupportExtensionButton) autorelease];
 }
 
 - (void)setBuySupportExtensionButton:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_buySupportExtensionButton, arg1);
 }
 
 - (id)releaseNotesView {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_releaseNotesView);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return [objc_loadWeakRetained((id *)&self->_releaseNotesView) autorelease];
 }
 
 - (void)setReleaseNotesView:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_releaseNotesView, arg1);
 }
 
 - (BOOL)registrationRefreshEnough {
@@ -348,45 +303,27 @@
 }
 
 - (id)refreshRegistrationToBuySupportSpacer {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_refreshRegistrationToBuySupportSpacer);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return [objc_loadWeakRetained((id *)&self->_refreshRegistrationToBuySupportSpacer) autorelease];
 }
 
 - (void)setRefreshRegistrationToBuySupportSpacer:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_refreshRegistrationToBuySupportSpacer, arg1);
 }
 
 - (id)notEntitledLabelToReleaseNotesBoxSpacer {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_notEntitledLabelToReleaseNotesBoxSpacer);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return [objc_loadWeakRetained((id *)&self->_notEntitledLabelToReleaseNotesBoxSpacer) autorelease];
 }
 
 - (void)setNotEntitledLabelToReleaseNotesBoxSpacer:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_notEntitledLabelToReleaseNotesBoxSpacer, arg1);
 }
 
 - (id)notEntitledLabelToDescriptionLabelSpacer {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_notEntitledLabelToDescriptionLabelSpacer);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return [objc_loadWeakRetained((id *)&self->_notEntitledLabelToDescriptionLabelSpacer) autorelease];
 }
 
 - (void)setNotEntitledLabelToDescriptionLabelSpacer:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_notEntitledLabelToDescriptionLabelSpacer, arg1);
 }
 
 - (id)updateItem {
@@ -394,7 +331,10 @@
 }
 
 - (void)setUpdateItem:(id)arg1 {
-    self->_updateItem = arg1;
+    if (self->_updateItem != arg1) {
+        [self->_updateItem release];
+        self->_updateItem = [arg1 retain];
+    }
 }
 
 - (id)releaseNotesSpinner {
@@ -402,7 +342,23 @@
 }
 
 - (void)setReleaseNotesSpinner:(id)arg1 {
-    self->_releaseNotesSpinner = arg1;
+    if (self->_releaseNotesSpinner != arg1) {
+        [self->_releaseNotesSpinner release];
+        self->_releaseNotesSpinner = [arg1 retain];
+    }
+}
+
+- (void)dealloc {
+    [self->_updateItem release];
+    [self->_releaseNotesSpinner release];
+    objc_destroyWeak((id *)&self->_notEntitledLabel);
+    objc_destroyWeak((id *)&self->_refreshRegistrationButton);
+    objc_destroyWeak((id *)&self->_buySupportExtensionButton);
+    objc_destroyWeak((id *)&self->_releaseNotesView);
+    objc_destroyWeak((id *)&self->_refreshRegistrationToBuySupportSpacer);
+    objc_destroyWeak((id *)&self->_notEntitledLabelToReleaseNotesBoxSpacer);
+    objc_destroyWeak((id *)&self->_notEntitledLabelToDescriptionLabelSpacer);
+    [super dealloc];
 }
 
 @end

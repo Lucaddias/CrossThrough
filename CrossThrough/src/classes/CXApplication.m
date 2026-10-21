@@ -2,6 +2,7 @@
 #import "CXApplication.h"
 #import "CrossThrough.h"
 #import "HopperCompat.h"
+#import "c_functions.h"
 
 @implementation CXApplication
 
@@ -58,17 +59,14 @@
 }
 
 - (void)reportException:(id)arg1 {
-    NSLog(@"[CXApplication] Exception: %@", arg1);
+    _CXLog(@"AppKit caught exception: %@", [arg1 debugDescription]);
     [super reportException:arg1];
 }
 
 - (void)sendEvent:(id)arg1 {
-    WineApplicationController *wine = (WineApplicationController *)[self wineController];
-    if (!wine || ![wine respondsToSelector:@selector(handleEvent:)] || ![wine handleEvent:arg1]) {
+    if (![(WineApplicationController *)[self wineController] handleEvent:arg1]) {
         [super sendEvent:arg1];
-        if (wine && [wine respondsToSelector:@selector(didSendEvent:)]) {
-            [wine didSendEvent:arg1];
-        }
+        [(WineApplicationController *)[self wineController] didSendEvent:arg1];
     }
 }
 
@@ -89,7 +87,7 @@
 }
 
 - (id)wineController {
-    return objc_loadWeakRetained((id *)&self->_wineController);
+    return [objc_loadWeakRetained((id *)&self->_wineController) autorelease];
 }
 
 - (void)setWineController:(id)arg1 {
@@ -105,7 +103,7 @@
 }
 
 - (id)CXServer {
-    return objc_loadWeakRetained((id *)&self->_CXServer);
+    return [objc_loadWeakRetained((id *)&self->_CXServer) autorelease];
 }
 
 - (void)setCXServer:(id)arg1 {

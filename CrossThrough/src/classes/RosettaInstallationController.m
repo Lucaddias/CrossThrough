@@ -248,7 +248,7 @@
 }
 
 - (id)licenseLabel {
-    return objc_loadWeakRetained((id *)&self->_licenseLabel);
+    return [objc_loadWeakRetained((id *)&self->_licenseLabel) autorelease];
 }
 
 - (void)setLicenseLabel:(id)arg1 {
@@ -256,7 +256,7 @@
 }
 
 - (id)titleLabel {
-    return objc_loadWeakRetained((id *)&self->_titleLabel);
+    return [objc_loadWeakRetained((id *)&self->_titleLabel) autorelease];
 }
 
 - (void)setTitleLabel:(id)arg1 {
@@ -275,7 +275,7 @@
 }
 
 - (id)progressSheetDetailsLabel {
-    return objc_loadWeakRetained((id *)&self->_progressSheetDetailsLabel);
+    return [objc_loadWeakRetained((id *)&self->_progressSheetDetailsLabel) autorelease];
 }
 
 - (void)setProgressSheetDetailsLabel:(id)arg1 {
@@ -283,7 +283,7 @@
 }
 
 - (id)progressSheetDoneButton {
-    return objc_loadWeakRetained((id *)&self->_progressSheetDoneButton);
+    return [objc_loadWeakRetained((id *)&self->_progressSheetDoneButton) autorelease];
 }
 
 - (void)setProgressSheetDoneButton:(id)arg1 {
@@ -291,7 +291,7 @@
 }
 
 - (id)progressSheetIcon {
-    return objc_loadWeakRetained((id *)&self->_progressSheetIcon);
+    return [objc_loadWeakRetained((id *)&self->_progressSheetIcon) autorelease];
 }
 
 - (void)setProgressSheetIcon:(id)arg1 {
@@ -299,7 +299,7 @@
 }
 
 - (id)progressSheetProgressIndicator {
-    return objc_loadWeakRetained((id *)&self->_progressSheetProgressIndicator);
+    return [objc_loadWeakRetained((id *)&self->_progressSheetProgressIndicator) autorelease];
 }
 
 - (void)setProgressSheetProgressIndicator:(id)arg1 {
@@ -307,7 +307,7 @@
 }
 
 - (id)progressSheetShowHideDetailsButton {
-    return objc_loadWeakRetained((id *)&self->_progressSheetShowHideDetailsButton);
+    return [objc_loadWeakRetained((id *)&self->_progressSheetShowHideDetailsButton) autorelease];
 }
 
 - (void)setProgressSheetShowHideDetailsButton:(id)arg1 {
@@ -315,7 +315,7 @@
 }
 
 - (id)progressSheetScrollView {
-    return objc_loadWeakRetained((id *)&self->_progressSheetScrollView);
+    return [objc_loadWeakRetained((id *)&self->_progressSheetScrollView) autorelease];
 }
 
 - (void)setProgressSheetScrollView:(id)arg1 {
@@ -323,7 +323,7 @@
 }
 
 - (id)progressSheetTextView {
-    return objc_loadWeakRetained((id *)&self->_progressSheetTextView);
+    return [objc_loadWeakRetained((id *)&self->_progressSheetTextView) autorelease];
 }
 
 - (void)setProgressSheetTextView:(id)arg1 {

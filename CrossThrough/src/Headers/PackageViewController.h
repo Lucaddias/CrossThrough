@@ -124,7 +124,7 @@
 - (void)setVisiblePackages:(id)arg1;
 - (id)summaryDetailsControllers;
 - (void)setSummaryDetailsControllers:(id)arg1;
-- (PackageInstaller *)installer;
+- (id)installer;
 - (id)packageView;
 - (void)setPackageView:(id)arg1;
 - (id)collectionView;

@@ -22,11 +22,11 @@
 
 // Instance Methods
 - (id)init;
-- (id)getEnvironmentForXConnection;
+- (bycopy id)getEnvironmentForXConnection;
 - (void)setIsReady;
 - (BOOL)isServerReady;
 - (BOOL)isServerReadyForBottle:(id)arg1;
-- (id)raiseWindowsWithTag:(NSInteger)arg1;
+- (oneway void)raiseWindowsWithTag:(NSInteger)arg1;
 - (id)theConnection;
 - (void)setTheConnection:(id)arg1;
 

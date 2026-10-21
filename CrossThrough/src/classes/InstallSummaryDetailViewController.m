@@ -60,7 +60,7 @@
 }
 
 - (id)delegate {
-    return objc_loadWeakRetained((id *)&self->_delegate);
+    return [objc_loadWeakRetained((id *)&self->_delegate) autorelease];
 }
 
 - (void)setDelegate:(id)arg1 {
@@ -106,7 +106,7 @@
 }
 
 - (id)editButton {
-    return objc_loadWeakRetained((id *)&self->_editButton);
+    return [objc_loadWeakRetained((id *)&self->_editButton) autorelease];
 }
 
 - (void)setEditButton:(id)arg1 {

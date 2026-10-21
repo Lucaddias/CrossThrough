@@ -13,6 +13,11 @@
 #import "PackageViewController.h"
 #import "CXSourceList.h"
 
+#import "BottleTableRowView.h"
+#import "CrossThroughBranding.h"
+
+static void *MainWindowControllerKVOContext = &MainWindowControllerKVOContext;
+
 @implementation MainWindowController
 
 + (void)initialize {
@@ -23,19 +28,47 @@
 }
 
 - (id)init {
+    CTRegisterBrandedLogo();
     self = [super initWithWindowNibName:@"MainWindow"];
-    NSLog(@"[MainWindowController] init called, nibName=%@", [self windowNibName]);
     if (self) {
         self->_bottleViewController = [[BottleViewController alloc] init];
         self->_iconViewController = [[LauncherIconViewController alloc] init];
         self->_packageViewController = [[PackageViewController alloc] init];
-        self->_bottleNodes = [[NSMutableArray alloc] init];
+        [self->_packageViewController setDelegate:self];
     }
     return self;
 }
 
 - (void)dealloc {
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [[self bottleSourceView] setDelegate:nil];
+    [[self bottleSourceView] setDataSource:nil];
+    [self->_packageViewController setDelegate:nil];
+    if (self->_observingBottleList) {
+        id collection = [[CXSetupLib bottleCollectionClass] sharedCollection];
+        for (id bottle in [collection bottleList]) {
+            [bottle removeObserver:self forKeyPath:@"isBusy" context:MainWindowControllerKVOContext];
+        }
+        [collection removeObserver:self forKeyPath:@"bottleList" context:MainWindowControllerKVOContext];
+    }
+    [[NSUserDefaultsController sharedUserDefaultsController] removeObserver:self forKeyPath:@"values.AutoUpdateCrossTies" context:MainWindowControllerKVOContext];
+
+    objc_storeWeak((id *)&self->_mainContentView, nil);
+    objc_storeWeak((id *)&self->_splitView, nil);
+    objc_storeWeak((id *)&self->_topMenuSourceView, nil);
+    objc_storeWeak((id *)&self->_bottomMenuSourceView, nil);
+    objc_storeWeak((id *)&self->_topMenuTreeController, nil);
+    objc_storeWeak((id *)&self->_bottomMenuTreeController, nil);
+    objc_storeWeak((id *)&self->_bottleSourceView, nil);
+    objc_storeWeak((id *)&self->_bottleTreeController, nil);
+    [self->_bottleNodes release];
+    [self->_bottleViewController release];
+    [self->_iconViewController release];
+    [self->_packageViewController release];
+    [self->_topMenuNodes release];
+    [self->_bottomMenuNodes release];
+    [self->_privateBottleGroup release];
+    [self->_publishedBottleGroup release];
+    [super dealloc];
 }
 
 - (id)bottleNodes {
@@ -44,6 +77,7 @@
 
 - (void)setBottleNodes:(id)arg1 {
     if (self->_bottleNodes != arg1) {
+        [self->_bottleNodes release];
         self->_bottleNodes = [arg1 mutableCopy];
     }
 }
@@ -57,22 +91,23 @@
 }
 
 - (id)selectedBottleNode {
-    if (self->_bottleSourceView) {
-        NSInteger clicked = [self->_bottleSourceView clickedRow];
-        if (clicked != -1) {
-            id item = [self->_bottleSourceView itemAtRow:clicked];
-            if ([item respondsToSelector:@selector(representedObject)]) {
-                return [item representedObject];
-            }
-            return item;
+    NSArray *selected = nil;
+    NSInteger clicked = [[self bottleSourceView] clickedRow];
+    if (clicked != -1) {
+        // A right-clicked row wins over the selection while its menu is up.
+        id item = [[self bottleSourceView] itemAtRow:clicked];
+        id node = [item valueForKey:@"representedObject"];
+        if (node) {
+            selected = [NSArray arrayWithObject:node];
         }
-        NSInteger selected = [self->_bottleSourceView selectedRow];
-        if (selected != -1) {
-            id item = [self->_bottleSourceView itemAtRow:selected];
-            if ([item respondsToSelector:@selector(representedObject)]) {
-                return [item representedObject];
-            }
-            return item;
+    }
+    if (!selected) {
+        selected = [[self bottleTreeController] selectedObjects];
+    }
+    if ([selected count] == 1) {
+        BottleNode *node = [selected objectAtIndex:0];
+        if ([node type] == 2) {
+            return node;
         }
     }
     return nil;
@@ -83,17 +118,14 @@
     if (node) {
         [[node bottle] loadHighResolutionInfo];
     }
-    [self updateMainContentView];
 }
 
 - (id)privateBottlesGroupNameNoPublished {
-    NSString *name = [[NSBundle mainBundle] localizedStringForKey:@"BOTTLES" value:@"BOTTLES" table:nil];
-    return name ?: @"BOTTLES";
+    return [[NSBundle mainBundle] localizedStringForKey:@"BOTTLES" value:@"" table:nil];
 }
 
 - (void)windowDidLoad {
-    NSLog(@"[MainWindowController] windowDidLoad called! window=%@", [self window]);
-    [super windowDidLoad];
+    [[self window] setTitle:CTApplicationName()];
 
     NSMutableArray *topNodes = [NSMutableArray array];
     BottleNode *allNode = [BottleNode allBottlesBottleNode];
@@ -107,67 +139,40 @@
     [bottomNodes addObject:installNode];
     [self setBottomMenuNodes:bottomNodes];
 
-    NSMutableArray *bNodes = [NSMutableArray array];
-    BottleNode *privGroup = [BottleNode groupBottleNodeWithName:[self privateBottlesGroupNameNoPublished]];
-    [privGroup setSortPriority:2];
-    [self setPrivateBottleGroup:privGroup];
-    [bNodes addObject:privGroup];
+    // The bottle groups only join the sidebar once the bottle list has members.
+    NSMutableArray *bottleNodes = [NSMutableArray array];
+    [self setPrivateBottleGroup:[BottleNode groupBottleNodeWithName:[self privateBottlesGroupNameNoPublished]]];
+    [[self privateBottleGroup] setSortPriority:2];
+    [self setPublishedBottleGroup:[BottleNode groupBottleNodeWithName:[[NSBundle mainBundle] localizedStringForKey:@"PUBLISHED BOTTLES" value:@"" table:nil]]];
+    [[self publishedBottleGroup] setSortPriority:3];
+    [self setBottleNodes:bottleNodes];
 
-    NSString *pubTitle = [[NSBundle mainBundle] localizedStringForKey:@"PUBLISHED BOTTLES" value:@"PUBLISHED BOTTLES" table:nil];
-    BottleNode *pubGroup = [BottleNode groupBottleNodeWithName:pubTitle];
-    [pubGroup setSortPriority:3];
-    [self setPublishedBottleGroup:pubGroup];
+    self->_observingBottleList = YES;
+    [[[CXSetupLib bottleCollectionClass] sharedCollection] addObserver:self
+                                                            forKeyPath:@"bottleList"
+                                                               options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld
+                                                               context:MainWindowControllerKVOContext];
 
-    [self setBottleNodes:bNodes];
+    NSArray *sortDescriptors = @[
+        [NSSortDescriptor sortDescriptorWithKey:@"sortPriority" ascending:YES selector:@selector(compare:)],
+        [NSSortDescriptor sortDescriptorWithKey:@"bottle.isDefault" ascending:NO selector:@selector(compare:)],
+        [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES selector:@selector(localizedStandardCompare:)],
+    ];
+    [[self bottleTreeController] setSortDescriptors:sortDescriptors];
 
-    if (self->_bottleTreeController) {
-        NSSortDescriptor *sd1 = [NSSortDescriptor sortDescriptorWithKey:@"sortPriority" ascending:YES selector:@selector(compare:)];
-        NSSortDescriptor *sd2 = [NSSortDescriptor sortDescriptorWithKey:@"bottle.isDefault" ascending:NO selector:@selector(compare:)];
-        NSSortDescriptor *sd3 = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES selector:@selector(localizedStandardCompare:)];
-        [self->_bottleTreeController setSortDescriptors:@[sd1, sd2, sd3]];
-    }
+    [[[self iconViewController] view] setFrame:[[self mainContentView] bounds]];
+    [[[self iconViewController] view] setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable];
+    [[[self packageViewController] view] setFrame:[[self mainContentView] bounds]];
+    [[[self packageViewController] view] setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable];
+    [[[self bottleViewController] view] setFrame:[[self mainContentView] bounds]];
+    [[[self bottleViewController] view] setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable];
+    [[self mainContentView] setSubviews:@[[[self iconViewController] view], [[self packageViewController] view], [[self bottleViewController] view]]];
 
-    if (self->_mainContentView) {
-        NSRect contentBounds = [self->_mainContentView bounds];
-        NSMutableArray *subviews = [NSMutableArray array];
-
-        if (self->_iconViewController) {
-            NSView *v = [self->_iconViewController view];
-            if (v) {
-                [v setFrame:contentBounds];
-                [v setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable];
-                [subviews addObject:v];
-            }
-        }
-        if (self->_packageViewController) {
-            NSView *v = [self->_packageViewController view];
-            if (v) {
-                [v setFrame:contentBounds];
-                [v setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable];
-                [subviews addObject:v];
-            }
-        }
-        if (self->_bottleViewController) {
-            NSView *v = [self->_bottleViewController view];
-            if (v) {
-                [v setFrame:contentBounds];
-                [v setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable];
-                [subviews addObject:v];
-            }
-        }
-        [self->_mainContentView setSubviews:subviews];
-    }
-
-    if (self->_splitView) {
-        [self->_splitView setAutosaveName:@"MainWindowSplit22"];
-    }
-
-    NSWindow *win = [self window];
-    if (win) {
-        [win setBackgroundColor:[NSColor controlBackgroundColor]];
-    }
-
+    [[self splitView] setAutosaveName:@"MainWindowSplit22"];
+    [[self window] setBackgroundColor:[NSColor controlBackgroundColor]];
     [self selectDefaultView];
+    [self updateC4Ps];
+    [[NSUserDefaultsController sharedUserDefaultsController] addObserver:self forKeyPath:@"values.AutoUpdateCrossTies" options:0 context:MainWindowControllerKVOContext];
 }
 
 - (NSUInteger)window:(id)arg1 willUseFullScreenPresentationOptions:(NSUInteger)arg2 {
@@ -175,32 +180,34 @@
 }
 
 - (void)updateMainContentView {
-    NSArray *selected = [self.topMenuTreeController selectedObjects];
+    NSArray *selected = [[self topMenuTreeController] selectedObjects];
     if ([selected count] == 0) {
-        selected = [self.bottleTreeController selectedObjects];
+        selected = [[self bottleTreeController] selectedObjects];
     }
     if ([selected count] == 0) {
-        selected = [self.bottomMenuTreeController selectedObjects];
+        selected = [[self bottomMenuTreeController] selectedObjects];
+    }
+    if ([selected count] == 0) {
+        [self selectDefaultView];
+        return;
     }
 
-    BottleNode *node = [selected count] > 0 ? selected[0] : nil;
-    NSInteger type = node ? [node type] : 1;
-
-    if (type == 3) {
-        // Install Software View
-        [[self.iconViewController view] setHidden:YES];
-        [[self.packageViewController view] setHidden:NO];
-        [[self.bottleViewController view] setHidden:YES];
-    } else if (type == 2) {
-        // Single Bottle Detail View
-        [[self.iconViewController view] setHidden:YES];
-        [[self.packageViewController view] setHidden:YES];
-        [[self.bottleViewController view] setHidden:NO];
+    BottleNode *node = [selected objectAtIndexedSubscript:0];
+    NSInteger type = [node type];
+    if (type == 1) {
+        [[[self iconViewController] view] setHidden:NO];
+        [[[self packageViewController] view] setHidden:YES];
+        [[[self bottleViewController] view] setHidden:YES];
+    } else if (type == 3) {
+        [[[self iconViewController] view] setHidden:YES];
+        [[[self packageViewController] view] setHidden:NO];
+        [[[self bottleViewController] view] setHidden:YES];
     } else {
-        // All Bottles / Home View
-        [[self.iconViewController view] setHidden:NO];
-        [[self.packageViewController view] setHidden:YES];
-        [[self.bottleViewController view] setHidden:YES];
+        [[[self iconViewController] view] setHidden:YES];
+        [[[self packageViewController] view] setHidden:YES];
+        [[[self bottleViewController] view] setHidden:NO];
+        [[self bottleViewController] setBottle:[node bottle]];
+        [self loadInfoForSelectedBottle];
     }
 }
 
@@ -233,7 +240,22 @@
 }
 
 - (void)updateC4Ps {
-    return;
+    if (![[NSUserDefaults standardUserDefaults] boolForKey:@"AutoUpdateCrossTies"] || [self updating]) {
+        return;
+    }
+    [self setUpdating:YES];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        [[CXSetupLib webUtilsClass] updateCompatDB];
+        [[CXSetupLib c4ProfilesClass] updateOnlineProfilesFromURL:[[NSUserDefaults standardUserDefaults] objectForKey:@"TieURL"]];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [[self packageViewController] populatePackages];
+            [self setUpdating:NO];
+            // Check again in a day.
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 86400 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+                [self updateC4Ps];
+            });
+        });
+    });
 }
 
 - (void)autoPlay:(id)arg1 inBottle:(id)arg2 {
@@ -252,7 +274,7 @@
 
 - (void)addIconsForBottles:(id)arg1 {
     for (id bottle in arg1) {
-        [bottle addObserver:self forKeyPath:@"isBusy" options:0 context:NULL];
+        [bottle addObserver:self forKeyPath:@"isBusy" options:0 context:MainWindowControllerKVOContext];
     }
 }
 
@@ -261,15 +283,118 @@
 }
 
 - (void)observeValueForKeyPath:(id)arg1 ofObject:(id)arg2 change:(id)arg3 context:(void *)arg4 {
-    [self updateMainContentView];
+    if (arg4 != MainWindowControllerKVOContext) {
+        [super observeValueForKeyPath:arg1 ofObject:arg2 change:arg3 context:arg4];
+        return;
+    }
+
+    if (arg2 == [[CXSetupLib bottleCollectionClass] sharedCollection] && [arg1 isEqualToString:@"bottleList"]) {
+        [self updateMainContentView];
+        if ([[self bottleSourceView] clickedRow] != -1) {
+            [[[self bottleSourceView] menu] cancelTracking];
+        }
+
+        int kind = [[arg3 objectForKey:NSKeyValueChangeKindKey] intValue];
+        NSArray *oldBottles = [arg3 objectForKey:NSKeyValueChangeOldKey];
+        NSArray *newBottles = [arg3 objectForKey:NSKeyValueChangeNewKey];
+        NSMutableSet *added = nil;
+        NSMutableSet *removed = nil;
+        if (kind != NSKeyValueChangeRemoval && [newBottles count]) {
+            added = [NSMutableSet setWithArray:newBottles];
+            if (kind != NSKeyValueChangeInsertion && [oldBottles count]) {
+                [added minusSet:[NSSet setWithArray:oldBottles]];
+            }
+        }
+        if (kind != NSKeyValueChangeInsertion && [oldBottles count]) {
+            removed = [NSMutableSet setWithArray:oldBottles];
+            if (kind != NSKeyValueChangeRemoval && [newBottles count]) {
+                [removed minusSet:[NSSet setWithArray:newBottles]];
+            }
+        }
+
+        if ([removed count]) {
+            BOOL (^isRemoved)(id, NSUInteger, BOOL *) = ^BOOL(id node, NSUInteger idx, BOOL *stop) {
+                return [removed containsObject:[node bottle]];
+            };
+            NSIndexSet *privateIndexes = [[[self privateBottleGroup] children] indexesOfObjectsPassingTest:isRemoved];
+            NSMutableArray *removedNodes = [[[[self privateBottleGroup] children] objectsAtIndexes:privateIndexes] mutableCopy];
+            if ([privateIndexes count]) {
+                [[self privateBottleGroup] removeChildrenAtIndexes:privateIndexes];
+                if ([[[self privateBottleGroup] children] count] == 0) {
+                    NSUInteger idx = [[self bottleNodes] indexOfObjectIdenticalTo:[self privateBottleGroup]];
+                    if (idx != NSNotFound) {
+                        [self removeObjectFromBottleNodesAtIndex:idx];
+                    }
+                }
+            }
+            NSIndexSet *publishedIndexes = [[[self publishedBottleGroup] children] indexesOfObjectsPassingTest:isRemoved];
+            if ([publishedIndexes count]) {
+                [removedNodes addObjectsFromArray:[[[self publishedBottleGroup] children] objectsAtIndexes:publishedIndexes]];
+                [[self publishedBottleGroup] removeChildrenAtIndexes:publishedIndexes];
+                if ([[[self publishedBottleGroup] children] count] == 0) {
+                    NSUInteger idx = [[self bottleNodes] indexOfObjectIdenticalTo:[self publishedBottleGroup]];
+                    if (idx != NSNotFound) {
+                        [self removeObjectFromBottleNodesAtIndex:idx];
+                    }
+                    [(BottleNode *)[self privateBottleGroup] setName:[self privateBottlesGroupNameNoPublished]];
+                }
+            }
+            for (BottleNode *node in removedNodes) {
+                [node removeObserver:self forKeyPath:@"bottle.isDefault" context:MainWindowControllerKVOContext];
+                [node removeObserver:self forKeyPath:@"name" context:MainWindowControllerKVOContext];
+            }
+            [removedNodes release];
+            for (id bottle in removed) {
+                [bottle removeObserver:self forKeyPath:@"isBusy" context:MainWindowControllerKVOContext];
+            }
+        }
+
+        if ([added count]) {
+            NSMutableArray *privateNodes = [NSMutableArray array];
+            NSMutableArray *publishedNodes = [NSMutableArray array];
+            for (id bottle in added) {
+                BottleNode *node = [BottleNode bottleNodeWithBottle:bottle];
+                [node addObserver:self forKeyPath:@"bottle.isDefault" options:0 context:MainWindowControllerKVOContext];
+                [node addObserver:self forKeyPath:@"name" options:0 context:MainWindowControllerKVOContext];
+                [([bottle isIsManaged] ? publishedNodes : privateNodes) addObject:node];
+            }
+            if ([privateNodes count]) {
+                if ([[[self privateBottleGroup] children] count] == 0) {
+                    [self insertObject:[self privateBottleGroup] inBottleNodesAtIndex:[[self bottleNodes] count]];
+                    [[self bottleSourceView] expandItem:nil expandChildren:YES];
+                }
+                NSUInteger start = [[[self privateBottleGroup] children] count];
+                [[self privateBottleGroup] insertChildren:privateNodes atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(start, [privateNodes count])]];
+            }
+            if ([publishedNodes count]) {
+                if ([[[self publishedBottleGroup] children] count] == 0) {
+                    [(BottleNode *)[self privateBottleGroup] setName:[[NSBundle mainBundle] localizedStringForKey:@"PRIVATE BOTTLES" value:@"" table:nil]];
+                    [self insertObject:[self publishedBottleGroup] inBottleNodesAtIndex:[[self bottleNodes] count]];
+                    [[self bottleSourceView] expandItem:nil expandChildren:YES];
+                }
+                NSUInteger start = [[[self publishedBottleGroup] children] count];
+                [[self publishedBottleGroup] insertChildren:publishedNodes atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(start, [publishedNodes count])]];
+            }
+            [self addIconsForBottles:added];
+        }
+        [self updateMainContentView];
+    } else if ([arg1 isEqualToString:@"isBusy"]) {
+        NSOutlineView *outline = [self bottleSourceView];
+        for (NSInteger row = 0; row < [outline numberOfRows]; row++) {
+            if ([[[outline itemAtRow:row] representedObject] bottle] == arg2) {
+                [outline setNeedsDisplayInRect:[outline rectOfRow:row]];
+                break;
+            }
+        }
+    } else if ([arg1 isEqualToString:@"values.AutoUpdateCrossTies"]) {
+        [self updateC4Ps];
+    } else if ([arg2 isKindOfClass:[BottleNode class]]) {
+        [[self bottleTreeController] rearrangeObjects];
+    }
 }
 
 - (BOOL)outlineView:(id)arg1 isGroupItem:(id)arg2 {
-    id item = [arg2 respondsToSelector:@selector(representedObject)] ? [arg2 representedObject] : arg2;
-    if ([item isKindOfClass:[BottleNode class]]) {
-        return [(BottleNode *)item type] == 0;
-    }
-    return NO;
+    return [(BottleNode *)[arg2 representedObject] type] == 0;
 }
 
 - (BOOL)outlineView:(id)arg1 shouldShowOutlineCellForItem:(id)arg2 {
@@ -285,16 +410,20 @@
 }
 
 - (void)outlineViewSelectionDidChange:(id)arg1 {
-    id obj = [arg1 respondsToSelector:@selector(object)] ? [arg1 object] : arg1;
-    if (obj == self->_topMenuSourceView && [self->_topMenuSourceView selectedRow] != -1) {
-        [self->_bottleSourceView deselectAll:self];
-        [self->_bottomMenuSourceView deselectAll:self];
-    } else if (obj == self->_bottleSourceView && [self->_bottleSourceView selectedRow] != -1) {
-        [self->_topMenuSourceView deselectAll:self];
-        [self->_bottomMenuSourceView deselectAll:self];
-    } else if (obj == self->_bottomMenuSourceView && [self->_bottomMenuSourceView selectedRow] != -1) {
-        [self->_topMenuSourceView deselectAll:self];
-        [self->_bottleSourceView deselectAll:self];
+    NSArray *bottleSelection = [[self bottleTreeController] selectedObjects];
+    NSArray *topSelection = [[self topMenuTreeController] selectedObjects];
+    NSArray *bottomSelection = [[self bottomMenuTreeController] selectedObjects];
+    id source = [arg1 object];
+    // The three sidebar lists behave as one: selecting in one clears the others.
+    if (source == [self topMenuSourceView] && [topSelection count]) {
+        if ([bottleSelection count]) [[self bottleSourceView] deselectAll:self];
+        if ([bottomSelection count]) [[self bottomMenuSourceView] deselectAll:self];
+    } else if (source == [self bottleSourceView] && [bottleSelection count]) {
+        if ([topSelection count]) [[self topMenuSourceView] deselectAll:self];
+        if ([bottomSelection count]) [[self bottomMenuSourceView] deselectAll:self];
+    } else if (source == [self bottomMenuSourceView] && [bottomSelection count]) {
+        if ([topSelection count]) [[self topMenuSourceView] deselectAll:self];
+        if ([bottleSelection count]) [[self bottleSourceView] deselectAll:self];
     }
     [self updateMainContentView];
 }
@@ -304,8 +433,9 @@
 }
 
 - (id)outlineView:(id)arg1 viewForTableColumn:(id)arg2 item:(id)arg3 {
-    NSString *identifier = arg2 ? @"DataCell" : @"HeaderCell";
-    return [arg1 makeViewWithIdentifier:identifier owner:self];
+    NSTableCellView *view = [arg1 makeViewWithIdentifier:(arg2 ? @"DataCell" : @"HeaderCell") owner:self];
+    [[view textField] setAutoresizingMask:NSViewNotSizable];
+    return view;
 }
 
 - (BOOL)validateUserInterfaceItem:(id)arg1 {
@@ -758,7 +888,10 @@
 }
 
 - (void)setBottleViewController:(id)arg1 {
-    self->_bottleViewController = arg1;
+    if (self->_bottleViewController != arg1) {
+        [self->_bottleViewController release];
+        self->_bottleViewController = [arg1 retain];
+    }
 }
 
 - (id)iconViewController {
@@ -766,7 +899,10 @@
 }
 
 - (void)setIconViewController:(id)arg1 {
-    self->_iconViewController = arg1;
+    if (self->_iconViewController != arg1) {
+        [self->_iconViewController release];
+        self->_iconViewController = [arg1 retain];
+    }
 }
 
 - (id)packageViewController {
@@ -774,11 +910,14 @@
 }
 
 - (void)setPackageViewController:(id)arg1 {
-    self->_packageViewController = arg1;
+    if (self->_packageViewController != arg1) {
+        [self->_packageViewController release];
+        self->_packageViewController = [arg1 retain];
+    }
 }
 
 - (id)mainContentView {
-    return objc_loadWeakRetained((id *)&self->_mainContentView);
+    return [objc_loadWeakRetained((id *)&self->_mainContentView) autorelease];
 }
 
 - (void)setMainContentView:(id)arg1 {
@@ -786,7 +925,7 @@
 }
 
 - (id)splitView {
-    return objc_loadWeakRetained((id *)&self->_splitView);
+    return [objc_loadWeakRetained((id *)&self->_splitView) autorelease];
 }
 
 - (void)setSplitView:(id)arg1 {
@@ -799,6 +938,7 @@
 
 - (void)setTopMenuNodes:(id)arg1 {
     if (self->_topMenuNodes != arg1) {
+        [self->_topMenuNodes release];
         self->_topMenuNodes = [arg1 copy];
     }
 }
@@ -809,12 +949,13 @@
 
 - (void)setBottomMenuNodes:(id)arg1 {
     if (self->_bottomMenuNodes != arg1) {
+        [self->_bottomMenuNodes release];
         self->_bottomMenuNodes = [arg1 copy];
     }
 }
 
 - (id)topMenuSourceView {
-    return objc_loadWeakRetained((id *)&self->_topMenuSourceView);
+    return [objc_loadWeakRetained((id *)&self->_topMenuSourceView) autorelease];
 }
 
 - (void)setTopMenuSourceView:(id)arg1 {
@@ -822,7 +963,7 @@
 }
 
 - (id)bottomMenuSourceView {
-    return objc_loadWeakRetained((id *)&self->_bottomMenuSourceView);
+    return [objc_loadWeakRetained((id *)&self->_bottomMenuSourceView) autorelease];
 }
 
 - (void)setBottomMenuSourceView:(id)arg1 {
@@ -830,7 +971,7 @@
 }
 
 - (id)topMenuTreeController {
-    return objc_loadWeakRetained((id *)&self->_topMenuTreeController);
+    return [objc_loadWeakRetained((id *)&self->_topMenuTreeController) autorelease];
 }
 
 - (void)setTopMenuTreeController:(id)arg1 {
@@ -838,7 +979,7 @@
 }
 
 - (id)bottomMenuTreeController {
-    return objc_loadWeakRetained((id *)&self->_bottomMenuTreeController);
+    return [objc_loadWeakRetained((id *)&self->_bottomMenuTreeController) autorelease];
 }
 
 - (void)setBottomMenuTreeController:(id)arg1 {
@@ -846,7 +987,7 @@
 }
 
 - (id)bottleSourceView {
-    return objc_loadWeakRetained((id *)&self->_bottleSourceView);
+    return [objc_loadWeakRetained((id *)&self->_bottleSourceView) autorelease];
 }
 
 - (void)setBottleSourceView:(id)arg1 {
@@ -854,7 +995,7 @@
 }
 
 - (id)bottleTreeController {
-    return objc_loadWeakRetained((id *)&self->_bottleTreeController);
+    return [objc_loadWeakRetained((id *)&self->_bottleTreeController) autorelease];
 }
 
 - (void)setBottleTreeController:(id)arg1 {
@@ -866,7 +1007,10 @@
 }
 
 - (void)setPrivateBottleGroup:(id)arg1 {
-    self->_privateBottleGroup = arg1;
+    if (self->_privateBottleGroup != arg1) {
+        [self->_privateBottleGroup release];
+        self->_privateBottleGroup = [arg1 retain];
+    }
 }
 
 - (id)publishedBottleGroup {
@@ -874,7 +1018,10 @@
 }
 
 - (void)setPublishedBottleGroup:(id)arg1 {
-    self->_publishedBottleGroup = arg1;
+    if (self->_publishedBottleGroup != arg1) {
+        [self->_publishedBottleGroup release];
+        self->_publishedBottleGroup = [arg1 retain];
+    }
 }
 
 - (BOOL)updating {

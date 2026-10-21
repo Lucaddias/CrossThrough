@@ -6,30 +6,15 @@
 @implementation LauncherTreeNode
 
 + (id)keyPathsForValuesAffectingLeaf {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = [NSSet set];
-     *   return r0;
-     */
-    return nil;
+    return [NSSet set];
 }
 
 + (id)keyPathsForValuesAffectingSortOrderThenName {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = [NSSet setWithObjects:@"sortOrder"];
-     *   return r0;
-     */
-    return nil;
+    return [NSSet setWithObjects:@"sortOrder", @"name", nil];
 }
 
 + (id)keyPathsForValuesAffectingSortOrderThenBottleName {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = [NSSet setWithObjects:@"sortOrder"];
-     *   return r0;
-     */
-    return nil;
+    return [NSSet setWithObjects:@"sortOrder", @"bottle.name", nil];
 }
 
 - (BOOL)isLeaf {
@@ -65,11 +50,12 @@
 }
 
 - (BOOL)canBeRated {
-    return self->_bottle;
+    return self->_bottle && [[self->_bottle appid] length] != 0;
 }
 
 - (void)openWithErrorHandler:(id)arg1 {
-    return;
+    [NSException raise:NSInternalInconsistencyException
+                format:@"%s called; %@ is not openable", __PRETTY_FUNCTION__, NSStringFromClass([self class])];
 }
 
 - (id)pasteboardWriter {
@@ -77,87 +63,31 @@
 }
 
 - (id)sortOrderThenName {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = self;
-     *   return r0;
-     */
-    return nil;
+    return self;
 }
 
 - (id)sortOrderThenBottleName {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = self;
-     *   return r0;
-     */
-    return nil;
+    return self;
 }
 
 - (NSInteger)compareSortOrderThenName:(id)arg1 {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   var_20 = r22;
-     *   decomp_var_18 = r21;
-     *   r31 = r31 + 0xffffffffffffffd0;
-     *   var_10 = r20;
-     *   decomp_var_8 = r19;
-     *   saved_fp = r29;
-     *   decomp_var_m8 = r30;
-     *   r20 = self;
-     *   r19 = [arg2 retain];
-     *   if ([r20 sortOrder] < [r19 sortOrder]) {
-     *   r20 = 0xffffffffffffffff;
-     *   }
-     *   else {
-     *   if ([r20 sortOrder] > [r19 sortOrder]) {
-     *   r20 = 0x1;
-     *   }
-     *   else {
-     *   r21 = [[r20 name] retain];
-     *   r22 = [[r19 name] retain];
-     *   r20 = [r21 localizedStandardCompare:r22];
-     *   [r22 release];
-     *   [r21 release];
-     *   }
-     *   }
-     *   [r19 release];
-     *   ... (2 more lines)
-     */
-    return 0;
+    if ([self sortOrder] < [arg1 sortOrder]) {
+        return NSOrderedAscending;
+    }
+    if ([self sortOrder] > [arg1 sortOrder]) {
+        return NSOrderedDescending;
+    }
+    return [[self name] localizedStandardCompare:[arg1 name]];
 }
 
 - (NSInteger)compareSortOrderThenBottleName:(id)arg1 {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   var_30 = r24;
-     *   decomp_var_28 = r23;
-     *   r31 = r31 + 0xffffffffffffffc0;
-     *   var_20 = r22;
-     *   decomp_var_18 = r21;
-     *   var_10 = r20;
-     *   decomp_var_8 = r19;
-     *   saved_fp = r29;
-     *   decomp_var_m8 = r30;
-     *   r20 = self;
-     *   r19 = [arg2 retain];
-     *   if ([r20 sortOrder] < [r19 sortOrder]) {
-     *   r20 = 0xffffffffffffffff;
-     *   }
-     *   else {
-     *   if ([r20 sortOrder] > [r19 sortOrder]) {
-     *   r20 = 0x1;
-     *   }
-     *   else {
-     *   r0 = [r20 bottle];
-     *   r0 = [r0 retain];
-     *   r21 = r0;
-     *   r22 = [[r0 name] retain];
-     *   r0 = [r19 bottle];
-     *   r0 = [r0 retain];
-     *   ... (12 more lines)
-     */
-    return 0;
+    if ([self sortOrder] < [arg1 sortOrder]) {
+        return NSOrderedAscending;
+    }
+    if ([self sortOrder] > [arg1 sortOrder]) {
+        return NSOrderedDescending;
+    }
+    return [[[self bottle] name] localizedStandardCompare:[[arg1 bottle] name]];
 }
 
 - (id)name {
@@ -165,7 +95,10 @@
 }
 
 - (void)setName:(id)arg1 {
-    return;
+    if (self->_name != arg1) {
+        [self->_name release];
+        self->_name = [arg1 copy];
+    }
 }
 
 - (id)icon {
@@ -173,7 +106,10 @@
 }
 
 - (void)setIcon:(id)arg1 {
-    return;
+    if (self->_icon != arg1) {
+        [self->_icon release];
+        self->_icon = [arg1 copy];
+    }
 }
 
 - (id)bottle {
@@ -181,7 +117,10 @@
 }
 
 - (void)setBottle:(id)arg1 {
-    self->_bottle = arg1;
+    if (self->_bottle != arg1) {
+        [self->_bottle release];
+        self->_bottle = [arg1 retain];
+    }
 }
 
 - (id)tooltip {
@@ -189,20 +128,18 @@
 }
 
 - (void)setTooltip:(id)arg1 {
-    return;
+    if (self->_tooltip != arg1) {
+        [self->_tooltip release];
+        self->_tooltip = [arg1 copy];
+    }
 }
 
 - (NSInteger)sortOrder {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = *(int32_t *)(int64_t *)&self->_sortOrder;
-     *   return r0;
-     */
-    return 0;
+    return self->_sortOrder;
 }
 
 - (void)setSortOrder:(NSInteger)arg1 {
-    return;
+    self->_sortOrder = arg1;
 }
 
 - (BOOL)showBottleName {
@@ -211,6 +148,14 @@
 
 - (void)setShowBottleName:(BOOL)arg1 {
     self->_showBottleName = arg1;
+}
+
+- (void)dealloc {
+    [self->_name release];
+    [self->_icon release];
+    [self->_bottle release];
+    [self->_tooltip release];
+    [super dealloc];
 }
 
 @end

@@ -24,7 +24,7 @@
     NSMutableArray * children;
     NSMutableArray * unfilteredChildren;
     NSString * sortkey;
-    id _ratingImages;
+    NSImage * _ratingImages[5];
     NSString * _ratingDescription;
     NSString * _ratingTooltip;
     NSString * _softwarePackage;

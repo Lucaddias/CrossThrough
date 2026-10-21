@@ -20,15 +20,12 @@
 }
 
 - (BOOL)getObjectValue:(id *)arg1 forString:(id)arg2 errorDescription:(id *)arg3 {
-    if (arg1) {
-        *arg1 = [arg2 copy];
-    }
+    *arg1 = [[arg2 copy] autorelease];
     return YES;
 }
 
 - (BOOL)isPartialStringValid:(id)arg1 newEditingString:(id *)arg2 errorDescription:(id *)arg3 {
-    if (!arg1) return YES;
-    NSCharacterSet *invalidChars = [NSCharacterSet characterSetWithCharactersInString:@"/*?:|<>\"'{}"];
+    NSCharacterSet *invalidChars = [NSCharacterSet characterSetWithCharactersInString:@"\\/*?:|<>\"'{}"];
     if ([arg1 rangeOfCharacterFromSet:invalidChars].location != NSNotFound) {
         return NO;
     }

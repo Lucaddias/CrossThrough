@@ -3,132 +3,240 @@
 #import "CrossThrough.h"
 #import "HopperCompat.h"
 
+// Most recent channel/environment pairs, newest first.
+static NSString * const kRecentLoggingOptionsKey = @"RecentLoggingOptions";
+static const NSUInteger kMaxRecentLoggingOptions = 3;
+// Recent entries longer than this are shown elided in the menu.
+static const NSUInteger kMaxRecentTitleLength = 40;
+
 @implementation LoggingOptionsViewController
 
 + (id)keyPathsForValuesAffectingEnableControls {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r31 = r31 - 0x40;
-     *   var_10 = r20;
-     *   decomp_var_8 = r19;
-     *   saved_fp = r29;
-     *   decomp_var_m8 = r30;
-     *   var_18 = **___stack_chk_guard;
-     *   var_28 = @"createLogFile";
-     *   r0 = [NSArray arrayWithObjects:&var_28 count:0x2];
-     *   r20 = [r0 retain];
-     *   r19 = [[NSSet setWithArray:r20] retain];
-     *   r0 = [r20 release];
-     *   if (**___stack_chk_guard != var_18) {
-     *   __stack_chk_fail();
-     *   }
-     *   r0 = [r19 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return [NSSet setWithArray:@[@"createLogFile", @"enabled"]];
 }
 
 - (id)initWithLogFileName:(id)arg1 {
-    self = [super init];
+    self = [super initWithNibName:@"LoggingOptionsView" bundle:nil];
     if (self) {
-        // Initialized
+        [self setEnabled:YES];
+        [self setLogFileName:arg1];
+        [self setLogFileNameFromUser:NO];
+        [self setChannelCombos:[NSMutableArray arrayWithArray:[LoggingOption commonPresets]]];
     }
     return self;
 }
 
 - (void)viewDidLoad {
-    return;
+    [super viewDidLoad];
+    if ([self logFileURL]) {
+        [self setCreateLogFile:YES];
+        [self setLogDirectoryURL:[[self logFileURL] URLByDeletingLastPathComponent]];
+        [self setLogFileNameFromUser:YES];
+    } else {
+        [self setCreateLogFile:NO];
+        [self setLogDirectoryURL:[[NSFileManager defaultManager] URLForDirectory:NSLibraryDirectory inDomain:NSUserDomainMask appropriateForURL:nil create:YES error:NULL]];
+        if (![self logDirectoryURL]) {
+            [self setLogDirectoryURL:[NSURL fileURLWithPath:[@"~/Library" stringByExpandingTildeInPath] isDirectory:YES]];
+        }
+        [self setLogDirectoryURL:[[self logDirectoryURL] URLByAppendingPathComponent:@"Logs" isDirectory:YES]];
+        [self setLogDirectoryURL:[[self logDirectoryURL] URLByAppendingPathComponent:@"CrossOver" isDirectory:YES]];
+        [self updateLogFileURL];
+    }
+    [[NSFileManager defaultManager] createDirectoryAtURL:[self logDirectoryURL] withIntermediateDirectories:YES attributes:nil error:NULL];
+    [self updateRecentMenuItems];
+
+    for (LoggingOption *option in [self channelCombos]) {
+        NSString *toolTip = [[[option logChannels] sortedArrayUsingSelector:@selector(localizedStandardCompare:)] componentsJoinedByString:@","];
+        if ([[option logEnvironment] count] != 0) {
+            toolTip = [NSString stringWithFormat:@"%@\n%@", toolTip, [[option logEnvironment] componentsJoinedByString:@"\n"]];
+        }
+        NSMenuItem *item = [[NSMenuItem alloc] initWithTitle:[option name] action:@selector(addLoggingChannels:) keyEquivalent:@""];
+        [item setTarget:self];
+        [item setRepresentedObject:option];
+        [item setToolTip:toolTip];
+        [item setIndentationLevel:1];
+        [[[self channelPresets] menu] addItem:item];
+        [item release];
+    }
 }
 
 - (void)updateLogFileURL {
-    return;
+    if ([self logFileNameFromUser]) {
+        return;
+    }
+    // Pick "<name>.cxlog", then "<name> 2.cxlog", ... until the name is free.
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    int attempt = 1;
+    BOOL exists;
+    do {
+        NSMutableString *fileName = [[[self logFileName] mutableCopy] autorelease];
+        if (attempt != 1) {
+            [fileName appendFormat:@" %d", attempt];
+        }
+        [fileName appendString:@".cxlog"];
+        [self setLogFileURL:[[self logDirectoryURL] URLByAppendingPathComponent:fileName isDirectory:NO]];
+        exists = [fileManager fileExistsAtPath:[[self logFileURL] path]];
+        attempt++;
+    } while (exists);
 }
 
 - (void)setLogFileName:(id)arg1 {
-    return;
+    if (self->_logFileName != arg1) {
+        NSString *old = self->_logFileName;
+        self->_logFileName = [arg1 copy];
+        [old release];
+        [self updateLogFileURL];
+    }
 }
 
 - (void)selectLogFile:(id)arg1 {
-    return;
+    NSSavePanel *panel = [NSSavePanel savePanel];
+    [panel setMessage:[[NSBundle mainBundle] localizedStringForKey:@"Select a log file" value:@"" table:nil]];
+    [panel setAllowedFileTypes:@[@"cxlog"]];
+    [panel setAllowsOtherFileTypes:YES];
+    [panel setCanSelectHiddenExtension:YES];
+    NSString *fileName = [[self logFileURL] lastPathComponent];
+    if (fileName) {
+        [panel setNameFieldStringValue:fileName];
+    }
+    [panel setDirectoryURL:[self logDirectoryURL]];
+    [panel setShowsTagField:NO];
+    [panel beginSheetModalForWindow:[[self view] window] completionHandler:^(NSModalResponse result) {
+        if (result == NSModalResponseOK) {
+            [self setLogFileNameFromUser:YES];
+            [self setLogFileURL:[panel URL]];
+            [self setLogDirectoryURL:[[self logFileURL] URLByDeletingLastPathComponent]];
+        }
+    }];
 }
 
 - (void)clearLoggingChannels:(id)arg1 {
-    return;
+    [self setLogChannels:nil];
+    [self setLogEnvironment:nil];
 }
 
 - (id)combineChannels:(id)arg1 with:(id)arg2 andDelimiter:(id)arg3 {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r31 = r31 - 0x140;
-     *   var_50 = r28;
-     *   decomp_var_48 = r27;
-     *   var_40 = r26;
-     *   decomp_var_38 = r25;
-     *   var_30 = r24;
-     *   decomp_var_28 = r23;
-     *   var_20 = r22;
-     *   decomp_var_18 = r21;
-     *   var_10 = r20;
-     *   decomp_var_8 = r19;
-     *   saved_fp = r29;
-     *   decomp_var_m8 = r30;
-     *   var_60 = **___stack_chk_guard;
-     *   r21 = [arg2 retain];
-     *   r19 = [arg3 retain];
-     *   r20 = [arg4 retain];
-     *   r22 = [[r21 componentsSeparatedByString:r20] retain];
-     *   if (r21 == 0x0) {
-     *   r21 = @"";
-     *   }
-     *   r23 = [[NSMutableString string] retain];
-     *   if ([r22 count] != 0x0) {
-     *   r24 = [[NSSet setWithArray:r22] retain];
-     *   var_120 = q0;
-     *   ... (60 more lines)
-     */
-    return nil;
+    // Appends the entries of arg2 that arg1 doesn't already contain.
+    NSArray *existing = [arg1 componentsSeparatedByString:arg3];
+    NSString *base = arg1 ? arg1 : @"";
+    NSMutableString *added = [NSMutableString string];
+    if ([existing count] != 0) {
+        NSSet *existingSet = [NSSet setWithArray:existing];
+        for (NSString *channel in arg2) {
+            if (![existingSet containsObject:channel]) {
+                if ([added length] != 0) {
+                    [added appendString:arg3];
+                }
+                [added appendString:channel];
+            }
+        }
+    } else {
+        [added setString:[arg2 componentsJoinedByString:arg3]];
+    }
+    if ([added length] == 0) {
+        return base;
+    }
+    if ([base length] != 0 && ![base hasSuffix:arg3]) {
+        base = [base stringByAppendingString:arg3];
+    }
+    return [base stringByAppendingString:added];
 }
 
 - (void)addLoggingChannels:(id)arg1 {
-    return;
+    LoggingOption *option = [arg1 representedObject];
+    NSString *channels = [[self logChannels] stringByRemovingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    [self setLogChannels:[self combineChannels:channels with:[option logChannels] andDelimiter:@","]];
+    [self addExtraEnvVariables:arg1];
 }
 
 - (void)addExtraEnvVariables:(id)arg1 {
-    return;
+    LoggingOption *option = [arg1 representedObject];
+    [self setLogEnvironment:[self combineChannels:[self logEnvironment] with:[option logEnvironment] andDelimiter:@" "]];
 }
 
 - (BOOL)enableControls {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   var_10 = r20;
-     *   decomp_var_8 = r19;
-     *   r31 = r31 + 0xffffffffffffffe0;
-     *   saved_fp = r29;
-     *   decomp_var_m8 = r30;
-     *   r19 = self;
-     *   r0 = [self createLogFile];
-     *   if (r0 != 0x0) {
-     *   r0 = [r19 enabled];
-     *   }
-     *   return r0;
-     */
-    return NO;
+    return [self createLogFile] && [self enabled];
 }
 
 - (void)sanitizeLogChannels {
-    return;
+    [self setLogChannels:[DebugChannelFormatter sanitizeChannelString:[self logChannels]]];
 }
 
 - (void)saveSettingsToRecent {
-    return;
+    if (![self createLogFile]) {
+        return;
+    }
+    if ([[self logChannels] length] == 0 && [[self logEnvironment] length] == 0) {
+        return;
+    }
+    NSArray *entry = @[[self logChannels] ?: @"", [self logEnvironment] ?: @""];
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSMutableArray *recent = [[[defaults arrayForKey:kRecentLoggingOptionsKey] mutableCopy] autorelease];
+    if (!recent) {
+        recent = [NSMutableArray array];
+    }
+    NSUInteger index = [recent indexOfObject:entry];
+    if (index != NSNotFound) {
+        [recent removeObjectAtIndex:index];
+    }
+    [recent insertObject:entry atIndex:0];
+    if ([recent count] > kMaxRecentLoggingOptions) {
+        [recent removeObjectsInRange:NSMakeRange(kMaxRecentLoggingOptions, [recent count] - kMaxRecentLoggingOptions)];
+    }
+    [defaults setObject:recent forKey:kRecentLoggingOptionsKey];
+    [self updateRecentMenuItems];
 }
 
 - (void)updateRecentMenuItems {
-    return;
+    NSArray *recent = [[NSUserDefaults standardUserDefaults] arrayForKey:kRecentLoggingOptionsKey];
+    BOOL hidden = [recent count] == 0;
+    [[self recentChannelsMenuItem] setHidden:hidden];
+    [[self recentChannelsDivider] setHidden:hidden];
+
+    // The recent entries live between the "Recent" header and the divider.
+    NSMenu *menu = [[self channelPresets] menu];
+    NSInteger firstIndex = [menu indexOfItem:[self recentChannelsMenuItem]] + 1;
+    while ([[[self channelPresets] menu] itemAtIndex:firstIndex] != [self recentChannelsDivider]) {
+        [[[self channelPresets] menu] removeItemAtIndex:firstIndex];
+    }
+
+    NSInteger offset = 0;
+    for (NSArray *entry in recent) {
+        NSString *channels = [entry objectAtIndexedSubscript:0];
+        NSString *environment = [entry objectAtIndexedSubscript:1];
+        NSMutableString *toolTip = [NSMutableString string];
+        NSString *title = nil;
+        if ([channels length] != 0) {
+            title = channels;
+            [toolTip setString:channels];
+            if ([environment length] != 0) {
+                [toolTip appendFormat:@"\n%@", environment];
+            }
+        } else if ([environment length] != 0) {
+            title = environment;
+            [toolTip setString:environment];
+        }
+        NSUInteger length = [title length];
+        if (length > kMaxRecentTitleLength) {
+            title = [NSString stringWithFormat:@"%@…%@", [title substringToIndex:19], [title substringFromIndex:length - 20]];
+        }
+        NSMenuItem *item = [[NSMenuItem alloc] initWithTitle:title ?: @"" action:@selector(restoreRecent:) keyEquivalent:@""];
+        [item setTarget:self];
+        [item setRepresentedObject:entry];
+        [item setIndentationLevel:1];
+        if (length > kMaxRecentTitleLength || ([channels length] != 0 && [environment length] != 0)) {
+            [item setToolTip:toolTip];
+        }
+        [[[self channelPresets] menu] insertItem:item atIndex:firstIndex + offset];
+        [item release];
+        offset++;
+    }
 }
 
 - (void)restoreRecent:(id)arg1 {
-    return;
+    NSArray *entry = [arg1 representedObject];
+    [self setLogChannels:[entry objectAtIndexedSubscript:0]];
+    [self setLogEnvironment:[entry objectAtIndexedSubscript:1]];
 }
 
 - (BOOL)createLogFile {
@@ -148,42 +256,36 @@
 }
 
 - (id)channelCombos {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_getProperty(self, _cmd, sign_extend_64(*(int32_t *)ivar_offset(_channelCombos)), 0x1);
-     *   return r0;
-     */
-    return nil;
+    return [[self->_channelCombos retain] autorelease];
 }
 
 - (void)setChannelCombos:(id)arg1 {
-    return;
+    if (self->_channelCombos != arg1) {
+        [self->_channelCombos release];
+        self->_channelCombos = [arg1 retain];
+    }
 }
 
 - (id)logChannels {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_getProperty(self, _cmd, sign_extend_64(*(int32_t *)ivar_offset(_logChannels)), 0x1);
-     *   return r0;
-     */
-    return nil;
+    return [[self->_logChannels retain] autorelease];
 }
 
 - (void)setLogChannels:(id)arg1 {
-    return;
+    if (self->_logChannels != arg1) {
+        [self->_logChannels release];
+        self->_logChannels = [arg1 copy];
+    }
 }
 
 - (id)logEnvironment {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_getProperty(self, _cmd, sign_extend_64(*(int32_t *)ivar_offset(_logEnvironment)), 0x1);
-     *   return r0;
-     */
-    return nil;
+    return [[self->_logEnvironment retain] autorelease];
 }
 
 - (void)setLogEnvironment:(id)arg1 {
-    return;
+    if (self->_logEnvironment != arg1) {
+        [self->_logEnvironment release];
+        self->_logEnvironment = [arg1 copy];
+    }
 }
 
 - (id)logFileName {
@@ -195,20 +297,21 @@
 }
 
 - (void)setLogFileURL:(id)arg1 {
-    return;
+    if (self->_logFileURL != arg1) {
+        [self->_logFileURL release];
+        self->_logFileURL = [arg1 copy];
+    }
 }
 
 - (id)logDirectoryURL {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_getProperty(self, _cmd, sign_extend_64(*(int32_t *)ivar_offset(_logDirectoryURL)), 0x1);
-     *   return r0;
-     */
-    return nil;
+    return [[self->_logDirectoryURL retain] autorelease];
 }
 
 - (void)setLogDirectoryURL:(id)arg1 {
-    return;
+    if (self->_logDirectoryURL != arg1) {
+        [self->_logDirectoryURL release];
+        self->_logDirectoryURL = [arg1 copy];
+    }
 }
 
 - (BOOL)logFileNameFromUser {
@@ -220,45 +323,40 @@
 }
 
 - (id)channelPresets {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_channelPresets);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return [objc_loadWeakRetained((id *)&self->_channelPresets) autorelease];
 }
 
 - (void)setChannelPresets:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_channelPresets, arg1);
 }
 
 - (id)recentChannelsDivider {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_recentChannelsDivider);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return [objc_loadWeakRetained((id *)&self->_recentChannelsDivider) autorelease];
 }
 
 - (void)setRecentChannelsDivider:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_recentChannelsDivider, arg1);
 }
 
 - (id)recentChannelsMenuItem {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_recentChannelsMenuItem);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return [objc_loadWeakRetained((id *)&self->_recentChannelsMenuItem) autorelease];
 }
 
 - (void)setRecentChannelsMenuItem:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_recentChannelsMenuItem, arg1);
+}
+
+- (void)dealloc {
+    [self->_channelCombos release];
+    [self->_logChannels release];
+    [self->_logEnvironment release];
+    [self->_logFileName release];
+    [self->_logFileURL release];
+    [self->_logDirectoryURL release];
+    objc_destroyWeak((id *)&self->_channelPresets);
+    objc_destroyWeak((id *)&self->_recentChannelsDivider);
+    objc_destroyWeak((id *)&self->_recentChannelsMenuItem);
+    [super dealloc];
 }
 
 @end

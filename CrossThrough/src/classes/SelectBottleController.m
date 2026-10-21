@@ -111,7 +111,7 @@ static void *_SelectBottleControllerKVOContextDummy = &_SelectBottleControllerKV
 }
 
 - (id)bottleArrayController {
-    return objc_loadWeakRetained((id *)&self->_bottleArrayController);
+    return [objc_loadWeakRetained((id *)&self->_bottleArrayController) autorelease];
 }
 
 - (void)setBottleArrayController:(id)arg1 {

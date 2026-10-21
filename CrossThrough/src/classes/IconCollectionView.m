@@ -10,29 +10,22 @@
 }
 
 - (BOOL)becomeFirstResponder {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   [self setIsFirstResponder:0x1];
-     *   return 0x1;
-     */
-    return NO;
+    [self setIsFirstResponder:YES];
+    return YES;
 }
 
 - (BOOL)resignFirstResponder {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   [self setIsFirstResponder:0x0];
-     *   return 0x1;
-     */
-    return NO;
+    [self setIsFirstResponder:NO];
+    return YES;
 }
 
 - (void)keyDown:(id)arg1 {
-    return;
+    [[self nextResponder] keyDown:arg1];
 }
 
 - (void)mouseDown:(id)arg1 {
-    return;
+    [super mouseDown:arg1];
+    [[self nextResponder] mouseDown:arg1];
 }
 
 - (BOOL)isFirstResponder {

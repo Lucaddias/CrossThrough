@@ -32,7 +32,7 @@
     NSMutableArray * _failedTasks;
     id _downloadUpdateTimer;
     id _installEngine;
-    InstallConfiguration * _installConfiguration;
+    id _installConfiguration;
     id _delegate;
     id _bottleCollection;
 }

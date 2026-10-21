@@ -10,7 +10,7 @@
 }
 
 - (BOOL)isEmphasized {
-    return YES;
+    return NO;
 }
 
 @end

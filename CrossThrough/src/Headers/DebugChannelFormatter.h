@@ -19,8 +19,8 @@
 
 // Instance Methods
 - (id)stringForObjectValue:(id)arg1;
-- (BOOL)getObjectValue:(id)arg1 forString:(id *)arg2 errorDescription:(id)arg3;
-- (BOOL)isPartialStringValid:(id *)arg1 proposedSelectedRange:(void *)arg2 originalString:(NSRange)arg3 originalSelectedRange:(id)arg4 errorDescription:(NSRange)arg5;
+- (BOOL)getObjectValue:(id *)arg1 forString:(NSString *)arg2 errorDescription:(NSString **)arg3;
+- (BOOL)isPartialStringValid:(NSString **)arg1 proposedSelectedRange:(NSRangePointer)arg2 originalString:(NSString *)arg3 originalSelectedRange:(NSRange)arg4 errorDescription:(NSString **)arg5;
 
 @end
 

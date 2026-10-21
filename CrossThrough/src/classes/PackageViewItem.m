@@ -11,7 +11,7 @@
 }
 
 - (id)dividerLine {
-    return objc_loadWeakRetained((id *)&self->_dividerLine);
+    return [objc_loadWeakRetained((id *)&self->_dividerLine) autorelease];
 }
 
 - (void)setDividerLine:(id)arg1 {

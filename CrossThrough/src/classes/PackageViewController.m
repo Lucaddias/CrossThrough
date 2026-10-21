@@ -17,12 +17,7 @@
 @implementation PackageViewController
 
 - (id)init {
-    self = [super initWithNibName:@"PackageView" bundle:nil];
-    if (self) {
-        self->_packages = [[NSMutableArray alloc] init];
-        self->_visiblePackages = [[NSMutableArray alloc] init];
-    }
-    return self;
+    return [super initWithNibName:@"PackageView" bundle:nil];
 }
 
 - (void)dealloc {
@@ -64,67 +59,39 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    NSRect b = [self.view bounds];
-    if (self->_packageView) {
-        [self->_packageView setFrame:b];
-        [self->_packageView setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable];
-        [self->_packageView registerForDraggedTypes:@[NSPasteboardTypeFileURL]];
-        [self->_packageView setDelegate:self];
-    }
-    if (self->_installerView) {
-        [self->_installerView setFrame:b];
-        [self->_installerView setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable];
-        [self->_installerView setHidden:YES];
-        [self->_installerView setDelegate:self];
-    }
+    [[self packageView] setFrame:[[self view] bounds]];
+    [(NSView *)[self packageView] setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable];
+    [[self packageView] registerForDraggedTypes:@[NSPasteboardTypeFileURL]];
+    [[self packageView] setDelegate:self];
 
-    NSMutableArray *subviews = [NSMutableArray array];
-    if (self->_packageView) [subviews addObject:self->_packageView];
-    if (self->_installerView) [subviews addObject:self->_installerView];
-    [self.view setSubviews:subviews];
+    [[self installerView] setFrame:[[self view] bounds]];
+    [(NSView *)[self installerView] setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable];
+    [[self installerView] setHidden:YES];
+    [[self installerView] registerForDraggedTypes:@[NSPasteboardTypeFileURL]];
+    [[self installerView] setDelegate:self];
 
-    if (self->_collectionView) {
-        [self->_collectionView registerClass:[PackageViewItem class] forItemWithIdentifier:@"PackageViewItem"];
-        [self->_collectionView setSelectable:YES];
-        [self->_collectionView setAllowsEmptySelection:YES];
-        [self->_collectionView setAllowsMultipleSelection:NO];
-        [self->_collectionView addObserver:self forKeyPath:@"selectionIndexPaths" options:0 context:NULL];
-        [self->_collectionView setDataSource:self];
-        [self->_collectionView setDelegate:self];
-    }
+    NSMutableArray *subviews = [NSMutableArray arrayWithCapacity:2];
+    if ([self packageView]) [subviews addObject:[self packageView]];
+    if ([self installerView]) [subviews addObject:[self installerView]];
+    [[self view] setSubviews:subviews];
 
-    if (self->_installButton) {
-        [self->_installButton setBezelColor:[NSColor controlAccentColor]];
-    }
+    [[self collectionView] registerClass:[PackageViewItem class] forItemWithIdentifier:@"PackageViewItem"];
+    [[self collectionView] addObserver:self forKeyPath:@"selectionIndexPaths" options:0 context:NULL];
+    NSCollectionViewGridLayout *layout = (NSCollectionViewGridLayout *)[[self collectionView] collectionViewLayout];
+    [layout setMinimumInteritemSpacing:40.0];
+    [layout setMinimumLineSpacing:20.0];
+    [layout setMargins:NSEdgeInsetsMake(20.0, 40.0, 20.0, 40.0)];
 
-    if (self->_optionsButton) {
-        [self->_optionsButton sendActionOn:NSEventMaskLeftMouseDown];
-    }
-
-    if (self->_installUnlistedAppButton) {
-        [self->_installUnlistedAppButton setContentTintColor:[NSColor linkColor]];
-        [self->_installUnlistedAppButton setTarget:self];
-        [self->_installUnlistedAppButton setAction:@selector(selectUnknownPackage:)];
-    }
-
-    if (self->_packageDescriptionTextField) {
-        [self startObservingFrameOfView:self->_packageDescriptionTextField];
-    }
-    if (self->_installationNotesTextField) {
-        [self startObservingFrameOfView:self->_installationNotesTextField];
-    }
-
-    if (self->_searchField) {
-        [self->_searchField setTarget:self];
-        [self->_searchField setAction:@selector(search:)];
-    }
+    [[self installButton] setBezelColor:[NSColor controlAccentColor]];
+    [[self optionsButton] sendActionOn:NSEventMaskLeftMouseDown];
+    [[self installUnlistedAppButton] setContentTintColor:[NSColor linkColor]];
+    [self startObservingFrameOfView:[self packageDescriptionTextField]];
+    [self startObservingFrameOfView:[self installationNotesTextField]];
 
     NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"softwarePackage" ascending:YES selector:@selector(localizedStandardCompare:)];
     [self setSortDescriptors:@[sort]];
-
     [[NSUserDefaultsController sharedUserDefaultsController] addObserver:self forKeyPath:@"values.ShowUntestedApps" options:0 context:NULL];
-
-    if ([self->_packages count] == 0) {
+    if (![self packages]) {
         [self populatePackages];
     }
     [self back];
@@ -132,17 +99,12 @@
 
 - (void)viewDidAppear {
     [super viewDidAppear];
-    if ([self->_packages count] == 0) {
-        [self populatePackages];
-    }
-    if (self->_searchField && [self.view window]) {
-        [[self.view window] makeFirstResponder:self->_searchField];
-    }
+    [[self window] makeFirstResponder:[self searchField]];
 }
 
 - (void)viewDidDisappear {
     [super viewDidDisappear];
-    if (self->_installerView && ![self->_installerView isHidden]) {
+    if ([[self installerView] isHidden]) {
         [self back];
     }
 }
@@ -212,9 +174,21 @@
     }
 
     [self setPackages:result];
-    printf("[PackageViewController] Populated %lu packages\n", (unsigned long)[result count]); fflush(stdout);
-    [PackageTreeNode updateIconList];
     [self updateVisiblePackages];
+
+    // CrossOver fetches the icon list off the main thread, then loads icons.
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        // fetch_icon_list only guards the download: a reply that is not JSON
+        // (codeweavers.com serving its "Offline!" page) raises from json.loads,
+        // and CrossOver 26.3 has no handler around this call. Carry on without
+        // the icon list rather than let the exception end the app.
+        @try {
+            [PackageTreeNode updateIconList];
+        } @catch (NSException *exception) {
+            NSLog(@"Could not fetch the icon list: %@", [exception reason]);
+        }
+        [self loadIcons];
+    });
 }
 
 - (void)loadIcons {
@@ -307,9 +281,7 @@
         pkgs = [pkgs sortedArrayUsingDescriptors:self->_sortDescriptors];
     }
 
-    self->_visiblePackages = [pkgs mutableCopy];
-    printf("[PackageViewController] updateVisiblePackages: visible count=%lu, isHighlighted=%d\n", 
-           (unsigned long)[self->_visiblePackages count], self->_isHighlighted); fflush(stdout);
+    [self setVisiblePackages:[pkgs subarrayWithRange:NSMakeRange(0, MIN([pkgs count], (NSUInteger)128))]];
 
     if (self->_collectionView) {
         [self->_collectionView reloadData];
@@ -351,13 +323,11 @@
 }
 
 - (void)back:(id)sender {
-    if (self->_packageView) [self->_packageView setHidden:NO];
-    if (self->_installerView) [self->_installerView setHidden:YES];
-    [self setPackageViewTitle:[[NSBundle mainBundle] localizedStringForKey:@"Install a Windows Application" value:@"Install a Windows Application" table:nil]];
-    if (self->_collectionView) [self->_collectionView deselectAll:nil];
-    if (self->_searchField && [self.view window]) {
-        [[self.view window] makeFirstResponder:self->_searchField];
-    }
+    [[self packageView] setHidden:NO];
+    [[self installerView] setHidden:YES];
+    [self setPackageViewTitle:[[NSBundle mainBundle] localizedStringForKey:@"Install a Windows Application" value:@"" table:nil]];
+    [[self collectionView] deselectAll:nil];
+    [[self window] makeFirstResponder:[self searchField]];
     [self setInstaller:nil];
 }
 
@@ -366,8 +336,11 @@
 }
 
 - (void)setSortDescriptors:(id)arg1 {
-    [self->_sortDescriptors release];
-    self->_sortDescriptors = [arg1 copy];
+    if (self->_sortDescriptors != arg1) {
+        [self->_sortDescriptors release];
+        self->_sortDescriptors = [arg1 retain];
+    }
+    [self updateVisiblePackages];
 }
 
 - (void)setFilterPredicate:(id)arg1 {
@@ -674,16 +647,6 @@
     [[pvi dividerLine] setHidden:hideDivider];
 }
 
-- (void)collectionView:(NSCollectionView *)collectionView didSelectItemsAtIndexPaths:(NSSet<NSIndexPath *> *)indexPaths {
-    if ([indexPaths count] == 1) {
-        NSIndexPath *indexPath = [indexPaths anyObject];
-        if (indexPath.item < (NSInteger)[self->_visiblePackages count]) {
-            PackageTreeNode *node = self->_visiblePackages[indexPath.item];
-            [self setSelectedPackage:node];
-        }
-    }
-}
-
 - (void)observeValueForKeyPath:(id)arg1 ofObject:(id)arg2 change:(id)arg3 context:(void *)arg4 {
     if ([arg1 isEqualToString:@"selectionIndexPaths"]) {
         NSSet *selectedPaths = [self.collectionView selectionIndexPaths];
@@ -764,26 +727,29 @@
 }
 
 - (void)installationCompleted {
-    NSString *installTitle = [[NSBundle mainBundle] localizedStringForKey:@"Install" value:@"" table:nil];
-    [[self installButton] setTitle:installTitle];
+    [[self installButton] setTitle:[[NSBundle mainBundle] localizedStringForKey:@"Install" value:@"" table:nil]];
     [[self optionsButton] setEnabled:YES];
-
     if ([[self installer] status] == 2) {
-        id d = [self delegate];
-        if ([d respondsToSelector:@selector(revealNewBottle:)]) {
-            [d revealNewBottle:[[self installer] bottle]];
+        [[self delegate] revealNewBottle:[[self installer] bottle]];
+        [self back];
+    } else {
+        for (InstallSummaryDetailViewController *controller in [self summaryDetailsControllers]) {
+            [controller setButtonEnabled:YES];
         }
+        [[self delegate] selectInstallView];
     }
 }
 
 - (void)installationStarted {
-    NSString *cancelTitle = [[NSBundle mainBundle] localizedStringForKey:@"Cancel" value:@"" table:nil];
-    [[self installButton] setTitle:cancelTitle];
+    [[self installButton] setTitle:[[NSBundle mainBundle] localizedStringForKey:@"Cancel" value:@"" table:nil]];
     [[self optionsButton] setEnabled:NO];
+    for (InstallSummaryDetailViewController *controller in [self summaryDetailsControllers]) {
+        [controller setButtonEnabled:NO];
+    }
 }
 
 - (id)window {
-    return [self.view window];
+    return [[self view] window];
 }
 
 - (BOOL)performDragOperation:(id)arg1 {
@@ -854,7 +820,7 @@
 }
 
 - (id)delegate {
-    return objc_loadWeakRetained((id *)&self->_delegate);
+    return [objc_loadWeakRetained((id *)&self->_delegate) autorelease];
 }
 
 - (void)setDelegate:(id)arg1 {
@@ -866,12 +832,10 @@
 }
 
 - (void)setPackages:(id)arg1 {
-    [self willChangeValueForKey:@"packages"];
     if (self->_packages != arg1) {
         [self->_packages release];
-        self->_packages = [arg1 mutableCopy];
+        self->_packages = [arg1 retain];
     }
-    [self didChangeValueForKey:@"packages"];
 }
 
 - (id)unknownPackage {
@@ -898,9 +862,7 @@
 }
 
 - (void)setIsHighlighted:(BOOL)arg1 {
-    [self willChangeValueForKey:@"isHighlighted"];
     self->_isHighlighted = arg1;
-    [self didChangeValueForKey:@"isHighlighted"];
 }
 
 - (id)visiblePackages {
@@ -910,7 +872,7 @@
 - (void)setVisiblePackages:(id)arg1 {
     if (self->_visiblePackages != arg1) {
         [self->_visiblePackages release];
-        self->_visiblePackages = [arg1 mutableCopy];
+        self->_visiblePackages = [arg1 retain];
     }
 }
 
@@ -930,7 +892,7 @@
 }
 
 - (id)packageView {
-    return objc_loadWeakRetained((id *)&self->_packageView);
+    return [objc_loadWeakRetained((id *)&self->_packageView) autorelease];
 }
 
 - (void)setPackageView:(id)arg1 {
@@ -938,7 +900,7 @@
 }
 
 - (id)collectionView {
-    return objc_loadWeakRetained((id *)&self->_collectionView);
+    return [objc_loadWeakRetained((id *)&self->_collectionView) autorelease];
 }
 
 - (void)setCollectionView:(id)arg1 {
@@ -946,7 +908,7 @@
 }
 
 - (id)loading {
-    return objc_loadWeakRetained((id *)&self->_loading);
+    return [objc_loadWeakRetained((id *)&self->_loading) autorelease];
 }
 
 - (void)setLoading:(id)arg1 {
@@ -954,7 +916,7 @@
 }
 
 - (id)noResultsLabel {
-    return objc_loadWeakRetained((id *)&self->_noResultsLabel);
+    return [objc_loadWeakRetained((id *)&self->_noResultsLabel) autorelease];
 }
 
 - (void)setNoResultsLabel:(id)arg1 {
@@ -962,7 +924,7 @@
 }
 
 - (id)searchField {
-    return objc_loadWeakRetained((id *)&self->_searchField);
+    return [objc_loadWeakRetained((id *)&self->_searchField) autorelease];
 }
 
 - (void)setSearchField:(id)arg1 {
@@ -970,7 +932,7 @@
 }
 
 - (id)installUnlistedAppButton {
-    return objc_loadWeakRetained((id *)&self->_installUnlistedAppButton);
+    return [objc_loadWeakRetained((id *)&self->_installUnlistedAppButton) autorelease];
 }
 
 - (void)setInstallUnlistedAppButton:(id)arg1 {
@@ -982,16 +944,14 @@
 }
 
 - (void)setPackageViewTitle:(id)arg1 {
-    [self willChangeValueForKey:@"packageViewTitle"];
     if (self->_packageViewTitle != arg1) {
         [self->_packageViewTitle release];
         self->_packageViewTitle = [arg1 copy];
     }
-    [self didChangeValueForKey:@"packageViewTitle"];
 }
 
 - (id)installerView {
-    return objc_loadWeakRetained((id *)&self->_installerView);
+    return [objc_loadWeakRetained((id *)&self->_installerView) autorelease];
 }
 
 - (void)setInstallerView:(id)arg1 {
@@ -999,7 +959,7 @@
 }
 
 - (id)installButton {
-    return objc_loadWeakRetained((id *)&self->_installButton);
+    return [objc_loadWeakRetained((id *)&self->_installButton) autorelease];
 }
 
 - (void)setInstallButton:(id)arg1 {
@@ -1007,7 +967,7 @@
 }
 
 - (id)optionsButton {
-    return objc_loadWeakRetained((id *)&self->_optionsButton);
+    return [objc_loadWeakRetained((id *)&self->_optionsButton) autorelease];
 }
 
 - (void)setOptionsButton:(id)arg1 {
@@ -1059,7 +1019,7 @@
 }
 
 - (id)summaryDetailsView {
-    return objc_loadWeakRetained((id *)&self->_summaryDetailsView);
+    return [objc_loadWeakRetained((id *)&self->_summaryDetailsView) autorelease];
 }
 
 - (void)setSummaryDetailsView:(id)arg1 {
@@ -1067,7 +1027,7 @@
 }
 
 - (id)packageDescriptionTextField {
-    return objc_loadWeakRetained((id *)&self->_packageDescriptionTextField);
+    return [objc_loadWeakRetained((id *)&self->_packageDescriptionTextField) autorelease];
 }
 
 - (void)setPackageDescriptionTextField:(id)arg1 {
@@ -1075,7 +1035,7 @@
 }
 
 - (id)packageDescriptionExpandButton {
-    return objc_loadWeakRetained((id *)&self->_packageDescriptionExpandButton);
+    return [objc_loadWeakRetained((id *)&self->_packageDescriptionExpandButton) autorelease];
 }
 
 - (void)setPackageDescriptionExpandButton:(id)arg1 {
@@ -1083,7 +1043,7 @@
 }
 
 - (id)packageDescriptionMoreLabel {
-    return objc_loadWeakRetained((id *)&self->_packageDescriptionMoreLabel);
+    return [objc_loadWeakRetained((id *)&self->_packageDescriptionMoreLabel) autorelease];
 }
 
 - (void)setPackageDescriptionMoreLabel:(id)arg1 {
@@ -1091,7 +1051,7 @@
 }
 
 - (id)installationNotesTextField {
-    return objc_loadWeakRetained((id *)&self->_installationNotesTextField);
+    return [objc_loadWeakRetained((id *)&self->_installationNotesTextField) autorelease];
 }
 
 - (void)setInstallationNotesTextField:(id)arg1 {
@@ -1099,7 +1059,7 @@
 }
 
 - (id)installationNotesMoreLabel {
-    return objc_loadWeakRetained((id *)&self->_installationNotesMoreLabel);
+    return [objc_loadWeakRetained((id *)&self->_installationNotesMoreLabel) autorelease];
 }
 
 - (void)setInstallationNotesMoreLabel:(id)arg1 {
@@ -1107,7 +1067,7 @@
 }
 
 - (id)installationNotesExpandButton {
-    return objc_loadWeakRetained((id *)&self->_installationNotesExpandButton);
+    return [objc_loadWeakRetained((id *)&self->_installationNotesExpandButton) autorelease];
 }
 
 - (void)setInstallationNotesExpandButton:(id)arg1 {
@@ -1115,7 +1075,7 @@
 }
 
 - (id)packageDescriptionCollapsedHeightConstraint {
-    return objc_loadWeakRetained((id *)&self->_packageDescriptionCollapsedHeightConstraint);
+    return [objc_loadWeakRetained((id *)&self->_packageDescriptionCollapsedHeightConstraint) autorelease];
 }
 
 - (void)setPackageDescriptionCollapsedHeightConstraint:(id)arg1 {
@@ -1123,7 +1083,7 @@
 }
 
 - (id)installationNotesCollapsedHeightConstraint {
-    return objc_loadWeakRetained((id *)&self->_installationNotesCollapsedHeightConstraint);
+    return [objc_loadWeakRetained((id *)&self->_installationNotesCollapsedHeightConstraint) autorelease];
 }
 
 - (void)setInstallationNotesCollapsedHeightConstraint:(id)arg1 {

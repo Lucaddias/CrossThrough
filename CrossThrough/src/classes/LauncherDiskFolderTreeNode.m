@@ -5,6 +5,11 @@
 
 @implementation LauncherDiskFolderTreeNode
 
+- (void)dealloc {
+    [self->_launcherFolder release];
+    [super dealloc];
+}
+
 - (BOOL)isOpenable {
     return YES;
 }
@@ -14,35 +19,15 @@
 }
 
 - (id)url {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = [self launcherFolder];
-     *   r0 = [r0 retain];
-     *   r19 = r0;
-     *   r20 = [[r0 url] retain];
-     *   [r19 release];
-     *   r0 = [r20 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return [[self launcherFolder] url];
 }
 
 - (void)openWithErrorHandler:(id)arg1 {
-    return;
+    [[NSWorkspace sharedWorkspace] openURL:[[self launcherFolder] url]];
 }
 
 - (id)pasteboardWriter {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = [self launcherFolder];
-     *   r0 = [r0 retain];
-     *   r19 = r0;
-     *   r20 = [[r0 url] retain];
-     *   [r19 release];
-     *   r0 = [r20 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return [[self launcherFolder] url];
 }
 
 - (id)launcherFolder {
@@ -50,7 +35,10 @@
 }
 
 - (void)setLauncherFolder:(id)arg1 {
-    self->_launcherFolder = arg1;
+    if (self->_launcherFolder != arg1) {
+        [self->_launcherFolder release];
+        self->_launcherFolder = [arg1 retain];
+    }
 }
 
 @end

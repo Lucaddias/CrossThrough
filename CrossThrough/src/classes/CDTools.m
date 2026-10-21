@@ -6,100 +6,118 @@
 @implementation CDTools
 
 + (BOOL)isValidInstallerVolume:(id)arg1 requireRemovable:(BOOL)arg2 {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r31 = r31 - 0x170;
-     *   var_50 = r28;
-     *   decomp_var_48 = r27;
-     *   var_40 = r26;
-     *   decomp_var_38 = r25;
-     *   var_30 = r24;
-     *   decomp_var_28 = r23;
-     *   var_20 = r22;
-     *   decomp_var_18 = r21;
-     *   var_10 = r20;
-     *   decomp_var_8 = r19;
-     *   saved_fp = r29;
-     *   decomp_var_m8 = r30;
-     *   r21 = arg3;
-     *   r27 = self;
-     *   var_60 = **___stack_chk_guard;
-     *   r19 = [arg2 retain];
-     *   r0 = [NSFileManager defaultManager];
-     *   r0 = [r0 retain];
-     *   r20 = r0;
-     *   [r0 fileExistsAtPath:r19 isDirectory:&var_E1];
-     *   [r20 release];
-     *   asm { ccmp       w23, #0x0, #0x0, ne };
-     *   if (!asm { ccmp       w23, #0x0, #0x0, ne }) {
-     *   if ([r19 compare:@"/"] != 0x0) {
-     *   ... (1367 more lines)
-     */
-    return NO;
+    BOOL isDirectory = NO;
+    if (![[NSFileManager defaultManager] fileExistsAtPath:arg1 isDirectory:&isDirectory] || !isDirectory) {
+        NSString *application = nil;
+        NSString *type = nil;
+        [[NSWorkspace sharedWorkspace] getInfoForFile:arg1 application:&application type:&type];
+        if ([type caseInsensitiveCompare:@"exe"] == NSOrderedSame ||
+            [type caseInsensitiveCompare:@"msi"] == NSOrderedSame ||
+            [type caseInsensitiveCompare:@"inf"] == NSOrderedSame) {
+            return YES;
+        }
+    }
+    if ([arg1 compare:@"/"] == NSOrderedSame) {
+        return NO;
+    }
+    if (arg2) {
+        BOOL removable = NO;
+        BOOL writable = NO;
+        BOOL unmountable = NO;
+        NSString *description = nil;
+        NSString *fileSystemType = nil;
+        if ([[NSWorkspace sharedWorkspace] getFileSystemInfoForPath:arg1 isRemovable:&removable isWritable:&writable isUnmountable:&unmountable description:&description type:&fileSystemType]) {
+            if (!removable) {
+                return NO;
+            }
+            if (![fileSystemType isEqualToString:@"cd9660"] && ![fileSystemType isEqualToString:@"udf"]) {
+                return NO;
+            }
+        }
+    }
+    static NSString *const installerNames[] = {
+        @"autorun.inf", @"autorun.exe", @"setup.exe", @"setup.bat",
+        @"install.exe", @"install.bat", @"setuppls.exe", @"setupse.exe",
+    };
+    for (NSString *name in [[NSFileManager defaultManager] contentsOfDirectoryAtPath:arg1 error:nil]) {
+        for (size_t i = 0; i < sizeof(installerNames) / sizeof(installerNames[0]); i++) {
+            if ([name caseInsensitiveCompare:installerNames[i]] == NSOrderedSame) {
+                return YES;
+            }
+        }
+    }
+    return [[self identifyInstallablePackagesForVolume:arg1] count] != 0;
 }
 
 + (BOOL)isValidInstallerVolume:(id)arg1 {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = [self isValidInstallerVolume:arg2 requireRemovable:0x0];
-     *   return r0;
-     */
-    return NO;
+    return [self isValidInstallerVolume:arg1 requireRemovable:NO];
 }
 
 + (void)removeCDHelper {
-    return;
+    LSSharedFileListRef loginItems = LSSharedFileListCreate(NULL, kLSSharedFileListSessionLoginItems, NULL);
+    if (loginItems) {
+        UInt32 seed = 0;
+        NSArray *snapshot = (NSArray *)LSSharedFileListCopySnapshot(loginItems, &seed);
+        for (id item in snapshot) {
+            LSSharedFileListItemRef itemRef = (LSSharedFileListItemRef)item;
+            CFURLRef url = LSSharedFileListItemCopyResolvedURL(itemRef, kLSSharedFileListNoUserInteraction | kLSSharedFileListDoNotMountVolumes, NULL);
+            if (url) {
+                if ([[(NSURL *)url lastPathComponent] caseInsensitiveCompare:@"CrossOver CD Helper.app"] == NSOrderedSame) {
+                    LSSharedFileListItemRemove(loginItems, itemRef);
+                }
+                CFRelease(url);
+            } else {
+                CFStringRef name = LSSharedFileListItemCopyDisplayName(itemRef);
+                if (name) {
+                    if (CFEqual(name, CFSTR("CrossOver CD Helper"))) {
+                        LSSharedFileListItemRemove(loginItems, itemRef);
+                    }
+                    CFRelease(name);
+                }
+            }
+        }
+        [snapshot release];
+        CFRelease(loginItems);
+    }
+    for (NSRunningApplication *helper in [NSRunningApplication runningApplicationsWithBundleIdentifier:@"com.codeweavers.CrossOverCDHelper"]) {
+        [helper terminate];
+    }
 }
 
 + (id)getListOfAppsHelpedByTheCDHelper {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r31 = r31 - 0x170;
-     *   var_50 = r28;
-     *   decomp_var_48 = r27;
-     *   var_40 = r26;
-     *   decomp_var_38 = r25;
-     *   var_30 = r24;
-     *   decomp_var_28 = r23;
-     *   var_20 = r22;
-     *   decomp_var_18 = r21;
-     *   var_10 = r20;
-     *   decomp_var_8 = r19;
-     *   saved_fp = r29;
-     *   decomp_var_m8 = r30;
-     *   var_60 = **___stack_chk_guard;
-     *   r0 = [NSArray arrayWithObjects:@"CrossOver"];
-     *   r0 = [r0 retain];
-     *   r21 = r0;
-     *   var_128 = [[NSMutableArray arrayWithCapacity:[r0 count]] retain];
-     *   r20 = [[NSMutableSet setWithCapacity:[r21 count]] retain];
-     *   var_120 = q0;
-     *   var_110 = q0;
-     *   r0 = [r21 retain];
-     *   r21 = r0;
-     *   r3 = &decomp_var_e0;
-     *   r0 = [r0 countByEnumeratingWithState:&var_120 objects:r3 count:0x10];
-     *   ... (35 more lines)
-     */
-    return nil;
+    NSArray *products = [NSArray arrayWithObjects:@"CrossOver", @"CrossOverGames", nil];
+    NSMutableSet *seen = [NSMutableSet setWithCapacity:[products count]];
+    NSMutableArray *apps = [NSMutableArray array];
+    for (NSString *product in products) {
+        if ([seen containsObject:product]) {
+            continue;
+        }
+        NSString *bundleID = [NSString stringWithFormat:@"com.codeweavers.%@", product];
+        NSString *scheme = [NSString stringWithFormat:@"com.codeweavers.private-%@-app-scheme", product];
+        [apps addObject:[NSDictionary dictionaryWithObjectsAndKeys:bundleID, @"BundleID", scheme, @"IdentifyingURLScheme", product, @"ProductID", nil]];
+        [seen addObject:product];
+    }
+    return apps;
 }
 
 + (void)removeCDHelperAndPrefsForAllInstalls {
-    return;
+    [CDTools removeCDHelper];
+    for (NSDictionary *app in [CDTools getListOfAppsHelpedByTheCDHelper]) {
+        NSUserDefaults *defaults = [[NSUserDefaults alloc] init];
+        if ([defaults persistentDomainForName:[app objectForKey:@"BundleID"]]) {
+            CFStringRef bundleID = (CFStringRef)[app objectForKey:@"BundleID"];
+            CFPreferencesSetAppValue(CFSTR("AutoLaunch"), NULL, bundleID);
+            CFPreferencesSetAppValue(CFSTR("AutoLaunchAppID"), NULL, bundleID);
+            CFPreferencesSetAppValue(CFSTR("AutoLaunchAppIdentifyingURLScheme"), NULL, bundleID);
+            CFPreferencesAppSynchronize(bundleID);
+        }
+        [defaults release];
+    }
 }
 
 + (id)identifyInstallablePackagesForVolume:(id)arg1 {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r20 = [arg2 retain];
-     *   r19 = [[[CXSetupLib c4ProfilesClass] profilesSet] retain];
-     *   r21 = [[[CXSetupLib cdDetectorClass] findMatchingProfilesForVolume:r20 inProfiles:r19] retain];
-     *   [r20 release];
-     *   [r19 release];
-     *   r0 = [r21 autorelease];
-     *   return r0;
-     */
-    return nil;
+    id profiles = [[CXSetupLib c4ProfilesClass] profilesSet];
+    return [[CXSetupLib cdDetectorClass] findMatchingProfilesForVolume:arg1 inProfiles:profiles];
 }
 
 @end

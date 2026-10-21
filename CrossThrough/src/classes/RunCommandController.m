@@ -3,7 +3,6 @@
 #import "CrossThrough.h"
 #import "HopperCompat.h"
 #import "NSString+CrossOverAdditions.h"
-#import "CXServerCrossOver.h"
 #import <fcntl.h>
 
 @implementation RunCommandController
@@ -442,10 +441,7 @@
                                                    folder:startMenuPath
                                          localDesktopPath:desktopPath
                                          andStartMenuPath:startMenuPath];
-        CXApplication *app = (CXApplication *)[CXApplication sharedApplication];
-        if ([[app delegate] respondsToSelector:@selector(refreshPrograms:)]) {
-            [(CXServerCrossOver *)[app delegate] refreshPrograms:nil];
-        }
+        [(CXServerCrossOver *)[NSApp delegate] refreshPrograms:nil];
     } else {
         NSLog(@"We can't create an icon when there is no current bottle.\n");
     }

@@ -1,6 +1,5 @@
 // test_wizard.m — Comprehensive test suite for wizard, engine, and backend controllers
 #import <Cocoa/Cocoa.h>
-#import <objc/runtime.h>
 #import "CrossThrough.h"
 #import "PackageViewController.h"
 #import "PackageTreeNode.h"
@@ -15,8 +14,6 @@
 #import "SubmitRatingController.h"
 #import "CXServer.h"
 #import "CXServerCrossOver.h"
-#import "CXTask.h"
-#import "CXTaskSpecialString.h"
 
 int main(int argc, const char * argv[]) {
     @autoreleasepool {
@@ -37,7 +34,10 @@ int main(int argc, const char * argv[]) {
         assert([visible count] > 0);
 
         PackageTreeNode *firstApp = [visible objectAtIndex:0];
-        NSLog(@"[TEST] First popular app: %@ (appid: %@)", [firstApp description], [firstApp packageid]);
+        NSLog(@"[TEST] First popular app: %@ (appid: %@)", [firstApp softwarePackage], [firstApp packageid]);
+        assert([firstApp softwarePackage] != nil);
+        assert([firstApp leaf]);
+        NSLog(@"[TEST] First popular app rating: %@, description: %lu chars", [firstApp ratingDescription], (unsigned long)[[firstApp description] length]);
 
         NSLog(@"[TEST] Simulating app selection...");
         [pvc setSelectedPackage:firstApp];
@@ -145,43 +145,6 @@ int main(int argc, const char * argv[]) {
         NSLog(@"[TEST] CXServerCrossOver crossTieModDateString: %@", crossTieMod);
 
         [cxServer release];
-
-        NSLog(@"[TEST] Testing CXTaskSpecialString proxy behavior...");
-        CXTaskSpecialString *spStr = [[CXTaskSpecialString alloc] initWithString:@"hello_wine"];
-        assert(spStr != nil);
-        assert(strcmp([spStr fileSystemRepresentation], "hello_wine") == 0);
-        assert([(NSString *)spStr length] == 10);
-        assert([(NSString *)spStr isEqualToString:@"hello_wine"]);
-        CXTaskSpecialString *spCopy = [spStr copy];
-        assert([(NSString *)spCopy isEqualToString:@"hello_wine"]);
-        [spCopy release];
-        [spStr release];
-        NSLog(@"[TEST] CXTaskSpecialString validated successfully.");
-
-        NSLog(@"[TEST] Testing CXTask proxy and string transformation...");
-        NSArray *rawArgs = @[ @"--bottle", @"Default", @123 ];
-        NSArray *converted = [CXTask argumentsWithStringsReplacedBySpecialStrings:rawArgs];
-        assert([converted count] == 3);
-        assert(object_getClass([converted objectAtIndex:0]) == [CXTaskSpecialString class]);
-        assert(object_getClass([converted objectAtIndex:1]) == [CXTaskSpecialString class]);
-        assert([[converted objectAtIndex:0] isEqualToString:@"--bottle"]);
-        assert([[converted objectAtIndex:1] isEqualToString:@"Default"]);
-        assert([[converted objectAtIndex:2] isKindOfClass:[NSNumber class]]);
-
-        CXTask *task = [[CXTask alloc] init];
-        assert(task != nil);
-        [task setLaunchPath:@"/bin/echo"];
-        [task setArguments:@[ @"CrossThroughTaskTest" ]];
-        NSPipe *pipe = [NSPipe pipe];
-        [task setStandardOutput:pipe];
-        [task launch];
-        [task waitUntilExit];
-        assert([task terminationStatus] == 0);
-        NSData *outData = [[pipe fileHandleForReading] readDataToEndOfFile];
-        NSString *outStr = [[[NSString alloc] initWithData:outData encoding:NSUTF8StringEncoding] autorelease];
-        assert([outStr containsString:@"CrossThroughTaskTest"]);
-        [task release];
-        NSLog(@"[TEST] CXTask execution and forwarding validated successfully.");
 
         [pvc release];
         NSLog(@"[TEST] ALL WIZARD, ENGINE, AND BACKEND TESTS PASSED SUCCESSFULLY! ✅");

@@ -310,7 +310,7 @@
 }
 
 + (void)toggleMSyncForBottle:(id)arg1 withWindow:(id)arg2 modalCompletionHandler:(id)arg3 {
-    void (^handler)(void) = [arg3 copy];
+    void (^handler)(BOOL) = [arg3 copy];
     BOOL isEnabled = [arg1 isIsMSyncEnabled];
     NSAlert *alert = [[NSAlert alloc] init];
     NSBundle *bundle = [NSBundle mainBundle];
@@ -340,7 +340,7 @@
             }
         }
         if (handler) {
-            handler();
+            handler(returnCode != NSAlertFirstButtonReturn);
             [handler release];
         }
     }];
@@ -352,7 +352,7 @@
 }
 
 + (void)toggleHighResolutionForBottle:(id)arg1 withWindow:(id)arg2 modalCompletionHandler:(id)arg3 {
-    void (^handler)(void) = [arg3 copy];
+    void (^handler)(BOOL) = [arg3 copy];
     BOOL isEnabled = [arg1 isIsHighResolutionEnabled];
     NSAlert *alert = [[NSAlert alloc] init];
     NSBundle *bundle = [NSBundle mainBundle];
@@ -402,7 +402,7 @@
             }
         }
         if (handler) {
-            handler();
+            handler(returnCode != NSAlertFirstButtonReturn);
             [handler release];
         }
     }];
@@ -414,7 +414,7 @@
 }
 
 + (void)togglePreviewForBottle:(id)arg1 withWindow:(id)arg2 modalCompletionHandler:(id)arg3 {
-    void (^handler)(void) = [arg3 copy];
+    void (^handler)(BOOL) = [arg3 copy];
     BOOL isEnabled = [arg1 isIsPreviewEnabled];
     NSAlert *alert = [[NSAlert alloc] init];
     NSBundle *bundle = [NSBundle mainBundle];
@@ -430,7 +430,7 @@
                 }];
             }
             if (handler) {
-                handler();
+                handler(returnCode != NSAlertFirstButtonReturn);
                 [handler release];
             }
         }];
@@ -448,7 +448,7 @@
                 [arg1 enablePreview];
             }
             if (handler) {
-                handler();
+                handler(returnCode != NSAlertFirstButtonReturn);
                 [handler release];
             }
         }];

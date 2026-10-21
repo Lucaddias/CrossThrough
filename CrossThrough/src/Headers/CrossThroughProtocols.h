@@ -19,19 +19,30 @@
 @end
 
 @protocol CXDragViewDelegate <NSObject>
-@optional
+- (BOOL)performDragOperation:(id)arg1;
 @end
 
 @protocol CXUpdaterDelegate <NSObject>
 @optional
+- (id)bestValidUpdateInAppcast:(id)arg1 forUpdater:(id)arg2;
+- (void)updaterDidNotFindUpdate:(id)arg1;
+- (void)updaterDidAbortWithError:(id)arg1 error:(id)arg2;
+- (void)updater:(id)arg1 userDidSkipThisVersion:(id)arg2;
+- (void)updater:(id)arg1 failedToDownloadUpdate:(id)arg2 error:(id)arg3;
+- (void)userDidCancelDownload:(id)arg1;
 @end
 
 @protocol CrossTieURLHandlerDelegate <NSObject>
 @optional
+- (void)crossTieURLDidFinish:(id)arg1;
 @end
 
+// Vended over Distributed Objects as com.codeweavers.CrossOver.HelperServer.
 @protocol HelperServer <NSObject>
-@optional
+- (bycopy id)getEnvironmentForXConnection;
+- (BOOL)isServerReady;
+- (BOOL)isServerReadyForBottle:(id)arg1;
+- (oneway void)raiseWindowsWithTag:(NSInteger)arg1;
 @end
 
 @protocol IconCollectionViewControllerDelegate <NSObject>

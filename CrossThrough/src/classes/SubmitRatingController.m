@@ -25,8 +25,7 @@
     self = [super initWithWindowNibName:@"SubmitRating"];
     if (self) {
         // CrossThrough: o envio de avaliações fala com www.codeweavers.com
-        // (ratingutils, webutils: fetchRating, setRating:Notes:, createToken:password:).
-        // O recurso foi removido; nunca abrimos o painel de avaliação.
+        // (ratingutils, webutils). O recurso foi removido; nunca abrimos o painel.
         [self release];
         return nil;
     }
@@ -349,7 +348,7 @@
 }
 
 - (id)stackView {
-    return objc_loadWeakRetained((id *)&self->_stackView);
+    return [objc_loadWeakRetained((id *)&self->_stackView) autorelease];
 }
 
 - (void)setStackView:(id)arg1 {
@@ -357,7 +356,7 @@
 }
 
 - (id)ratingIndicator {
-    return objc_loadWeakRetained((id *)&self->_ratingIndicator);
+    return [objc_loadWeakRetained((id *)&self->_ratingIndicator) autorelease];
 }
 
 - (void)setRatingIndicator:(id)arg1 {
@@ -365,7 +364,7 @@
 }
 
 - (id)notesField {
-    return objc_loadWeakRetained((id *)&self->_notesField);
+    return [objc_loadWeakRetained((id *)&self->_notesField) autorelease];
 }
 
 - (void)setNotesField:(id)arg1 {
@@ -373,7 +372,7 @@
 }
 
 - (id)submitButton {
-    return objc_loadWeakRetained((id *)&self->_submitButton);
+    return [objc_loadWeakRetained((id *)&self->_submitButton) autorelease];
 }
 
 - (void)setSubmitButton:(id)arg1 {
@@ -381,7 +380,7 @@
 }
 
 - (id)notesFormatter {
-    return objc_loadWeakRetained((id *)&self->_notesFormatter);
+    return [objc_loadWeakRetained((id *)&self->_notesFormatter) autorelease];
 }
 
 - (void)setNotesFormatter:(id)arg1 {
@@ -389,7 +388,7 @@
 }
 
 - (id)forgotPasswordLabel {
-    return objc_loadWeakRetained((id *)&self->_forgotPasswordLabel);
+    return [objc_loadWeakRetained((id *)&self->_forgotPasswordLabel) autorelease];
 }
 
 - (void)setForgotPasswordLabel:(id)arg1 {
@@ -397,7 +396,7 @@
 }
 
 - (id)emailField {
-    return objc_loadWeakRetained((id *)&self->_emailField);
+    return [objc_loadWeakRetained((id *)&self->_emailField) autorelease];
 }
 
 - (void)setEmailField:(id)arg1 {
