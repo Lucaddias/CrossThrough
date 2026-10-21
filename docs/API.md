@@ -1,6 +1,6 @@
 # Referência da API
 
-Gerada a partir de `CrossThrough/src/Headers` e `src/include`: todas as classes, com seus métodos de classe (`+`) e de instância (`-`), e as funções C.
+Gerada a partir de `CrossThrough/src/Headers` e `src/include`: todas as classes (o nome do produto host nos identificadores aparece como `<Produto>`), com seus métodos de classe (`+`) e de instância (`-`), e as funções C.
 
 
 ## AddDependenciesViewController : CXViewController
@@ -296,8 +296,8 @@ Gerada a partir de `CrossThrough/src/Headers` e `src/include`: todas as classes,
 - `+ (BOOL)accessInstanceVariablesDirectly`
 - `- (id)init`
 - `- (void)setDelegate:(id)arg1`
-- `- (id)crossOverRoot`
-- `- (id)crossOverRootURL`
+- `- (id)<produto>Root`
+- `- (id)<produto>RootURL`
 - `- (BOOL)isDemo`
 - `- (void)setIsDemo`
 - `- (NSInteger)daysLeft`
@@ -541,7 +541,7 @@ Gerada a partir de `CrossThrough/src/Headers` e `src/include`: todas as classes,
 - `- (void)processFirstRun:(BOOL)arg1`
 - `- (BOOL)handleGetURLEvent:(id)arg1 withReplyEvent:(id)arg2`
 
-## CXServerCrossOver : CXServer
+## CXServer<Produto> : CXServer
 
 - `+ (id)getDefaultProgramsFolder`
 - `+ (id)getProgramsFolder`
@@ -1510,13 +1510,13 @@ Gerada a partir de `CrossThrough/src/Headers` e `src/include`: todas as classes,
 - `- (BOOL)updating`
 - `- (void)setUpdating:(BOOL)arg1`
 
-## NSAttributedString (CrossOverAdditions)
+## NSAttributedString (<Produto>Additions)
 
 - `+ (id)cx_attributedStringWithHTML:(id)arg1 font:(id)arg2`
 - `+ (id)cx_attributedStringWithHTML:(id)arg1`
 - `- (id)cx_attributedStringByRemovingTrailingWhitespaceAndNewlines`
 
-## NSFileManager (CrossOverAdditions)
+## NSFileManager (<Produto>Additions)
 
 - `+ (id)systemPaths`
 - `- (BOOL)createDirectoryAtPath:(id)arg1 attributes:(id)arg2 recursively:(BOOL)arg3`
@@ -1531,13 +1531,13 @@ Gerada a partir de `CrossThrough/src/Headers` e `src/include`: todas as classes,
 - `- (BOOL)isFile:(id)arg1 inDirectory:(id)arg2`
 - `- (void)clearQuarantine:(id)arg1`
 
-## NSMutableAttributedString (CrossOverAdditions)
+## NSMutableAttributedString (<Produto>Additions)
 
 - `+ (id)cx_attributedStringWithHTML:(id)arg1 font:(id)arg2`
 - `+ (id)cx_attributedStringWithHTML:(id)arg1`
 - `- (void)cx_removeTrailingWhitespaceAndNewlines`
 
-## NSString (CrossOverAdditions)
+## NSString (<Produto>Additions)
 
 - `- (NSString *)stringQuotedForBash`
 - `- (NSString *)stringByRemovingCharactersInSet:(NSCharacterSet *)characterSet`
@@ -1559,11 +1559,11 @@ Gerada a partir de `CrossThrough/src/Headers` e `src/include`: todas as classes,
 - `- (NSString *)stringByConditionallyResolvingSymlink`
 - `- (NSString *)stringByConditionallyResolvingAlias`
 
-## NSURL (CrossOverAdditions)
+## NSURL (<Produto>Additions)
 
 - `- (id)stringWithFileSystemRepresentation`
 
-## NSWorkspace (CrossOverAdditions)
+## NSWorkspace (<Produto>Additions)
 
 - `- (id)CX_findRunningAppBundleWithIdentifier:(id)arg1`
 - `- (id)CX_absolutePathForAppBundleWithIdentifier:(id)arg1 orIdentifyingURLScheme:(id)arg2`

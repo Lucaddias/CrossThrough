@@ -8,7 +8,8 @@ set -euo pipefail
 
 INSTALL_DIR=/Applications
 RUN_TESTS=1
-RUNTIME=/Applications/CrossOver.app
+# Host runtime: found by its bundle identifier; override with RUNTIME=<path>.
+RUNTIME="${RUNTIME:-$(mdfind "kMDItemCFBundleIdentifier == 'com.codeweavers.*'" 2>/dev/null | grep "^/Applications/[^/]*\.app$" | head -1)}"
 ROOT="$(cd "$(dirname "$0")" && pwd)"
 
 while [ $# -gt 0 ]; do
@@ -32,7 +33,7 @@ step "Checking requirements"
 major=$(sw_vers -productVersion | cut -d. -f1)
 [ "$major" -ge 11 ] || fail "macOS 11 or later is required."
 xcrun --find clang >/dev/null 2>&1 || fail "Xcode Command Line Tools are missing: run xcode-select --install"
-[ -d "$RUNTIME/Contents/SharedSupport" ] || fail "The host runtime was not found at $RUNTIME (see README, Requirements)."
+[ -n "$RUNTIME" ] && [ -d "$RUNTIME/Contents/SharedSupport" ] || fail "The host runtime was not found at $RUNTIME (see README, Requirements)."
 [ -w "$INSTALL_DIR" ] || fail "$INSTALL_DIR is not writable by $(whoami); use --dir <folder>."
 echo "ok: macOS $(sw_vers -productVersion), $(xcrun clang --version | head -1)"
 
