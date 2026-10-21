@@ -7,6 +7,48 @@
 static void *PackageTreeNodeKVOContextDummy = &PackageTreeNodeKVOContextDummy;
 static IconUtils *_iconUtils = nil;
 
+// CrossThrough addition: CrossOver keeps the icon list only in memory, so while
+// codeweavers.com is unreachable every package shows the default icon even
+// though its icon is already in the icon cache. The paths the list resolved to
+// are saved here and used when the list is missing.
+static NSString *savedIconPathsFile(void) {
+    NSString *caches = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) firstObject];
+    return [[caches stringByAppendingPathComponent:[[NSBundle mainBundle] bundleIdentifier]]
+            stringByAppendingPathComponent:@"IconPaths.plist"];
+}
+
+static NSMutableDictionary *savedIconPaths(void) {
+    static NSMutableDictionary *paths = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        paths = [[NSMutableDictionary alloc] initWithContentsOfFile:savedIconPathsFile()] ?: [[NSMutableDictionary alloc] init];
+    });
+    return paths;
+}
+
+// Returns the icon path to use for packageid: the one the icon list gave,
+// remembered for later, or else the remembered one.
+static NSString *resolvedIconPath(NSString *iconPath, NSString *packageid) {
+    if (packageid == nil) {
+        return iconPath;
+    }
+    NSFileManager *fm = [NSFileManager defaultManager];
+    NSMutableDictionary *paths = savedIconPaths();
+    @synchronized (paths) {
+        if (iconPath != nil && [fm fileExistsAtPath:iconPath]) {
+            if (![[paths objectForKey:packageid] isEqualToString:iconPath]) {
+                [paths setObject:[NSString stringWithString:iconPath] forKey:[NSString stringWithString:packageid]];
+                NSString *file = savedIconPathsFile();
+                [fm createDirectoryAtPath:[file stringByDeletingLastPathComponent] withIntermediateDirectories:YES attributes:nil error:NULL];
+                [paths writeToFile:file atomically:YES];
+            }
+            return iconPath;
+        }
+        NSString *saved = [paths objectForKey:packageid];
+        return (saved != nil && [fm fileExistsAtPath:saved]) ? [[saved retain] autorelease] : nil;
+    }
+}
+
 @implementation PackageTreeNode
 
 - (id)initRootWithChildren:(id)arg1 {
@@ -599,7 +641,7 @@ static IconUtils *_iconUtils = nil;
 
 - (void)loadIcon {
     [_iconUtils fetchIcon:self->packageid];
-    NSString *iconPath = [_iconUtils getIconPath:self->packageid];
+    NSString *iconPath = resolvedIconPath([_iconUtils getIconPath:self->packageid], self->packageid);
     if (iconPath == nil) {
         return;
     }
