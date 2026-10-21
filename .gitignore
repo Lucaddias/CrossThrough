@@ -4,3 +4,6 @@ CrossThrough/decompiled/.batches.json
 CrossThrough/build/
 .DS_Store
 __pycache__/
+
+# Frameworks vendorizados (populados por CrossThrough/vendor/setup.sh)
+CrossThrough/vendor/Frameworks/

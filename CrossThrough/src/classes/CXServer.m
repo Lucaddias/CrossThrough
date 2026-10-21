@@ -15,7 +15,10 @@ static void _observeProxyChange(SCDynamicStoreRef store, CFArrayRef changedKeys,
 @implementation CXServer
 
 + (id)getCellarID {
-    return @"CrossOver";
+    // CrossThrough: identidade própria de armazenamento. As bottles passam a
+    // ficar em ~/Library/Application Support/CrossThrough/Bottles, separadas
+    // das do CrossOver (etapa 1: deixar de compartilhar os dados do app original).
+    return @"CrossThrough";
 }
 
 + (id)getAppSupportDir {
@@ -27,7 +30,7 @@ static void _observeProxyChange(SCDynamicStoreRef store, CFArrayRef changedKeys,
 + (id)getCachesDir {
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
     NSString *base = [paths objectAtIndex:0];
-    return [base stringByAppendingPathComponent:@"com.codeweavers.CrossOver"];
+    return [base stringByAppendingPathComponent:@"com.crossthrough.CrossThrough"];
 }
 
 + (id)getDefaultBottleDir {

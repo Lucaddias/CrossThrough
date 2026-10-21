@@ -74,15 +74,8 @@ static NSImage *_defIcon = nil;
 static IconUtils * s_iconUtils = nil;
 
 + (void)updateIconList {
-    if (!s_iconUtils) {
-        Class cls = [CXSetupLib iconUtilsClass];
-        if (cls) {
-            s_iconUtils = [[cls alloc] init];
-        }
-    }
-    if ([s_iconUtils respondsToSelector:@selector(fetchIconList)]) {
-        [s_iconUtils fetchIconList];
-    }
+    // CrossThrough: ícones vinham de www.codeweavers.com/bin/rest/app/img_icon.
+    // O serviço online foi removido; usamos só ícones já em cache no disco.
 }
 
 + (id)defaultIcon {
@@ -365,9 +358,8 @@ static IconUtils * s_iconUtils = nil;
         }
     }
     if (s_iconUtils && self->packageid) {
-        if ([s_iconUtils respondsToSelector:@selector(fetchIcon:)]) {
-            [s_iconUtils fetchIcon:self->packageid];
-        }
+        // CrossThrough: fetchIcon: baixava o ícone de codeweavers.com. Removido.
+        // Mantemos só a leitura de um ícone que já esteja em cache no disco.
         if ([s_iconUtils respondsToSelector:@selector(getIconPath:)]) {
             NSString *iconPath = [s_iconUtils getIconPath:self->packageid];
             if (iconPath && [[NSFileManager defaultManager] fileExistsAtPath:iconPath]) {

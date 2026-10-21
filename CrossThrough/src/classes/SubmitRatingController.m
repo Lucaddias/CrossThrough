@@ -24,6 +24,13 @@
 - (id)initWithBottle:(id)arg1 isNag:(BOOL)arg2 isDeleting:(BOOL)arg3 {
     self = [super initWithWindowNibName:@"SubmitRating"];
     if (self) {
+        // CrossThrough: o envio de avaliações fala com www.codeweavers.com
+        // (ratingutils, webutils: fetchRating, setRating:Notes:, createToken:password:).
+        // O recurso foi removido; nunca abrimos o painel de avaliação.
+        [self release];
+        return nil;
+    }
+    if (self) {
         if (!arg1 || ![arg1 appid]) {
             [self release];
             return nil;
