@@ -6,97 +6,75 @@
 @implementation LoggingOption
 
 + (id)loggingOptionWithName:(id)arg1 channels:(id)arg2 environment:(id)arg3 {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r22 = [arg4 retain];
-     *   r19 = [arg3 retain];
-     *   r20 = [arg2 retain];
-     *   r21 = [[self alloc] initWithName:r20 channels:r19 environment:r22];
-     *   [r22 release];
-     *   [r19 release];
-     *   [r20 release];
-     *   r0 = [r21 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return [[[self alloc] initWithName:arg1 channels:arg2 environment:arg3] autorelease];
 }
 
 + (id)loggingOptionWithName:(id)arg1 channels:(id)arg2 {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r21 = [arg3 retain];
-     *   r19 = [arg2 retain];
-     *   r20 = [[self alloc] initWithName:r19 channels:r21 environment:**___NSArray0__];
-     *   [r21 release];
-     *   [r19 release];
-     *   r0 = [r20 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return [[[self alloc] initWithName:arg1 channels:arg2 environment:@[]] autorelease];
 }
 
 + (id)commonPresets {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r31 = r31 - 0x40;
-     *   saved_fp = r29;
-     *   decomp_var_m8 = r30;
-     *   var_28 = *__NSConcreteStackBlock;
-     *   if (*_commonPresets.onceToken != -0x1) {
-     *   dispatch_once(_commonPresets.onceToken, &var_28);
-     *   }
-     *   r0 = *_commonPresets.presets;
-     *   r0 = objc_retainAutoreleaseReturnValue(r0);
-     *   return r0;
-     */
-    return nil;
+    static dispatch_once_t onceToken;
+    static NSMutableArray *presets = nil;
+    dispatch_once(&onceToken, ^{
+        presets = [[NSMutableArray array] retain];
+        for (id preset in [[CXSetupLib cxUtilsClass] loggingPresets]) {
+            [presets addObject:[self loggingOptionWithName:[preset valueForKey:@"label"]
+                                                  channels:[preset valueForKey:@"channels"]
+                                               environment:[preset valueForKey:@"environment"]]];
+        }
+    });
+    return [[presets retain] autorelease];
 }
 
 - (id)initWithName:(id)arg1 channels:(id)arg2 environment:(id)arg3 {
     self = [super init];
     if (self) {
-        // Initialized
+        self->_name = [arg1 copy];
+        self->_logChannels = [arg2 copy];
+        self->_logEnvironment = [arg3 copy];
     }
     return self;
 }
 
 - (id)name {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = self[0x1];
-     *   return r0;
-     */
-    return nil;
+    return self->_name;
 }
 
 - (void)setName:(id)arg1 {
-    return;
+    if (self->_name != arg1) {
+        [self->_name release];
+        self->_name = [arg1 copy];
+    }
 }
 
 - (id)logChannels {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = self[0x2];
-     *   return r0;
-     */
-    return nil;
+    return self->_logChannels;
 }
 
 - (void)setLogChannels:(id)arg1 {
-    return;
+    if (self->_logChannels != arg1) {
+        [self->_logChannels release];
+        self->_logChannels = [arg1 copy];
+    }
 }
 
 - (id)logEnvironment {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = self[0x3];
-     *   return r0;
-     */
-    return nil;
+    return self->_logEnvironment;
 }
 
 - (void)setLogEnvironment:(id)arg1 {
-    return;
+    if (self->_logEnvironment != arg1) {
+        [self->_logEnvironment release];
+        self->_logEnvironment = [arg1 copy];
+    }
+}
+
+- (void)dealloc {
+    [self->_name release];
+    [self->_logChannels release];
+    [self->_logEnvironment release];
+    [super dealloc];
 }
 
 @end

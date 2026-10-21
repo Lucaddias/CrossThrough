@@ -64,7 +64,7 @@
 - (void)bottleNameChanged;
 - (void)categorizedAllBottles;
 - (void)analyzedBottle:(id)arg1;
-- (id)installConfiguration;
+- (InstallConfiguration *)installConfiguration;
 - (id)bottleCollection;
 - (id)categorizedBottles;
 - (void)setCategorizedBottles:(id)arg1;

@@ -182,7 +182,7 @@ static void _boolSetterMethodIMP(id self, SEL _cmd, BOOL value) {
     if (self) {
         Class taskClass = [CXSetupLib installTaskClass];
         if (taskClass) {
-            self->_installTask = [[taskClass alloc] initWithDelegate:self];
+            self->_installTask = [(InstallTask *)[taskClass alloc] initWithDelegate:self];
         }
         self->_delegates = [[NSMutableArray alloc] init];
         self->_bottleCollection = [[[CXSetupLib bottleCollectionClass] sharedCollection] retain];
@@ -255,7 +255,7 @@ static void _boolSetterMethodIMP(id self, SEL _cmd, BOOL value) {
 }
 
 - (BOOL)creatingNewBottle {
-    return [self->_installTask GetCreateNewBottle];
+    return [[self->_installTask GetCreateNewBottle] boolValue];
 }
 
 - (void)setInstallerLocale:(NSString *)arg1 {
@@ -324,7 +324,7 @@ static void _boolSetterMethodIMP(id self, SEL _cmd, BOOL value) {
 }
 
 - (BOOL)isNewBottleNameValid:(id)arg1 {
-    return [self->_installTask isNewBottleNameValid:arg1];
+    return [[self->_installTask isNewBottleNameValid:arg1] boolValue];
 }
 
 - (void)createNewBottle:(id)arg1 template:(id)arg2 {
@@ -349,7 +349,7 @@ static void _boolSetterMethodIMP(id self, SEL _cmd, BOOL value) {
 }
 
 - (BOOL)volumeMatchesProfile:(id)arg1 {
-    return [self->_installTask volumeMatchesProfile:arg1];
+    return [[self->_installTask volumeMatchesProfile:arg1] boolValue];
 }
 
 - (id)profiles {

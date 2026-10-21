@@ -20,15 +20,23 @@
     [[self.needsUpgradeButton cell] setBackgroundStyle:arg1];
 }
 
+// The default bottle is shown in bold, including any attributed title.
 - (void)updateTextField {
-    id node = [self objectValue];
-    id bottle = [node respondsToSelector:@selector(bottle)] ? [node bottle] : nil;
-    BOOL isDefault = [bottle respondsToSelector:@selector(isDefault)] ? [bottle isDefault] : NO;
-    NSFont *f = [self.textField font] ?: [NSFont systemFontOfSize:13.0];
+    BOOL isDefault = [[(BottleNode *)[self objectValue] bottle] isIsDefault];
     NSFontTraitMask trait = isDefault ? NSBoldFontMask : NSUnboldFontMask;
-    NSFont *newFont = [[NSFontManager sharedFontManager] convertFont:f toHaveTrait:trait];
-    if (newFont) {
-        [self.textField setFont:newFont];
+    NSCell *cell = [[self textField] cell];
+    [cell setFont:[[NSFontManager sharedFontManager] convertFont:[cell font] toHaveTrait:trait]];
+
+    id value = [[self textField] objectValue];
+    if ([value isKindOfClass:[NSAttributedString class]]) {
+        NSMutableAttributedString *title = [[value mutableCopy] autorelease];
+        [value enumerateAttribute:NSFontAttributeName inRange:NSMakeRange(0, [value length]) options:0 usingBlock:^(id font, NSRange range, BOOL *stop) {
+            NSFont *converted = [[NSFontManager sharedFontManager] convertFont:font toHaveTrait:trait];
+            if (converted) {
+                [title addAttribute:NSFontAttributeName value:converted range:range];
+            }
+        }];
+        [[self textField] setAttributedStringValue:title];
     }
 }
 
@@ -42,7 +50,7 @@
 }
 
 - (id)needsUpgradeButton {
-    return objc_loadWeakRetained((id *)&self->_needsUpgradeButton);
+    return [objc_loadWeakRetained((id *)&self->_needsUpgradeButton) autorelease];
 }
 
 - (void)setNeedsUpgradeButton:(id)arg1 {

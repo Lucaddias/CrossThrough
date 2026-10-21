@@ -171,7 +171,7 @@ static dispatch_once_t _catOnceToken = 0;
 - (void)addMenuItemsFromCategories:(id)categories isBottles:(BOOL)isBottles {
     if (_catOnceToken != -1) {
         dispatch_once(&_catOnceToken, ^{
-            id cxSetup = [CXSetupLib cxSetupClass];
+            Class cxSetup = [CXSetupLib cxSetupClass];
             NSNumber *rec = [cxSetup bottleCategory:@"RECOMMENDED"];
             NSNumber *comp = [cxSetup bottleCategory:@"COMPATIBLE"];
             NSNumber *none = [cxSetup bottleCategory:@"NONE"];
@@ -399,7 +399,7 @@ static dispatch_once_t _catOnceToken = 0;
 
 #pragma mark - Properties Accessors
 
-- (id)installConfiguration {
+- (InstallConfiguration *)installConfiguration {
     return self->_installConfiguration;
 }
 
@@ -461,7 +461,7 @@ static dispatch_once_t _catOnceToken = 0;
 }
 
 - (id)doneButton {
-    return objc_loadWeakRetained((id *)&self->_doneButton);
+    return [objc_loadWeakRetained((id *)&self->_doneButton) autorelease];
 }
 
 - (void)setDoneButton:(id)arg1 {
@@ -469,7 +469,7 @@ static dispatch_once_t _catOnceToken = 0;
 }
 
 - (id)nameForNewBottleTextField {
-    return objc_loadWeakRetained((id *)&self->_nameForNewBottleTextField);
+    return [objc_loadWeakRetained((id *)&self->_nameForNewBottleTextField) autorelease];
 }
 
 - (void)setNameForNewBottleTextField:(id)arg1 {
@@ -477,7 +477,7 @@ static dispatch_once_t _catOnceToken = 0;
 }
 
 - (id)bottleListPopUpButton {
-    return objc_loadWeakRetained((id *)&self->_bottleListPopUpButton);
+    return [objc_loadWeakRetained((id *)&self->_bottleListPopUpButton) autorelease];
 }
 
 - (void)setBottleListPopUpButton:(id)arg1 {
@@ -485,7 +485,7 @@ static dispatch_once_t _catOnceToken = 0;
 }
 
 - (id)makeNewBottleMenuItem {
-    return objc_loadWeakRetained((id *)&self->_makeNewBottleMenuItem);
+    return [objc_loadWeakRetained((id *)&self->_makeNewBottleMenuItem) autorelease];
 }
 
 - (void)setMakeNewBottleMenuItem:(id)arg1 {
@@ -493,7 +493,7 @@ static dispatch_once_t _catOnceToken = 0;
 }
 
 - (id)selectBottlePlaceholderMenuItem {
-    return objc_loadWeakRetained((id *)&self->_selectBottlePlaceholderMenuItem);
+    return [objc_loadWeakRetained((id *)&self->_selectBottlePlaceholderMenuItem) autorelease];
 }
 
 - (void)setSelectBottlePlaceholderMenuItem:(id)arg1 {
@@ -501,7 +501,7 @@ static dispatch_once_t _catOnceToken = 0;
 }
 
 - (id)templateTypesPopUpButton {
-    return objc_loadWeakRetained((id *)&self->_templateTypesPopUpButton);
+    return [objc_loadWeakRetained((id *)&self->_templateTypesPopUpButton) autorelease];
 }
 
 - (void)setTemplateTypesPopUpButton:(id)arg1 {

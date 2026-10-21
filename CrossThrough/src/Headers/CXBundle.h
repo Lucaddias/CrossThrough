@@ -15,7 +15,7 @@
 @interface CXBundle : CXObject
 {
     NSURL * _url;
-    id * _cfBundle;
+    CFBundleRef _cfBundle;
 }
 
 // Class Methods
@@ -31,8 +31,8 @@
 - (id)icon;
 - (id)url;
 - (void)setUrl:(id)arg1;
-- (id *)cfBundle;
-- (void)setCfBundle:(void *)arg1;
+- (CFBundleRef)cfBundle;
+- (void)setCfBundle:(CFBundleRef)arg1;
 
 @end
 

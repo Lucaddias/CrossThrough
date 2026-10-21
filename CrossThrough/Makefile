@@ -2,7 +2,12 @@
 # Converts reverse-engineered CrossOver 26.3 code into a compilable macOS app
 
 CC = xcrun clang
+# CrossOver 26.3 is built for macOS 11.0 against the 15.1 SDK; AppKit picks its
+# control and title bar styling from the linked SDK version, so match it.
+MIN_MACOS = 11.0
+LINKED_SDK = 15.1
 CFLAGS = -O2 -x objective-c \
+         -mmacosx-version-min=$(MIN_MACOS) \
          -Wno-deprecated-declarations \
          -Wno-objc-designated-initializers \
          -Wno-objc-missing-super-calls \
@@ -11,6 +16,8 @@ CFLAGS = -O2 -x objective-c \
          -F /Applications/CrossOver.app/Contents/Frameworks
 
 LDFLAGS = -F /Applications/CrossOver.app/Contents/Frameworks \
+          -mmacosx-version-min=$(MIN_MACOS) \
+          -Wl,-platform_version,macos,$(MIN_MACOS),$(LINKED_SDK) \
           -framework Cocoa \
           -framework Security \
           -framework SecurityFoundation \
@@ -76,14 +83,41 @@ app: $(TARGET)
 clean:
 	rm -rf build
 
-test: app build/obj/test_wizard.o
+test: app build/obj/test_wizard.o test-misc
 	@echo "Linking $(APP_BUNDLE)/Contents/MacOS/test_wizard..."
 	$(CC) $(LDFLAGS) build/obj/test_wizard.o $(filter-out build/obj/main.o, $(OBJS)) -o $(APP_BUNDLE)/Contents/MacOS/test_wizard
 	@echo "Running test_wizard inside app bundle..."
 	@./$(APP_BUNDLE)/Contents/MacOS/test_wizard
 
+test-misc: app build/obj/test_misc.o
+	$(CC) $(LDFLAGS) build/obj/test_misc.o $(filter-out build/obj/main.o, $(OBJS)) -o $(APP_BUNDLE)/Contents/MacOS/test_misc
+	@echo "Running test_misc inside app bundle..."
+	@./$(APP_BUNDLE)/Contents/MacOS/test_misc
+
+snapshot: app build/obj/snapshot_ui.o
+	$(CC) $(LDFLAGS) build/obj/snapshot_ui.o $(filter-out build/obj/main.o, $(OBJS)) -o $(APP_BUNDLE)/Contents/MacOS/snapshot_ui
+	@./$(APP_BUNDLE)/Contents/MacOS/snapshot_ui build/snapshots $(SNAPSHOT_PACKAGE)
+
+# Lists the install engine tasks for $(PROBE_PACKAGE); PROBE_ARGS=--download
+# also fetches its first download.
+probe: app build/obj/download_probe.o
+	$(CC) $(LDFLAGS) build/obj/download_probe.o $(filter-out build/obj/main.o, $(OBJS)) -o $(APP_BUNDLE)/Contents/MacOS/download_probe
+	@./$(APP_BUNDLE)/Contents/MacOS/download_probe $(PROBE_PACKAGE) $(PROBE_ARGS)
+
+build/obj/download_probe.o: tests/download_probe.m
+	@mkdir -p build/obj
+	$(CC) $(CFLAGS) -c $< -o $@
+
+build/obj/snapshot_ui.o: tests/snapshot_ui.m
+	@mkdir -p build/obj
+	$(CC) $(CFLAGS) -c $< -o $@
+
+build/obj/test_misc.o: tests/test_misc.m
+	@mkdir -p build/obj
+	$(CC) $(CFLAGS) -c $< -o $@
+
 build/obj/test_wizard.o: tests/test_wizard.m
 	@mkdir -p build/obj
 	$(CC) $(CFLAGS) -c $< -o $@
 
-.PHONY: all app clean test
+.PHONY: all app clean test test-misc snapshot probe

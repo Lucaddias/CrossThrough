@@ -10,11 +10,26 @@
 @interface NSString (CrossOverAdditions)
 
 - (NSString *)stringQuotedForBash;
-- (NSString *)stringQuotedForAppleScript;
-- (NSString *)stringInFileSystemRepresentationForm;
+- (NSString *)stringByRemovingCharactersInSet:(NSCharacterSet *)characterSet;
 - (NSArray *)componentsOfCommandLine;
+- (NSArray *)componentsSeparatedIntoAsciiAndNonAscii;
+- (NSString *)asciiStringQuotedForAppleScript;
+- (NSString *)nonAsciiStringQuotedForAppleScript;
+- (NSString *)stringQuotedForAppleScript;
+- (const char *)decomposedUTF8String;
+- (NSString *)stringInFileSystemRepresentationForm;
+- (BOOL)localizedStandardGreaterThan:(NSString *)other;
+- (BOOL)localizedStandardLessThan:(NSString *)other;
 - (NSString *)lastUnixOrWindowsPathComponent;
 - (NSString *)MD5;
+
+// Symlink and Finder alias resolution.
+- (NSString *)stringByResolvingSymlinksAndAliases;
+- (NSString *)stringByIterativelyResolvingSymlinkOrAlias;
+- (NSString *)stringByResolvingAlias;
+- (NSString *)stringByResolvingSymlink;
+- (NSString *)stringByConditionallyResolvingSymlink;
+- (NSString *)stringByConditionallyResolvingAlias;
 
 @end
 

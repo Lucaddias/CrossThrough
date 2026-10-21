@@ -6,69 +6,63 @@
 @implementation AddDependenciesViewController
 
 + (id)keyPathsForValuesAffectingInstallConfiguration {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = [NSSet setWithObject:@"representedObject"];
-     *   return r0;
-     */
-    return nil;
+    return [NSSet setWithObject:@"representedObject"];
 }
 
 - (id)init {
-    self = [super init];
-    if (self) {
-        // Initialized
-    }
-    return self;
+    return [super initWithNibName:@"AddDependenciesView" bundle:nil];
 }
 
 - (void)dealloc {
-    return;
+    [[self installConfiguration] removeDelegate:self];
+    objc_destroyWeak((id *)&self->_searchField);
+    objc_destroyWeak((id *)&self->_arrayController);
+    [self->_addableDependencies release];
+    [super dealloc];
 }
 
 - (id)installConfiguration {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = [self representedObject];
-     *   return r0;
-     */
-    return nil;
+    return [self representedObject];
 }
 
 - (void)loadView {
-    return;
+    [super loadView];
+    InstallConfiguration *configuration = [self installConfiguration];
+    [configuration addDelegate:self];
+    NSMutableArray *dependencies = [[NSMutableArray alloc] init];
+    for (id appID in [(InstallTask *)[configuration installTask] SuggestedDependencyOverrides]) {
+        id profile = [configuration profileForAppID:appID];
+        if ([[profile valueForKey:@"is_ranked"] boolValue]) {
+            NSString *name = [configuration nameForProfileWithAppID:appID];
+            [dependencies addObject:[NSDictionary dictionaryWithObjectsAndKeys:appID, @"appID", name, @"name", nil]];
+        }
+    }
+    [self setAddableDependencies:dependencies];
+    NSSortDescriptor *sortByName = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES selector:@selector(localizedStandardCompare:)];
+    [[self arrayController] setSortDescriptors:[NSArray arrayWithObject:sortByName]];
+    [dependencies release];
 }
 
 - (void)addDependencies:(id)arg1 {
-    return;
+    NSArray *appIDs = [[[self arrayController] selectedObjects] valueForKey:@"appID"];
+    [(InstallTask *)[[self installConfiguration] installTask] addDependencyOverrides:appIDs ofType:[InstallConfiguration overrideInclude]];
+    [[self view] tryToPerform:@selector(performClose:) with:arg1];
 }
 
 - (id)searchField {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_searchField);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return [objc_loadWeakRetained((id *)&self->_searchField) autorelease];
 }
 
 - (void)setSearchField:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_searchField, arg1);
 }
 
 - (id)arrayController {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_arrayController);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return [objc_loadWeakRetained((id *)&self->_arrayController) autorelease];
 }
 
 - (void)setArrayController:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_arrayController, arg1);
 }
 
 - (id)addableDependencies {
@@ -76,7 +70,10 @@
 }
 
 - (void)setAddableDependencies:(id)arg1 {
-    return;
+    if (self->_addableDependencies != arg1) {
+        [self->_addableDependencies release];
+        self->_addableDependencies = [arg1 copy];
+    }
 }
 
 @end

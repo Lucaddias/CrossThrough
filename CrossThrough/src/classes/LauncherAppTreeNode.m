@@ -6,145 +6,51 @@
 @implementation LauncherAppTreeNode
 
 + (id)fromLauncher:(id)arg1 {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r20 = [arg2 retain];
-     *   r19 = [[self alloc] init];
-     *   r21 = [[r20 name] retain];
-     *   [r19 setName:r21];
-     *   [r21 release];
-     *   r21 = [[r20 icon] retain];
-     *   [r19 setIcon:r21];
-     *   [r21 release];
-     *   r21 = [[r20 bottle] retain];
-     *   [r19 setBottle:r21];
-     *   [r21 release];
-     *   [r19 setLauncher:r20];
-     *   [r20 release];
-     *   r0 = [r19 autorelease];
-     *   return r0;
-     */
-    return nil;
+    LauncherAppTreeNode *node = [[self alloc] init];
+    [node setName:[arg1 name]];
+    [node setIcon:[arg1 icon]];
+    [node setBottle:[arg1 bottle]];
+    [node setLauncher:arg1];
+    return [node autorelease];
 }
 
 + (id)keyPathsForValuesAffectingPersistentID {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = [NSSet setWithObject:@"launcher.bundleID"];
-     *   return r0;
-     */
-    return nil;
+    return [NSSet setWithObject:@"launcher.bundleID"];
+}
+
+- (void)dealloc {
+    [self->_persistentID release];
+    [self->_launcher release];
+    [super dealloc];
 }
 
 - (BOOL)isOpenable {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   var_20 = r22;
-     *   decomp_var_18 = r21;
-     *   r31 = r31 + 0xffffffffffffffd0;
-     *   var_10 = r20;
-     *   decomp_var_8 = r19;
-     *   saved_fp = r29;
-     *   decomp_var_m8 = r30;
-     *   r21 = self;
-     *   r0 = [self bottle];
-     *   r0 = [r0 retain];
-     *   r19 = r0;
-     *   if (r0 != 0x0) {
-     *   r0 = [r21 bottle];
-     *   r0 = [r0 retain];
-     *   r20 = r0;
-     *   if (([r0 isCanRunCommands] & 0x1) != 0x0) {
-     *   r21 = 0x1;
-     *   }
-     *   else {
-     *   r0 = [r21 bottle];
-     *   r0 = [r0 retain];
-     *   r22 = r0;
-     *   r21 = [r0 isIsDisabled];
-     *   [r22 release];
-     *   }
-     *   ... (8 more lines)
-     */
-    return NO;
+    if (![self bottle]) {
+        return YES;
+    }
+    // A disabled bottle can still be opened: the launch offers to fix it.
+    return [[self bottle] isCanRunCommands] || [[self bottle] isIsDisabled];
 }
 
 - (BOOL)canRunCommands {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   var_20 = r22;
-     *   decomp_var_18 = r21;
-     *   r31 = r31 + 0xffffffffffffffd0;
-     *   var_10 = r20;
-     *   decomp_var_8 = r19;
-     *   saved_fp = r29;
-     *   decomp_var_m8 = r30;
-     *   r20 = self;
-     *   r0 = [self bottle];
-     *   r0 = [r0 retain];
-     *   r19 = r0;
-     *   if (r0 != 0x0) {
-     *   r0 = [r20 bottle];
-     *   r0 = [r0 retain];
-     *   r21 = r0;
-     *   r20 = [r0 isCanRunCommands];
-     *   [r21 release];
-     *   }
-     *   else {
-     *   r20 = 0x1;
-     *   }
-     *   [r19 release];
-     *   r0 = r20;
-     *   return r0;
-     */
-    return NO;
+    if (![self bottle]) {
+        return YES;
+    }
+    return [[self bottle] isCanRunCommands];
 }
 
 - (id)url {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = [self launcher];
-     *   r0 = [r0 retain];
-     *   r19 = r0;
-     *   r20 = [[r0 url] retain];
-     *   [r19 release];
-     *   r0 = [r20 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return [[self launcher] url];
 }
 
 - (id)persistentID {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r31 = r31 - 0x40;
-     *   var_20 = r22;
-     *   decomp_var_18 = r21;
-     *   var_10 = r20;
-     *   decomp_var_8 = r19;
-     *   saved_fp = r29;
-     *   decomp_var_m8 = r30;
-     *   r19 = self;
-     *   r22 = sign_extend_64(*(int32_t *)ivar_offset(_persistentID));
-     *   r0 = *(self + r22);
-     *   if (r0 == 0x0) {
-     *   r0 = [r19 launcher];
-     *   r0 = [r0 retain];
-     *   r21 = r0;
-     *   r20 = [[r0 bundleID] retain];
-     *   [r21 release];
-     *   if ([r20 length] != 0x0) {
-     *   r0 = [NSString alloc];
-     *   r0 = [r0 initWithFormat:@"ProgramLauncherID/%@", r3];
-     *   r8 = *(r19 + r22);
-     *   *(r19 + r22) = r0;
-     *   [r8 release];
-     *   }
-     *   [r20 release];
-     *   r0 = *(r19 + r22);
-     *   ... (3 more lines)
-     */
-    return nil;
+    if (!self->_persistentID) {
+        NSString *bundleID = [[self launcher] bundleID];
+        if ([bundleID length] != 0) {
+            self->_persistentID = [[NSString alloc] initWithFormat:@"ProgramLauncherID/%@", bundleID];
+        }
+    }
+    return [[self->_persistentID retain] autorelease];
 }
 
 - (BOOL)canBeFavorite {
@@ -152,21 +58,17 @@
 }
 
 - (void)openWithErrorHandler:(id)arg1 {
-    return;
+    LauncherApp *launcher = [[self launcher] retain];
+    id errorHandler = [arg1 copy];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
+        [launcher launchWithErrorHandler:errorHandler];
+        [launcher release];
+        [errorHandler release];
+    });
 }
 
 - (id)pasteboardWriter {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = [self launcher];
-     *   r0 = [r0 retain];
-     *   r19 = r0;
-     *   r20 = [[r0 url] retain];
-     *   [r19 release];
-     *   r0 = [r20 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return [[self launcher] url];
 }
 
 - (id)launcher {
@@ -174,7 +76,10 @@
 }
 
 - (void)setLauncher:(id)arg1 {
-    self->_launcher = arg1;
+    if (self->_launcher != arg1) {
+        [self->_launcher release];
+        self->_launcher = [arg1 retain];
+    }
 }
 
 @end

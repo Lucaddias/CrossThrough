@@ -22,7 +22,7 @@
 - (id)mutableCopy;
 - (id)copyWithZone:(void *)arg1;
 - (id)mutableCopyWithZone:(void *)arg1;
-- (id)fileSystemRepresentation;
+- (const char *)fileSystemRepresentation;
 - (id)forwardingTargetForSelector:(SEL)arg1;
 
 @end

@@ -26,7 +26,6 @@ static Class _pyWebUtils = nil;
 
 + (void)initialize {
     if (self == [CXSetupLib class]) {
-        NSLog(@"[CXSetupLib] Initializing Python...");
         _InitializePython(@"libcxsetup");
         _BottleQuery = NSClassFromString(@"BottleQuery");
         _CXSetup = NSClassFromString(@"CXSetup");
@@ -45,7 +44,6 @@ static Class _pyWebUtils = nil;
         _pyRatingUtils = NSClassFromString(@"RatingUtils");
         _pySystemInfo = NSClassFromString(@"SystemInfo");
         _pyWebUtils = NSClassFromString(@"WebUtils");
-        NSLog(@"[CXSetupLib] Loaded Python classes: BottleCollection=%@, C4Profiles=%@", _pyBottleCollection, _C4Profiles);
     }
 }
 

@@ -38,8 +38,8 @@
 - (void)updateTitleConstraints;
 - (void)setFlexibleIconWidth:(BOOL)arg1;
 - (void)reconfigureIcon;
-- (id)imageAlignmentRectInsets;
-- (NSRect)rectByRemovingInsets:(id)arg1 fromRect:(NSRect)arg2;
+- (NSEdgeInsets)imageAlignmentRectInsets;
+- (NSRect)rectByRemovingInsets:(NSEdgeInsets)arg1 fromRect:(NSRect)arg2;
 - (NSRect)rectByRoundingRect:(NSRect)arg1 toPixelScale:(CGFloat)arg2;
 - (NSSize)imageAlignmentRectSizeForCapHeight:(CGFloat)arg1 scaleFactor:(CGFloat *)arg2;
 - (CGFloat)alottedWidthForImage;
@@ -55,7 +55,7 @@
 - (void)mouseExited:(id)arg1;
 - (void)mouseDown:(id)arg1;
 - (void)drawFocusRingMask;
-- (id)alignmentRectInsets;
+- (NSEdgeInsets)alignmentRectInsets;
 - (CGFloat)firstBaselineOffsetFromTop;
 - (NSSize)intrinsicContentSize;
 - (void)prepareForInterfaceBuilder;

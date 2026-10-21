@@ -6,21 +6,11 @@
 @implementation FilteredTreeNode
 
 + (id)keyPathsForValuesAffectingAncestors {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = [NSSet setWithObject:@"parent"];
-     *   return r0;
-     */
-    return nil;
+    return [NSSet setWithObject:@"parent"];
 }
 
 + (id)keyPathsForValuesAffectingLeaf {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = [NSSet setWithObject:@"children"];
-     *   return r0;
-     */
-    return nil;
+    return [NSSet setWithObject:@"children"];
 }
 
 + (BOOL)automaticallyNotifiesObserversOfFilterPredicate {
@@ -28,171 +18,297 @@
 }
 
 - (id)init {
-    self = [super init];
-    if (self) {
-        // Initialized
-    }
-    return self;
+    return [super init];
 }
 
 - (void)dealloc {
-    return;
+    for (id child in self->_children) {
+        [self abandonChild:child];
+    }
+    [self->_children release];
+    [self->_filteredChildren release];
+    [self->_filterPredicate release];
+    objc_destroyWeak((id *)&self->_parent);
+    [super dealloc];
 }
 
 - (id)ancestors {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   var_20 = r22;
-     *   decomp_var_18 = r21;
-     *   r31 = r31 + 0xffffffffffffffd0;
-     *   var_10 = r20;
-     *   decomp_var_8 = r19;
-     *   saved_fp = r29;
-     *   decomp_var_m8 = r30;
-     *   r19 = [[NSMutableArray array] retain];
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_parent);
-     *   if (r0 != 0x0) {
-     *   r20 = r0;
-     *   do {
-     *   [r19 addObject:r20];
-     *   r21 = [[r20 parent] retain];
-     *   [r20 release];
-     *   r20 = r21;
-     *   } while (r21 != 0x0);
-     *   }
-     *   r0 = [r19 autorelease];
-     *   return r0;
-     */
-    return nil;
+    NSMutableArray *ancestors = [NSMutableArray array];
+    id node = [self parent];
+    while (node) {
+        [ancestors addObject:node];
+        node = [node parent];
+    }
+    return ancestors;
 }
 
 - (BOOL)isLeaf {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = self;
-     *   if (*(r0 + sign_extend_64(*(int32_t *)ivar_offset(_children))) == 0x0) {
-     *   r0 = 0x1;
-     *   }
-     *   return r0;
-     */
-    return NO;
+    return self->_children == nil;
 }
 
 - (id)children {
-    return self->_children;
+    return [[self->_children retain] autorelease];
 }
 
 - (void)setChildren:(id)arg1 {
-    return;
+    if (self->_children == arg1) {
+        return;
+    }
+    BOOL wasLeaf = [self isLeaf];
+    for (id child in self->_children) {
+        [self abandonChild:child];
+    }
+    NSMutableArray *old = self->_children;
+    self->_children = [arg1 mutableCopy];
+    [old release];
+    for (id child in self->_children) {
+        [self adoptChild:child];
+    }
+    [self filterWithPredicate];
+    if (wasLeaf != [self isLeaf]) {
+        [[self parent] noteChildChangedPassesFilter:self];
+    }
 }
 
 - (void)insertObject:(id)arg1 inChildrenAtIndex:(NSUInteger)arg2 {
-    return;
+    BOOL wasLeaf = [self isLeaf];
+    if (!self->_children) {
+        self->_children = [[NSMutableArray alloc] init];
+    }
+    [self->_children insertObject:arg1 atIndex:arg2];
+    [self adoptChild:arg1];
+    if ([arg1 passesFilter]) {
+        [self addObjectToFilteredChildren:arg1];
+    }
+    if (wasLeaf != [self isLeaf]) {
+        [[self parent] noteChildChangedPassesFilter:self];
+    }
 }
 
 - (void)insertChildren:(id)arg1 atIndexes:(id)arg2 {
-    return;
+    BOOL wasLeaf = [self isLeaf];
+    if (!self->_children) {
+        self->_children = [[NSMutableArray alloc] init];
+    }
+    [self->_children insertObjects:arg1 atIndexes:arg2];
+    for (id child in arg1) {
+        [self adoptChild:child];
+    }
+    NSIndexSet *passing = [arg1 indexesOfObjectsPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
+        return [obj passesFilter];
+    }];
+    if ([passing count] != 0) {
+        NSArray *passingChildren = [arg1 objectsAtIndexes:passing];
+        NSIndexSet *indexes = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange([self->_filteredChildren count], [passing count])];
+        [self insertFilteredChildren:passingChildren atIndexes:indexes];
+    }
+    if (wasLeaf != [self isLeaf]) {
+        [[self parent] noteChildChangedPassesFilter:self];
+    }
 }
 
 - (void)removeObjectFromChildrenAtIndex:(NSUInteger)arg1 {
-    return;
+    id child = [[self->_children objectAtIndex:arg1] retain];
+    [self abandonChild:child];
+    [self->_children removeObjectAtIndex:arg1];
+    NSUInteger filteredIndex = [self->_filteredChildren indexOfObjectIdenticalTo:child];
+    if (filteredIndex != NSNotFound) {
+        [self removeObjectFromFilteredChildrenAtIndex:filteredIndex];
+    }
+    [child release];
 }
 
 - (void)removeChildrenAtIndexes:(id)arg1 {
-    return;
+    NSMutableIndexSet *filteredIndexes = [NSMutableIndexSet indexSet];
+    [self->_children enumerateObjectsAtIndexes:arg1 options:0 usingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        [self abandonChild:obj];
+        NSUInteger filteredIndex = [self->_filteredChildren indexOfObjectIdenticalTo:obj];
+        if (filteredIndex != NSNotFound) {
+            [filteredIndexes addIndex:filteredIndex];
+        }
+    }];
+    [self->_children removeObjectsAtIndexes:arg1];
+    if ([filteredIndexes count] != 0) {
+        [self removeFilteredChildrenAtIndexes:filteredIndexes];
+    }
 }
 
 - (void)addObjectToChildren:(id)arg1 {
-    return;
+    [self insertObject:arg1 inChildrenAtIndex:[self->_children count]];
 }
 
 - (void)addChildrenFromArray:(id)arg1 {
-    return;
+    if ([arg1 count] != 0) {
+        NSIndexSet *indexes = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange([self->_children count], [arg1 count])];
+        [self insertChildren:arg1 atIndexes:indexes];
+    }
 }
 
 - (void)setFilterPredicate:(id)arg1 {
-    return;
+    if (self->_filterPredicate == arg1) {
+        return;
+    }
+    if (arg1 && self->_filterPredicate && [arg1 isEqual:self->_filterPredicate]) {
+        return;
+    }
+    BOOL passed = [self passesFilter];
+    [self willChangeValueForKey:@"filterPredicate"];
+    [self setFilterPredicateInternal:arg1];
+    [self filterWithPredicate];
+    [self didChangeValueForKey:@"filterPredicate"];
+    if (passed != [self passesFilter]) {
+        [[self parent] noteChildChangedPassesFilter:self];
+    }
 }
 
 - (void)setFilterPredicateInternal:(id)arg1 {
-    return;
+    if (self->_filterPredicate == arg1) {
+        return;
+    }
+    if (arg1 && self->_filterPredicate && [arg1 isEqual:self->_filterPredicate]) {
+        return;
+    }
+    [self->_filterPredicate release];
+    self->_filterPredicate = [arg1 retain];
+    for (id child in self->_children) {
+        if (![child filtersSeparately]) {
+            [child setFilterPredicateInternal:arg1];
+        }
+    }
 }
 
 - (id)filteredChildren {
-    return self->_filteredChildren;
+    return [[self->_filteredChildren retain] autorelease];
 }
 
 - (void)setFilteredChildren:(id)arg1 {
-    return;
+    if (self->_filteredChildren == arg1) {
+        return;
+    }
+    BOOL wasEmpty = [self->_filteredChildren count] == 0;
+    BOOL isEmpty = [arg1 count] == 0;
+    NSMutableArray *old = self->_filteredChildren;
+    self->_filteredChildren = [arg1 mutableCopy];
+    [old release];
+    if (wasEmpty != isEmpty) {
+        [[self parent] noteChildChangedPassesFilter:self];
+    }
 }
 
 - (void)insertObject:(id)arg1 inFilteredChildrenAtIndex:(NSUInteger)arg2 {
-    return;
+    if (!self->_filteredChildren) {
+        self->_filteredChildren = [[NSMutableArray alloc] init];
+    }
+    [self->_filteredChildren insertObject:arg1 atIndex:arg2];
+    if ([self->_filteredChildren count] == 1) {
+        [[self parent] noteChildChangedPassesFilter:self];
+    }
 }
 
 - (void)insertFilteredChildren:(id)arg1 atIndexes:(id)arg2 {
-    return;
+    if ([arg1 count] == 0) {
+        return;
+    }
+    if (!self->_filteredChildren) {
+        self->_filteredChildren = [[NSMutableArray alloc] init];
+    }
+    [self->_filteredChildren insertObjects:arg1 atIndexes:arg2];
+    if ([self->_filteredChildren count] == [arg1 count]) {
+        [[self parent] noteChildChangedPassesFilter:self];
+    }
 }
 
 - (void)addObjectToFilteredChildren:(id)arg1 {
-    return;
+    [self insertObject:arg1 inFilteredChildrenAtIndex:[self->_filteredChildren count]];
 }
 
 - (void)removeObjectFromFilteredChildrenAtIndex:(NSUInteger)arg1 {
-    return;
+    [self->_filteredChildren removeObjectAtIndex:arg1];
+    if (self->_filteredChildren && [self->_filteredChildren count] == 0) {
+        [[self parent] noteChildChangedPassesFilter:self];
+    }
 }
 
 - (void)removeFilteredChildrenAtIndexes:(id)arg1 {
-    return;
+    if ([arg1 count] == 0) {
+        return;
+    }
+    [self->_filteredChildren removeObjectsAtIndexes:arg1];
+    if (self->_filteredChildren && [self->_filteredChildren count] == 0) {
+        [[self parent] noteChildChangedPassesFilter:self];
+    }
 }
 
 - (BOOL)passesFilter {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   var_30 = r24;
-     *   decomp_var_28 = r23;
-     *   r31 = r31 + 0xffffffffffffffc0;
-     *   var_20 = r22;
-     *   decomp_var_18 = r21;
-     *   var_10 = r20;
-     *   decomp_var_8 = r19;
-     *   saved_fp = r29;
-     *   decomp_var_m8 = r30;
-     *   r21 = self;
-     *   r0 = [self filterPredicate];
-     *   r0 = [r0 retain];
-     *   r19 = r0;
-     *   if (r0 != 0x0) {
-     *   r0 = [r21 isLeaf];
-     *   r22 = r0;
-     *   if ((r0 & 0x1) != 0x0) {
-     *   if (([r21 isLeaf] & 0x1) == 0x0) {
-     *   [r19 release];
-     *   r0 = 0x0;
-     *   }
-     *   else {
-     *   r0 = [r21 filterPredicate];
-     *   r0 = [r0 retain];
-     *   r23 = r0;
-     *   ... (44 more lines)
-     */
-    return NO;
+    NSPredicate *predicate = [self filterPredicate];
+    if (!predicate) {
+        return YES;
+    }
+    if ([self isLeaf]) {
+        return [predicate evaluateWithObject:self];
+    }
+    // A folder passes when any of its children does.
+    return [[self filteredChildren] count] != 0;
 }
 
 - (void)noteChildChangedPassesFilter:(id)arg1 {
-    return;
+    if (self->_insideFilterWithPredicate) {
+        return;
+    }
+    NSUInteger index = self->_filteredChildren ? [self->_filteredChildren indexOfObjectIdenticalTo:arg1] : NSNotFound;
+    BOOL passes = [arg1 passesFilter];
+    if (index != NSNotFound && !passes) {
+        [self removeObjectFromFilteredChildrenAtIndex:index];
+    } else if (index == NSNotFound && passes) {
+        [self addObjectToFilteredChildren:arg1];
+    }
 }
 
 - (void)adoptChild:(id)arg1 {
-    return;
+    if (![arg1 filtersSeparately]) {
+        [arg1 setFilterPredicate:[self filterPredicate]];
+    }
+    [arg1 setParent:self];
 }
 
 - (void)abandonChild:(id)arg1 {
-    return;
+    [arg1 setParent:nil];
+    if (![arg1 filtersSeparately]) {
+        [arg1 setFilterPredicate:nil];
+    }
 }
 
 - (void)filterWithPredicate {
-    return;
+    BOOL wasInside = self->_insideFilterWithPredicate;
+    self->_insideFilterWithPredicate = YES;
+
+    NSMutableSet *passing = [NSMutableSet set];
+    for (id child in self->_children) {
+        [child filterWithPredicate];
+        if ([child passesFilter]) {
+            [passing addObject:child];
+        }
+    }
+
+    // Keep the children that still pass where they are; collect the ones
+    // that stopped passing, and append the newly passing ones.
+    NSMutableIndexSet *toRemove = [NSMutableIndexSet indexSet];
+    [self->_filteredChildren enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        if ([passing containsObject:obj]) {
+            [passing removeObject:obj];
+        } else {
+            [toRemove addIndex:idx];
+        }
+    }];
+    if ([passing count] != 0) {
+        NSIndexSet *indexes = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange([self->_filteredChildren count], [passing count])];
+        [self insertFilteredChildren:[passing allObjects] atIndexes:indexes];
+    }
+    if ([toRemove count] != 0) {
+        [self removeFilteredChildrenAtIndexes:toRemove];
+    }
+
+    self->_insideFilterWithPredicate = wasInside;
 }
 
 - (id)filterPredicate {
@@ -208,17 +324,11 @@
 }
 
 - (id)parent {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_parent);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return [objc_loadWeakRetained((id *)&self->_parent) autorelease];
 }
 
 - (void)setParent:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_parent, arg1);
 }
 
 @end
