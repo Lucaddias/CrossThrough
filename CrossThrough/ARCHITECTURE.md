@@ -44,7 +44,7 @@ flowchart TB
 2. `-[CXServer applicationWillFinishLaunching:]` chama `rosettaCheck`, só na slice arm64. Se o Rosetta 2 não estiver instalado, abre `RosettaInstallationController`, cujo botão roda `/usr/sbin/softwareupdate --install-rosetta --agree-to-license` via `NSTask` ([detalhes](decompiled/x86_64)).
 3. Na primeira mensagem a `CXSetupLib`, `+[CXSetupLib initialize]` chama `_InitializePython(@"libcxsetup.py")`. O endereço `0x1000a5718` foi resolvido na `__cfstring` da arm64.
 4. `_InitializePython` ([`c_functions.c`](decompiled/c_functions.c), `0x1000541d4`):
-   - pega `crossOverRoot` (`…/SharedSupport/<Produto>`) e define `PYTHONPATH=<root>/lib/python`;
+   - pega `<produto>Root` (`…/SharedSupport/<Produto>`) e define `PYTHONPATH=<root>/lib/python`;
    - remove `PYTHONEXECUTABLE`, `PYTHONHOME`, `PYTHONINSPECT`, `PYTHONSTARTUP` e `PYTHONUSERBASE`, e define `LC_CTYPE=en_US.UTF-8` só durante a inicialização, se a variável estiver ausente;
    - liga `Py_NoUserSiteDirectory` e chama `Py_InitializeEx(0)` (sem instalar handlers de sinal do Python);
    - importa `cxutils` e grava `cxutils.CX_ROOT`;
