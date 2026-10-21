@@ -99,8 +99,8 @@
             [NSDictionary dictionary], @"MostRecentCXFBMenuPlist",
             [NSDictionary dictionary], @"DocTypeToMenuPathMap",
             @0, @"LastHelperVersion",
-            @YES, @"AutoUpdateCrossTies",
-            @YES, @"AskForRatings",
+            @NO, @"AutoUpdateCrossTies",
+            @NO, @"AskForRatings",
             @NO, @"Enable32BitBottles",
             nil];
         [[NSUserDefaults standardUserDefaults] registerDefaults:defaults];
@@ -414,15 +414,11 @@
 }
 
 - (void)openScreenSharingHelpPage:(id)arg1 {
-    NSURL *url = [NSURL URLWithString:@"http://crossover.codeweavers.com/redirect/teamviewer"];
-    [[NSWorkspace sharedWorkspace] openURL:url];
+    // CrossThrough: abria crossover.codeweavers.com/redirect/teamviewer. Removido.
 }
 
 - (void)openHelpInBrowser:(id)arg1 {
-    NSString *fmt = [[NSBundle mainBundle] localizedStringForKey:@"https://support.codeweavers.com/user-guides/crossover-mac-user-guide" value:@"" table:@"Vendor"];
-    NSString *urlStr = [NSString stringWithFormat:@"%@", fmt];
-    NSURL *url = [NSURL URLWithString:urlStr];
-    [[NSWorkspace sharedWorkspace] openURL:url];
+    // CrossThrough: abria support.codeweavers.com. Removido.
 }
 
 - (void)showMainWindow:(id)arg1 {
@@ -1947,10 +1943,8 @@ done:
     NSModalResponse resp = [alert runModal];
     if (resp == NSAlertFirstButtonReturn) {
         [self repairBottles:arg1];
-    } else if (resp == NSAlertThirdButtonReturn) {
-        NSURL *url = [NSURL URLWithString:@"https://support.codeweavers.com/troubleshooting/antivirus-software-eg-bitdefender-avast-and-avg-and-crossover"];
-        [[NSWorkspace sharedWorkspace] openURL:url];
     }
+    // CrossThrough: "Learn More" abria support.codeweavers.com. Removido.
 }
 
 - (id)programsMenu {

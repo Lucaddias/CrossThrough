@@ -624,10 +624,8 @@ static NSString *resolvedIconPath(NSString *iconPath, NSString *packageid) {
 }
 
 + (void)updateIconList {
-    if (_iconUtils == nil) {
-        _iconUtils = [[[CXSetupLib iconUtilsClass] alloc] init];
-    }
-    [_iconUtils fetchIconList];
+    // CrossThrough: ícones vinham de www.codeweavers.com/bin/rest/app/img_icon.
+    // O serviço online foi removido; usamos só ícones já em cache no disco.
 }
 
 + (id)defaultIcon {
@@ -640,7 +638,8 @@ static NSString *resolvedIconPath(NSString *iconPath, NSString *packageid) {
 }
 
 - (void)loadIcon {
-    [_iconUtils fetchIcon:self->packageid];
+    // CrossThrough: fetchIcon: baixava o ícone de codeweavers.com. Removido.
+    // Mantemos só a leitura de um ícone que já esteja em cache no disco.
     NSString *iconPath = resolvedIconPath([_iconUtils getIconPath:self->packageid], self->packageid);
     if (iconPath == nil) {
         return;

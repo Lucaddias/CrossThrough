@@ -38,13 +38,10 @@ static NSMutableDictionary *_sharedUpdaters = nil;
             _sharedUpdaters = [[NSMutableDictionary alloc] init];
         }
         [_sharedUpdaters setObject:self forKey:[NSValue valueWithNonretainedObject:bundle]];
-        self->_userDriver = [[CXSparkleUserDriver alloc] initWithHostBundle:bundle delegate:self];
-        self->_updater = [[SPUUpdater alloc] initWithHostBundle:bundle applicationBundle:bundle userDriver:self->_userDriver delegate:self];
-        NSError *error = nil;
-        if (![self->_updater startUpdater:&error]) {
-            _CXLog(@"Error: Failed to start updater with error: %@", error);
-        }
-        [self setUserAgentString];
+        // CrossThrough: o self-update via Sparkle (appcast em
+        // www.codeweavers.com/xml/versions/cxmac.xml) foi removido. Não criamos
+        // o SPUUpdater nem o user driver; _updater fica nil e os métodos abaixo
+        // viram no-ops (mensagens a nil). Assim o app não liga com o Sparkle.
     }
     return self;
 }
