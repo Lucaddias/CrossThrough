@@ -174,8 +174,21 @@
     }
 
     [self setPackages:result];
-    [PackageTreeNode updateIconList];
     [self updateVisiblePackages];
+
+    // CrossOver fetches the icon list off the main thread, then loads icons.
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        // fetch_icon_list only guards the download: a reply that is not JSON
+        // (codeweavers.com serving its "Offline!" page) raises from json.loads,
+        // and CrossOver 26.3 has no handler around this call. Carry on without
+        // the icon list rather than let the exception end the app.
+        @try {
+            [PackageTreeNode updateIconList];
+        } @catch (NSException *exception) {
+            NSLog(@"Could not fetch the icon list: %@", [exception reason]);
+        }
+        [self loadIcons];
+    });
 }
 
 - (void)loadIcons {
