@@ -27,6 +27,8 @@ Engenharia reversa do CrossOver 26.3 para macOS (CodeWeavers). Os nomes que vêm
 | Código compilável (Headers, Shims, 94 classes, funções C, Makefile, 0 avisos de compilação) | ✅ [`src/`](CrossThrough/src) |
 | Suíte de testes automatizados (`make test` com simulação end-to-end do wizard, engine e CXTask) | ✅ [`tests/`](CrossThrough/tests) |
 | Documentação da arquitetura (GUI ↔ backend: inicialização do Python, ponte PyObjC, processos, privilégios, helper apps) | ✅ [`ARCHITECTURE.md`](CrossThrough/ARCHITECTURE.md) |
+| Reconstrução nativa do `wineloader` (`dlopen` do `ntdll.so` + `__wine_main`) e da camada cliente de socket + passagem de fd do `wineserver` (SCM_RIGHTS) | ✅ [`native/`](CrossThrough/native) |
+| Módulo de bottles nativo em Objective-C, removendo a camada Python fechada (`CTBottleWrapper`, `CTBottleCollection`, `CTBottleManagement`, `CTBottleQuery`) | ✅ [`NATIVE_BOTTLES.md`](CrossThrough/src/NATIVE_BOTTLES.md) |
 
 ## Arquitetura (resumo)
 

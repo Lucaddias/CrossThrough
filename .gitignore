@@ -2,5 +2,6 @@
 CrossThrough/decompiled/.store.json
 CrossThrough/decompiled/.batches.json
 CrossThrough/build/
+CrossThrough/native/build/
 .DS_Store
 __pycache__/

@@ -3,6 +3,7 @@
 #import "CrossThrough.h"
 #import "HopperCompat.h"
 #import "c_functions.h"
+#import "NativeBottles.h"   // módulo nativo de bottles (substitui a camada Python)
 
 static Class _BottleQuery = nil;
 static Class _CXSetup = nil;
@@ -28,13 +29,16 @@ static Class _pyWebUtils = nil;
     if (self == [CXSetupLib class]) {
         NSLog(@"[CXSetupLib] Initializing Python...");
         _InitializePython(@"libcxsetup");
-        _BottleQuery = NSClassFromString(@"BottleQuery");
         _CXSetup = NSClassFromString(@"CXSetup");
         _cxUtils = NSClassFromString(@"CXUtils");
-        _pyBottleCollection = NSClassFromString(@"BottleCollection");
-        _pyBottleWrapper = NSClassFromString(@"BottleWrapper");
         _AppDetector = NSClassFromString(@"AppDetector");
-        _BottleManagement = NSClassFromString(@"BottleManagement");
+        // Bottles: módulo NATIVO (BottleModel.m / CXBottleSupport.m). A camada
+        // Python fechada (bottlequery/bottlewrapper/bottlecollection/
+        // bottlemanagement .pyc) deixa de ser consultada.
+        _BottleQuery = [CTBottleQuery class];
+        _pyBottleCollection = [CTBottleCollection class];
+        _pyBottleWrapper = [CTBottleWrapper class];
+        _BottleManagement = [CTBottleManagement class];
         _CDDetector = NSClassFromString(@"CDDetector");
         _DemoUtils = NSClassFromString(@"DemoUtils");
         _C4Profiles = NSClassFromString(@"C4Profiles");
