@@ -264,7 +264,7 @@
 }
 
 - (id)delegate {
-    return objc_loadWeakRetained((id *)&self->_delegate);
+    return [objc_loadWeakRetained((id *)&self->_delegate) autorelease];
 }
 
 - (void)setDelegate:(id)arg1 {
@@ -284,7 +284,7 @@
 }
 
 - (id)collectionView {
-    return objc_loadWeakRetained((id *)&self->_collectionView);
+    return [objc_loadWeakRetained((id *)&self->_collectionView) autorelease];
 }
 
 - (void)setCollectionView:(id)arg1 {
@@ -292,7 +292,7 @@
 }
 
 - (id)contextualMenu {
-    return objc_loadWeakRetained((id *)&self->_contextualMenu);
+    return [objc_loadWeakRetained((id *)&self->_contextualMenu) autorelease];
 }
 
 - (void)setContextualMenu:(id)arg1 {

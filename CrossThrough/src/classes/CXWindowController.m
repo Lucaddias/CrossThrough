@@ -41,9 +41,7 @@ static NSMutableArray *_selfOwnedControllers = nil;
 }
 
 - (void)showWindow:(id)arg1 {
-    NSLog(@"[CXWindowController] showWindow called on %@", self);
     NSWindow *win = [self window];
-    NSLog(@"[CXWindowController] [self window] = %@", win);
     if (win) {
         NSString *autosaveName = [win frameAutosaveName];
         if (autosaveName && [autosaveName length] > 0) {

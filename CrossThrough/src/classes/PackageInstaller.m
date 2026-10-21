@@ -877,7 +877,7 @@ static NSByteCountFormatter *_byteCountFormatter = nil;
 }
 
 - (id)delegate {
-    return objc_loadWeakRetained((id *)&self->_delegate);
+    return [objc_loadWeakRetained((id *)&self->_delegate) autorelease];
 }
 
 - (void)setDelegate:(id)arg1 {
@@ -907,7 +907,7 @@ static NSByteCountFormatter *_byteCountFormatter = nil;
 }
 
 - (id)bottle {
-    return objc_loadWeakRetained((id *)&self->_bottle);
+    return [objc_loadWeakRetained((id *)&self->_bottle) autorelease];
 }
 
 - (void)setBottle:(id)arg1 {
@@ -1062,7 +1062,7 @@ static NSByteCountFormatter *_byteCountFormatter = nil;
 }
 
 - (id)bottleCollection {
-    return objc_loadWeakRetained((id *)&self->_bottleCollection);
+    return [objc_loadWeakRetained((id *)&self->_bottleCollection) autorelease];
 }
 
 @end

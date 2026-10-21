@@ -6,6 +6,8 @@
 #import <SystemConfiguration/SystemConfiguration.h>
 #import <fcntl.h>
 
+#import "helperServer.h"
+
 static void _observeProxyChange(SCDynamicStoreRef store, CFArrayRef changedKeys, void *info) {
     if (info) {
         [(CXServer *)info setHttpProxyEnvironmentVariableFromSystemConfiguration];
@@ -90,11 +92,21 @@ static void _observeProxyChange(SCDynamicStoreRef store, CFArrayRef changedKeys,
 - (id)init {
     self = [super init];
     if (self) {
-        self->pendingAppLaunches = [[NSMutableArray alloc] init];
-        self->tasksInProgress = [[NSMutableDictionary alloc] init];
+        NSDictionary *defaults = [NSDictionary dictionaryWithObjectsAndKeys:
+                                  @"", @"FirstRunVersion",
+                                  [NSNumber numberWithInt:10], @"RecentItemsCount",
+                                  [CXServer getDefaultBottleDir], @"BottleDir",
+                                  [NSArray array], @"ManagedBottleDirs",
+                                  [NSArray array], @"RecentItems",
+                                  @"http://ftp.codeweavers.com/pub/crossover/tie/crossover.tie.gz", @"TieURL",
+                                  [NSNumber numberWithBool:YES], @"ShowUntestedApps",
+                                  [NSNumber numberWithBool:YES], @"InstallExeFiles",
+                                  nil];
+        [[NSUserDefaults standardUserDefaults] registerDefaults:defaults];
+        self->pendingAppLaunches = [[NSMutableArray alloc] initWithCapacity:3];
+        self->tasksInProgress = [[NSMutableDictionary alloc] initWithCapacity:3];
+        [helperServer defaultHelperServer];
         self->backgroundQueue = [[NSOperationQueue alloc] init];
-        [self->backgroundQueue setMaxConcurrentOperationCount:1];
-        self->menusEnabled = YES;
     }
     return self;
 }

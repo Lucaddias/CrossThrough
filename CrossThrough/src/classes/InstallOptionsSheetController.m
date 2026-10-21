@@ -404,7 +404,7 @@ static NSInteger _CompareLanguageEntries(id dict1, id dict2, void *context) {
 #pragma mark - Properties Accessors
 
 - (id)installDependencyTable {
-    return objc_loadWeakRetained((id *)&self->_installDependencyTable);
+    return [objc_loadWeakRetained((id *)&self->_installDependencyTable) autorelease];
 }
 
 - (void)setInstallDependencyTable:(id)arg1 {
@@ -412,7 +412,7 @@ static NSInteger _CompareLanguageEntries(id dict1, id dict2, void *context) {
 }
 
 - (id)installDependencyArrayController {
-    return objc_loadWeakRetained((id *)&self->_installDependencyArrayController);
+    return [objc_loadWeakRetained((id *)&self->_installDependencyArrayController) autorelease];
 }
 
 - (void)setInstallDependencyArrayController:(id)arg1 {
@@ -420,7 +420,7 @@ static NSInteger _CompareLanguageEntries(id dict1, id dict2, void *context) {
 }
 
 - (id)appLanguagePopUp {
-    return objc_loadWeakRetained((id *)&self->_appLanguagePopUp);
+    return [objc_loadWeakRetained((id *)&self->_appLanguagePopUp) autorelease];
 }
 
 - (void)setAppLanguagePopUp:(id)arg1 {
@@ -428,7 +428,7 @@ static NSInteger _CompareLanguageEntries(id dict1, id dict2, void *context) {
 }
 
 - (id)stackView {
-    return objc_loadWeakRetained((id *)&self->_stackView);
+    return [objc_loadWeakRetained((id *)&self->_stackView) autorelease];
 }
 
 - (void)setStackView:(id)arg1 {

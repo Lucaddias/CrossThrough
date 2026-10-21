@@ -590,7 +590,7 @@ static CXServerCrossOver *BottleViewControllerServer(void) {
 }
 
 - (id)iconCollectionView {
-    return objc_loadWeakRetained((id *)&self->_iconCollectionView);
+    return [objc_loadWeakRetained((id *)&self->_iconCollectionView) autorelease];
 }
 
 - (void)setIconCollectionView:(id)arg1 {
@@ -598,7 +598,7 @@ static CXServerCrossOver *BottleViewControllerServer(void) {
 }
 
 - (id)noAppsFoundLabel {
-    return objc_loadWeakRetained((id *)&self->_noAppsFoundLabel);
+    return [objc_loadWeakRetained((id *)&self->_noAppsFoundLabel) autorelease];
 }
 
 - (void)setNoAppsFoundLabel:(id)arg1 {
@@ -606,7 +606,7 @@ static CXServerCrossOver *BottleViewControllerServer(void) {
 }
 
 - (id)leaveRatingButton {
-    return objc_loadWeakRetained((id *)&self->_leaveRatingButton);
+    return [objc_loadWeakRetained((id *)&self->_leaveRatingButton) autorelease];
 }
 
 - (void)setLeaveRatingButton:(id)arg1 {
@@ -625,7 +625,7 @@ static CXServerCrossOver *BottleViewControllerServer(void) {
 }
 
 - (id)runWithOptionsButton {
-    return objc_loadWeakRetained((id *)&self->_runWithOptionsButton);
+    return [objc_loadWeakRetained((id *)&self->_runWithOptionsButton) autorelease];
 }
 
 - (void)setRunWithOptionsButton:(id)arg1 {
@@ -633,7 +633,7 @@ static CXServerCrossOver *BottleViewControllerServer(void) {
 }
 
 - (id)runCommandButton {
-    return objc_loadWeakRetained((id *)&self->_runCommandButton);
+    return [objc_loadWeakRetained((id *)&self->_runCommandButton) autorelease];
 }
 
 - (void)setRunCommandButton:(id)arg1 {
@@ -641,7 +641,7 @@ static CXServerCrossOver *BottleViewControllerServer(void) {
 }
 
 - (id)installIntoBottleButton {
-    return objc_loadWeakRetained((id *)&self->_installIntoBottleButton);
+    return [objc_loadWeakRetained((id *)&self->_installIntoBottleButton) autorelease];
 }
 
 - (void)setInstallIntoBottleButton:(id)arg1 {
@@ -649,7 +649,7 @@ static CXServerCrossOver *BottleViewControllerServer(void) {
 }
 
 - (id)openCDriveButton {
-    return objc_loadWeakRetained((id *)&self->_openCDriveButton);
+    return [objc_loadWeakRetained((id *)&self->_openCDriveButton) autorelease];
 }
 
 - (void)setOpenCDriveButton:(id)arg1 {
@@ -657,7 +657,7 @@ static CXServerCrossOver *BottleViewControllerServer(void) {
 }
 
 - (id)quitButton {
-    return objc_loadWeakRetained((id *)&self->_quitButton);
+    return [objc_loadWeakRetained((id *)&self->_quitButton) autorelease];
 }
 
 - (void)setQuitButton:(id)arg1 {
@@ -665,7 +665,7 @@ static CXServerCrossOver *BottleViewControllerServer(void) {
 }
 
 - (id)deleteButton {
-    return objc_loadWeakRetained((id *)&self->_deleteButton);
+    return [objc_loadWeakRetained((id *)&self->_deleteButton) autorelease];
 }
 
 - (void)setDeleteButton:(id)arg1 {
@@ -673,7 +673,7 @@ static CXServerCrossOver *BottleViewControllerServer(void) {
 }
 
 - (id)dependencyButton {
-    return objc_loadWeakRetained((id *)&self->_dependencyButton);
+    return [objc_loadWeakRetained((id *)&self->_dependencyButton) autorelease];
 }
 
 - (void)setDependencyButton:(id)arg1 {
@@ -681,7 +681,7 @@ static CXServerCrossOver *BottleViewControllerServer(void) {
 }
 
 - (id)graphicsOptionView {
-    return objc_loadWeakRetained((id *)&self->_graphicsOptionView);
+    return [objc_loadWeakRetained((id *)&self->_graphicsOptionView) autorelease];
 }
 
 - (void)setGraphicsOptionView:(id)arg1 {
@@ -689,7 +689,7 @@ static CXServerCrossOver *BottleViewControllerServer(void) {
 }
 
 - (id)graphicsLabel {
-    return objc_loadWeakRetained((id *)&self->_graphicsLabel);
+    return [objc_loadWeakRetained((id *)&self->_graphicsLabel) autorelease];
 }
 
 - (void)setGraphicsLabel:(id)arg1 {
@@ -697,7 +697,7 @@ static CXServerCrossOver *BottleViewControllerServer(void) {
 }
 
 - (id)graphicsPopUpButton {
-    return objc_loadWeakRetained((id *)&self->_graphicsPopUpButton);
+    return [objc_loadWeakRetained((id *)&self->_graphicsPopUpButton) autorelease];
 }
 
 - (void)setGraphicsPopUpButton:(id)arg1 {
@@ -705,7 +705,7 @@ static CXServerCrossOver *BottleViewControllerServer(void) {
 }
 
 - (id)autoGraphicsMenuItem {
-    return objc_loadWeakRetained((id *)&self->_autoGraphicsMenuItem);
+    return [objc_loadWeakRetained((id *)&self->_autoGraphicsMenuItem) autorelease];
 }
 
 - (void)setAutoGraphicsMenuItem:(id)arg1 {
@@ -713,7 +713,7 @@ static CXServerCrossOver *BottleViewControllerServer(void) {
 }
 
 - (id)dxmtMenuItem {
-    return objc_loadWeakRetained((id *)&self->_dxmtMenuItem);
+    return [objc_loadWeakRetained((id *)&self->_dxmtMenuItem) autorelease];
 }
 
 - (void)setDxmtMenuItem:(id)arg1 {
@@ -721,7 +721,7 @@ static CXServerCrossOver *BottleViewControllerServer(void) {
 }
 
 - (id)dxvkMenuItem {
-    return objc_loadWeakRetained((id *)&self->_dxvkMenuItem);
+    return [objc_loadWeakRetained((id *)&self->_dxvkMenuItem) autorelease];
 }
 
 - (void)setDxvkMenuItem:(id)arg1 {
@@ -729,7 +729,7 @@ static CXServerCrossOver *BottleViewControllerServer(void) {
 }
 
 - (id)d3dMetalMenuItem {
-    return objc_loadWeakRetained((id *)&self->_d3dMetalMenuItem);
+    return [objc_loadWeakRetained((id *)&self->_d3dMetalMenuItem) autorelease];
 }
 
 - (void)setD3dMetalMenuItem:(id)arg1 {
@@ -737,7 +737,7 @@ static CXServerCrossOver *BottleViewControllerServer(void) {
 }
 
 - (id)wined3dMenuItem {
-    return objc_loadWeakRetained((id *)&self->_wined3dMenuItem);
+    return [objc_loadWeakRetained((id *)&self->_wined3dMenuItem) autorelease];
 }
 
 - (void)setWined3dMenuItem:(id)arg1 {
@@ -745,7 +745,7 @@ static CXServerCrossOver *BottleViewControllerServer(void) {
 }
 
 - (id)vulkanOptionView {
-    return objc_loadWeakRetained((id *)&self->_vulkanOptionView);
+    return [objc_loadWeakRetained((id *)&self->_vulkanOptionView) autorelease];
 }
 
 - (void)setVulkanOptionView:(id)arg1 {
@@ -753,7 +753,7 @@ static CXServerCrossOver *BottleViewControllerServer(void) {
 }
 
 - (id)vulkanLabel {
-    return objc_loadWeakRetained((id *)&self->_vulkanLabel);
+    return [objc_loadWeakRetained((id *)&self->_vulkanLabel) autorelease];
 }
 
 - (void)setVulkanLabel:(id)arg1 {
@@ -761,7 +761,7 @@ static CXServerCrossOver *BottleViewControllerServer(void) {
 }
 
 - (id)vulkanPopUpButton {
-    return objc_loadWeakRetained((id *)&self->_vulkanPopUpButton);
+    return [objc_loadWeakRetained((id *)&self->_vulkanPopUpButton) autorelease];
 }
 
 - (void)setVulkanPopUpButton:(id)arg1 {
@@ -769,7 +769,7 @@ static CXServerCrossOver *BottleViewControllerServer(void) {
 }
 
 - (id)moltenvkMenuItem {
-    return objc_loadWeakRetained((id *)&self->_moltenvkMenuItem);
+    return [objc_loadWeakRetained((id *)&self->_moltenvkMenuItem) autorelease];
 }
 
 - (void)setMoltenvkMenuItem:(id)arg1 {
@@ -777,7 +777,7 @@ static CXServerCrossOver *BottleViewControllerServer(void) {
 }
 
 - (id)mtlvkMenuItem {
-    return objc_loadWeakRetained((id *)&self->_mtlvkMenuItem);
+    return [objc_loadWeakRetained((id *)&self->_mtlvkMenuItem) autorelease];
 }
 
 - (void)setMtlvkMenuItem:(id)arg1 {
@@ -785,7 +785,7 @@ static CXServerCrossOver *BottleViewControllerServer(void) {
 }
 
 - (id)msyncLabel {
-    return objc_loadWeakRetained((id *)&self->_msyncLabel);
+    return [objc_loadWeakRetained((id *)&self->_msyncLabel) autorelease];
 }
 
 - (void)setMsyncLabel:(id)arg1 {
@@ -793,7 +793,7 @@ static CXServerCrossOver *BottleViewControllerServer(void) {
 }
 
 - (id)msyncSwitch {
-    return objc_loadWeakRetained((id *)&self->_msyncSwitch);
+    return [objc_loadWeakRetained((id *)&self->_msyncSwitch) autorelease];
 }
 
 - (void)setMsyncSwitch:(id)arg1 {
@@ -801,7 +801,7 @@ static CXServerCrossOver *BottleViewControllerServer(void) {
 }
 
 - (id)msyncView {
-    return objc_loadWeakRetained((id *)&self->_msyncView);
+    return [objc_loadWeakRetained((id *)&self->_msyncView) autorelease];
 }
 
 - (void)setMsyncView:(id)arg1 {
@@ -809,7 +809,7 @@ static CXServerCrossOver *BottleViewControllerServer(void) {
 }
 
 - (id)dlssLabel {
-    return objc_loadWeakRetained((id *)&self->_dlssLabel);
+    return [objc_loadWeakRetained((id *)&self->_dlssLabel) autorelease];
 }
 
 - (void)setDlssLabel:(id)arg1 {
@@ -817,7 +817,7 @@ static CXServerCrossOver *BottleViewControllerServer(void) {
 }
 
 - (id)dlssSwitch {
-    return objc_loadWeakRetained((id *)&self->_dlssSwitch);
+    return [objc_loadWeakRetained((id *)&self->_dlssSwitch) autorelease];
 }
 
 - (void)setDlssSwitch:(id)arg1 {
@@ -825,7 +825,7 @@ static CXServerCrossOver *BottleViewControllerServer(void) {
 }
 
 - (id)dlssView {
-    return objc_loadWeakRetained((id *)&self->_dlssView);
+    return [objc_loadWeakRetained((id *)&self->_dlssView) autorelease];
 }
 
 - (void)setDlssView:(id)arg1 {
@@ -833,7 +833,7 @@ static CXServerCrossOver *BottleViewControllerServer(void) {
 }
 
 - (id)highResolutionLabel {
-    return objc_loadWeakRetained((id *)&self->_highResolutionLabel);
+    return [objc_loadWeakRetained((id *)&self->_highResolutionLabel) autorelease];
 }
 
 - (void)setHighResolutionLabel:(id)arg1 {
@@ -841,7 +841,7 @@ static CXServerCrossOver *BottleViewControllerServer(void) {
 }
 
 - (id)highResolutionSwitch {
-    return objc_loadWeakRetained((id *)&self->_highResolutionSwitch);
+    return [objc_loadWeakRetained((id *)&self->_highResolutionSwitch) autorelease];
 }
 
 - (void)setHighResolutionSwitch:(id)arg1 {
@@ -849,7 +849,7 @@ static CXServerCrossOver *BottleViewControllerServer(void) {
 }
 
 - (id)highResolutionView {
-    return objc_loadWeakRetained((id *)&self->_highResolutionView);
+    return [objc_loadWeakRetained((id *)&self->_highResolutionView) autorelease];
 }
 
 - (void)setHighResolutionView:(id)arg1 {
@@ -857,7 +857,7 @@ static CXServerCrossOver *BottleViewControllerServer(void) {
 }
 
 - (id)previewLabel {
-    return objc_loadWeakRetained((id *)&self->_previewLabel);
+    return [objc_loadWeakRetained((id *)&self->_previewLabel) autorelease];
 }
 
 - (void)setPreviewLabel:(id)arg1 {
@@ -865,7 +865,7 @@ static CXServerCrossOver *BottleViewControllerServer(void) {
 }
 
 - (id)previewSwitch {
-    return objc_loadWeakRetained((id *)&self->_previewSwitch);
+    return [objc_loadWeakRetained((id *)&self->_previewSwitch) autorelease];
 }
 
 - (void)setPreviewSwitch:(id)arg1 {
@@ -873,7 +873,7 @@ static CXServerCrossOver *BottleViewControllerServer(void) {
 }
 
 - (id)previewView {
-    return objc_loadWeakRetained((id *)&self->_previewView);
+    return [objc_loadWeakRetained((id *)&self->_previewView) autorelease];
 }
 
 - (void)setPreviewView:(id)arg1 {
@@ -881,7 +881,7 @@ static CXServerCrossOver *BottleViewControllerServer(void) {
 }
 
 - (id)controlPanelsSection {
-    return objc_loadWeakRetained((id *)&self->_controlPanelsSection);
+    return [objc_loadWeakRetained((id *)&self->_controlPanelsSection) autorelease];
 }
 
 - (void)setControlPanelsSection:(id)arg1 {
@@ -889,7 +889,7 @@ static CXServerCrossOver *BottleViewControllerServer(void) {
 }
 
 - (id)controlPanelsLoadingView {
-    return objc_loadWeakRetained((id *)&self->_controlPanelsLoadingView);
+    return [objc_loadWeakRetained((id *)&self->_controlPanelsLoadingView) autorelease];
 }
 
 - (void)setControlPanelsLoadingView:(id)arg1 {
@@ -897,7 +897,7 @@ static CXServerCrossOver *BottleViewControllerServer(void) {
 }
 
 - (id)controlPanelsLoadingSpinner {
-    return objc_loadWeakRetained((id *)&self->_controlPanelsLoadingSpinner);
+    return [objc_loadWeakRetained((id *)&self->_controlPanelsLoadingSpinner) autorelease];
 }
 
 - (void)setControlPanelsLoadingSpinner:(id)arg1 {
@@ -905,7 +905,7 @@ static CXServerCrossOver *BottleViewControllerServer(void) {
 }
 
 - (id)installedSoftwareTableView {
-    return objc_loadWeakRetained((id *)&self->_installedSoftwareTableView);
+    return [objc_loadWeakRetained((id *)&self->_installedSoftwareTableView) autorelease];
 }
 
 - (void)setInstalledSoftwareTableView:(id)arg1 {
@@ -913,7 +913,7 @@ static CXServerCrossOver *BottleViewControllerServer(void) {
 }
 
 - (id)installedSoftware {
-    return objc_loadWeakRetained((id *)&self->_installedSoftware);
+    return [objc_loadWeakRetained((id *)&self->_installedSoftware) autorelease];
 }
 
 - (void)setInstalledSoftware:(id)arg1 {

@@ -42,7 +42,7 @@
 }
 
 - (id)needsUpgradeButton {
-    return objc_loadWeakRetained((id *)&self->_needsUpgradeButton);
+    return [objc_loadWeakRetained((id *)&self->_needsUpgradeButton) autorelease];
 }
 
 - (void)setNeedsUpgradeButton:(id)arg1 {
