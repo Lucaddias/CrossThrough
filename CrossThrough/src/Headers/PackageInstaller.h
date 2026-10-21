@@ -11,6 +11,7 @@
 #import "CXObject.h"
 
 @class PackageInstaller;
+@class InstallConfiguration;
 
 @interface PackageInstaller : CXObject <InstallConfigurationDelegate, NSObject>
 {
@@ -92,7 +93,7 @@
 - (void)analyzedBottle:(id)arg1;
 - (id)delegate;
 - (void)setDelegate:(id)arg1;
-- (id)installConfiguration;
+- (InstallConfiguration *)installConfiguration;
 - (void)setInstallConfiguration:(id)arg1;
 - (id)package;
 - (void)setPackage:(id)arg1;

@@ -111,7 +111,7 @@
 - (NSInteger)compareInstallDependencySortKey:(id)arg1 {
     if (self == arg1) return NSOrderedSame;
     NSInteger d1 = [self depth];
-    NSInteger d2 = [arg1 depth];
+    NSInteger d2 = [(InstallDependency *)arg1 depth];
     if (d1 < d2) {
         return NSOrderedAscending;
     } else if (d1 > d2) {

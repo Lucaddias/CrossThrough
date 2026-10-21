@@ -171,7 +171,7 @@ static dispatch_once_t _catOnceToken = 0;
 - (void)addMenuItemsFromCategories:(id)categories isBottles:(BOOL)isBottles {
     if (_catOnceToken != -1) {
         dispatch_once(&_catOnceToken, ^{
-            id cxSetup = [CXSetupLib cxSetupClass];
+            Class cxSetup = [CXSetupLib cxSetupClass];
             NSNumber *rec = [cxSetup bottleCategory:@"RECOMMENDED"];
             NSNumber *comp = [cxSetup bottleCategory:@"COMPATIBLE"];
             NSNumber *none = [cxSetup bottleCategory:@"NONE"];
@@ -399,7 +399,7 @@ static dispatch_once_t _catOnceToken = 0;
 
 #pragma mark - Properties Accessors
 
-- (id)installConfiguration {
+- (InstallConfiguration *)installConfiguration {
     return self->_installConfiguration;
 }
 

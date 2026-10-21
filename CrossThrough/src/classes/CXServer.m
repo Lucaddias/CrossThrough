@@ -205,7 +205,7 @@ static void _observeProxyChange(SCDynamicStoreRef store, CFArrayRef changedKeys,
 - (void)continueFromDemoCheck {
     dispatch_async(dispatch_get_main_queue(), ^{
         [[helperServer defaultHelperServer] setIsReady];
-        [[self startAppOp] start];
+        [(NSOperation *)[self startAppOp] start];
     });
     [self updateRecentItemsMenu];
     [self setMenusEnabled:YES];
@@ -271,7 +271,17 @@ static void _observeProxyChange(SCDynamicStoreRef store, CFArrayRef changedKeys,
 }
 
 - (void)otherWineAppWillActivate:(id)arg1 {
-    [NSApp yieldActivationToApplication:[arg1 object]];
+    if ([NSApp isActive]) {
+        int pid = [[[arg1 userInfo] objectForKeyedSubscript:@"ActivatingAppPID"] intValue];
+        NSRunningApplication *app = [NSRunningApplication runningApplicationWithProcessIdentifier:pid];
+        if (app) {
+            if (@available(macOS 14.0, *)) {
+                NSLog(@"yielding activation to %@", app);
+                [NSApp yieldActivationToApplication:app];
+                [app activateFromApplication:[NSRunningApplication currentApplication] options:0];
+            }
+        }
+    }
 }
 
 - (id)launchFeedbackDrawInfoForImageSize:(NSSize)arg1 {

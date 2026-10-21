@@ -60,12 +60,12 @@
     [super viewDidLoad];
 
     [[self packageView] setFrame:[[self view] bounds]];
-    [[self packageView] setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable];
+    [(NSView *)[self packageView] setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable];
     [[self packageView] registerForDraggedTypes:@[NSPasteboardTypeFileURL]];
     [[self packageView] setDelegate:self];
 
     [[self installerView] setFrame:[[self view] bounds]];
-    [[self installerView] setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable];
+    [(NSView *)[self installerView] setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable];
     [[self installerView] setHidden:YES];
     [[self installerView] registerForDraggedTypes:@[NSPasteboardTypeFileURL]];
     [[self installerView] setDelegate:self];
@@ -436,7 +436,7 @@
         inst = [[[PackageInstaller alloc] initWithPackage:nil] autorelease];
     }
 
-    id c4Profiles = (id)[CXSetupLib c4ProfilesClass];
+    Class c4Profiles = [CXSetupLib c4ProfilesClass];
     id matching = [c4Profiles getMatchingProfiles:arg1];
     if ([matching count] == 1) {
         for (id key in matching) {
@@ -483,7 +483,7 @@
         return;
     }
 
-    id c4Profiles = (id)[CXSetupLib c4ProfilesClass];
+    Class c4Profiles = [CXSetupLib c4ProfilesClass];
     id taste = [c4Profiles tasteC4PFile:arg1];
     if ([taste boolValue]) {
         [[self window] makeKeyAndOrderFront:self];
@@ -509,7 +509,7 @@
 }
 
 - (void)prepareDropinC4pAndAutorun:(id)arg1 {
-    id c4Profiles = (id)[CXSetupLib c4ProfilesClass];
+    Class c4Profiles = [CXSetupLib c4ProfilesClass];
     id res = [c4Profiles prepareSingleUseC4PFile:arg1];
     if ([res count] == 2) {
         id file0 = [res objectAtIndex:0];

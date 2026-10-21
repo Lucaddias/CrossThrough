@@ -244,7 +244,7 @@ static NSInteger _CompareLanguageEntries(id dict1, id dict2, void *context) {
     if (row != -1) {
         NSArray *arranged = [[self installDependencyArrayController] arrangedObjects];
         InstallDependency *dep = [arranged objectAtIndex:row];
-        id task = [self.installConfiguration installTask];
+        InstallTask *task = [self.installConfiguration installTask];
         if ([dep isManuallyAdded]) {
             [task removeDependencyOverrides:@[[dep appID]]];
         } else {
@@ -258,12 +258,12 @@ static NSInteger _CompareLanguageEntries(id dict1, id dict2, void *context) {
     if (row != -1) {
         NSArray *arranged = [[self installDependencyArrayController] arrangedObjects];
         InstallDependency *dep = [arranged objectAtIndex:row];
-        [[self.installConfiguration installTask] removeDependencyOverrides:@[[dep appID]]];
+        [(InstallTask *)[self.installConfiguration installTask] removeDependencyOverrides:@[[dep appID]]];
     }
 }
 
 - (void)revertInstallDependencies:(id)arg1 {
-    [[self.installConfiguration installTask] ClearDependencyOverrides];
+    [(InstallTask *)[self.installConfiguration installTask] ClearDependencyOverrides];
 }
 
 - (void)showAddDependenciesPopover:(id)arg1 {

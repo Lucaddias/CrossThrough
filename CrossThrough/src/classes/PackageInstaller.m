@@ -880,7 +880,7 @@ static NSByteCountFormatter *_byteCountFormatter = nil;
     objc_storeWeak((id *)&self->_delegate, arg1);
 }
 
-- (id)installConfiguration {
+- (InstallConfiguration *)installConfiguration {
     return self->_installConfiguration;
 }
 
