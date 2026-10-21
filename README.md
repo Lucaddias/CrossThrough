@@ -8,7 +8,7 @@ Uma GUI nativa para macOS, em Objective-C/Cocoa, que roda aplicativos e jogos Wi
 
 - macOS 11 ou mais recente (Apple Silicon ou Intel). No Apple Silicon, o Rosetta 2 é necessário.
 - Xcode Command Line Tools (`xcode-select --install`).
-- O runtime host instalado e licenciado em `/Applications/CrossOver.app`, versão 26.3. O CrossThrough é só a interface: o Wine, a biblioteca Python e as ferramentas de bottle vêm desse runtime.
+- O runtime host (versão 26.3) instalado e licenciado em `/Applications`. O caminho exato fica na variável `RUNTIME` do `install.sh`. O CrossThrough é só a interface: o Wine, a biblioteca Python e as ferramentas de bottle vêm desse runtime.
 
 ## Instalação
 
@@ -68,6 +68,7 @@ make -j8 && make app
 
 ## Documentação
 
+- [`docs/API.md`](docs/API.md): referência de todas as classes, métodos e funções C.
 - [`docs/HOW-IT-WORKS.md`](docs/HOW-IT-WORKS.md): camadas, inicialização, ponte GUI ↔ Python, fluxo de instalação, classes e funções.
 - [`CrossThrough/ARCHITECTURE.md`](CrossThrough/ARCHITECTURE.md): detalhes de baixo nível (processos, privilégios, apps helper).
 - [`CrossThrough/sharedsupport/`](CrossThrough/sharedsupport): ferramentas Perl e biblioteca Python do backend.

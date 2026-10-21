@@ -23,7 +23,7 @@ O CrossThrough compila apenas a camada de GUI. As outras camadas vêm do runtime
 ## Inicialização
 
 1. `main.m` chama `NSApplicationMain`, que carrega `MainMenu.nib` e cria `CXApplication`.
-2. `CXServerCrossOver` (o delegate, subclasse de `CXServer`) roda `applicationWillFinishLaunching:`:
+2. o delegate do app (a subclasse de produto de `CXServer`) roda `applicationWillFinishLaunching:`:
    - `CTBrandAppMenu()` troca o nome nos menus;
    - agenda `AskUpdateBottlesOp`;
    - `CXServer` verifica o Rosetta e registra o handler de URLs (`kAEGetURL`).
@@ -69,7 +69,7 @@ Principais classes Python usadas:
 | Classe | Responsabilidade |
 |---|---|
 | `CXApplication` | NSApplication: modo demo, dias de teste |
-| `CXServer` / `CXServerCrossOver` | delegate do app: URLs, menus de programas, apps helper por bottle, atualizações |
+| `CXServer` e subclasse de produto | delegate do app: URLs, menus de programas, apps helper por bottle, atualizações |
 | `MainWindowController` | janela principal, sidebar e troca de conteúdo (`updateMainContentView`) |
 | `PackageViewController` | tela Install: busca, grade de apps populares, detalhe, wizard |
 | `PackageTreeNode` | um app do catálogo: nome, medalha, ícone (`loadIcon`) |
@@ -107,4 +107,4 @@ Principais classes Python usadas:
 | `make snapshot` | captura Home e detalhe para comparação visual |
 | `make probe` | lista as tarefas de instalação de um pacote; `PROBE_ARGS=--download` baixa a primeira |
 
-Para mais detalhes de baixo nível, veja [`ARCHITECTURE.md`](../CrossThrough/ARCHITECTURE.md) e [`sharedsupport/`](../CrossThrough/sharedsupport).
+Referência completa de métodos: [`API.md`](API.md). Para mais detalhes de baixo nível, veja [`ARCHITECTURE.md`](../CrossThrough/ARCHITECTURE.md) e [`sharedsupport/`](../CrossThrough/sharedsupport).
