@@ -26,6 +26,8 @@ Engenharia reversa do CrossOver 26.3 para macOS (CodeWeavers). Os nomes que vêm
 | Scripts Python/Perl em `SharedSupport/CrossOver` (36 entradas de `bin/`, 16 scripts e 66 módulos Perl, 50 módulos Python 3.13 desmontados) | ✅ [`sharedsupport/`](CrossThrough/sharedsupport) |
 | Código compilável (Headers, Shims, 94 classes, funções C, Makefile) | ✅ [`src/`](CrossThrough/src) |
 | Documentação da arquitetura (GUI ↔ backend: inicialização do Python, ponte PyObjC, processos, privilégios, helper apps) | ✅ [`ARCHITECTURE.md`](CrossThrough/ARCHITECTURE.md) |
+| Implementação da GUI (Partes 1–5): 0 métodos com `Decompiled from CrossOver 26.3:`, build sem warnings, telas Home e detalhe do pacote conferidas com o original, download do instalador funcionando | ✅ [`src/classes/`](CrossThrough/src/classes) |
+| Testes (`test_wizard`: wizard, motor de instalação e backend; `test_misc`: formatters, categorias de Foundation, ordenação de launchers, presets de log e nibs com outlets conectados) | ✅ [`tests/`](CrossThrough/tests) |
 
 ## Arquitetura (resumo)
 
@@ -49,6 +51,7 @@ CrossThrough/
 │   ├── classes/*.m         # implementações Objective-C das 94 classes e categorias
 │   ├── c_functions.m       # funções C e callbacks standalone
 │   └── main.m              # ponto de entrada da aplicação (NSApplicationMain)
+├── tests/                  # test_wizard, test_misc, snapshot_ui (capturas) e download_probe
 ├── ARCHITECTURE.md         # como a GUI, o Python, o Perl e o Wine se ligam
 ├── reproduce.sh            # regenera e confere x86_64/ e sharedsupport/
 ├── decompiled/             # pseudocódigo bruto do Hopper via REA
@@ -79,3 +82,21 @@ O binário final é gerado em `build/CrossThrough`. Para empacotar o bundle comp
 ```bash
 make app
 ```
+
+O build segue o original: macOS 11.0 como mínimo e SDK 15.1 como SDK de link, porque o AppKit escolhe o estilo dos controles e da barra de título pela versão do SDK linkado.
+
+Testes e ferramentas de verificação (todos rodam dentro do bundle, para achar nibs e a ponte Python):
+
+```bash
+make test        # test_wizard + test_misc
+```
+
+```bash
+make snapshot    # build/snapshots/home.png e detail.png (SNAPSHOT_PACKAGE=Steam por padrão)
+```
+
+```bash
+make probe       # tarefas do motor de instalação de PROBE_PACKAGE; PROBE_ARGS=--download baixa a primeira
+```
+
+`snapshot_ui <dir> <pacote> install` também aperta Install, captura o progresso do download e cancela. Rode esse modo com `CX_BOTTLE_PATH` e `CX_MANAGED_BOTTLE_PATH` apontando para uma pasta temporária, porque ele cria a bottle de verdade. Nenhum teste executa fluxos que pedem privilégios de administrador (publicar bottles, registro para todos os usuários, atualização de bottles gerenciadas).

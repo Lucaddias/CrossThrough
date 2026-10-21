@@ -83,11 +83,16 @@ app: $(TARGET)
 clean:
 	rm -rf build
 
-test: app build/obj/test_wizard.o
+test: app build/obj/test_wizard.o test-misc
 	@echo "Linking $(APP_BUNDLE)/Contents/MacOS/test_wizard..."
 	$(CC) $(LDFLAGS) build/obj/test_wizard.o $(filter-out build/obj/main.o, $(OBJS)) -o $(APP_BUNDLE)/Contents/MacOS/test_wizard
 	@echo "Running test_wizard inside app bundle..."
 	@./$(APP_BUNDLE)/Contents/MacOS/test_wizard
+
+test-misc: app build/obj/test_misc.o
+	$(CC) $(LDFLAGS) build/obj/test_misc.o $(filter-out build/obj/main.o, $(OBJS)) -o $(APP_BUNDLE)/Contents/MacOS/test_misc
+	@echo "Running test_misc inside app bundle..."
+	@./$(APP_BUNDLE)/Contents/MacOS/test_misc
 
 snapshot: app build/obj/snapshot_ui.o
 	$(CC) $(LDFLAGS) build/obj/snapshot_ui.o $(filter-out build/obj/main.o, $(OBJS)) -o $(APP_BUNDLE)/Contents/MacOS/snapshot_ui
@@ -107,8 +112,12 @@ build/obj/snapshot_ui.o: tests/snapshot_ui.m
 	@mkdir -p build/obj
 	$(CC) $(CFLAGS) -c $< -o $@
 
+build/obj/test_misc.o: tests/test_misc.m
+	@mkdir -p build/obj
+	$(CC) $(CFLAGS) -c $< -o $@
+
 build/obj/test_wizard.o: tests/test_wizard.m
 	@mkdir -p build/obj
 	$(CC) $(CFLAGS) -c $< -o $@
 
-.PHONY: all app clean test snapshot probe
+.PHONY: all app clean test test-misc snapshot probe
