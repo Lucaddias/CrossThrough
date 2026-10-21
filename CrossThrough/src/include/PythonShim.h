@@ -153,6 +153,7 @@ extern void _Py_Dealloc(PyObject *);
 
 @interface CXUtils : NSObject
 + (id)loggingPresets;
++ (id)getLanguageValue:(id)arg1 forLanguage:(id)arg2;
 @end
 
 @interface InstallTask : NSObject
@@ -168,6 +169,20 @@ extern void _Py_Dealloc(PyObject *);
 - (id)canCancel;
 - (void)cancel;
 - (void)done;
+@end
+
+// c4profiles: the CrossTie profile database.
+@interface C4Profiles : NSObject
++ (id)profilesSet;
++ (id)getOnlineFilePath;
++ (id)updateOnlineProfilesFromURL:(id)arg1;
+@end
+
+// iconutils: downloads and caches CrossTie application icons.
+@interface IconUtils : NSObject
+- (id)fetchIconList;
+- (id)fetchIcon:(id)arg1;
+- (id)getIconPath:(id)arg1;
 @end
 
 @interface CDDetector : NSObject

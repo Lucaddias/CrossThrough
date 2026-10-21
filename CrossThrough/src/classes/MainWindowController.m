@@ -233,7 +233,22 @@
 }
 
 - (void)updateC4Ps {
-    return;
+    if (![[NSUserDefaults standardUserDefaults] boolForKey:@"AutoUpdateCrossTies"] || [self updating]) {
+        return;
+    }
+    [self setUpdating:YES];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        [[CXSetupLib webUtilsClass] updateCompatDB];
+        [[CXSetupLib c4ProfilesClass] updateOnlineProfilesFromURL:[[NSUserDefaults standardUserDefaults] objectForKey:@"TieURL"]];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [[self packageViewController] populatePackages];
+            [self setUpdating:NO];
+            // Check again in a day.
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 86400 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+                [self updateC4Ps];
+            });
+        });
+    });
 }
 
 - (void)autoPlay:(id)arg1 inBottle:(id)arg2 {

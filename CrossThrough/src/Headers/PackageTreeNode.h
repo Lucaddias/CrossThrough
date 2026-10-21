@@ -24,7 +24,7 @@
     NSMutableArray * children;
     NSMutableArray * unfilteredChildren;
     NSString * sortkey;
-    id _ratingImages;
+    NSImage * _ratingImages[5];
     NSString * _ratingDescription;
     NSString * _ratingTooltip;
     NSString * _softwarePackage;
@@ -50,8 +50,8 @@
 - (id)initRootWithChildren:(id)arg1;
 - (id)initWithProfile:(id)arg1;
 - (id)initWithCategoryID:(id)arg1 name:(id)arg2 children:(id)arg3 sortKey:(id)arg4;
-- (id)copyWithZone:(void *)arg1;
-- (id)mutableCopyWithZone:(void *)arg1;
+- (id)copyWithZone:(NSZone *)arg1;
+- (id)mutableCopyWithZone:(NSZone *)arg1;
 - (void)dealloc;
 - (id)packageid;
 - (id)packageobject;

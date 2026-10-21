@@ -34,7 +34,10 @@ int main(int argc, const char * argv[]) {
         assert([visible count] > 0);
 
         PackageTreeNode *firstApp = [visible objectAtIndex:0];
-        NSLog(@"[TEST] First popular app: %@ (appid: %@)", [firstApp description], [firstApp packageid]);
+        NSLog(@"[TEST] First popular app: %@ (appid: %@)", [firstApp softwarePackage], [firstApp packageid]);
+        assert([firstApp softwarePackage] != nil);
+        assert([firstApp leaf]);
+        NSLog(@"[TEST] First popular app rating: %@, description: %lu chars", [firstApp ratingDescription], (unsigned long)[[firstApp description] length]);
 
         NSLog(@"[TEST] Simulating app selection...");
         [pvc setSelectedPackage:firstApp];
