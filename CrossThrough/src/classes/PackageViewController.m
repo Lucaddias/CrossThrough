@@ -714,22 +714,25 @@
 }
 
 - (void)installationCompleted {
-    NSString *installTitle = [[NSBundle mainBundle] localizedStringForKey:@"Install" value:@"" table:nil];
-    [[self installButton] setTitle:installTitle];
+    [[self installButton] setTitle:[[NSBundle mainBundle] localizedStringForKey:@"Install" value:@"" table:nil]];
     [[self optionsButton] setEnabled:YES];
-
     if ([[self installer] status] == 2) {
-        id d = [self delegate];
-        if ([d respondsToSelector:@selector(revealNewBottle:)]) {
-            [d revealNewBottle:[[self installer] bottle]];
+        [[self delegate] revealNewBottle:[[self installer] bottle]];
+        [self back];
+    } else {
+        for (InstallSummaryDetailViewController *controller in [self summaryDetailsControllers]) {
+            [controller setButtonEnabled:YES];
         }
+        [[self delegate] selectInstallView];
     }
 }
 
 - (void)installationStarted {
-    NSString *cancelTitle = [[NSBundle mainBundle] localizedStringForKey:@"Cancel" value:@"" table:nil];
-    [[self installButton] setTitle:cancelTitle];
+    [[self installButton] setTitle:[[NSBundle mainBundle] localizedStringForKey:@"Cancel" value:@"" table:nil]];
     [[self optionsButton] setEnabled:NO];
+    for (InstallSummaryDetailViewController *controller in [self summaryDetailsControllers]) {
+        [controller setButtonEnabled:NO];
+    }
 }
 
 - (id)window {

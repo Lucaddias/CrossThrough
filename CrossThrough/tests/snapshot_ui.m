@@ -1,10 +1,13 @@
 // snapshot_ui.m — renders CrossThrough screens to PNG for side-by-side checks
 // against the original CrossOver.
 //
-// Usage: snapshot_ui <output-dir> [package name]
+// Usage: snapshot_ui <output-dir> [package name] [install]
 // Writes home.png (the Install view) and detail.png (the package detail view
-// for the named package, "Steam" by default). Nothing is installed: the
-// harness only selects a package, exactly like a click in the grid.
+// for the named package, "Steam" by default); the harness only selects a
+// package, exactly like a click in the grid. With "install" it also presses
+// Install, captures installing.png while the first tasks download, presses
+// Cancel and captures cancelled.png. Point CX_BOTTLE_PATH and
+// CX_MANAGED_BOTTLE_PATH at a scratch directory for that mode.
 #import <Cocoa/Cocoa.h>
 #import "CrossThrough.h"
 #import "MainWindowController.h"
@@ -25,12 +28,20 @@ int main(int argc, const char *argv[]) {
         }
         NSString *outDir = [NSString stringWithUTF8String:argv[1]];
         NSString *packageName = argc > 2 ? [NSString stringWithUTF8String:argv[2]] : @"Steam";
+        BOOL pressInstall = argc > 3 && strcmp(argv[3], "install") == 0;
         [[NSFileManager defaultManager] createDirectoryAtPath:outDir withIntermediateDirectories:YES attributes:nil error:NULL];
 
         [CXApplication sharedApplication];
         [NSApp setActivationPolicy:NSApplicationActivationPolicyRegular];
-        // Keep the persisted window state of the real app untouched.
-        [[NSUserDefaults standardUserDefaults] setVolatileDomain:@{@"ApplePersistenceIgnoreState": @YES} forName:NSArgumentDomain];
+        // Keep the persisted window state of the real app untouched. CXServer
+        // exports BottleDir as CX_BOTTLE_PATH, so a scratch CX_BOTTLE_PATH has
+        // to go through the defaults to survive.
+        NSMutableDictionary *volatileDefaults = [NSMutableDictionary dictionaryWithObject:@YES forKey:@"ApplePersistenceIgnoreState"];
+        NSString *scratchBottles = [[[NSProcessInfo processInfo] environment] objectForKey:@"CX_BOTTLE_PATH"];
+        if (scratchBottles) {
+            [volatileDefaults setObject:scratchBottles forKey:@"BottleDir"];
+        }
+        [[NSUserDefaults standardUserDefaults] setVolatileDomain:volatileDefaults forName:NSArgumentDomain];
 
         MainWindowController *controller = [[MainWindowController alloc] init];
         [controller showWindow:nil];
@@ -56,7 +67,22 @@ int main(int argc, const char *argv[]) {
 
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 3 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
                 capture([controller window], [outDir stringByAppendingPathComponent:@"detail.png"]);
-                exit(0);
+                if (!pressInstall) {
+                    exit(0);
+                }
+                [pvc install:nil];
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 3 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+                    printf("[SNAPSHOT] status=%ld task='%s' download='%s'\n", (long)[[pvc installer] status],
+                           [[[[pvc installer] currentTaskDescription] description] UTF8String],
+                           [[[[pvc installer] currentTaskDownloadDescription] description] UTF8String]);
+                    capture([controller window], [outDir stringByAppendingPathComponent:@"installing.png"]);
+                    [pvc install:nil];
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 5 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+                        printf("[SNAPSHOT] after cancel status=%ld\n", (long)[[pvc installer] status]);
+                        capture([controller window], [outDir stringByAppendingPathComponent:@"cancelled.png"]);
+                        exit(0);
+                    });
+                });
             });
         });
         [NSApp run];

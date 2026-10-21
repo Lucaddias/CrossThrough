@@ -93,6 +93,16 @@ snapshot: app build/obj/snapshot_ui.o
 	$(CC) $(LDFLAGS) build/obj/snapshot_ui.o $(filter-out build/obj/main.o, $(OBJS)) -o $(APP_BUNDLE)/Contents/MacOS/snapshot_ui
 	@./$(APP_BUNDLE)/Contents/MacOS/snapshot_ui build/snapshots $(SNAPSHOT_PACKAGE)
 
+# Lists the install engine tasks for $(PROBE_PACKAGE); PROBE_ARGS=--download
+# also fetches its first download.
+probe: app build/obj/download_probe.o
+	$(CC) $(LDFLAGS) build/obj/download_probe.o $(filter-out build/obj/main.o, $(OBJS)) -o $(APP_BUNDLE)/Contents/MacOS/download_probe
+	@./$(APP_BUNDLE)/Contents/MacOS/download_probe $(PROBE_PACKAGE) $(PROBE_ARGS)
+
+build/obj/download_probe.o: tests/download_probe.m
+	@mkdir -p build/obj
+	$(CC) $(CFLAGS) -c $< -o $@
+
 build/obj/snapshot_ui.o: tests/snapshot_ui.m
 	@mkdir -p build/obj
 	$(CC) $(CFLAGS) -c $< -o $@
@@ -101,4 +111,4 @@ build/obj/test_wizard.o: tests/test_wizard.m
 	@mkdir -p build/obj
 	$(CC) $(CFLAGS) -c $< -o $@
 
-.PHONY: all app clean test snapshot
+.PHONY: all app clean test snapshot probe
