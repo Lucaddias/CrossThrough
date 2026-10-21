@@ -14,6 +14,7 @@
 #import "CXSourceList.h"
 
 #import "BottleTableRowView.h"
+#import "CrossThroughBranding.h"
 
 static void *MainWindowControllerKVOContext = &MainWindowControllerKVOContext;
 
@@ -27,6 +28,7 @@ static void *MainWindowControllerKVOContext = &MainWindowControllerKVOContext;
 }
 
 - (id)init {
+    CTRegisterBrandedLogo();
     self = [super initWithWindowNibName:@"MainWindow"];
     if (self) {
         self->_bottleViewController = [[BottleViewController alloc] init];
@@ -123,6 +125,8 @@ static void *MainWindowControllerKVOContext = &MainWindowControllerKVOContext;
 }
 
 - (void)windowDidLoad {
+    [[self window] setTitle:CTApplicationName()];
+
     NSMutableArray *topNodes = [NSMutableArray array];
     BottleNode *allNode = [BottleNode allBottlesBottleNode];
     [allNode setSortPriority:0];

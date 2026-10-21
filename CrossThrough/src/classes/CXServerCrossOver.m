@@ -21,6 +21,7 @@
 #import <math.h>
 
 #import "BuySupportNagController.h"
+#import "CrossThroughBranding.h"
 
 @implementation CXServerCrossOver
 
@@ -156,6 +157,7 @@
 }
 
 - (void)applicationWillFinishLaunching:(id)arg1 {
+    CTBrandAppMenu();
     AskUpdateBottlesOp *op = [[AskUpdateBottlesOp alloc] init];
     [updateCheckOp release];
     updateCheckOp = op;

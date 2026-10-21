@@ -100,3 +100,24 @@ make probe       # tarefas do motor de instalação de PROBE_PACKAGE; PROBE_ARGS
 ```
 
 `snapshot_ui <dir> <pacote> install` também aperta Install, captura o progresso do download e cancela. Rode esse modo com `CX_BOTTLE_PATH` e `CX_MANAGED_BOTTLE_PATH` apontando para uma pasta temporária, porque ele cria a bottle de verdade. Nenhum teste executa fluxos que pedem privilégios de administrador (publicar bottles, registro para todos os usuários, atualização de bottles gerenciadas).
+
+## Instalar em /Applications
+
+```bash
+make install
+```
+
+Copia o bundle para `/Applications/CrossThrough.app` sem as ferramentas de teste, assina ad hoc e registra no LaunchServices. A cópia instalada não declara os tipos de documento, os esquemas de URL nem os tipos exportados do CrossOver, então `.exe`, `.c4p` e links CrossTie continuam abrindo no CrossOver. `INSTALL_DIR=<pasta>` instala em outro lugar. O bundle depende do `/Applications/CrossOver.app` instalado (frameworks, recursos e `SharedSupport`).
+
+## Identidade
+
+O app usa ícone, logo e nome próprios sobre os recursos do CrossOver:
+
+- Ícone: o controle de `resources/icon/controller.webp` sobre fundo preto, recortado pela máscara de ícone da Apple para o macOS não colocá-lo numa placa cinza. `make icon` regenera o PNG e o `.icns`.
+- Logo da barra lateral: `resources/logo/CrossThroughLogo*.png`, versões clara e escura no estilo da faixa original. `make logo` regenera.
+- Nome: `CFBundleName` e `CFBundleDisplayName` viram CrossThrough; `src/classes/CrossThroughBranding.m` registra a logo com o nome que o `MainWindow.nib` pede e troca o nome nos itens Sobre, Ocultar e Encerrar.
+
+## Diferenças do original
+
+- A lista de ícones da CodeWeavers é buscada em segundo plano, como no CrossOver 26.3, mas o erro de uma resposta que não é JSON (o site fora do ar) é tratado em vez de encerrar o app.
+- Os caminhos que a lista de ícones resolveu ficam salvos em `~/Library/Caches/com.crossthrough.app/IconPaths.plist`, e são usados quando a lista não chega, para os ícones já baixados continuarem aparecendo.
