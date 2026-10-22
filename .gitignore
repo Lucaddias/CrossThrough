@@ -6,5 +6,7 @@ CrossThrough/native/build/
 .DS_Store
 __pycache__/
 
-# Frameworks vendorizados (populados por CrossThrough/vendor/setup.sh)
+# Artefatos vendorizados (populados por CrossThrough/vendor/setup.sh)
 CrossThrough/vendor/Frameworks/
+CrossThrough/vendor/SharedSupport
+CrossThrough/vendor/Resources/

@@ -1,10 +1,12 @@
 # Makefile for CrossThrough
 # Converts reverse-engineered CrossOver 26.3 code into a compilable macOS app.
 #
-# Etapa 1 da independência: o build não aponta para /Applications/CrossOver.app.
-# O Python embarcado vem de vendor/Frameworks (vendor/setup.sh) e o Sparkle saiu
-# do link (src/classes/SparkleCompat.m). O branding (ícone/logo, nome) e o backend
-# ainda compartilhado (SharedSupport, Resources) são aplicados no empacotamento.
+# Etapa 1 da independência: nenhuma regra do build aponta para
+# /Applications/CrossOver.app. Tudo que vem do app de referência (Python.framework,
+# o backend SharedSupport e os Resources da GUI) é vendorizado em vendor/ por
+# vendor/setup.sh; o único lugar que conhece o caminho do app é esse script, pela
+# variável CROSSOVER_APP. O Sparkle saiu do link (src/classes/SparkleCompat.m) e o
+# branding (ícone/logo, nome) é aplicado no empacotamento.
 
 CC = xcrun clang
 # CrossOver 26.3 is built for macOS 11.0 against the 15.1 SDK; AppKit picks its
@@ -14,8 +16,14 @@ LINKED_SDK = 15.1
 
 VENDOR ?= vendor
 FRAMEWORKS ?= $(VENDOR)/Frameworks
+# CROSSOVER_APP é apenas o knob de bootstrap repassado a vendor/setup.sh; nenhuma
+# regra de build/empacotamento o usa diretamente.
 CROSSOVER_APP ?= /Applications/CrossOver.app
 PYTHON_FRAMEWORK = $(FRAMEWORKS)/Python.framework
+SHAREDSUPPORT ?= $(VENDOR)/SharedSupport
+RESOURCES ?= $(VENDOR)/Resources
+# Invocação única do bootstrap de vendor (idempotente).
+VENDOR_SETUP = CROSSOVER_APP="$(CROSSOVER_APP)" bash $(VENDOR)/setup.sh
 
 CFLAGS = -O2 -x objective-c \
          -mmacosx-version-min=$(MIN_MACOS) \
@@ -46,7 +54,7 @@ APP_BUNDLE = build/CrossThrough.app
 # App icon: the controller art on a black macOS icon shape. `make icon`
 # regenerates the PNG and the .icns from ICON_SOURCE.
 ICON_SOURCE = resources/icon/controller.webp
-ICON_MASK = $(CROSSOVER_APP)/Contents/Resources/app-icon-roundrect-mask.png
+ICON_MASK = $(RESOURCES)/app-icon-roundrect-mask.png
 ICON_PNG = resources/icon/CrossThrough-1024.png
 ICON = resources/icon/CrossThrough.icns
 
@@ -58,12 +66,22 @@ LSREGISTER = /System/Library/Frameworks/CoreServices.framework/Frameworks/Launch
 
 all: $(TARGET)
 
-# Garante o Python.framework vendorizado antes de compilar/ligar.
+# Garante os artefatos vendorizados antes de compilar/empacotar. setup.sh é
+# idempotente: popula os três (Python.framework, SharedSupport, Resources) e pula
+# o que já existe.
 $(PYTHON_FRAMEWORK):
 	@echo "Python.framework ausente em $(FRAMEWORKS); rodando vendor/setup.sh..."
-	@CROSSOVER_APP="$(CROSSOVER_APP)" bash $(VENDOR)/setup.sh
+	@$(VENDOR_SETUP)
 
-vendor: $(PYTHON_FRAMEWORK)
+$(SHAREDSUPPORT):
+	@echo "SharedSupport ausente em $(VENDOR); rodando vendor/setup.sh..."
+	@$(VENDOR_SETUP)
+
+$(RESOURCES):
+	@echo "Resources ausentes em $(VENDOR); rodando vendor/setup.sh..."
+	@$(VENDOR_SETUP)
+
+vendor: $(PYTHON_FRAMEWORK) $(SHAREDSUPPORT) $(RESOURCES)
 
 $(TARGET): $(PYTHON_FRAMEWORK) $(OBJS)
 	@mkdir -p build
@@ -83,7 +101,7 @@ build/obj/%.o: src/classes/%.m | $(PYTHON_FRAMEWORK)
 	@mkdir -p build/obj
 	$(CC) $(CFLAGS) -c $< -o $@
 
-app: $(TARGET)
+app: $(TARGET) $(SHAREDSUPPORT) $(RESOURCES)
 	@echo "Packaging $(APP_BUNDLE)..."
 	@mkdir -p $(APP_BUNDLE)/Contents/MacOS
 	@mkdir -p $(APP_BUNDLE)/Contents/Frameworks
@@ -91,16 +109,20 @@ app: $(TARGET)
 	@ln -sf CrossThrough $(APP_BUNDLE)/Contents/MacOS/CrossOver
 	@echo "Copiando frameworks vendorizados..."
 	@cp -R $(FRAMEWORKS)/ $(APP_BUNDLE)/Contents/Frameworks/
-	@if [ -d $(CROSSOVER_APP)/Contents/SharedSupport ]; then \
+	@# SharedSupport (backend): symlink do bundle para o caminho real resolvido de
+	@# vendor/SharedSupport (que pode ser symlink para o host ou um snapshot copiado).
+	@if [ -e $(SHAREDSUPPORT) ]; then \
 		rm -rf $(APP_BUNDLE)/Contents/SharedSupport; \
-		ln -sf $(CROSSOVER_APP)/Contents/SharedSupport $(APP_BUNDLE)/Contents/SharedSupport; \
+		ln -sf "$$(cd $(SHAREDSUPPORT)/ && pwd -P)" $(APP_BUNDLE)/Contents/SharedSupport; \
 	else \
-		echo "aviso: SharedSupport (backend/Wine) não encontrado em $(CROSSOVER_APP); o app compila mas não roda bottles."; \
+		echo "aviso: SharedSupport (backend/Wine) ausente em $(SHAREDSUPPORT); o app compila mas não roda bottles. Rode 'make vendor'."; \
 	fi
-	@if [ -d $(CROSSOVER_APP)/Contents/Resources ]; then \
-		cp -R $(CROSSOVER_APP)/Contents/Resources $(APP_BUNDLE)/Contents/; \
+	@if [ -d $(RESOURCES) ]; then \
+		rm -rf $(APP_BUNDLE)/Contents/Resources; \
+		cp -R $(RESOURCES) $(APP_BUNDLE)/Contents/Resources; \
 	else \
-		echo "aviso: Resources (nibs/ícones) não encontrados em $(CROSSOVER_APP); a interface não carregará."; \
+		mkdir -p $(APP_BUNDLE)/Contents/Resources; \
+		echo "aviso: Resources (nibs/ícones) ausentes em $(RESOURCES); a interface não carregará. Rode 'make vendor'."; \
 	fi
 	@echo "Instalando Info.plist próprio e o branding..."
 	@cp src/Info.plist $(APP_BUNDLE)/Contents/Info.plist
@@ -141,7 +163,7 @@ install: app
 	@# SharedSupport link to CrossOver, then put the link back.
 	rm $(INSTALL_DIR)/CrossThrough.app/Contents/SharedSupport
 	codesign -f -s - $(INSTALL_DIR)/CrossThrough.app
-	ln -s $(CROSSOVER_APP)/Contents/SharedSupport $(INSTALL_DIR)/CrossThrough.app/Contents/SharedSupport
+	ln -s "$$(cd $(SHAREDSUPPORT)/ && pwd -P)" $(INSTALL_DIR)/CrossThrough.app/Contents/SharedSupport
 	@# ditto keeps the build bundle's dates; a fresh one makes Finder and the
 	@# Dock drop the cached icon.
 	touch $(INSTALL_DIR)/CrossThrough.app
