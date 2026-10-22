@@ -157,7 +157,13 @@ static CXServerCrossOver *BottleViewControllerServer(void) {
 
 
 - (void)updateDependencyButton {
-    NSArray *missing = [[CXSetupLib installTaskClass] getMissingDependencies:[self bottle]];
+    // O InstallTask (Python) espera o BottleWrapper Python; com o CTBottleWrapper nativo ele lança.
+    NSArray *missing = nil;
+    @try {
+        missing = [[CXSetupLib installTaskClass] getMissingDependencies:[self bottle]];
+    } @catch (NSException *e) {
+        NSLog(@"getMissingDependencies falhou: %@", [e reason]);
+    }
     [[self dependencyButton] setHidden:[missing count] == 0];
 }
 

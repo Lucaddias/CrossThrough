@@ -532,6 +532,28 @@ static CTBottleCollection *gSharedCollection = nil;
 }
 - (BOOL)isIsActive { return ![self hasOverride:ST_DISABLED] && _upToDate; }
 - (BOOL)isIsUpToDate { return _upToDate; }
+- (BOOL)needsUpgrade { return !_upToDate; }   // binding do BottleTableCellView (botão needsUpgrade)
+- (BOOL)isCanEdit { return _upToDate && ![self isManaged] && ![self isIsBusy]; }
+- (BOOL)isIsRenaming { return [self hasOverride:ST_RENAMING]; }
+- (BOOL)isIsMoltenVKAvailable { return YES; }
+- (BOOL)isLastQuitFailed { return NO; }
+- (id)controlPanelTable { return @[]; }
+- (BOOL)isIsControlPanelReady { return YES; }
+- (void)launchControlPanelApplet:(id)applet { }   // painel de controle não reconstruído
+- (BOOL)isIsWineD3DEnabled { return [_graphicsState isEqualToString:GB_WINE]; }
+- (id)menuChangedTime { return nil; }
+
+// Template "win10_64" -> versão "win10"; (inferência a partir de load_basic_info)
+- (NSString *)windowsVersionDisplayName {
+    NSString *tpl = [self getConfigSection:kSecBottle key:@"Template" default:@""];
+    NSString *ver = [[tpl componentsSeparatedByString:@"_"] firstObject];
+    NSDictionary *names = @{ @"win11": @"Windows 11", @"win10": @"Windows 10", @"win81": @"Windows 8.1",
+                             @"win8": @"Windows 8", @"win7": @"Windows 7", @"vista": @"Windows Vista",
+                             @"winxp": @"Windows XP", @"win98": @"Windows 98" };
+    NSString *name = names[ver] ?: ([ver length] ? ver : @"Windows 10");
+    if ([self is32Bit]) return [NSString stringWithFormat:@"%@ 32-bit (deprecated)", name];
+    return name;
+}
 - (BOOL)isIsDeleted { BOOL d=NO; return !([[NSFileManager defaultManager] fileExistsAtPath:_winePrefix isDirectory:&d] && d); }
 - (BOOL)isCanRunCommands { return _upToDate && ![self isManaged] && ![self isIsBusy] && ![self isIsDisabled]; }
 - (BOOL)isCanInstall { return ![self isManaged] && [self isIsUsable]; }
