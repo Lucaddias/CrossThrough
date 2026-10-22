@@ -36,6 +36,17 @@ CROSSOVER_APP=${CROSSOVER_APP:-/Applications/CrossOver.app}
 PYTHON_313_PKG_URL=${PYTHON_313_PKG_URL:-https://www.python.org/ftp/python/3.13.1/python-3.13.1-macos11.pkg}
 VENDOR_SHAREDSUPPORT_MODE=${VENDOR_SHAREDSUPPORT_MODE:-link}
 
+# Fase 2: dados redistribuíveis do upstream (Gecko + Mono), em vez do host.
+# Opt-in (VENDOR_UPSTREAM_DATA=1) porque são ~125 MB de download; só faz sentido
+# quando SharedSupport é um snapshot copiado (VENDOR_SHAREDSUPPORT_MODE=copy).
+# VENDOR_UPSTREAM_DRY=1 valida as URLs sem baixar. Veja vendor/UPSTREAM.md.
+VENDOR_UPSTREAM_DATA=${VENDOR_UPSTREAM_DATA:-0}
+VENDOR_UPSTREAM_DRY=${VENDOR_UPSTREAM_DRY:-0}
+GECKO_VERSION=${GECKO_VERSION:-2.47.4}
+MONO_VERSION=${MONO_VERSION:-10.4.1}
+GECKO_BASE_URL=${GECKO_BASE_URL:-https://dl.winehq.org/wine/wine-gecko/$GECKO_VERSION}
+MONO_URL=${MONO_URL:-https://github.com/wine-mono/wine-mono/releases/download/wine-mono-$MONO_VERSION/wine-mono-$MONO_VERSION-x86.tar.xz}
+
 mkdir -p "$DEST"
 
 # ---------------------------------------------------------------------------
@@ -137,6 +148,56 @@ setup_resources() {
   return 0
 }
 
+# ---------------------------------------------------------------------------
+# 4. (Fase 2, opt-in) Dados redistribuíveis do upstream: Gecko + Mono
+# ---------------------------------------------------------------------------
+upstream_probe() { # url -> imprime tamanho; retorna !=0 se não resolver
+  local url="$1" len
+  len=$(curl -sIL -m 30 "$url" | grep -i '^content-length:' | tail -1 | tr -dc '0-9')
+  [ -n "$len" ] || return 1
+  echo "    $url  (~$((len / 1024 / 1024)) MB)"
+}
+
+fetch_and_extract() { # url dest_dir
+  local url="$1" dest="$2" tmp
+  tmp=$(mktemp -d -t crossthrough-upstream)
+  echo "==> Baixando $url"
+  curl -fL --retry 2 -o "$tmp/pkg.tar.xz" "$url" || { rm -rf "$tmp"; return 1; }
+  mkdir -p "$dest"
+  tar -xJf "$tmp/pkg.tar.xz" -C "$dest" || { rm -rf "$tmp"; return 1; }
+  rm -rf "$tmp"
+}
+
+setup_upstream_data() {
+  [ "$VENDOR_UPSTREAM_DATA" = "1" ] || return 0
+  local gecko_dir="$DEST_SS/share/wine/gecko"
+  local mono_dir="$DEST_SS/share/wine/mono"
+
+  if [ "$VENDOR_UPSTREAM_DRY" = "1" ]; then
+    echo "==> [dry] validando URLs de upstream (Gecko $GECKO_VERSION, Mono $MONO_VERSION):"
+    upstream_probe "$GECKO_BASE_URL/wine-gecko-$GECKO_VERSION-x86.tar.xz" || echo "    FALHA: Gecko x86"
+    upstream_probe "$GECKO_BASE_URL/wine-gecko-$GECKO_VERSION-x86_64.tar.xz" || echo "    FALHA: Gecko x86_64"
+    upstream_probe "$MONO_URL" || echo "    FALHA: Mono"
+    return 0
+  fi
+
+  # Só faz sentido sobrepor num SharedSupport copiado (não no symlink do host).
+  if [ ! -d "$DEST_SS" ] || [ -L "$DEST_SS" ]; then
+    echo "aviso: VENDOR_UPSTREAM_DATA=1 requer um SharedSupport copiado" >&2
+    echo "       (VENDOR_SHAREDSUPPORT_MODE=copy); pulando o overlay de Gecko/Mono." >&2
+    return 0
+  fi
+
+  echo "==> Substituindo Gecko pelo upstream $GECKO_VERSION"
+  rm -rf "$gecko_dir"
+  fetch_and_extract "$GECKO_BASE_URL/wine-gecko-$GECKO_VERSION-x86.tar.xz" "$gecko_dir"
+  fetch_and_extract "$GECKO_BASE_URL/wine-gecko-$GECKO_VERSION-x86_64.tar.xz" "$gecko_dir"
+  echo "==> Substituindo Mono pelo upstream $MONO_VERSION"
+  rm -rf "$mono_dir"
+  fetch_and_extract "$MONO_URL" "$mono_dir"
+}
+
 setup_python
 setup_sharedsupport
 setup_resources
+setup_upstream_data
