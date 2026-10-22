@@ -16,8 +16,10 @@ Um `./build.sh` baixa cada fonte fixado em [`components.lock`](components.lock) 
 | DXMT | 0.80 | MIT | Direct3D 10/11 → Metal |
 | Wine Gecko | 2.47.4 | MPL-2.0 | motor HTML (mshtml) |
 | Wine Mono | 10.4.1 | MIT, LGPL e outras | .NET Framework |
+| winetricks | 20260125 | LGPL-2.1+ | instala dependências numa bottle (vcrun, dotnet, fontes, d3dx…) |
+| cabextract (+ libmspack) | 1.9.1 | GPL-2+ (libmspack: LGPL-2.1) | extrai os `.cab`/`.exe` da Microsoft para o winetricks |
 
-O fonte do Wine, das bibliotecas TLS, do MoltenVK e do DXVK vem do tarball LGPL que a CodeWeavers publica, a mesma base do Wine que o CrossOver usa. O Nettle e o FreeType vêm dos lançamentos oficiais, porque as cópias do tarball estão incompletas. O DXMT, o Gecko e o Mono vêm dos binários oficiais de cada projeto. As licenças vão junto, em `share/licenses/<componente>`.
+O fonte do Wine, das bibliotecas TLS, do MoltenVK, do DXVK e do cabextract vem do tarball LGPL que a CodeWeavers publica, a mesma base do Wine que o CrossOver usa. O Nettle e o FreeType vêm dos lançamentos oficiais, porque as cópias do tarball estão incompletas. O DXMT, o Gecko e o Mono vêm dos binários oficiais de cada projeto, e o winetricks, do script do lançamento. As licenças vão junto, em `share/licenses/<componente>`.
 
 ### O que ficou de fora, e por quê
 
@@ -54,7 +56,7 @@ Cada etapa é retomável: se uma falhar, rodar de novo continua de onde parou. N
 | Etapa | Script | Faz |
 |---|---|---|
 | 1 | `scripts/prereqs.sh` | confere as ferramentas |
-| 2 | `scripts/deps.sh` | GMP, Nettle, GnuTLS, FreeType (x86_64) |
+| 2 | `scripts/deps.sh` | GMP, Nettle, GnuTLS, FreeType e cabextract (x86_64) |
 | 3 | `scripts/moltenvk.sh` | MoltenVK. As dependências externas são clonadas do GitHub nas revisões fixadas em `ExternalRevisions/` |
 | 4 | `scripts/wine.sh` | Wine 11.0 com WoW64 (`--enable-archs=i386,x86_64`) |
 | 5 | `scripts/dxvk.sh` | DXVK 32 e 64-bit (mingw-w64) |
@@ -78,13 +80,14 @@ Correções aplicadas sobre os fontes, numa cópia; o fonte extraído nunca é a
 
 ```
 CrossThroughRuntime/
-  bin/wine, bin/wineserver
+  bin/wine, bin/wineserver, bin/cabextract
   lib/*.dylib                      gnutls, nettle, hogweed, gmp, freetype, MoltenVK
   lib/wine/{x86_64,i386}-windows   DLLs do Wine (PE) + winemetal (DXMT)
   lib/wine/x86_64-unix             módulos Unix do Wine + winemetal.so
   lib/dxvk/{x86_64,i386}-windows   DXVK, instalado por bottle
   lib/dxmt/{x86_64,i386}-windows   DXMT, instalado por bottle
   share/wine/{gecko,mono}          Gecko e Mono já descompactados
+  share/winetricks/winetricks      o script do winetricks
   share/licenses/                  licença de cada componente
   runtime.json                     versões, origens, SHA-256 e limites
 ```
@@ -103,6 +106,7 @@ O que o app precisa respeitar para usar o runtime. O [`smoke.sh`](scripts/smoke.
 - **Caminho de instalação.** No máximo `maxInstallPathLength` caracteres (150), conforme o `runtime.json`. O Wine monta caminhos de DOS em buffers de 260 caracteres a partir do caminho do runtime; acima de cerca de 195 o Mono deixa de ser encontrado. Por isso o limite tem folga, e o `relocation.sh` testa exatamente nele, num caminho com espaços. O caminho da bottle não tem esse limite: dentro dela tudo é `C:\`.
 - **Diretório atual.** O programa roda com o diretório atual no dele, como no Windows. O DXVK grava ali o log (`<exe>_d3d11.log`) e o cache de shaders (`<exe>.dxvk-cache`).
 - **Gecko e Mono** são usados direto de `share/wine`, sem download e sem cópia para a bottle. O `wineboot --init` instala o suporte .NET (`Microsoft.NET`) a partir dali.
+- **winetricks.** Rode `share/winetricks/winetricks -q <verbo>` com o ambiente da bottle mais `WINE=bin/wine`, `WINESERVER=bin/wineserver` e `bin/` no começo do `PATH`, para ele achar o `cabextract`. O `curl`, o `unzip` e o `shasum` são os do macOS. Sem `7z`, ele instala o 7-Zip do Windows na bottle quando um verbo precisa. Aponte `XDG_CACHE_HOME` para o cache do app (os downloads ficam em `<cache>/winetricks`) e defina `WINETRICKS_LATEST_VERSION_CHECK=disabled`, porque a versão é a fixada aqui. A função `winetricks_env` do smoke.sh monta esse ambiente.
 
 ## Testes
 
@@ -111,11 +115,13 @@ O `smoke.sh` cria uma bottle descartável e verifica cada parte do runtime de ve
 | Teste | Prova |
 |---|---|
 | `wineboot --init`, `cmd /c ver` | a bottle nasce e o Windows responde |
-| `tlstest.exe` | HTTPS aceita um certificado válido e recusa um inválido (e funciona ignorando a validação, prova de que a recusa é do certificado) |
+| `tlstest.exe` | HTTPS aceita um certificado válido e recusa um inválido (e funciona ignorando a validação, prova de que a recusa é do certificado). As conexões que têm de funcionar são tentadas até 3 vezes, para uma queda de rede não reprovar o runtime |
 | `fonttest.exe` | Tahoma carregada pelo FreeType, com métricas de contorno, e texto desenhado |
 | `htmltest.exe` (64 e 32-bit) | o mshtml faz o parse de HTML com o Gecko e devolve o texto |
 | `dotnettest.cs` | compilado pelo `csc.exe` da bottle e executado no Mono (LINQ, texto, P/Invoke) |
 | `vktest.exe` | Vulkan enumera a GPU via MoltenVK |
+| `cabarc` + `cabextract` | um `.cab` criado pelo Wine é extraído pelo cabextract do runtime, com o conteúdo conferido |
+| `winetricks -q fontsmooth=bgr` | o winetricks reconhece o Wine do runtime (WoW64 novo, win64) e grava o registro da bottle |
 | `d3d11test.exe` (64 e 32-bit) × wined3d, DXVK, DXMT | dispositivo D3D11, limpeza de tela lida de volta pixel a pixel e 10 quadros apresentados; o teste confere qual backend de fato rodou |
 
-Em um M5, os 17 passam no lugar e realocados.
+Em um M5, os 21 passam no lugar e realocados.

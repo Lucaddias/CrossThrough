@@ -12,11 +12,14 @@
 #   5. htmltest.exe x2           mshtml com o Wine Gecko (64 e 32-bit)
 #   6. dotnettest.cs             compilado e executado com o Wine Mono
 #   7. vktest.exe                Vulkan via winevulkan -> MoltenVK
-#   8. d3d11test.exe x3          Direct3D 11 em wined3d, DXVK e DXMT (64-bit)
-#   9. d3d11test32.exe           o mesmo em 32-bit (WoW64), nos três backends
+#   8. cabextract                abre um .cab feito pelo cabarc do Wine
+#   9. winetricks                aplica um verbo de configuração na bottle
+#  10. d3d11test.exe x3          Direct3D 11 em wined3d, DXVK e DXMT (64-bit)
+#  11. d3d11test32.exe           o mesmo em 32-bit (WoW64), nos três backends
 #
 # Também é a referência executável do contrato que o app segue: o ambiente de
-# execução (env_cmd) e a troca de backend gráfico por bottle (use_backend).
+# execução (env_cmd), o do winetricks (winetricks_env) e a troca de backend
+# gráfico por bottle (use_backend).
 source "$(dirname "$0")/common.sh"
 
 RT=$(cd "${1:-$OUT}" && pwd)
@@ -53,6 +56,15 @@ env_cmd() {
            WINEDLLOVERRIDES="$OVERRIDES")
 }
 wine_env() { env_cmd; "${ENV_CMD[@]}" "$@"; }
+# O winetricks recebe o Wine do runtime por WINE/WINESERVER e acha o cabextract
+# pelo PATH. Cache e configuração ficam fora do HOME (o app usa os dele), e
+# sem a checagem de versão nova, que baixaria o script de novo.
+winetricks_env() {
+  WINETRICKS_ENV=(WINE="$RT/bin/wine" WINESERVER="$RT/bin/wineserver"
+                  PATH="$RT/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+                  XDG_CACHE_HOME="$TB/cache" XDG_CONFIG_HOME="$TB/config"
+                  WINETRICKS_LATEST_VERSION_CHECK=disabled)
+}
 # Caminho Unix -> caminho Windows pelo drive Z: (que o Wine mapeia para /).
 winpath() { local p=${1//\//\\}; printf 'Z:%s' "$p"; }
 
@@ -89,16 +101,16 @@ use_backend() {
 
 # --- execução ---------------------------------------------------------------
 pass=0; failed=()
-# check <nome> <padrão esperado na saída> <argumentos do wine...>
-# Roda "wine <argumentos>" no ambiente da bottle, com limite de 180 s.
-check() {
+# check_cmd <nome> <padrão esperado na saída> <comando...>
+# Roda o comando no ambiente da bottle, com limite de 180 s.
+check_cmd() {
   local name=$1 want=$2 out rc; shift 2
   printf '  %-34s ' "$name"
   env_cmd
   # A saída vai para um arquivo, não para um pipe: processos que o programa
   # deixa vivos (conhost, winedbg) segurariam o pipe e travariam o teste.
   rc=0
-  perl -e 'alarm shift; exec @ARGV or die "exec: $!\n"' 180 "${ENV_CMD[@]}" "$WINE" "$@" > "$TB/check.log" 2>&1 || rc=$?
+  perl -e 'alarm shift; exec @ARGV or die "exec: $!\n"' 180 "${ENV_CMD[@]}" "$@" > "$TB/check.log" 2>&1 || rc=$?
   # 142 = SIGALRM: o tempo acabou; encerra tudo o que ficou rodando na bottle.
   [ $rc -ne 142 ] || wine_env "$RT/bin/wineserver" -k 2>/dev/null || true
   out=$(cat "$TB/check.log")
@@ -110,6 +122,8 @@ check() {
     failed+=("$name")
   fi
 }
+# check <nome> <padrão> <argumentos do wine...>
+check() { local name=$1 want=$2; shift 2; check_cmd "$name" "$want" "$WINE" "$@"; }
 
 WINE=$RT/bin/wine
 log "Runtime: $RT ($(wine_env "$WINE" --version))"
@@ -130,6 +144,19 @@ check "C# compila (csc do Mono)" "" 'C:\windows\Microsoft.NET\Framework\v4.0.303
   -nologo "-out:$(winpath "$TB/dotnettest.exe")" "$(winpath "$TB/dotnettest.cs")"
 check ".NET executa (Mono)" "^OK" "$TB/dotnettest.exe"
 check "Vulkan (MoltenVK)" "^OK" "$TB/vktest.exe"
+# cabextract: o .cab vem do cabarc do Wine, com um conteúdo que muda a cada vez.
+token="cabextract-ok-$RANDOM$RANDOM"
+printf '%s\n' "$token" > "$TB/cabtest.txt"
+rm -f "$TB/cabtest.cab"
+check "cabarc cria um .cab" "" cabarc -m mszip N "$(winpath "$TB/cabtest.cab")" "$(winpath "$TB/cabtest.txt")"
+check_cmd "cabextract abre o .cab" "^$token\$" "$RT/bin/cabextract" -p "$TB/cabtest.cab"
+# winetricks: um verbo que só grava no registro, sem download. bgr grava a
+# orientação 0; o padrão do Wine é 1 (RGB), então o 0 só aparece se ele rodou.
+winetricks_env
+rm -rf "$TB/cache" "$TB/config"
+check_cmd "winetricks fontsmooth=bgr" "" "${WINETRICKS_ENV[@]}" "$RT/share/winetricks/winetricks" -q fontsmooth=bgr
+check "winetricks gravou o registro" "FontSmoothingOrientation +REG_DWORD +0x0([^0-9a-fA-F]|$)" \
+  reg query 'HKCU\Control Panel\Desktop' /v FontSmoothingOrientation
 for backend in wined3d dxvk dxmt; do
   use_backend $backend
   check "D3D11 64-bit / $backend" "backend: $backend" "$TB/d3d11test.exe"

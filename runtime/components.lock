@@ -5,13 +5,13 @@
 
 # Fonte LGPL/MIT publicada pela CodeWeavers (https://www.codeweavers.com/crossover/source).
 # Traz Wine 11.0 (com msync), gnutls+nettle+gmp, FreeType, MoltenVK, DXVK
-# 1.10.3 para macOS, vkd3d, GLib e GStreamer. Só o fonte aberto: nenhuma das
-# partes proprietárias do CrossOver está neste tarball.
+# 1.10.3 para macOS, vkd3d, cabextract, GLib e GStreamer. Só o fonte aberto:
+# nenhuma das partes proprietárias do CrossOver está neste tarball.
 [crossover-sources]
 version = 26.3.0
 url = https://media.codeweavers.com/pub/crossover/source/crossover-sources-26.3.0.tar.gz
 sha256 = ac99c8ca4b3848f3e81784135f023df266b61c2345726ea55a50b3e030dd6872
-license = LGPL-2.1+ (Wine, vkd3d, gnutls, GLib, GStreamer), LGPL-3+/GPL-2+ (nettle, gmp), FTL/GPL-2 (FreeType), Apache-2.0 (MoltenVK), zlib (DXVK)
+license = LGPL-2.1+ (Wine, vkd3d, gnutls, GLib, GStreamer), LGPL-3+/GPL-2+ (nettle, gmp), FTL/GPL-2 (FreeType), Apache-2.0 (MoltenVK), zlib (DXVK), GPL-2+/LGPL-2.1 (cabextract, libmspack)
 
 # O tarball acima traz o nettle 3.10 sem o Makefile.in da raiz; usamos o
 # lançamento oficial do GNU, mesma série 3.10 (compatível em ABI).
@@ -71,3 +71,18 @@ license = MIT, LGPL-2.1 e outras (ver wine-mono-license)
 url = https://raw.githubusercontent.com/wine-mono/wine-mono/wine-mono-10.4.1/COPYING
 file = wine-mono-10.4.1-COPYING
 sha256 = 0265443ffc97c9450dbcf402c2430bf9fe87d7a6c92d5d7684fcecfe749bf75d
+
+# Instalador de dependências (vcrun, dotnet, fontes, d3dx...) por bottle. É um
+# script de shell; precisa de cabextract (vem no tarball acima), curl, unzip e
+# shasum (do macOS). O 7z é opcional: sem ele o winetricks usa o 7-Zip do Windows.
+[winetricks]
+version = 20260125
+url = https://raw.githubusercontent.com/Winetricks/winetricks/20260125/src/winetricks
+file = winetricks-20260125
+sha256 = 431f82fc74000e6c864409f1d8fb495d696c03928808e3e8acffc45179312a7b
+license = LGPL-2.1+
+
+[winetricks-license]
+url = https://raw.githubusercontent.com/Winetricks/winetricks/20260125/COPYING
+file = winetricks-20260125-COPYING
+sha256 = dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551

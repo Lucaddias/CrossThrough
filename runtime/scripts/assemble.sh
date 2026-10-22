@@ -3,12 +3,13 @@
 #
 # Layout (relocável; nada aponta para o diretório de build):
 #
-#   bin/                         wine, wineserver
+#   bin/                         wine, wineserver, cabextract
 #   lib/*.dylib                  gnutls, nettle, hogweed, gmp, freetype, MoltenVK
 #   lib/wine/<arch>-{windows,unix}  Wine + winemetal (parte Unix do DXMT)
 #   lib/dxvk/<arch>-windows      DXVK, DLLs nativas para instalar por bottle
 #   lib/dxmt/<arch>-windows      DXMT (d3d11/dxgi/d3d10core/nvapi), idem
 #   share/wine/{gecko,mono}      complementos do Wine, já descompactados
+#   share/winetricks/winetricks  instalador de dependências por bottle
 #   share/licenses/<componente>  licença de cada parte
 #   runtime.json                 manifesto (versões, origem, SHA-256)
 source "$(dirname "$0")/common.sh"
@@ -24,6 +25,12 @@ cp -R "$STAGE/bin" "$OUT/bin"
 cp -R "$STAGE/lib/wine" "$OUT/lib/wine"
 mkdir -p "$OUT/share"
 cp -R "$STAGE/share/wine" "$OUT/share/wine"
+
+# --- ferramentas ------------------------------------------------------------
+# O winetricks acha o cabextract pelo PATH; o app põe bin/ no PATH.
+cp "$DEPS/bin/cabextract" "$OUT/bin/cabextract"
+mkdir -p "$OUT/share/winetricks"
+install -m 755 "$(fetch winetricks)" "$OUT/share/winetricks/winetricks"
 
 # --- bibliotecas Unix -------------------------------------------------------
 for lib in libgnutls.30 libnettle.8 libhogweed.6 libgmp.10 libfreetype.6 libMoltenVK; do
@@ -112,6 +119,11 @@ lic dxvk      "$SRC/dxvk/LICENSE"
 lic dxmt      "$(fetch dxmt-license)"
 lic wine-gecko "$(fetch wine-gecko-license)"
 lic wine-mono  "$(fetch wine-mono-license)"
+lic cabextract "$SRC/cabextract/COPYING" "$SRC/cabextract/AUTHORS"
+# O libmspack embutido é LGPL-2.1 (cabeçalho de mspack/mspack.h), mas o fonte
+# não traz o texto da licença; é o mesmo texto do COPYING.LIB do Wine.
+cp "$SRC/wine/COPYING.LIB" "$L/cabextract/libmspack-LGPL-2.1.txt"
+lic winetricks "$(fetch winetricks-license)"
 
 # --- limpeza ----------------------------------------------------------------
 rm -rf "$OUT/share/man" "$OUT/share/applications"
@@ -140,7 +152,7 @@ wine_version=$("$STAGE/bin/wine" --version 2>/dev/null || echo "wine-11.0")
   printf '  "maxInstallPathLength": %d,\n' "$RUNTIME_PATH_MAX"
   printf '  "wine": "%s",\n  "components": [\n' "$wine_version"
   first=1
-  for c in crossover-sources nettle freetype dxmt wine-gecko-x86 wine-gecko-x86_64 wine-mono; do
+  for c in crossover-sources nettle freetype dxmt wine-gecko-x86 wine-gecko-x86_64 wine-mono winetricks; do
     [ $first = 1 ] || printf ',\n'; first=0
     printf '    {"name": "%s", "version": "%s", "url": "%s", "sha256": "%s", "license": "%s"}' \
       "$c" "$(lock_field $c version)" "$(lock_field $c url)" "$(lock_field $c sha256)" "$(lock_field $c license)"

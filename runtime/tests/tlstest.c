@@ -13,6 +13,9 @@
  *                 SECURITY_FLAG_IGNORE_*; assim a falha é comprovadamente do
  *                 certificado, não do handshake (o Wine devolve o mesmo
  *                 ERROR_WINHTTP_SECURE_CHANNEL_ERROR para os dois casos)
+ *
+ * As conexões que têm de dar certo são tentadas até 3 vezes: uma queda da
+ * rede no meio do teste não é defeito do runtime.
  */
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
@@ -44,6 +47,24 @@ static DWORD get(const WCHAR *host, const WCHAR *path, DWORD security_flags, DWO
     return err;
 }
 
+/* get() até dar certo, no máximo 3 vezes, com 2 s entre as tentativas. */
+static DWORD get_retry(const WCHAR *host, const WCHAR *path, DWORD security_flags, DWORD *status)
+{
+    DWORD err = 0;
+    int attempt;
+
+    for (attempt = 1; attempt <= 3; attempt++)
+    {
+        if (!(err = get(host, path, security_flags, status))) return 0;
+        if (attempt < 3)
+        {
+            printf("tentativa %d falhou (erro %lu), tentando de novo\n", attempt, err);
+            Sleep(2000);
+        }
+    }
+    return err;
+}
+
 int wmain(int argc, WCHAR **argv)
 {
     const DWORD ignore = SECURITY_FLAG_IGNORE_UNKNOWN_CA | SECURITY_FLAG_IGNORE_CERT_DATE_INVALID
@@ -62,7 +83,7 @@ int wmain(int argc, WCHAR **argv)
 
     if (!reject)
     {
-        if ((err = get(host, path, 0, &status))) { printf("FAIL erro %lu\n", err); return 1; }
+        if ((err = get_retry(host, path, 0, &status))) { printf("FAIL erro %lu\n", err); return 1; }
         printf("https://%ls%ls -> %lu\n", host, path, status);
         if (status != 200) { printf("FAIL status\n"); return 1; }
         printf("OK\n");
@@ -75,7 +96,7 @@ int wmain(int argc, WCHAR **argv)
         return 1;
     }
     printf("https://%ls%ls -> recusado (erro %lu)\n", host, path, err);
-    if ((err = get(host, path, ignore, &status)))
+    if ((err = get_retry(host, path, ignore, &status)))
     {
         printf("FAIL nem ignorando a validação conectou (erro %lu): a falha não é do certificado\n", err);
         return 1;
