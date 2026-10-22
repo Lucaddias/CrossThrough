@@ -1,110 +1,221 @@
 # Como o CrossThrough funciona
 
-Visão de ponta a ponta: camadas, fluxo de inicialização, chamadas entre a GUI e o backend, e as funções principais de cada parte.
+Este documento acompanha cada operação desde o clique no app até o Wine: as
+camadas, a inicialização e o caminho percorrido em cada caso. A lista de
+tipos e funções fica em [API.md](API.md).
 
 ## Camadas
 
 ```
-┌──────────────────────────────────────────────┐
-│ GUI Objective-C/Cocoa (src/classes, 95 .m)   │  janelas, sidebar, grade de apps, wizard
-├──────────────────────────────────────────────┤
-│ Ponte PyObjC (src/include/PythonShim.h)      │  classes Python vistas como NSObject
-├──────────────────────────────────────────────┤
-│ Biblioteca Python 3.13 (lib/python/*.pyc)    │  bottles, perfis CrossTie, motor de instalação
-├──────────────────────────────────────────────┤
-│ Ferramentas Perl (bin/, lib/perl)            │  wine, cxbottle, cxmenu, cxassoc
-├──────────────────────────────────────────────┤
-│ Wine x86_64 (sob Rosetta 2 no Apple Silicon) │  executa o programa Windows
-└──────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────┐
+│ CrossThroughApp (SwiftUI)          crossthrough (CLI)      │  interface
+│   AppModel: estado, tarefas, alertas   um comando por vez  │
+├────────────────────────────────────────────────────────────┤
+│ CrossThroughKit                                            │  toda a lógica
+│   BottleStore · Bottle · Wine · Installer · Catalog        │
+│   ProgramScanner · ShellLink · ReparsePoint · IconExtractor│
+│   GraphicsBackend · Winetricks · Downloader · adoção       │
+├────────────────────────────────────────────────────────────┤
+│ Runtime (Contents/SharedSupport/CrossThroughRuntime)       │  compilado do fonte
+│   Wine 11 x86_64 · DXMT · DXVK + MoltenVK · Gecko · Mono   │  em runtime/
+│   winetricks · cabextract                                  │
+├────────────────────────────────────────────────────────────┤
+│ Rosetta 2 → macOS (Metal, Vulkan via MoltenVK, OpenGL)     │
+└────────────────────────────────────────────────────────────┘
 ```
 
-O CrossThrough compila apenas a camada de GUI. As outras camadas vêm do runtime host, ligadas por `Contents/SharedSupport` (link simbólico) e `Contents/Frameworks` (cópia).
+O app e o CLI não falam com o Wine diretamente: tudo passa pelo Kit, que roda
+os executáveis do runtime (`bin/wine`, `bin/wineserver`) como processos
+filhos, com um ambiente montado do zero. Não há biblioteca Python, ferramenta
+Perl nem framework de terceiros no meio.
 
-## Inicialização
+## Inicialização do app
 
-1. `main.m` chama `NSApplicationMain`, que carrega `MainMenu.nib` e cria `CXApplication`.
-2. o delegate do app (a subclasse de produto de `CXServer`) roda `applicationWillFinishLaunching:`:
-   - `CTBrandAppMenu()` troca o nome nos menus;
-   - agenda `AskUpdateBottlesOp`;
-   - `CXServer` verifica o Rosetta e registra o handler de URLs (`kAEGetURL`).
-3. `applicationDidFinishLaunching:` → `continueFromDemoCheck` → `refreshPrograms:` monta o menu de programas a partir das bottles.
-4. `mainWindowController` cria `MainWindowController`:
-   - `init` chama `CTRegisterBrandedLogo()` antes de carregar `MainWindow.nib`;
-   - `windowDidLoad` monta a sidebar (`BottleNode`), observa `bottleList` e mostra a tela Install (`PackageViewController`).
-5. `PackageViewController populatePackages` lê os perfis (`C4ProfilesSet.contentsDict`), cria um `PackageTreeNode` por app e, em segundo plano, busca a lista de ícones (`updateIconList` → `loadIcons`).
+1. `CrossThroughApp` cria o `AppModel`. Ele faz três coisas:
+   - acha o runtime com `Runtime.locate()`, que procura nesta ordem:
+     `CROSSTHROUGH_RUNTIME`, `Contents/SharedSupport` do app e
+     `runtime/out/` do repositório;
+   - carrega o catálogo com `Catalog.locate()`;
+   - passa a observar o diretório das bottles com o FSEvents
+     (`DirectoryWatcher`).
+2. A janela abre e chama `reload()`. `BottleStore.scan()` separa o conteúdo de
+   `~/Library/Application Support/CrossThrough/Bottles` em três grupos:
+   - **bottles**: têm um `crossthrough.json` válido;
+   - **danificadas**: têm um `crossthrough.json` ilegível;
+   - **de outro programa**: não têm `crossthrough.json`, mas têm `system.reg` e
+     `drive_c/`.
+3. Quando uma bottle é selecionada, `ProgramScanner.scan` monta a lista de
+   programas dela, fora da thread principal.
+4. Daí em diante, um evento do FSEvents vira um `StoreChanges`:
+   - uma bottle criada, apagada ou renomeada relê a lista de bottles;
+   - um atalho novo no Menu Iniciar relê só os programas daquela bottle.
 
-## A ponte GUI ↔ Python
+   Assim, uma instalação feita pelo CLI aparece no app sozinha.
 
-`CXSetupLib` devolve as classes Python por nome (`bottleCollectionClass`, `c4ProfilesClass`, `iconUtilsClass`…). Os métodos Python aparecem como seletores Objective-C, declarados em `PythonShim.h`.
+Sem runtime, o app abre do mesmo jeito: o catálogo e as bottles aparecem, e as
+ações que precisam do Wine ficam desligadas, com a explicação na tela.
 
-Regras da ponte:
+## Tarefas
 
-- Todo retorno é objeto. Para ler um booleano use `[[x foo] boolValue]`.
-- Uma exceção Python vira `NSException` (`OC_PythonException`). Chamadas que podem falhar por rede devem ficar em `@try`.
-- Chamadas longas rodam fora da thread principal. O resultado volta por `dispatch_async(dispatch_get_main_queue(), …)`.
+Toda operação longa (criar, adotar, instalar, winetricks, renomear, apagar) é
+uma `Job` do `AppModel`. O rodapé da barra lateral mostra o título, a fase atual
+e, no download, a fração concluída. Um erro vira um alerta com um botão para o
+log. Cancelar interrompe a tarefa, e uma criação interrompida não deixa nada no
+disco. Uma bottle com uma tarefa em andamento recusa outra.
 
-Principais classes Python usadas:
+## Criar uma bottle
 
-| Classe (módulo) | Uso pela GUI |
-|---|---|
-| `BottleCollection` (bottlecollection) | lista e observa bottles (`bottleList`, `sharedCollection`) |
-| `BottleWrapper` (bottlewrapper) | estado de uma bottle: `isBusy`, versão do Windows, preview |
-| `C4ProfilesSet` (c4profilesmanager) | perfis CrossTie: nome, notas, medalhas, instaladores |
-| `InstallTask` / motor (cxaiengine) | plano e execução da instalação: downloads, dependências |
-| `IconUtils` (iconutils) | lista de ícones da web e cache local |
-| `RatingUtils` (ratingutils) | envio de avaliações |
+`BottleStore.create(name:windowsVersion:graphics:runtime:)`:
 
-## Fluxo de instalação de um app
+1. cria o diretório, que falha se outro processo já o tiver criado;
+2. roda `wine wineboot --init`, que monta o registro, o `system32`, o
+   `syswow64`, o Mono e o Gecko;
+3. espera com `wineserver -w` e confere se `kernel32.dll` existe nas duas
+   arquiteturas;
+4. roda `winecfg /v <versão>` se a versão pedida não for o Windows 10 padrão;
+5. instala o backend gráfico (veja abaixo);
+6. grava o `crossthrough.json`.
 
-1. O usuário clica num app da grade. `PackageViewController setSelectedPackage:` mostra o detalhe.
-2. `install:` cria `PackageInstaller` com uma `InstallConfiguration` (bottle, idioma, instalador local ou download).
-3. `PackageInstaller` pede ao motor Python o plano de tarefas e executa cada uma:
-   - download: `CXDownloader`/`DownloadProgressController`;
-   - criação da bottle: `cxbottle`;
-   - execução do instalador no Wine.
-4. O progresso chega por KVO (`summaryDetails`, `status`, `currentTaskDescription`). Cancelar chama `install:` de novo.
+Qualquer falha encerra a bottle (`wineserver -k`) e apaga o diretório. O log da
+tentativa fica em `~/Library/Logs/CrossThrough/<bottle>/`.
 
-## Classes principais da GUI
+## O ambiente do Wine
 
-| Classe | Responsabilidade |
-|---|---|
-| `CXApplication` | NSApplication: modo demo, dias de teste |
-| `CXServer` e subclasse de produto | delegate do app: URLs, menus de programas, apps helper por bottle, atualizações |
-| `MainWindowController` | janela principal, sidebar e troca de conteúdo (`updateMainContentView`) |
-| `PackageViewController` | tela Install: busca, grade de apps populares, detalhe, wizard |
-| `PackageTreeNode` | um app do catálogo: nome, medalha, ícone (`loadIcon`) |
-| `PackageInstaller`, `InstallConfiguration` | executam e configuram uma instalação |
-| `BottleViewController`, `LauncherIconViewController` | conteúdo de uma bottle e seus atalhos |
-| `NewBottleController`, `RunCommandController` | criar bottle e rodar comando |
-| `PreferencesController`, `LoggingOptionsViewController` | preferências e logs do Wine |
-| `CXUpdater`, `CXSparkleUserDriver` | atualizações via Sparkle |
-| `CrossTieURLHandler` | abre receitas `.tie` e links de instalação |
+`Wine.environment()` não herda nada de quem chamou; é o equivalente a um
+`env -i`. Ele contém:
 
-## Funções próprias do CrossThrough
+- `HOME`, `USER`, `LOGNAME`, `TMPDIR` e `LANG`;
+- `PATH`, com o `bin/` do runtime e o sistema;
+- `WINEPREFIX`, apontando para a bottle;
+- `WINEDEBUG=-all`, ou um nível de log detalhado se o log detalhado estiver
+  ligado nos Ajustes;
+- `WINEDLLOVERRIDES`. Tem `winemenubuilder.exe=d`, para o Wine não criar
+  atalhos fora da bottle, depois as DLLs do backend gráfico e por fim os
+  overrides da bottle, cada um com precedência sobre o anterior;
+- `WINEMSYNC=1`, quando o msync está ligado;
+- os níveis de log do DXVK e do MoltenVK;
+- as variáveis da bottle.
 
-| Função | Onde | O que faz |
+A saída de cada processo vai para um arquivo de log, nunca para um pipe: o
+`wineserver` e os serviços que ficam vivos segurariam o pipe aberto, e quem lê
+esperaria para sempre.
+
+## Backend gráfico
+
+| Backend | DLLs nativas em `system32`/`syswow64` | Override |
 |---|---|---|
-| `CTApplicationName()` | CrossThroughBranding.m | nome do bundle (`CFBundleName`) |
-| `CTRegisterBrandedLogo()` | CrossThroughBranding.m | registra a logo clara/escura com os nomes que o nib pede |
-| `CTBrandAppMenu()` | CrossThroughBranding.m | nome nos itens Sobre, Ocultar e Encerrar |
-| `resolvedIconPath()` | PackageTreeNode.m | guarda o caminho de cada ícone e o usa quando a lista da web falha |
+| DXMT | `d3d10core`, `d3d11`, `dxgi` (de `lib/dxmt`) | `d3d10core,d3d11,dxgi=n,b` |
+| DXVK | `d3d9`, `d3d10`, `d3d10_1`, `d3d10core`, `d3d11`, `dxgi` (de `lib/dxvk`) | as seis `=n,b` |
+| Wine (OpenGL) | nenhuma: as seis voltam a ser as do Wine (`lib/wine`) | nenhum |
 
-## Build e empacotamento
+Trocar de backend sempre restaura antes as DLLs do Wine, então uma bottle só
+pode estar em um desses três estados. Cada arquivo é trocado de forma atômica.
+Os programas abertos continuam com o backend antigo até serem reabertos.
 
-- `make`: compila `src/` com Clang (mínimo macOS 11.0, SDK de link 15.1).
-- `make app`: monta `build/CrossThrough.app` com frameworks, recursos, ícone, logo e `Info.plist` ajustado (`com.crossthrough.app`).
-- `make install`: instala no `/Applications`. A cópia instalada:
-  - fica sem as ferramentas de teste e sem associações de arquivo;
-  - é assinada ad hoc;
-  - é registrada no LaunchServices.
-- `./install.sh`: faz tudo isso com verificação de pré-requisitos.
+`GraphicsBackend.advice(for:)` olha os programas da bottle e recomenda um
+backend quando algum deles não abre com o padrão. Hoje o único caso é o EA app,
+que precisa do Wine (OpenGL).
 
-## Testes
+## Programas e atalhos
 
-| Alvo | Cobre |
-|---|---|
-| `make test` | `test_wizard` (wizard, motor, backend) e `test_misc` (formatters, Foundation, launchers, nibs) |
-| `make snapshot` | captura Home e detalhe para comparação visual |
-| `make probe` | lista as tarefas de instalação de um pacote; `PROBE_ARGS=--download` baixa a primeira |
+`ProgramScanner.scan` lê os `.lnk` destes lugares:
 
-Referência completa de métodos: [`API.md`](API.md). Para mais detalhes de baixo nível, veja [`ARCHITECTURE.md`](../CrossThrough/ARCHITECTURE.md) e [`sharedsupport/`](../CrossThrough/sharedsupport).
+- o Menu Iniciar de todos os usuários (`ProgramData`);
+- o Menu Iniciar de cada usuário (`AppData/Roaming`);
+- as Áreas de Trabalho.
+
+O `ShellLink` lê cada atalho sem usar o Windows: a lista de IDs, o LinkInfo, o
+caminho relativo, o diretório de trabalho, os argumentos, o ícone e o bloco de
+ambiente. Ficam de fora:
+
+- os desinstaladores;
+- os atalhos para pastas e documentos;
+- as repetições: o mesmo alvo com os mesmos argumentos vale como um programa só.
+
+Para achar o alvo no Mac, `Bottle.existingUnixPath(forWindowsPath:)` faz três
+coisas:
+
+- expande `%VARIÁVEIS%` com o ambiente do Windows da bottle;
+- percorre o caminho sem diferenciar maiúsculas de minúsculas, como o NTFS;
+- atravessa os links simbólicos e as junções que o Wine grava (um item
+  `<nome>?` com o atributo `user.WINEREPARSE`, lido por `ReparsePoint`).
+
+O ícone vem do recurso `RT_GROUP_ICON` do executável, lido pelo
+`IconExtractor`. Ele escolhe no `.ico` a imagem maior e com mais cores e a
+converte em PNG. O resultado fica em cache, com a data do arquivo na chave.
+
+## Abrir um programa
+
+`Wine.open(_:log:onExit:)` resolve o atalho no próprio Kit, sem o `start` do
+Wine. Quando o shell32 abre um `.lnk`, ele não devolve o processo, então o
+código de saída se perderia. Há três casos:
+
+- **Alvo executável:** roda `wine <alvo> <argumentos>` no diretório de trabalho
+  do atalho, e o processo acompanhado é o do programa.
+- **Alvo não executável** (um documento, por exemplo): roda
+  `wine start /wait /unix <alvo>`.
+- **Atalho do Windows Installer**, que não traz caminho: roda `wine start /unix
+  <atalho>`. Como esse processo termina na hora, o app acompanha a bottle com
+  `wineserver -w`, que só termina quando tudo nela fecha.
+
+O app mostra o programa como aberto enquanto o processo vive. Se ele fechar com
+erro em menos de 5 segundos, aparece um alerta com o log, porque isso quase
+sempre é uma falha ao iniciar.
+
+## Instalar uma receita
+
+`Installer.install(_:into:progress:)`:
+
+1. cria a bottle, se o destino for uma nova. A receita define a versão do
+   Windows, o backend e o msync. Numa bottle que já existe, a receita só soma
+   variáveis e overrides;
+2. roda o winetricks com os verbos que faltam. O cache do winetricks fica em
+   `~/Library/Caches/CrossThrough`;
+3. baixa o instalador para `~/Library/Caches/CrossThrough/Downloads`, ou
+   reaproveita um já baixado. Nos dois casos confere o SHA-256 da receita;
+4. instala:
+
+   | Tipo | Comando |
+   |---|---|
+   | `run` | `wine <instalador> <argumentos>` |
+   | `msi` | `msiexec /i` |
+   | `extract` | extrai o `.zip` com o `ditto` |
+
+   Os códigos de saída 0, 1641 e 3010 contam como sucesso;
+5. espera os processos que o instalador deixou rodando. Os de fundo (serviços,
+   `explorer.exe`) não contam;
+6. cria o atalho da receita no Menu Iniciar, quando ela tem um;
+7. registra a receita no `crossthrough.json`.
+
+Se a instalação falhar numa bottle nova, a bottle vai para o Lixo.
+
+## Adotar uma bottle de outro programa
+
+`BottleStore.adopt(_:graphics:runtime:)`:
+
+1. lê a versão do Windows do `system.reg` (`CurrentBuild`, por exemplo 19045 →
+   Windows 10);
+2. roda `wineboot --update`, que atualiza os arquivos do Windows para o Wine
+   do runtime e mantém o registro, os programas e os dados;
+3. encerra a bottle (`wineserver -k`), o que grava o registro;
+4. confere se `kernel32.dll` existe e instala o backend gráfico;
+5. grava o `crossthrough.json`, com a data da adoção.
+
+Os arquivos de configuração do outro programa ficam como estão. Adotar uma
+bottle que já tem `crossthrough.json` não faz nada.
+
+## Empacotamento
+
+`app/scripts/bundle.sh` faz o seguinte:
+
+- compila o app e o CLI em modo universal (arm64 e x86_64);
+- monta o `CrossThrough.app` com o catálogo e o ícone;
+- copia o runtime com `ditto`, que preserva os links e as permissões;
+- assina tudo ad hoc.
+
+O `install.sh` da raiz chama o `bundle.sh` depois dos testes e troca o app em
+`/Applications` de uma vez: grava ao lado, confere a assinatura, fecha o app
+aberto e move. Antes, confere duas coisas:
+
+- se não há programas do Windows abertos pelo runtime do app;
+- se o caminho do runtime instalado cabe no limite do `runtime.json`.

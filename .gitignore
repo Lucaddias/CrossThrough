@@ -1,15 +1,5 @@
-# Internal REA/ingest working state (regenerable, large)
-CrossThrough/decompiled/.store.json
-CrossThrough/decompiled/.batches.json
-CrossThrough/build/
-CrossThrough/native/build/
 .DS_Store
 __pycache__/
-
-# Artefatos vendorizados (populados por CrossThrough/vendor/setup.sh)
-CrossThrough/vendor/Frameworks/
-CrossThrough/vendor/SharedSupport
-CrossThrough/vendor/Resources/
 
 # Runtime: build e saída (regeneráveis com runtime/build.sh)
 runtime/.work/

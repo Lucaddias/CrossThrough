@@ -1,16 +1,42 @@
 # CrossThrough
 
-Uma GUI nativa para macOS, em Objective-C/Cocoa, que roda aplicativos e jogos Windows. A GUI instala apps a partir de um catálogo de receitas, cria e gerencia *bottles* (ambientes Wine isolados) e abre os programas instalados.
+<img src="app/Resources/icon/CrossThrough-1024.png" alt="ícone do CrossThrough" width="128" align="right">
 
-![ícone](CrossThrough/resources/icon/CrossThrough-1024.png)
+Um app para macOS que roda programas Windows. Tudo é open source: o app em
+SwiftUI, a biblioteca e a linha de comando em Swift, e o runtime do Wine,
+compilado aqui do código-fonte. Nada vem de um app de terceiros instalado no Mac.
+
+- **Catálogo.** Cada receita instala um programa numa bottle nova ou numa que
+  já existe: põe as dependências do winetricks, baixa o instalador oficial
+  (conferido por SHA-256) e roda o instalador.
+- **Bottles.** Cada bottle é um Windows à parte (um prefixo do Wine). O app
+  mostra os programas do Menu Iniciar com os ícones deles, abre, acompanha e
+  encerra o que roda ali. Também aceita instaladores `.exe` e `.msi` arrastados
+  para a janela. Os ajustes de cada bottle são a versão do Windows, o backend
+  gráfico, o msync, as variáveis de ambiente, a ordem de carga das DLLs e o
+  winetricks.
+- **Bottles de outro programa.** Um prefixo do Wine criado por outro app
+  aparece na barra lateral, e um clique o adota sem mexer nos programas nem nos
+  dados.
+- **Linha de comando.** O `crossthrough` faz o mesmo que o app, sobre a mesma
+  biblioteca.
 
 ## Requisitos
 
-- macOS 11 ou mais recente (Apple Silicon ou Intel). No Apple Silicon, o Rosetta 2 é necessário.
-- Xcode Command Line Tools (`xcode-select --install`).
-- O runtime host (versão 26.3) instalado e licenciado em `/Applications`. O caminho exato fica na variável `RUNTIME` do `install.sh`. O CrossThrough é só a interface: o Wine, a biblioteca Python e as ferramentas de bottle vêm desse runtime.
+- Um Mac com Apple Silicon e macOS 14 ou mais novo.
+- O Rosetta 2, porque o Wine é x86_64.
+- O Swift 6 (Xcode ou Command Line Tools), para compilar o app.
+- Para compilar o runtime, o que só acontece na primeira instalação:
+  - o Xcode completo;
+  - o Homebrew;
+  - as ferramentas de build listadas em [`runtime/README.md`](runtime/README.md).
 
-## Instalação
+  Num M5, esse build leva cerca de 3 horas.
+
+O app é universal, e o runtime x86_64 também roda em Macs Intel, mas isso ainda
+não foi testado.
+
+## Instalar
 
 ```bash
 git clone https://github.com/Lucaddias/CrossThrough.git
@@ -20,88 +46,106 @@ git clone https://github.com/Lucaddias/CrossThrough.git
 cd CrossThrough && ./install.sh
 ```
 
-O instalador:
+O `install.sh`:
 
 1. confere os requisitos;
-2. compila o app;
+2. compila o runtime, se ele ainda não existir em `runtime/out/`;
 3. roda os testes;
-4. instala em `/Applications/CrossThrough.app`, encerrando antes uma cópia aberta.
+4. monta o app;
+5. instala o app em `/Applications/CrossThrough.app`.
 
-Depois disso, abra o app pelo Launchpad ou pelo Spotlight. Nenhuma etapa pede senha de administrador.
-
-Opções do instalador:
+Antes de trocar o app, o script recusa a troca se houver programas do Windows
+abertos por ele. Se o app estava aberto, é reaberto já na versão nova. Nenhuma
+etapa pede senha de administrador.
 
 | Opção | Efeito |
 |---|---|
 | `--dir <pasta>` | instala em outra pasta (ex.: `~/Applications`) |
+| `--runtime <dir>` | usa um runtime já compilado em outro lugar |
 | `--no-test` | pula os testes |
-| `--uninstall` | remove o app instalado |
+| `--uninstall` | remove o app; as bottles, os logs e os caches ficam |
 
-Na primeira abertura, se o macOS bloquear o app (ele é assinado ad hoc), clique com o botão direito no app e escolha **Abrir**.
+## Usar
 
-## Uso
+- **Catálogo.** Escolha uma receita e clique em Instalar. Ela pode ir para uma
+  bottle nova ou para uma que já existe.
+- **Bottle.** Dê dois cliques num programa para abri-lo. O menu de contexto
+  encerra o programa e mostra os arquivos e os logs. A barra de ferramentas tem
+  estes botões:
+  - Executar arquivo;
+  - Winetricks;
+  - Disco C:;
+  - Encerrar tudo;
+  - Configurações.
+- **Bottle de outro programa.** Selecione-a e clique em Usar no CrossThrough. O
+  app atualiza o Windows dela para o Wine do runtime e instala o backend gráfico
+  escolhido (para o EA app, o Wine (OpenGL), que ele já sugere).
 
-- **Home**: catálogo de apps populares, com busca. Clique num app para ver detalhes e **Install**.
-- **Install an unlisted application**: instala qualquer `.exe`/`.msi` local.
-- **Bottles**: na barra lateral, cada bottle mostra seus programas. O menu de contexto abre, configura ou apaga a bottle.
-
-## Compilar manualmente
+Pelo Terminal, o CLI está dentro do app:
 
 ```bash
-cd CrossThrough
+/Applications/CrossThrough.app/Contents/Helpers/crossthrough help
 ```
 
-```bash
-make -j8 && make app
-```
-
-| Alvo | O que faz |
+| O quê | Onde |
 |---|---|
-| `make` | compila o binário em `build/CrossThrough` |
-| `make app` | monta `build/CrossThrough.app` |
-| `make install` | instala em `/Applications` (`INSTALL_DIR=<pasta>` para outra) |
-| `make test` | `test_wizard` + `test_misc` |
-| `make snapshot` | capturas das telas Home e detalhe em `build/snapshots/` |
-| `make probe` | lista as tarefas de instalação de `PROBE_PACKAGE` |
-| `make icon` / `make logo` | regenera o ícone e a logo a partir de `resources/icon/controller.webp` |
-| `make clean` | apaga `build/` |
+| bottles | `~/Library/Application Support/CrossThrough/Bottles` |
+| logs, por bottle | `~/Library/Logs/CrossThrough` |
+| downloads, ícones e cache do winetricks | `~/Library/Caches/CrossThrough` |
 
-## Documentação
+## Backends gráficos
 
-- [`docs/API.md`](docs/API.md): referência de todas as classes, métodos e funções C.
-- [`docs/HOW-IT-WORKS.md`](docs/HOW-IT-WORKS.md): camadas, inicialização, ponte GUI ↔ Python, fluxo de instalação, classes e funções.
-- [`CrossThrough/ARCHITECTURE.md`](CrossThrough/ARCHITECTURE.md): detalhes de baixo nível (processos, privilégios, apps helper).
-- [`CrossThrough/sharedsupport/`](CrossThrough/sharedsupport): ferramentas Perl e biblioteca Python do backend.
-- [`CrossThrough/native/`](CrossThrough/native): reconstrução nativa do `wineloader` (`dlopen` do `ntdll.so` + `__wine_main`) e da camada cliente de socket + passagem de fd do `wineserver` (SCM_RIGHTS).
-- [`CrossThrough/src/NATIVE_BOTTLES.md`](CrossThrough/src/NATIVE_BOTTLES.md): módulo de bottles nativo em Objective-C, removendo a camada Python fechada.
-- [`CrossThrough/decompiled/`](CrossThrough/decompiled): pseudocódigo de referência usado na reconstrução.
+| Backend | Para quê |
+|---|---|
+| DXMT (Metal) | o padrão: Direct3D 10/11 direto no Metal, o mais rápido no Apple Silicon |
+| DXVK (Vulkan) | Direct3D 9/10/11 via Vulkan e MoltenVK |
+| Wine (OpenGL) | o tradutor do próprio Wine: o mais compatível e o mais lento |
+
+O D3DMetal da Apple (Game Porting Toolkit) não entra, porque é proprietário.
+Jogos que só rodam com ele ainda não rodam aqui.
+
+## Limitações conhecidas
+
+- Vídeo e áudio por Media Foundation/DirectShow ainda não tocam, porque o
+  GStreamer não está no runtime.
+- Programas que abrem outro e saem (como o `EALauncher` do EA app) aparecem
+  como fechados no app enquanto o programa de verdade continua aberto.
+- O EA app só abre com o Wine (OpenGL). O DXMT ainda não tem swap chain entre
+  processos, de que o Chromium precisa, e com o DXVK ele trava.
 
 ## Estrutura
 
 ```
-install.sh              # instalador
-docs/                   # documentação do sistema
-CrossThrough/
-├── Makefile            # build, empacotamento e instalação
-├── src/                # código-fonte
-│   ├── Headers/        # headers das classes
-│   ├── include/        # CrossThrough.h, shims (Python, Sparkle) e branding
-│   ├── classes/        # implementação das 95 classes
-│   ├── c_functions.m   # funções C
-│   └── main.m          # ponto de entrada
-├── tests/              # testes e ferramentas de captura
-├── tools/              # geradores do ícone e da logo
-├── resources/          # ícone e logo
-├── decompiled/         # referência
-└── sharedsupport/      # referência do backend
+install.sh          compila e instala o app
+app/                o app SwiftUI, o CrossThroughKit e o CLI (pacote Swift)
+├── Sources/
+│   ├── CrossThroughKit/   bottles, Wine, atalhos .lnk, ícones, catálogo, instalação
+│   ├── CrossThroughApp/   a interface
+│   └── crossthrough/      a linha de comando
+├── Tests/
+└── scripts/bundle.sh      monta o CrossThrough.app
+catalog/            as receitas do catálogo
+runtime/            o build do runtime do Wine, do fonte
+docs/               como funciona e a referência da API
 ```
 
-## Comportamentos próprios
+## Documentação
 
-- A lista de ícones do catálogo é baixada em segundo plano. Se a resposta não for válida, o app continua sem ela.
-- Os caminhos dos ícones ficam salvos em `~/Library/Caches/com.crossthrough.app/IconPaths.plist`, para os ícones aparecerem mesmo sem rede.
-- A cópia instalada não reivindica `.exe`, `.c4p` nem links de receita: essas associações continuam com o runtime host.
+- [`docs/HOW-IT-WORKS.md`](docs/HOW-IT-WORKS.md): as camadas e o caminho de
+  cada operação, do clique até o Wine.
+- [`docs/API.md`](docs/API.md): a referência do CrossThroughKit e dos comandos
+  do CLI.
+- [`app/README.md`](app/README.md): como compilar, testar e capturar as telas
+  do app, além de detalhes da adoção, dos atalhos e dos ícones.
+- [`runtime/README.md`](runtime/README.md): os componentes, as licenças, o
+  build e os testes do runtime.
+- [`catalog/README.md`](catalog/README.md): o formato das receitas e as regras
+  para entrar no catálogo.
 
-## Aviso
+## Licenças
 
-Projeto de estudo de engenharia reversa, sem afiliação com o fabricante do runtime host. Ele não distribui nenhum binário ou recurso desse runtime: tudo é lido da sua instalação licenciada.
+Cada componente do runtime (Wine, DXVK, DXMT, MoltenVK, Gecko, Mono, winetricks
+e os demais) mantém a própria licença open source. A lista fixa está em
+[`runtime/components.lock`](runtime/components.lock), e os textos das licenças
+vão dentro do app, em `Contents/SharedSupport/CrossThroughRuntime/share/licenses`.
+O projeto não tem afiliação com o Wine nem com a CodeWeavers.
