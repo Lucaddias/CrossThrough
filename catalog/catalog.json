@@ -12,7 +12,118 @@
         "url": "https://www.7-zip.org/a/7z2605-x64.exe",
         "sha256": "fd99e86f57d8f429ef5ed045bf98315af962e2309b0f1ba87a147a44c71647d0"
       },
-      "install": { "type": "run", "arguments": ["/S"] }
+      "install": {
+        "type": "run",
+        "arguments": [
+          "/S"
+        ]
+      }
+    },
+    {
+      "id": "notepadpp",
+      "name": "Notepad++",
+      "summary": "Editor de texto e de código-fonte, com abas e realce de sintaxe.",
+      "category": "development",
+      "homepage": "https://notepad-plus-plus.org",
+      "license": "GPL-3.0",
+      "download": {
+        "url": "https://github.com/notepad-plus-plus/notepad-plus-plus/releases/download/v8.9.8.1/npp.8.9.8.1.Installer.x64.exe",
+        "sha256": "26f3bcced788fadbac4e7e577b430ea2ce6060cf3bcad993ef4612ecd7d743da"
+      },
+      "install": {
+        "type": "run",
+        "arguments": [
+          "/S"
+        ]
+      }
+    },
+    {
+      "id": "winmerge",
+      "name": "WinMerge",
+      "summary": "Compara e mescla arquivos e pastas, lado a lado.",
+      "category": "development",
+      "homepage": "https://winmerge.org",
+      "license": "GPL-2.0",
+      "download": {
+        "url": "https://github.com/WinMerge/winmerge/releases/download/v2.16.58.2/WinMerge-2.16.58.2-x64-Setup.exe",
+        "sha256": "26f794838bc4e545d7b9f36dc8beeb5a65a12bd4627fa3b4fe87068abef925b0"
+      },
+      "install": {
+        "type": "run",
+        "arguments": [
+          "/VERYSILENT",
+          "/SUPPRESSMSGBOXES",
+          "/NORESTART",
+          "/SP-"
+        ]
+      }
+    },
+    {
+      "id": "putty",
+      "name": "PuTTY",
+      "summary": "Cliente SSH, Telnet e serial, com o gerador de chaves PuTTYgen.",
+      "category": "internet",
+      "homepage": "https://www.chiark.greenend.org.uk/~sgtatham/putty/",
+      "license": "MIT",
+      "download": {
+        "url": "https://the.earth.li/~sgtatham/putty/0.85/w64/putty-64bit-0.85-installer.msi",
+        "sha256": "2213ebacf962b709411d654a40087508a694756bc4e41c5a1c24ad86596b2511"
+      },
+      "install": {
+        "type": "msi",
+        "arguments": [
+          "/qn"
+        ]
+      }
+    },
+    {
+      "id": "sumatrapdf",
+      "name": "SumatraPDF",
+      "summary": "Leitor leve de PDF, EPUB, MOBI, XPS e quadrinhos (CBZ e CBR).",
+      "category": "productivity",
+      "homepage": "https://www.sumatrapdfreader.org",
+      "license": "GPL-3.0",
+      "download": {
+        "url": "https://files.sumatrapdfreader.org/software/sumatrapdf/rel/3.6.1/SumatraPDF-3.6.1-64.zip",
+        "sha256": "98b33a518d42986856d225064b0cd2d3643ecf78cbf84ab873d26cc51877a544"
+      },
+      "install": {
+        "type": "extract",
+        "destination": "C:\\Program Files\\SumatraPDF"
+      },
+      "shortcut": {
+        "name": "SumatraPDF",
+        "target": "C:\\Program Files\\SumatraPDF\\SumatraPDF-3.6.1-64.exe"
+      }
+    },
+    {
+      "id": "vcrun2022",
+      "name": "Visual C++ 2015–2022",
+      "summary": "As bibliotecas do Visual C++ que muitos jogos e programas pedem.",
+      "category": "utilities",
+      "homepage": "https://learn.microsoft.com/cpp/windows/latest-supported-vc-redist",
+      "license": "Microsoft (redistribuível)",
+      "winetricks": [
+        "vcrun2022"
+      ],
+      "install": {
+        "type": "none"
+      },
+      "notes": "Instale numa bottle que já tem o programa que pede estas bibliotecas."
+    },
+    {
+      "id": "corefonts",
+      "name": "Fontes do Windows",
+      "summary": "Arial, Times New Roman, Verdana e as outras fontes que sites e documentos esperam.",
+      "category": "utilities",
+      "license": "Microsoft Core Fonts EULA",
+      "winetricks": [
+        "corefonts"
+      ],
+      "install": {
+        "type": "none"
+      },
+      "notes": "Instale numa bottle que já tem o programa que usa as fontes."
     }
   ]
 }

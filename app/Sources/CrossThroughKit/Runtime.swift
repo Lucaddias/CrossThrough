@@ -2,7 +2,8 @@ import Foundation
 
 /// O manifesto `runtime.json` que `runtime/scripts/assemble.sh` grava na raiz do runtime.
 public struct RuntimeManifest: Codable, Sendable, Equatable {
-    public struct Component: Codable, Sendable, Equatable {
+    public struct Component: Codable, Sendable, Equatable, Identifiable {
+        public var id: String { name }
         public var name: String
         public var version: String
         public var url: String
@@ -83,7 +84,7 @@ public struct Runtime: Sendable, Equatable {
     /// Onde procurar o runtime, em ordem:
     /// 1. `CROSSTHROUGH_RUNTIME` no ambiente;
     /// 2. dentro do app: `Contents/SharedSupport/CrossThroughRuntime`;
-    /// 3. ao lado do executável (CLI instalado junto do app, em `Contents/MacOS`);
+    /// 3. relativo ao executável (o CLI que vai no app, em `Contents/Helpers`);
     /// 4. a saída do build no repositório (`runtime/out/CrossThroughRuntime`), para desenvolvimento.
     public static func candidates(environment: [String: String] = ProcessInfo.processInfo.environment,
                                   bundle: Bundle = .main,
@@ -96,7 +97,7 @@ public struct Runtime: Sendable, Equatable {
             list.append(shared.appending(path: "CrossThroughRuntime"))
         }
         if let exe = executable?.resolvingSymlinksInPath() {
-            // .../CrossThrough.app/Contents/MacOS/crossthrough -> Contents/SharedSupport
+            // .../CrossThrough.app/Contents/Helpers/crossthrough -> Contents/SharedSupport
             let contents = exe.deletingLastPathComponent().deletingLastPathComponent()
             list.append(contents.appending(path: "SharedSupport/CrossThroughRuntime"))
             // .../app/.build/<config>/crossthrough -> <repo>/runtime/out/CrossThroughRuntime

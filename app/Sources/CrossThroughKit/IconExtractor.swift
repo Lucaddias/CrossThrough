@@ -57,28 +57,85 @@ public enum IconExtractor {
 
     /// PNG da maior imagem do .ico, reduzida para no máximo `maxPixelSize`.
     public static func pngData(fromICO ico: Data, maxPixelSize: Int = 256) -> Data? {
-        guard let source = CGImageSourceCreateWithData(ico as CFData, nil) else { return nil }
+        // Só a imagem escolhida vai para o ImageIO: ele devolve as imagens do
+        // .ico na ordem dele, não na do arquivo, e diz profundidade 8 para todas.
+        let chosen = bestImage(inICO: ico) ?? ico
+        guard let source = CGImageSourceCreateWithData(chosen as CFData, nil) else { return nil }
         let count = CGImageSourceGetCount(source)
         guard count > 0 else { return nil }
-        // A maior em pixels; empate fica com a de mais cores (aparece depois no .ico).
+        // Num .ico que não deu para ler aqui, a primeira das maiores.
         var best = 0, bestWidth = -1
         for i in 0..<count {
             let props = CGImageSourceCopyPropertiesAtIndex(source, i, nil) as? [CFString: Any]
             let width = props?[kCGImagePropertyPixelWidth] as? Int ?? 0
-            if width >= bestWidth { best = i; bestWidth = width }
+            if width > bestWidth { best = i; bestWidth = width }
         }
         let options: [CFString: Any] = [
             kCGImageSourceCreateThumbnailFromImageAlways: true,
             kCGImageSourceThumbnailMaxPixelSize: maxPixelSize,
         ]
-        guard let image = bestWidth > maxPixelSize
+        guard let decoded = bestWidth > maxPixelSize
                 ? CGImageSourceCreateThumbnailAtIndex(source, best, options as CFDictionary)
-                : CGImageSourceCreateImageAtIndex(source, best, nil) else { return nil }
+                : CGImageSourceCreateImageAtIndex(source, best, nil),
+              let image = rgba8(decoded) else { return nil }
         let out = NSMutableData()
         guard let dest = CGImageDestinationCreateWithData(out, "public.png" as CFString, 1, nil) else { return nil }
         CGImageDestinationAddImage(dest, image, nil)
         guard CGImageDestinationFinalize(dest) else { return nil }
         return out as Data
+    }
+
+    /// A imagem redesenhada em RGBA de 8 bits. Os bitmaps de paleta do .ico
+    /// (4 e 1 bit) saem do ImageIO com 4 bits por componente, e o PNG gravado
+    /// direto deles fica com alfa 15 de 255: quase invisível.
+    private static func rgba8(_ image: CGImage) -> CGImage? {
+        guard let space = CGColorSpace(name: CGColorSpace.sRGB),
+              let context = CGContext(data: nil, width: image.width, height: image.height, bitsPerComponent: 8,
+                                      bytesPerRow: 0, space: space,
+                                      bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue) else { return nil }
+        context.draw(image, in: CGRect(x: 0, y: 0, width: image.width, height: image.height))
+        return context.makeImage()
+    }
+
+    /// A imagem que o Windows mostraria no maior tamanho, sozinha num .ico:
+    /// a maior e, entre as do mesmo tamanho, a de mais cores. Ícones antigos
+    /// (o do PuTTY) trazem versões de 1 bit do mesmo tamanho depois das
+    /// coloridas. nil se o diretório não der para ler.
+    static func bestImage(inICO ico: Data) -> Data? {
+        let r = BinaryReader(ico)
+        var best: (entry: Data, image: Data, key: (width: Int, depth: Int))?
+        for (entry, image) in images(inICO: r) {
+            guard let key = imageKey(image) else { continue }
+            if best == nil || key > best!.key { best = (entry, image, key) }
+        }
+        guard let best else { return nil }
+        return Data([0, 0, 1, 0, 1, 0]) + best.entry.prefix(8) + le32(UInt32(best.image.count)) + le32(22) + best.image
+    }
+
+    /// As entradas do diretório (16 bytes) e os dados de cada imagem.
+    private static func images(inICO r: BinaryReader) -> [(entry: Data, image: Data)] {
+        guard let count = try? Int(r.u16(4)) else { return [] }
+        return (0..<count).compactMap { i in
+            guard let entry = try? r.bytes(6 + i * 16, 16) else { return nil }
+            let e = BinaryReader(entry)
+            guard let size = try? Int(e.u32(8)), let offset = try? Int(e.u32(12)),
+                  let image = try? r.bytes(offset, size) else { return nil }
+            return (entry, image)
+        }
+    }
+
+    /// Largura e bits por pixel tirados da própria imagem (o BITMAPINFOHEADER
+    /// ou o IHDR do PNG): os campos do diretório vêm zerados em muitos .ico.
+    static func imageKey(_ image: Data) -> (width: Int, depth: Int)? {
+        let h = BinaryReader(image)
+        if (try? h.bytes(0, 8)) == Data([0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A]) {
+            guard let b = try? h.bytes(16, 10) else { return nil }
+            let width = b.prefix(4).reduce(0) { $0 << 8 | Int($1) }
+            let channels = [0: 1, 2: 3, 3: 1, 4: 2, 6: 4][Int(b[9])] ?? 1
+            return (width, Int(b[8]) * channels)
+        }
+        guard let width = try? h.u32(4), let bitCount = try? h.u16(14) else { return nil }
+        return (Int(Int32(bitPattern: width)), Int(bitCount))
     }
 }
 
@@ -94,7 +151,8 @@ public enum IconCache {
         let fm = FileManager.default
         let modified = (try? fm.attributesOfItem(atPath: reference.file.path)[.modificationDate] as? Date)?
             .timeIntervalSince1970 ?? 0
-        let key = "\(reference.file.path)|\(reference.index)|\(modified)|\(maxPixelSize)"
+        // A versão muda quando a extração muda: senão o cache serve o PNG antigo.
+        let key = "2|\(reference.file.path)|\(reference.index)|\(modified)|\(maxPixelSize)"
         let name = SHA256.hash(data: Data(key.utf8)).map { String(format: "%02x", $0) }.joined()
         let cached = directory.appending(path: "\(name).png")
         if let data = try? Data(contentsOf: cached) { return data }

@@ -64,3 +64,20 @@ final class Flag: @unchecked Sendable {
     func set() { lock.withLock { isSet = true } }
     var value: Bool { lock.withLock { isSet } }
 }
+
+@Suite("Processos da bottle")
+struct ProcessListTests {
+    @Test("lê os nomes do CSV do tasklist, sem as mensagens do Wine")
+    func tasklist() {
+        let output = """
+        msync: bootstrapped mach port on wine-48ab64d-msync.
+        "services.exe","48","Console","1","0 K"
+        "WinMergeU.exe","364","Console","1","0 K"
+        "explorer.exe","216","Console","1","0 K"
+
+        """
+        #expect(Wine.parseTasklist(output) == ["services.exe", "winmergeu.exe", "explorer.exe"])
+        let busy = Wine.parseTasklist(output).filter { !Wine.backgroundProcesses.contains($0) }
+        #expect(busy == ["winmergeu.exe"])
+    }
+}

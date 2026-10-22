@@ -52,9 +52,14 @@ struct BottleTests {
         try FileManager.default.createDirectory(at: tmp.url.appending(path: "criação interrompida"),
                                                 withIntermediateDirectories: true)
         try touch(tmp.url.appending(path: "quebrada/crossthrough.json"), "{ não é json")
-        let (bottles, damaged) = try store.scan()
-        #expect(bottles.map(\.name) == ["A", "b"])
-        #expect(damaged.map(\.name) == ["quebrada"])
+        // Prefixo do Wine de outro programa: registro e disco C:, sem crossthrough.json.
+        try touch(tmp.url.appending(path: "De Fora/system.reg"), "WINE REGISTRY Version 2\n")
+        try FileManager.default.createDirectory(at: tmp.url.appending(path: "De Fora/drive_c"),
+                                                withIntermediateDirectories: true)
+        let scan = try store.scan()
+        #expect(scan.bottles.map(\.name) == ["A", "b"])
+        #expect(scan.damaged.map(\.name) == ["quebrada"])
+        #expect(scan.foreign.map(\.name) == ["De Fora"])
         #expect(store.availableName(base: "A") == "A 2")
         #expect(store.availableName(base: "Nova") == "Nova")
     }
@@ -154,5 +159,173 @@ struct ProgramTests {
         #expect(jogo.icon?.file.lastPathComponent == "jogo.exe")
         #expect(programs.first { $0.name == "Jogo (janela)" }?.arguments == "-window")
         #expect(programs.first { $0.name == "Editor" }?.source == .desktop)
+    }
+}
+
+@Suite("Configuração como texto")
+struct ConfigTextTests {
+    @Test("variáveis de ambiente, uma por linha")
+    func environment() throws {
+        let text = """
+        # comentário
+        DXVK_HUD=fps,memory
+
+          MVK_CONFIG_LOG_LEVEL = 2
+        VAZIA=
+        COM_IGUAL=a=b
+        """
+        let env = try ConfigText.parseEnvironment(text)
+        #expect(env == ["DXVK_HUD": "fps,memory", "MVK_CONFIG_LOG_LEVEL": "2", "VAZIA": "", "COM_IGUAL": "a=b"])
+        #expect(try ConfigText.parseEnvironment(ConfigText.format(env)) == env)
+        #expect(throws: ConfigText.ParseError.missingEquals(line: 2)) { try ConfigText.parseEnvironment("A=1\nsem igual") }
+        #expect(throws: ConfigText.ParseError.invalidName(line: 1, name: "COM ESPAÇO")) {
+            try ConfigText.parseEnvironment("COM ESPAÇO=1")
+        }
+    }
+
+    @Test("ordem de carga de DLLs no formato do WINEDLLOVERRIDES")
+    func overrides() throws {
+        let parsed = try ConfigText.parseDLLOverrides("xinput1_3=n,b\nd3dcompiler_47.dll = n\nmscoree=\nwinegstreamer=B, N")
+        #expect(parsed == ["xinput1_3": "n,b", "d3dcompiler_47": "n", "mscoree": "", "winegstreamer": "b,n"])
+        #expect(throws: ConfigText.ParseError.invalidLoadOrder(line: 1, value: "nativa")) {
+            try ConfigText.parseDLLOverrides("x=nativa")
+        }
+    }
+}
+
+@Suite("Mudanças no diretório das bottles")
+struct StoreChangesTests {
+    @Test("separa o que muda a lista de bottles do que muda os programas")
+    func classify() {
+        let store = BottleStore(root: URL(fileURLWithPath: "/private/var/tmp/Bottles"))
+        let root = "/private/var/tmp/Bottles"
+        func changes(_ paths: String...) -> StoreChanges { store.changes(forEventPaths: paths) }
+        #expect(changes(root + "/") == StoreChanges(bottles: true))
+        #expect(changes(root + "/Jogos/") == StoreChanges(bottles: true))
+        #expect(changes(root + "/Jogos/drive_c/ProgramData/Microsoft/Windows/Start Menu/Programs/Steam/")
+                == StoreChanges(programs: ["Jogos"]))
+        #expect(changes(root + "/Jogos/drive_c/users/crossover/Desktop/") == StoreChanges(programs: ["Jogos"]))
+        #expect(changes(root + "/A/drive_c/users/crossover/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/",
+                        "/var/tmp/Bottles/B/drive_c/users/Public/Desktop")
+                == StoreChanges(programs: ["A", "B"]))
+        // O resto da bottle (registro, arquivos de jogo, subpastas da Área de Trabalho) não importa.
+        #expect(changes(root + "/Jogos/drive_c/windows/system32/",
+                        root + "/Jogos/drive_c/users/crossover/Desktop/My Mac Desktop/fotos/",
+                        root + "/Jogos/drive_c/users/crossover/AppData/Local/Temp/",
+                        "/outro/lugar/").isEmpty)
+    }
+}
+
+@Suite("Bottles de outro programa")
+struct ForeignBottleTests {
+    @Test("número de build do Windows para a versão", arguments: [
+        (22631, WindowsVersion?.some(.win11)), (19045, .win10), (10240, .win10), (9600, .win81),
+        (9200, .win8), (7601, .win7), (6002, .vista), (2600, .winxp), (1000, nil),
+    ])
+    func build(number: Int, expected: WindowsVersion?) {
+        #expect(WindowsVersion(build: number) == expected)
+    }
+
+    @Test("lê a versão do system.reg, só na chave certa")
+    func registry() throws {
+        let text = #"""
+        WINE REGISTRY Version 2
+        ;; All keys relative to \\Machine
+
+        [Software\\Microsoft\\Windows NT\\CurrentVersion\\AeDebug] 1784105040
+        "CurrentBuild"="2600"
+
+        [Software\\Microsoft\\Windows NT\\CurrentVersion] 1784105040
+        #time=1dc6b2e1f2a3b4c
+        "CurrentBuild"="19045"
+        "CurrentBuildNumber"="19045"
+
+        [Software\\Microsoft\\Windows NT\\CurrentVersion\\Fonts] 1784105040
+        """#
+        #expect(ForeignBottle.windowsVersion(inSystemRegistry: text) == .win10)
+        #expect(ForeignBottle.windowsVersion(inSystemRegistry: "WINE REGISTRY Version 2\n") == nil)
+        let noBuild = #"[Software\\Microsoft\\Windows NT\\CurrentVersion] 1"# + "\n\"ProductName\"=\"x\"\n[Outra] 1\n\"CurrentBuild\"=\"7601\"\n"
+        #expect(ForeignBottle.windowsVersion(inSystemRegistry: noBuild) == nil)
+
+        let tmp = try TempDirectory()
+        try touch(tmp.url.appending(path: "Velha/system.reg"), text)
+        #expect(ForeignBottle(url: tmp.url.appending(path: "Velha")).windowsVersion == .win10)
+    }
+
+    @Test("o campo adopted vai e volta pelo JSON; arquivos antigos ficam sem ele")
+    func adoptedField() throws {
+        let config = BottleConfig(adopted: Date(timeIntervalSince1970: 1_800_000_000.7))
+        let decoded = try BottleConfig.decoder().decode(BottleConfig.self, from: BottleConfig.encoder().encode(config))
+        #expect(decoded == config)
+        #expect(decoded.adopted == Date(timeIntervalSince1970: 1_800_000_000))
+        let old = try BottleConfig.decoder().decode(BottleConfig.self, from: Data(#"{"windowsVersion":"win7"}"#.utf8))
+        #expect(old.adopted == nil)
+    }
+}
+
+@Suite("Links e junções do NTFS gravados pelo Wine")
+struct ReparsePointTests {
+    @Test("lê o link relativo que o instalador do EA app cria")
+    func eaJunction() throws {
+        // O user.WINEREPARSE de "EA Desktop?" numa bottle de verdade.
+        let hex = "0C0000A07000000000003000320030000100000031003300" + "2E003800310033002E0030002E0036003300320036005C00"
+            + "4500410020004400650073006B0074006F00700000003100" + "33002E003800310033002E0030002E0036003300320036005C00"
+            + "4500410020004400650073006B0074006F0070000000"
+        let bytes = stride(from: 0, to: hex.count, by: 2).map { i -> UInt8 in
+            let start = hex.index(hex.startIndex, offsetBy: i)
+            return UInt8(hex[start..<hex.index(start, offsetBy: 2)], radix: 16)!
+        }
+        #expect(ReparsePoint(data: Data(bytes))?.target == .relative(#"13.813.0.6326\EA Desktop"#))
+        #expect(ReparsePoint(data: ReparsePoint.data(for: .absolute(#"C:\Jogos"#)))?.target == .absolute(#"C:\Jogos"#))
+        #expect(ReparsePoint(data: Data([1, 2, 3])) == nil)
+    }
+
+    @Test("caminhos do Windows atravessam links relativos e junções")
+    func resolve() throws {
+        let tmp = try TempDirectory()
+        let bottle = try makeFakeBottle(in: tmp.url)
+        let fm = FileManager.default
+        let base = bottle.driveC.appending(path: "Program Files/Electronic Arts/EA Desktop")
+        let real = try touch(base.appending(path: "13.813.0.6326/EA Desktop/EALauncher.exe"))
+        try Self.link(base.appending(path: "EA Desktop?"), to: .relative(#"13.813.0.6326\EA Desktop"#))
+        let resolved = bottle.existingUnixPath(forWindowsPath: #"C:\Program Files\Electronic Arts\EA Desktop\EA Desktop\EALauncher.exe"#)
+        #expect(resolved?.resolvingSymlinksInPath() == real.resolvingSymlinksInPath())
+
+        // Junção absoluta, com ".." no relativo e um link que aponta para outro.
+        try fm.createDirectory(at: bottle.driveC.appending(path: "Jogos/Um"), withIntermediateDirectories: true)
+        try touch(bottle.driveC.appending(path: "Jogos/Um/jogo.exe"))
+        try Self.link(bottle.driveC.appending(path: "Atalho?"), to: .absolute(#"C:\Jogos"#))
+        try Self.link(bottle.driveC.appending(path: "Jogos/Volta?"), to: .relative(#"..\Atalho\Um"#))
+        #expect(bottle.existingUnixPath(forWindowsPath: #"C:\atalho\um\JOGO.exe"#) != nil)
+        #expect(bottle.existingUnixPath(forWindowsPath: #"C:\Jogos\Volta\jogo.exe"#) != nil)
+        #expect(bottle.existingUnixPath(forWindowsPath: #"C:\Atalho\Um\nada.exe"#) == nil)
+
+        // Um link para si mesmo acaba no limite, sem laço infinito.
+        try Self.link(bottle.driveC.appending(path: "Laço?"), to: .relative("Laço"))
+        #expect(bottle.existingUnixPath(forWindowsPath: #"C:\Laço\x"#) == nil)
+    }
+
+    /// Um diretório `<nome>?` com o atributo, como o Wine grava.
+    static func link(_ url: URL, to target: ReparsePoint.Target) throws {
+        try FileManager.default.createDirectory(at: url, withIntermediateDirectories: true)
+        let data = ReparsePoint.data(for: target)
+        let status = data.withUnsafeBytes { setxattr(url.path, ReparsePoint.xattrName, $0.baseAddress, data.count, 0, 0) }
+        #expect(status == 0)
+    }
+}
+
+@Suite("Backend recomendado")
+struct GraphicsAdviceTests {
+    @Test("o EA app pede o backend do Wine; outros programas não pedem nada")
+    func ea() {
+        func program(_ name: String, _ path: String) -> Program {
+            Program(name: name, shortcut: URL(fileURLWithPath: "/x/\(name).lnk"), source: .startMenu, folder: [],
+                    target: URL(fileURLWithPath: path))
+        }
+        let notepad = program("Notepad++", "/b/drive_c/Program Files/Notepad++/notepad++.exe")
+        let ea = program("EA", "/b/drive_c/Program Files/Electronic Arts/EA Desktop/13.8/EA Desktop/EALauncher.exe")
+        #expect(GraphicsBackend.advice(for: [notepad]) == nil)
+        let advice = GraphicsBackend.advice(for: [notepad, ea])
+        #expect(advice?.backend == .wined3d && advice?.program == "EA")
     }
 }

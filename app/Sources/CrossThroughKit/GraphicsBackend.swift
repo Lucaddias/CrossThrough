@@ -90,6 +90,34 @@ public enum GraphicsBackend: String, Codable, CaseIterable, Sendable, Identifiab
     }
 }
 
+/// Um backend que um programa da bottle pede, e por quê.
+public struct GraphicsAdvice: Sendable, Equatable {
+    public var backend: GraphicsBackend
+    /// O nome do programa (o do atalho).
+    public var program: String
+    public var reason: String
+}
+
+extension GraphicsBackend {
+    /// Programas que não abrem com os backends nativos, pelo executável. Só
+    /// entra aqui o que foi testado neste runtime.
+    static let requirements: [String: (backend: GraphicsBackend, reason: String)] = {
+        let ea = (GraphicsBackend.wined3d,
+                  "O EA app é feito com o Chromium, que não abre com o DXMT nem com o DXVK. Com o Wine (OpenGL) ele funciona.")
+        return ["ealauncher.exe": ea, "eadesktop.exe": ea]
+    }()
+
+    /// O backend que algum destes programas pede, se algum pedir.
+    public static func advice(for programs: [Program]) -> GraphicsAdvice? {
+        for program in programs {
+            guard let file = program.target?.lastPathComponent.lowercased(),
+                  let requirement = requirements[file] else { continue }
+            return GraphicsAdvice(backend: requirement.backend, program: program.name, reason: requirement.reason)
+        }
+        return nil
+    }
+}
+
 /// Copia `source` sobre `target` passando por um arquivo temporário no mesmo diretório.
 func replaceFile(at target: URL, with source: URL) throws {
     let fm = FileManager.default

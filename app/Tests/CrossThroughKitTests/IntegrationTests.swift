@@ -64,6 +64,44 @@ struct IntegrationTests {
         try await Wine(runtime: runtime, bottle: renamed).stopAll()
     }
 
+    @Test("adota um prefixo do Wine criado fora do CrossThrough")
+    func adoption() async throws {
+        let runtime = try #require(builtRuntime)
+        let tmp = try TempDirectory()
+        let store = BottleStore(root: tmp.url)
+        // Um prefixo comum (como o de outro programa): wineboot, Windows 7, sem crossthrough.json.
+        let prefix = tmp.url.appending(path: "De Fora")
+        try FileManager.default.createDirectory(at: prefix, withIntermediateDirectories: true)
+        let plain = Wine(runtime: runtime, bottle: Bottle(url: prefix, config: BottleConfig()))
+        #expect(try await plain.run(["wineboot", "--init"], workingDirectory: prefix, timeout: .seconds(600)).succeeded)
+        #expect(try await plain.run(["winecfg", "/v", "win7"], timeout: .seconds(120)).succeeded)
+        try await plain.stopAll()
+        let mine = prefix.appending(path: "drive_c/dados do usuário.txt")
+        try touch(mine, "não pode sumir")
+
+        let scan = try store.scan()
+        #expect(scan.bottles.isEmpty)
+        let foreign = try #require(scan.foreign.first)
+        #expect(foreign.name == "De Fora")
+        #expect(foreign.windowsVersion == .win7)
+
+        let steps = StepRecorder()
+        let bottle = try await store.adopt(foreign, graphics: .dxvk, runtime: runtime) { steps.append($0) }
+        #expect(steps.all == [.updating, .installingGraphics(.dxvk), .finishing])
+        #expect(bottle.config.windowsVersion == .win7)
+        #expect(bottle.config.adopted != nil && bottle.config.createdWith == nil)
+        #expect(GraphicsBackend.dxvk.isInstalled(in: bottle, runtime: runtime))
+        #expect(try String(contentsOf: mine, encoding: .utf8) == "não pode sumir")
+        let after = try store.scan()
+        #expect(after.bottles.map(\.name) == ["De Fora"] && after.foreign.isEmpty)
+        // Adotar de novo não refaz nada.
+        #expect(try await store.adopt(foreign, runtime: runtime) == bottle)
+
+        let ver = try await Wine(runtime: runtime, bottle: bottle).run(["cmd", "/c", "ver"], timeout: .seconds(120))
+        #expect(ver.output.contains("6.1"), "cmd /c ver: \(ver.output)")
+        try await Wine(runtime: runtime, bottle: bottle).stopAll()
+    }
+
     @Test("criação que falha não deixa nada no disco")
     func failedCreation() async throws {
         let runtime = try #require(builtRuntime)

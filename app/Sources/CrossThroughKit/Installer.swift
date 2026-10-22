@@ -127,9 +127,11 @@ public struct Installer: Sendable {
                     break
                 }
                 progress?(.waitingForInstaller)
-                // Instaladores deixam filhos rodando (msiexec, atualizadores). Espera
-                // sem matar: se o programa abriu sozinho no fim, ele fica aberto.
-                try await wine.waitForAll(timeout: .seconds(1800), stopOnTimeout: false)
+                // Instaladores deixam filhos rodando (msiexec, o instalador de verdade
+                // depois do que se extrai). Espera esses, sem matar nada: o explorer.exe
+                // que alguns deixam aberto não conta, e se o programa abriu sozinho no
+                // fim, ele continua aberto.
+                try await wine.waitForPrograms(timeout: .seconds(1800))
             }
 
             if let shortcut = recipe.shortcut {

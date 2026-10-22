@@ -1,4 +1,5 @@
 import Foundation
+import ImageIO
 import Testing
 @testable import CrossThroughKit
 
@@ -179,6 +180,57 @@ struct IconTests {
         try (Data([0, 0, 1, 0, 0, 0])).write(to: ico)
         #expect(try IconExtractor.icoData(for: IconReference(file: ico)) == Data([0, 0, 1, 0, 0, 0]))
     }
+
+    @Test("no mesmo tamanho, fica a imagem de mais cores, antes ou depois da de 1 bit", arguments: [false, true])
+    func prefersColor(monoFirst: Bool) throws {
+        // Como o putty.exe: 16x16 de 4 bits (vermelha) e 16x16 de 1 bit (preta).
+        let color = Self.bitmap(bitCount: 4, palette: [0x000000, 0xFF0000], index: 1)
+        let mono = Self.bitmap(bitCount: 1, palette: [0x000000, 0xFFFFFF], index: 0)
+        #expect(IconExtractor.imageKey(color)! == (16, 4))
+        #expect(IconExtractor.imageKey(mono)! == (16, 1))
+        let png = try #require(IconExtractor.pngData(fromICO: Self.ico(monoFirst ? [mono, color] : [color, mono])))
+        let source = try #require(CGImageSourceCreateWithData(png as CFData, nil))
+        let image = try #require(CGImageSourceCreateImageAtIndex(source, 0, nil))
+        #expect(image.width == 16 && image.height == 16)
+        var pixels = [UInt8](repeating: 0, count: 16 * 16 * 4)
+        let context = try #require(CGContext(data: &pixels, width: 16, height: 16, bitsPerComponent: 8, bytesPerRow: 16 * 4,
+                                             space: CGColorSpace(name: CGColorSpace.sRGB)!,
+                                             bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue))
+        context.draw(image, in: CGRect(x: 0, y: 0, width: 16, height: 16))
+        let red = stride(from: 0, to: pixels.count, by: 4).allSatisfy {
+            pixels[$0] > 200 && pixels[$0 + 1] < 50 && pixels[$0 + 2] < 50 && pixels[$0 + 3] == 255
+        }
+        #expect(red, "a imagem escolhida não é a colorida e opaca")
+    }
+
+    /// Um .ico com estas imagens (cabeçalhos de 16 bytes, dados em seguida).
+    static func ico(_ images: [Data]) -> Data {
+        var ico = Data([0, 0, 1, 0, UInt8(images.count), 0])
+        var offset = 6 + images.count * 16
+        for image in images {
+            ico += Data([16, 16, 0, 0, 1, 0, 0, 0]) + le32(image.count) + le32(offset)
+            offset += image.count
+        }
+        return images.reduce(ico, +)
+    }
+
+    /// Bitmap de ícone 16x16 (BITMAPINFOHEADER, paleta, cores, máscara AND
+    /// zerada = opaco), todo com a cor `index` da paleta (0xRRGGBB).
+    static func bitmap(bitCount: Int, palette: [UInt32], index: UInt8) -> Data {
+        var d = le32(40) + le32(16) + le32(32) + Data([1, 0, UInt8(bitCount), 0]) + Data(count: 24)
+        for i in 0..<(1 << bitCount) {
+            let rgb = i < palette.count ? palette[i] : 0
+            d += Data([UInt8(rgb & 0xFF), UInt8((rgb >> 8) & 0xFF), UInt8(rgb >> 16), 0])
+        }
+        let pixelsPerByte = 8 / bitCount
+        var byte: UInt8 = 0
+        for p in 0..<pixelsPerByte { byte |= index << UInt8(8 - bitCount * (p + 1)) }
+        let rowBytes = (16 * bitCount + 31) / 32 * 4
+        for _ in 0..<16 { d += Data(repeating: byte, count: 16 / pixelsPerByte) + Data(count: rowBytes - 16 / pixelsPerByte) }
+        return d + Data(count: 16 * 4)
+    }
+
+    private static func le32(_ v: Int) -> Data { Data((0..<4).map { UInt8((v >> (8 * $0)) & 0xFF) }) }
 
     @Test("arquivo que não é PE dá erro, não trava")
     func notPE() throws {

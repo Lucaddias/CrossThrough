@@ -8,6 +8,7 @@ uso: crossthrough <comando> [argumentos]
 
   runtime                              o runtime em uso e seus componentes
   bottles                              lista as bottles
+  adopt <bottle> [--graphics <backend>] passa a usar uma bottle de outro programa
   create <bottle> [--windows <versão>] [--graphics dxmt|dxvk|wined3d]
   delete <bottle>                      manda a bottle para o Lixo
   rename <bottle> <novo nome>
@@ -93,6 +94,16 @@ func printProgress(_ text: String) {
     print("  \(text)")
 }
 
+/// O valor de `--graphics`, se veio.
+func parseGraphics(_ value: String?) throws -> GraphicsBackend? {
+    try value.map {
+        guard let g = GraphicsBackend(rawValue: $0) else {
+            throw UsageError(message: "backend desconhecido: \($0) (dxmt, dxvk ou wined3d)")
+        }
+        return g
+    }
+}
+
 func run(_ args: Arguments) async throws -> Int32 {
     guard let command = args.positional.first else { print(usage); return 2 }
     let verbose = args.flags.contains("verbose")
@@ -112,13 +123,32 @@ func run(_ args: Arguments) async throws -> Int32 {
         return 0
 
     case "bottles":
-        let (bottles, damaged) = try store.scan()
-        if bottles.isEmpty && damaged.isEmpty { print("Nenhuma bottle em \(store.root.path).") }
-        for b in bottles {
+        let scan = try store.scan()
+        if scan.bottles.isEmpty && scan.damaged.isEmpty && scan.foreign.isEmpty {
+            print("Nenhuma bottle em \(store.root.path).")
+        }
+        for b in scan.bottles {
             let recipes = b.config.recipes.isEmpty ? "" : "  receitas: \(b.config.recipes.joined(separator: ", "))"
             print("\(b.name)  [\(b.config.windowsVersion.displayName), \(b.config.graphics.displayName)\(b.config.msync ? ", msync" : "")]\(recipes)")
         }
-        for d in damaged { printError("\(d.name): crossthrough.json ilegível (\(d.error.localizedDescription))") }
+        for f in scan.foreign { print("\(f.name)  [de outro programa; para usar: crossthrough adopt \"\(f.name)\"]") }
+        for d in scan.damaged { printError("\(d.name): crossthrough.json ilegível (\(d.error.localizedDescription))") }
+        return 0
+
+    case "adopt":
+        let name = try rest.required(0, "o nome da bottle")
+        guard let foreign = try store.scan().foreign.first(where: { $0.name == name }) else {
+            if (try? store.bottle(named: name)) != nil { throw UsageError(message: "“\(name)” já é uma bottle do CrossThrough") }
+            throw BottleError.notFound(name)
+        }
+        let advice = GraphicsBackend.advice(for: ProgramScanner.scan(Bottle(url: foreign.url, config: BottleConfig())))
+        let graphics = try parseGraphics(args.options["graphics"]) ?? advice?.backend ?? .dxmt
+        if let advice, advice.backend == graphics { print("\(advice.program): \(advice.reason)") }
+        let runtime = try Runtime.locate()
+        print("Adotando “\(name)”...")
+        let clock = ContinuousClock.now
+        let bottle = try await store.adopt(foreign, graphics: graphics, runtime: runtime) { printProgress($0.description) }
+        print("Pronto em \(Int((ContinuousClock.now - clock).components.seconds)) s: \(bottle.config.windowsVersion.displayName), \(bottle.config.graphics.displayName)")
         return 0
 
     case "create":
@@ -127,10 +157,7 @@ func run(_ args: Arguments) async throws -> Int32 {
             guard let v = WindowsVersion(rawValue: $0) else { throw UsageError(message: "versão do Windows desconhecida: \($0)") }
             return v
         } ?? .wineDefault
-        let graphics = try args.options["graphics"].map {
-            guard let g = GraphicsBackend(rawValue: $0) else { throw UsageError(message: "backend desconhecido: \($0)") }
-            return g
-        } ?? .dxmt
+        let graphics = try parseGraphics(args.options["graphics"]) ?? .dxmt
         let runtime = try Runtime.locate()
         print("Criando “\(name)”...")
         let clock = ContinuousClock.now

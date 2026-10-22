@@ -4,6 +4,8 @@ import Foundation
 public enum BottleCreationStep: Sendable, Equatable {
     /// `wineboot --init`: registro, system32/syswow64, Mono e Gecko. A mais demorada.
     case initializing
+    /// `wineboot --update` num prefixo adotado.
+    case updating
     case configuringWindows(WindowsVersion)
     case installingGraphics(GraphicsBackend)
     case finishing
@@ -11,6 +13,7 @@ public enum BottleCreationStep: Sendable, Equatable {
     public var description: String {
         switch self {
         case .initializing: return "Criando o Windows da bottle"
+        case .updating: return "Atualizando o Windows da bottle para este Wine"
         case .configuringWindows(let v): return "Configurando como \(v.displayName)"
         case .installingGraphics(let g): return "Instalando o backend gráfico \(g.displayName)"
         case .finishing: return "Concluindo"
@@ -18,9 +21,19 @@ public enum BottleCreationStep: Sendable, Equatable {
     }
 }
 
+/// O que há no diretório das bottles.
+public struct StoreScan: Sendable {
+    public var bottles: [Bottle] = []
+    /// `crossthrough.json` ilegível.
+    public var damaged: [(name: String, error: Error)] = []
+    /// Prefixos do Wine sem `crossthrough.json`, que dá para adotar.
+    public var foreign: [ForeignBottle] = []
+}
+
 /// O diretório onde ficam as bottles. Cada subdiretório com `crossthrough.json`
 /// é uma bottle; o arquivo é gravado por último na criação, então uma criação
-/// interrompida nunca aparece como bottle.
+/// interrompida nunca aparece como bottle. Um prefixo do Wine sem ele (de
+/// outro programa) aparece à parte, para ser adotado.
 public struct BottleStore: Sendable {
     public let root: URL
 
@@ -35,24 +48,29 @@ public struct BottleStore: Sendable {
 
     public func url(for name: String) -> URL { root.appending(path: name, directoryHint: .isDirectory) }
 
-    /// As bottles, em ordem de nome. Um diretório com `crossthrough.json`
-    /// ilegível entra em `damaged`, não some em silêncio.
-    public func scan() throws -> (bottles: [Bottle], damaged: [(name: String, error: Error)]) {
+    /// As bottles e os prefixos de fora, em ordem de nome. Um diretório com
+    /// `crossthrough.json` ilegível entra em `damaged`, não some em silêncio.
+    public func scan() throws -> StoreScan {
         let fm = FileManager.default
-        guard fm.fileExists(atPath: root.path) else { return ([], []) }
-        var bottles: [Bottle] = []
-        var damaged: [(String, Error)] = []
+        var scan = StoreScan()
+        guard fm.fileExists(atPath: root.path) else { return scan }
         let entries = try fm.contentsOfDirectory(at: root, includingPropertiesForKeys: [.isDirectoryKey],
                                                  options: [.skipsHiddenFiles])
         for entry in entries where (try? entry.resourceValues(forKeys: [.isDirectoryKey]).isDirectory) == true {
             do {
-                if let bottle = try Bottle.load(from: entry) { bottles.append(bottle) }
+                if let bottle = try Bottle.load(from: entry) {
+                    scan.bottles.append(bottle)
+                } else if ForeignBottle.isWinePrefix(entry) {
+                    scan.foreign.append(ForeignBottle(url: entry))
+                }
             } catch {
-                damaged.append((entry.lastPathComponent, error))
+                scan.damaged.append((entry.lastPathComponent, error))
             }
         }
-        bottles.sort { $0.name.localizedStandardCompare($1.name) == .orderedAscending }
-        return (bottles, damaged)
+        let byName = { (a: String, b: String) in a.localizedStandardCompare(b) == .orderedAscending }
+        scan.bottles.sort { byName($0.name, $1.name) }
+        scan.foreign.sort { byName($0.name, $1.name) }
+        return scan
     }
 
     public func list() throws -> [Bottle] { try scan().bottles }
@@ -198,5 +216,69 @@ extension Bottle {
         let previous = config
         config = copy
         do { try save() } catch { config = previous; throw error }
+    }
+}
+
+// MARK: - Mudanças no disco
+
+/// O que um lote de eventos do FSEvents (caminhos de diretórios) mudou no
+/// diretório das bottles.
+public struct StoreChanges: Equatable, Sendable {
+    /// Uma bottle apareceu, sumiu ou teve o crossthrough.json mudado.
+    public var bottles = false
+    /// Bottles (pelo nome) cujos atalhos mudaram: Menu Iniciar ou Área de Trabalho.
+    public var programs: Set<String> = []
+
+    public init(bottles: Bool = false, programs: Set<String> = []) {
+        self.bottles = bottles
+        self.programs = programs
+    }
+
+    public var isEmpty: Bool { !bottles && programs.isEmpty }
+}
+
+extension BottleStore {
+    /// Classifica caminhos de eventos. Mudanças em outros lugares da bottle
+    /// (o registro, os arquivos de um jogo) não importam aqui.
+    public func changes(forEventPaths paths: [String]) -> StoreChanges {
+        let rootPath = Self.comparable(root.resolvingSymlinksInPath().path)
+        var changes = StoreChanges()
+        for raw in paths {
+            let path = Self.comparable(raw)
+            if path == rootPath { changes.bottles = true; continue }
+            guard path.hasPrefix(rootPath + "/") else { continue }
+            let parts = path.dropFirst(rootPath.count + 1).split(separator: "/").map(String.init)
+            guard let name = parts.first else { continue }
+            let inside = Array(parts.dropFirst())
+            if inside.isEmpty {
+                changes.bottles = true
+            } else if Self.holdsShortcuts(inside) {
+                changes.programs.insert(name)
+            }
+        }
+        return changes
+    }
+
+    /// drive_c/ProgramData/Microsoft/Windows/Start Menu/...,
+    /// drive_c/users/<u>/AppData/Roaming/Microsoft/Windows/Start Menu/... ou
+    /// drive_c/users/<u>/Desktop (sem subpastas, como o ProgramScanner).
+    static func holdsShortcuts(_ inside: [String]) -> Bool {
+        guard inside.first == "drive_c" else { return false }
+        let rest = Array(inside.dropFirst())
+        if rest.starts(with: ["ProgramData", "Microsoft", "Windows", "Start Menu"]) { return true }
+        guard rest.count >= 3, rest[0] == "users" else { return false }
+        let afterUser = Array(rest.dropFirst(2))
+        return afterUser == ["Desktop"]
+            || afterUser.starts(with: ["AppData", "Roaming", "Microsoft", "Windows", "Start Menu"])
+    }
+
+    /// Sem a barra final e sem o /private de /private/var e /private/tmp: o
+    /// FSEvents usa o caminho real, o Foundation às vezes o outro.
+    static func comparable(_ path: String) -> String {
+        var p = path.hasSuffix("/") && path.count > 1 ? String(path.dropLast()) : path
+        for prefix in ["/private/var/", "/private/tmp/"] where p.hasPrefix(prefix) {
+            p = String(p.dropFirst("/private".count))
+        }
+        return p
     }
 }

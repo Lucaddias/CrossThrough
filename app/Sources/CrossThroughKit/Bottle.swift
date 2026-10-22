@@ -39,6 +39,9 @@ public struct BottleConfig: Codable, Sendable, Hashable {
     public var created: Date
     /// Versão do Wine que criou a bottle (`runtime.json`, campo `wine`).
     public var createdWith: String?
+    /// Quando um prefixo de outro programa passou a ser esta bottle (nil se
+    /// ela foi criada aqui).
+    public var adopted: Date?
     /// Receitas do catálogo instaladas nesta bottle (ids).
     public var recipes: [String]
 
@@ -49,6 +52,7 @@ public struct BottleConfig: Codable, Sendable, Hashable {
                 environment: [String: String] = [:],
                 created: Date = Date(),
                 createdWith: String? = nil,
+                adopted: Date? = nil,
                 recipes: [String] = []) {
         self.formatVersion = Self.currentFormat
         self.windowsVersion = windowsVersion
@@ -60,6 +64,7 @@ public struct BottleConfig: Codable, Sendable, Hashable {
         // salva e a relida serem iguais.
         self.created = Date(timeIntervalSince1970: created.timeIntervalSince1970.rounded(.down))
         self.createdWith = createdWith
+        self.adopted = adopted.map { Date(timeIntervalSince1970: $0.timeIntervalSince1970.rounded(.down)) }
         self.recipes = recipes
     }
 
@@ -75,6 +80,7 @@ public struct BottleConfig: Codable, Sendable, Hashable {
         environment = try c.decodeIfPresent([String: String].self, forKey: .environment) ?? [:]
         created = try c.decodeIfPresent(Date.self, forKey: .created) ?? Date(timeIntervalSince1970: 0)
         createdWith = try c.decodeIfPresent(String.self, forKey: .createdWith)
+        adopted = try c.decodeIfPresent(Date.self, forKey: .adopted)
         recipes = try c.decodeIfPresent([String].self, forKey: .recipes) ?? []
     }
 
@@ -157,25 +163,52 @@ public struct Bottle: Sendable, Hashable, Identifiable {
 
     /// Como `unixPath(forWindowsPath:)`, mas expande `%VAR%` e só devolve o que
     /// existe. Cada componente é casado sem diferenciar maiúsculas, como no
-    /// Windows (o volume do Mac pode diferenciar).
+    /// Windows (o volume do Mac pode diferenciar), e links e junções do NTFS
+    /// que o Wine gravou são seguidos como ele segue.
     public func existingUnixPath(forWindowsPath windowsPath: String) -> URL? {
-        let path = expandEnvironment(windowsPath).replacingOccurrences(of: "/", with: "\\")
+        resolve(expandEnvironment(windowsPath), hops: 0)
+    }
+
+    private func resolve(_ windowsPath: String, hops: Int) -> URL? {
+        let path = windowsPath.replacingOccurrences(of: "/", with: "\\")
         guard path.count >= 2, path.dropFirst().first == ":",
               let letter = path.first?.lowercased(), ("a"..."z").contains(letter) else { return nil }
-        let fm = FileManager.default
         var current = url.appending(path: "dosdevices/\(letter):").resolvingSymlinksInPath()
-        guard fm.fileExists(atPath: current.path) else { return nil }
-        for component in path.dropFirst(2).split(separator: "\\").map(String.init) {
+        guard FileManager.default.fileExists(atPath: current.path) else { return nil }
+        let components = path.dropFirst(2).split(separator: "\\").map(String.init)
+        var walked: [String] = []
+        for (i, component) in components.enumerated() {
             if component == "." { continue }
-            if component == ".." { current.deleteLastPathComponent(); continue }
-            let exact = current.appending(path: component)
-            if fm.fileExists(atPath: exact.path) { current = exact; continue }
-            let lower = component.lowercased()
-            guard let match = (try? fm.contentsOfDirectory(atPath: current.path))?
-                    .first(where: { $0.lowercased() == lower }) else { return nil }
-            current = current.appending(path: match)
+            if component == ".." {
+                if !walked.isEmpty { walked.removeLast(); current.deleteLastPathComponent() }
+                continue
+            }
+            if let match = Self.entry(named: component, in: current) {
+                current = current.appending(path: match)
+                walked.append(component)
+                continue
+            }
+            // Um ponto de reparse: "<nome>?" com o destino no atributo estendido.
+            guard hops < ReparsePoint.maximumHops, let match = Self.entry(named: component + "?", in: current),
+                  let reparse = ReparsePoint(contentsOf: current.appending(path: match)) else { return nil }
+            let rest = components[(i + 1)...]
+            switch reparse.target {
+            case .relative(let target):
+                let parent = "\(letter):\\" + walked.joined(separator: "\\")
+                return resolve(([parent, target] + rest).joined(separator: "\\"), hops: hops + 1)
+            case .absolute(let target):
+                return resolve(([target] + rest).joined(separator: "\\"), hops: hops + 1)
+            }
         }
         return current
+    }
+
+    /// O nome do item em `directory` igual a `name` sem diferenciar maiúsculas.
+    private static func entry(named name: String, in directory: URL) -> String? {
+        let fm = FileManager.default
+        if fm.fileExists(atPath: directory.appending(path: name).path) { return name }
+        let lower = name.lowercased()
+        return (try? fm.contentsOfDirectory(atPath: directory.path))?.first { $0.lowercased() == lower }
     }
 
     /// O usuário do Windows da bottle. O Wine usa o nome do usuário do macOS

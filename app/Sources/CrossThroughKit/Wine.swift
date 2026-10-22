@@ -72,6 +72,52 @@ public struct Wine: Sendable {
                                workingDirectory: bottle.url, log: nil, timeout: timeout, onTimeout: stop)
     }
 
+    /// Processos que o Wine mantém em toda bottle (serviços e a área de
+    /// trabalho) e os que a consulta do `tasklist` cria. O explorer.exe sem
+    /// /desktop também conta: instaladores costumam deixar um aberto, e ele não
+    /// é o programa de ninguém.
+    static let backgroundProcesses: Set<String> = [
+        "services.exe", "winedevice.exe", "plugplay.exe", "svchost.exe", "rpcss.exe",
+        "explorer.exe", "conhost.exe", "start.exe", "tasklist.exe",
+    ]
+
+    /// Os nomes dos processos da bottle, em minúsculas (`tasklist` do Wine).
+    public func processNames() async throws -> [String] {
+        let result = try await Self.execute(runtime.wine, ["tasklist", "/fo", "csv", "/nh"],
+                                            environment: environment(), workingDirectory: bottle.driveC,
+                                            log: nil, timeout: .seconds(60), onTimeout: nil)
+        guard result.succeeded else {
+            throw BottleError.commandFailed(command: "tasklist", status: result.status, log: nil)
+        }
+        return Self.parseTasklist(result.output)
+    }
+
+    /// A primeira coluna de cada linha do CSV do `tasklist` ("nome.exe","PID",...).
+    static func parseTasklist(_ output: String) -> [String] {
+        output.split(whereSeparator: \.isNewline).compactMap { line in
+            guard line.first == "\"" else { return nil }
+            let rest = line.dropFirst()
+            guard let end = rest.firstIndex(of: "\"") else { return nil }
+            return rest[..<end].lowercased()
+        }
+    }
+
+    /// Espera os programas da bottle terminarem, sem contar os processos de
+    /// fundo (`backgroundProcesses`). Ao contrário do `waitForAll`, não fica
+    /// preso num explorer.exe que um instalador deixou aberto. Devolve false
+    /// se o tempo acabar (sem encerrar nada).
+    @discardableResult
+    public func waitForPrograms(timeout: Duration, poll: Duration = .seconds(2)) async throws -> Bool {
+        let clock = ContinuousClock()
+        let deadline = clock.now + timeout
+        while true {
+            let busy = try await processNames().filter { !Self.backgroundProcesses.contains($0) }
+            if busy.isEmpty { return true }
+            if clock.now >= deadline { return false }
+            try await Task.sleep(for: poll)
+        }
+    }
+
     /// Encerra à força tudo o que roda na bottle (`wineserver -k`).
     public func stopAll() async throws {
         try await Self.execute(runtime.wineserver, ["-k"], environment: environment(),
