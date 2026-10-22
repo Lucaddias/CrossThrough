@@ -1,0 +1,73 @@
+# components.lock — origem fixa de tudo que entra no runtime do CrossThrough.
+#
+# Cada componente é open source. O build baixa a URL, confere o SHA-256 e falha
+# se não bater. Para atualizar um componente, troque version/url/sha256 juntos.
+
+# Fonte LGPL/MIT publicada pela CodeWeavers (https://www.codeweavers.com/crossover/source).
+# Traz Wine 11.0 (com msync), gnutls+nettle+gmp, FreeType, MoltenVK, DXVK
+# 1.10.3 para macOS, vkd3d, GLib e GStreamer. Só o fonte aberto: nenhuma das
+# partes proprietárias do CrossOver está neste tarball.
+[crossover-sources]
+version = 26.3.0
+url = https://media.codeweavers.com/pub/crossover/source/crossover-sources-26.3.0.tar.gz
+sha256 = ac99c8ca4b3848f3e81784135f023df266b61c2345726ea55a50b3e030dd6872
+license = LGPL-2.1+ (Wine, vkd3d, gnutls, GLib, GStreamer), LGPL-3+/GPL-2+ (nettle, gmp), FTL/GPL-2 (FreeType), Apache-2.0 (MoltenVK), zlib (DXVK)
+
+# O tarball acima traz o nettle 3.10 sem o Makefile.in da raiz; usamos o
+# lançamento oficial do GNU, mesma série 3.10 (compatível em ABI).
+[nettle]
+version = 3.10.2
+url = https://ftp.gnu.org/gnu/nettle/nettle-3.10.2.tar.gz
+sha256 = fe9ff51cb1f2abb5e65a6b8c10a92da0ab5ab6eaf26e7fc2b675c45f1fb519b5
+license = LGPL-3+ ou GPL-2+
+
+# O FreeType do tarball é uma cópia do git (sem configure, pede o submódulo
+# dlg); usamos o lançamento oficial da mesma versão.
+[freetype]
+version = 2.13.3
+url = https://download.savannah.gnu.org/releases/freetype/freetype-2.13.3.tar.xz
+sha256 = 0550350666d427c74daeb85d5ac7bb353acba5f76956395995311a9c6f063289
+license = FTL ou GPL-2
+
+# Tradutor Direct3D 10/11 -> Metal. Binários oficiais do projeto (sem LLVM 15 no build).
+[dxmt]
+version = 0.80
+url = https://github.com/3Shain/dxmt/releases/download/v0.80/dxmt-v0.80-builtin.tar.gz
+sha256 = 8f260e36b5739e68f3bad613381441385c4dc7b85b78ba8de653d5a6a264529d
+license = MIT
+
+# O tarball de binários do DXMT não traz a licença; esta é a do mesmo tag.
+[dxmt-license]
+url = https://raw.githubusercontent.com/3Shain/dxmt/v0.80/LICENSE
+file = dxmt-v0.80-LICENSE
+sha256 = 6b928413c6308c106f3e0080bd94b6427b56d587d400fd40e6cbfbab7d9c4ae1
+
+# Motor HTML (mshtml) do Wine.
+[wine-gecko-x86]
+version = 2.47.4
+url = https://dl.winehq.org/wine/wine-gecko/2.47.4/wine-gecko-2.47.4-x86.tar.xz
+sha256 = 2cfc8d5c948602e21eff8a78613e1826f2d033df9672cace87fed56e8310afb6
+license = MPL-2.0
+
+[wine-gecko-x86_64]
+version = 2.47.4
+url = https://dl.winehq.org/wine/wine-gecko/2.47.4/wine-gecko-2.47.4-x86_64.tar.xz
+sha256 = fd88fc7e537d058d7a8abf0c1ebc90c574892a466de86706a26d254710a82814
+license = MPL-2.0
+
+[wine-gecko-license]
+url = https://www.mozilla.org/media/MPL/2.0/index.txt
+file = MPL-2.0.txt
+sha256 = 3f3d9e0024b1921b067d6f7f88deb4a60cbe7a78e76c64e3f1d7fc3b779b9d04
+
+# Runtime .NET Framework do Wine.
+[wine-mono]
+version = 10.4.1
+url = https://github.com/wine-mono/wine-mono/releases/download/wine-mono-10.4.1/wine-mono-10.4.1-x86.tar.xz
+sha256 = a16606ef0724202e6a6848ece6e0cbba64d11e2f11aefe744af1d93c6d9f99bb
+license = MIT, LGPL-2.1 e outras (ver wine-mono-license)
+
+[wine-mono-license]
+url = https://raw.githubusercontent.com/wine-mono/wine-mono/wine-mono-10.4.1/COPYING
+file = wine-mono-10.4.1-COPYING
+sha256 = 0265443ffc97c9450dbcf402c2430bf9fe87d7a6c92d5d7684fcecfe749bf75d

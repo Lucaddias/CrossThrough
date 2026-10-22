@@ -1,0 +1,80 @@
+mscoree: não estoura buffers MAX_PATH com o Mono num caminho longo.
+
+find_mono_dll() e get_support_msi() concatenam o caminho do Mono com sufixos
+em buffers WCHAR[MAX_PATH] sem conferir o tamanho. Com o runtime (e portanto
+WINEDATADIR/mono) num diretório longo, o wineboot --init corrompe a pilha de
+install_wine_mono() e o rundll32 do DefaultInstall cai em kernelbase
+copy_file() lendo um ponteiro feito de texto ("ort." de "support.msi").
+
+Um caminho que não cabe passa a contar como "não encontrado" (com WARN), e o
+caller segue para a próxima opção. Os callers continuam passando buffers de
+MAX_PATH: find_mono_dll() só tem sucesso para caminhos que cabem neles.
+
+--- a/dlls/mscoree/metahost.c
++++ b/dlls/mscoree/metahost.c
+@@ -717,31 +717,29 @@
+ static const WCHAR libmono2_arch_dll[] = {'\\','b','i','n','\\','l','i','b','m','o','n','o','-','2','.','0','.','d','l','l',0};
+ #endif
+ 
++/* dll_path holds MAX_PATH characters; a path that would not fit is treated
++ * as not found instead of overflowing it. */
++static BOOL mono_dll_exists(LPCWSTR path, LPCWSTR suffix, LPWSTR dll_path)
++{
++    if (lstrlenW(path) + lstrlenW(suffix) >= MAX_PATH)
++    {
++        WARN("path too long: %s%s\n", debugstr_w(path), debugstr_w(suffix));
++        return FALSE;
++    }
++    lstrcpyW(dll_path, path);
++    lstrcatW(dll_path, suffix);
++    return GetFileAttributesW(dll_path) != INVALID_FILE_ATTRIBUTES;
++}
++
++/* Only succeeds for a path short enough to be copied into a MAX_PATH buffer. */
+ static BOOL find_mono_dll(LPCWSTR path, LPWSTR dll_path)
+ {
+     static const WCHAR mono2_dll[] = {'\\','b','i','n','\\','m','o','n','o','-','2','.','0','.','d','l','l',0};
+     static const WCHAR libmono2_dll[] = {'\\','b','i','n','\\','l','i','b','m','o','n','o','-','2','.','0','.','d','l','l',0};
+-    DWORD attributes=INVALID_FILE_ATTRIBUTES;
+ 
+-    lstrcpyW(dll_path, path);
+-    lstrcatW(dll_path, libmono2_arch_dll);
+-    attributes = GetFileAttributesW(dll_path);
+-
+-    if (attributes == INVALID_FILE_ATTRIBUTES)
+-    {
+-        lstrcpyW(dll_path, path);
+-        lstrcatW(dll_path, mono2_dll);
+-        attributes = GetFileAttributesW(dll_path);
+-    }
+-
+-    if (attributes == INVALID_FILE_ATTRIBUTES)
+-    {
+-        lstrcpyW(dll_path, path);
+-        lstrcatW(dll_path, libmono2_dll);
+-        attributes = GetFileAttributesW(dll_path);
+-    }
+-
+-    return (attributes != INVALID_FILE_ATTRIBUTES);
++    return mono_dll_exists(path, libmono2_arch_dll, dll_path) ||
++           mono_dll_exists(path, mono2_dll, dll_path) ||
++           mono_dll_exists(path, libmono2_dll, dll_path);
+ }
+ 
+ static BOOL get_mono_path_local(LPWSTR path)
+--- a/dlls/mscoree/mscoree_main.c
++++ b/dlls/mscoree/mscoree_main.c
+@@ -813,6 +813,13 @@
+     ULONG msiproduct;
+     BOOL ret=FALSE;
+ 
++    /* msi_path holds MAX_PATH characters. */
++    if (lstrlenW(mono_path) + ARRAY_SIZE(support_msi_relative) > MAX_PATH)
++    {
++        WARN("path too long: %s\n", debugstr_w(mono_path));
++        return FALSE;
++    }
++
+     hmsi = GetModuleHandleA("msi");
+ 
+     lstrcpyW(msi_path, mono_path);

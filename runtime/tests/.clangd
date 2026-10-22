@@ -1,0 +1,5 @@
+# Os testes são programas Windows (mingw-w64), não macOS.
+CompileFlags:
+  Add:
+    - --target=x86_64-w64-mingw32
+    - -isystem/opt/homebrew/opt/mingw-w64/toolchain-x86_64/x86_64-w64-mingw32/include

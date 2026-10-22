@@ -1,0 +1,21 @@
+O mingw-w64 atual (validado com o 14) já define D3DDEVINFO_RESOURCEMANAGER em
+d3d9types.h, e o stub do DXVK 1.10.3 passou a colidir com ele. O stub fica só
+para outros compiladores MinGW.
+
+--- a/src/d3d9/d3d9_include.h
++++ b/src/d3d9/d3d9_include.h
+@@ -79,10 +79,14 @@
+
+ // MinGW headers are broken. Who'dve guessed?
+ #ifndef _MSC_VER
++// O mingw-w64 atual (validado com o 14) já define D3DDEVINFO_RESOURCEMANAGER
++// em d3d9types.h; o stub só vale para outros compiladores MinGW.
++#ifndef __MINGW64_VERSION_MAJOR
+ typedef struct _D3DDEVINFO_RESOURCEMANAGER
+ {
+   char dummy;
+ } D3DDEVINFO_RESOURCEMANAGER, * LPD3DDEVINFO_RESOURCEMANAGER;
++#endif
+
+ #ifndef __WINE__
+ extern "C" WINUSERAPI WINBOOL WINAPI SetProcessDPIAware(VOID);

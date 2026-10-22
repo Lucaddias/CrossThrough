@@ -10,3 +10,7 @@ __pycache__/
 CrossThrough/vendor/Frameworks/
 CrossThrough/vendor/SharedSupport
 CrossThrough/vendor/Resources/
+
+# Runtime: build e saída (regeneráveis com runtime/build.sh)
+runtime/.work/
+runtime/out/
