@@ -14,3 +14,7 @@ CrossThrough/vendor/Resources/
 # Runtime: build e saída (regeneráveis com runtime/build.sh)
 runtime/.work/
 runtime/out/
+
+# App: build do SwiftPM (use --scratch-path fora do iCloud; ver app/README.md)
+app/.build/
+app/.swiftpm/

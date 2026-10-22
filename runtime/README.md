@@ -125,3 +125,9 @@ O `smoke.sh` cria uma bottle descartável e verifica cada parte do runtime de ve
 | `d3d11test.exe` (64 e 32-bit) × wined3d, DXVK, DXMT | dispositivo D3D11, limpeza de tela lida de volta pixel a pixel e 10 quadros apresentados; o teste confere qual backend de fato rodou |
 
 Em um M5, os 21 passam no lugar e realocados.
+
+O `smoke.sh` também compila o `wininspect.exe`, que não é um teste do runtime: serve para conferir, sem permissão de gravação de tela, que um programa aberto numa bottle montou a interface. Rodado na mesma bottle, ele acha a janela pelo título e lista o tamanho, o menu e os controles, com o número de itens de listas, árvores e barras de ferramentas:
+
+```bash
+WINEPREFIX=<bottle> out/CrossThroughRuntime/bin/wine .work/tests/wininspect.exe "7-Zip"
+```

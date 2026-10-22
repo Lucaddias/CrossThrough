@@ -37,6 +37,8 @@ x86_64-w64-mingw32-gcc -O2 -municode -o "$TB/tlstest.exe" "$T/tlstest.c" -lwinht
 x86_64-w64-mingw32-gcc -O2 -o "$TB/fonttest.exe" "$T/fonttest.c" -lgdi32
 x86_64-w64-mingw32-gcc -O2 -o "$TB/htmltest.exe" "$T/htmltest.c" -lole32 -loleaut32 -luuid
 i686-w64-mingw32-gcc   -O2 -o "$TB/htmltest32.exe" "$T/htmltest.c" -lole32 -loleaut32 -luuid
+# Ferramenta para conferir a janela de um programa aberto (não é um teste daqui; ver README).
+x86_64-w64-mingw32-gcc -O2 -municode -o "$TB/wininspect.exe" "$T/wininspect.c" -lcomctl32 -luser32
 
 # Os programas rodam com o diretório atual em $TB, como o app faz (o diretório
 # do .exe): o DXVK grava ali o log (<exe>_d3d11.log) e o cache de shaders.

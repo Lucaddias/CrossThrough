@@ -1,0 +1,18 @@
+{
+  "formatVersion": 1,
+  "recipes": [
+    {
+      "id": "7zip",
+      "name": "7-Zip",
+      "summary": "Compactador de arquivos: 7z, zip, rar, tar, iso e outros.",
+      "category": "utilities",
+      "homepage": "https://www.7-zip.org",
+      "license": "LGPL-2.1+ (o descompactador de RAR tem a restrição do unRAR)",
+      "download": {
+        "url": "https://www.7-zip.org/a/7z2605-x64.exe",
+        "sha256": "fd99e86f57d8f429ef5ed045bf98315af962e2309b0f1ba87a147a44c71647d0"
+      },
+      "install": { "type": "run", "arguments": ["/S"] }
+    }
+  ]
+}
