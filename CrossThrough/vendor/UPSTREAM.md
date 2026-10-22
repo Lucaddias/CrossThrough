@@ -44,10 +44,12 @@ Em ordem de esforço, do mais fácil ao mais pesado:
    `vendor/SharedSupport/share/wine/{gecko,mono}` quando o SharedSupport é um
    snapshot copiado (`VENDOR_SHAREDSUPPORT_MODE=copy`).
 
-2. **Wine 11.0.** Clonar/baixar o fonte do CrossOver 26.3 e compilar o Wine
-   x86_64 para macOS (mesma ABI do binário analisado). Produz `lib/wine`,
-   `lib64`, `share/wine` e `bin/wine*`. Requer o toolchain do Wine (clang,
-   bison, flex, mingw para os PE). Heavy; roda fora do fluxo normal de build.
+2. **Wine 11.0.** `vendor/build-wine.sh` automatiza: baixa o fonte do CrossOver
+   26.3 (`crossover-sources-26.3.0.tar.gz`, LGPL), compila o Wine (WoW64
+   `i386,x86_64`) e mescla `lib/wine`/`share/wine` em `vendor/SharedSupport`
+   (modo `copy`). `bash vendor/build-wine.sh --check` confere pré-requisitos
+   (Xcode CLT + Homebrew: bison, flex, mingw-w64, pkgconf, gnutls) e a fonte sem
+   compilar. Heavy (toolchain + dezenas de minutos); fora do `make` normal.
 
 3. **DXVK e DXMT.** Compilar os PE (DXVK via mingw; DXMT com o pipeline Metal)
    ou extrair do tarball CodeWeavers. Depende do item 2 para a árvore de destino.
