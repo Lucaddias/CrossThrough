@@ -124,6 +124,8 @@ app: $(TARGET) $(SHAREDSUPPORT) $(RESOURCES)
 		mkdir -p $(APP_BUNDLE)/Contents/Resources; \
 		echo "aviso: Resources (nibs/ícones) ausentes em $(RESOURCES); a interface não carregará. Rode 'make vendor'."; \
 	fi
+	@echo "Neutralizando o nome de produto nas strings (CrossOver -> CrossThrough)..."
+	@python3 resources/branding/neutralize_strings.py $(APP_BUNDLE)/Contents/Resources || echo "aviso: neutralize_strings falhou"
 	@echo "Instalando Info.plist próprio e o branding..."
 	@cp src/Info.plist $(APP_BUNDLE)/Contents/Info.plist
 	@if [ -f $(ICON) ]; then cp $(ICON) $(APP_BUNDLE)/Contents/Resources/CrossThrough.icns; fi
