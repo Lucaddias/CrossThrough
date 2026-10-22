@@ -13,7 +13,8 @@ pseudocódigo, não inferido. Nada foi executado.
 |---|---|---|
 | [`cxbounce.c`](cxbounce.c) | `bin/cxbounce` (x86_64) | Reconstrução **compilável** (C) |
 | [`BottleHelper.m`](BottleHelper.m) | `Bottle Helper.cpbz2` → `.app` (universal) | Reconstrução **compilável** (ObjC/ARC) |
-| [`MenuHelper.decompiled.c`](MenuHelper.decompiled.c) | `Menu Helper.cpbz2` → `.app` (x86_64) | Pseudocódigo bruto + espec. abaixo |
+| [`MenuHelper.decompiled.c`](MenuHelper.decompiled.c) | `Menu Helper.cpbz2` → `.app` (x86_64) | Pseudocódigo bruto (referência) |
+| [`MenuHelper.m`](MenuHelper.m) | `Menu Helper.cpbz2` → `.app` (x86_64) | Reconstrução **compilável** (ObjC/ARC) |
 
 ## cxbounce
 
@@ -77,8 +78,15 @@ Conexão X do Wine embarcada na app nativa (loader `macdrv`):
 Pseudocódigo bruto dos 12 métodos centrais em
 [`MenuHelper.decompiled.c`](MenuHelper.decompiled.c).
 
-**Pendente:** a reconstrução compilável do Menu Helper (sobretudo o `WineLoader`:
-socket com passagem de fd e o caminho `__wine_main` via `dlopen`) é um esforço
-maior e ainda não foi feita. O `CXTask`/`CXTaskSpecialString` já existem na GUI
-([`../../src/classes`](../../src/classes)) e podem ser reaproveitados no caminho
-de lançamento por `cxmenu`/`cxstart`.
+**Reconstrução compilável:** [`MenuHelper.m`](MenuHelper.m) reconstrói os 12
+métodos de forma compilável (ObjC/ARC, só Cocoa; compila a `.o` sem avisos),
+incluindo o `WineLoader`/`WineLoaderClientConnection`: o socket `AF_UNIX`
+não-bloqueante com dispatch source, o protocolo length-prefixed (magic
+`0x52c17355`, working dir + environment + args), a passagem de descritores por
+`recvmsg`/`SCM_RIGHTS` (3 fds de std + o fd do wineserver) e o salto final
+`dlopen(ntdll.so)` + `__wine_main`. O caminho de lançamento por `cxmenu`/`cxstart`
+usa `NSTask` (na GUI é o `CXTask`, mesma API, em
+[`../../src/classes`](../../src/classes)). As partes que o decompilado não expõe
+(corpos de blocos de dispatch, o helper `readData:length:`, o layout bruto do
+`cmsg` — aqui pelas macros `CMSG_*` portáveis) estão marcadas `(inferência)` no
+código.
