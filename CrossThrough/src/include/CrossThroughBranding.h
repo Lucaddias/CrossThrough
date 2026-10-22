@@ -8,6 +8,12 @@
 // CFBundleName of the running bundle ("CrossThrough").
 NSString *CTApplicationName(void);
 
+// Replaces the product name "CrossOver" with CTApplicationName() in a user-facing
+// string (e.g. install-summary labels that come from the CrossTie/backend engine,
+// which the .strings neutralization can't reach). Case-sensitive, so the lowercase
+// "crossover" in URLs/domains is left intact. Non-strings pass through unchanged.
+NSString *CTNeutralizeProductName(NSString *s);
+
 // Registers the CrossThrough logo under the names MainWindow.nib asks for
 // (welcomeCrossOverIcon and its Preview twin). Call before the nib loads.
 void CTRegisterBrandedLogo(void);

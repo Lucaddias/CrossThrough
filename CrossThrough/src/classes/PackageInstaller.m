@@ -1,6 +1,7 @@
 // PackageInstaller.m — CrossThrough
 #import "PackageInstaller.h"
 #import "CrossThrough.h"
+#import "CrossThroughBranding.h"
 #import "HopperCompat.h"
 
 static void * _PackageInstallerKVOContext = &_PackageInstallerKVOContext;
@@ -596,7 +597,11 @@ static NSByteCountFormatter *_byteCountFormatter = nil;
                 } else if ([key isEqualToString:@"warnings"]) {
                     type = 1;
                 }
-                SummaryDetail *sd = [SummaryDetail detailWithType:type label:item action:arg2];
+                // Backend/CrossTie labels ("CrossOver will download/install…") come
+                // from outside the .strings; neutralize the product name at display.
+                SummaryDetail *sd = [SummaryDetail detailWithType:type
+                                                            label:CTNeutralizeProductName(item)
+                                                           action:arg2];
                 if (sd) {
                     [res addObject:sd];
                 }

@@ -5,6 +5,13 @@ NSString *CTApplicationName(void) {
     return [[NSBundle mainBundle] objectForInfoDictionaryKey:(NSString *)kCFBundleNameKey] ?: @"CrossThrough";
 }
 
+NSString *CTNeutralizeProductName(NSString *s) {
+    if (![s isKindOfClass:[NSString class]]) {
+        return s;
+    }
+    return [s stringByReplacingOccurrencesOfString:@"CrossOver" withString:CTApplicationName()];
+}
+
 // The logo ships as loose PNGs (CrossThroughLogo, CrossThroughLogo-dark), not
 // in the asset catalog borrowed from CrossOver, so the light and dark variants
 // are picked at draw time from the appearance being drawn.
