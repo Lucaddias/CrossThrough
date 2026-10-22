@@ -10,12 +10,6 @@
     return self;
 }
 
-- (void)dealloc {
-    [self->realString release];
-    self->realString = nil;
-    [super dealloc];
-}
-
 - (id)copy {
     return [self copyWithZone:NULL];
 }
@@ -24,18 +18,18 @@
     return [self mutableCopyWithZone:NULL];
 }
 
-- (id)copyWithZone:(NSZone *)arg1 {
-    id copied = [self->realString copyWithZone:arg1];
-    CXTaskSpecialString *res = [[CXTaskSpecialString alloc] initWithString:copied];
-    [copied release];
-    return res;
+- (id)copyWithZone:(void *)arg1 {
+    NSString *string = [self->realString copyWithZone:(NSZone *)arg1];
+    CXTaskSpecialString *copy = [[CXTaskSpecialString alloc] initWithString:string];
+    [string release];
+    return copy;
 }
 
-- (id)mutableCopyWithZone:(NSZone *)arg1 {
-    id copied = [self->realString mutableCopyWithZone:arg1];
-    CXTaskSpecialString *res = [[CXTaskSpecialString alloc] initWithString:copied];
-    [copied release];
-    return res;
+- (id)mutableCopyWithZone:(void *)arg1 {
+    NSMutableString *string = [self->realString mutableCopyWithZone:(NSZone *)arg1];
+    CXTaskSpecialString *copy = [[CXTaskSpecialString alloc] initWithString:string];
+    [string release];
+    return copy;
 }
 
 - (const char *)fileSystemRepresentation {
@@ -44,6 +38,11 @@
 
 - (id)forwardingTargetForSelector:(SEL)arg1 {
     return self->realString;
+}
+
+- (void)dealloc {
+    [self->realString release];
+    [super dealloc];
 }
 
 @end

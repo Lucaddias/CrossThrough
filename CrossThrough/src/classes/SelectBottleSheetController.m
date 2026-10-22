@@ -154,7 +154,7 @@ static dispatch_once_t _catOnceToken = 0;
             warning = [self attributedWarningStringWithString:msg];
         } else {
             NSString *bName = [self->_targetBottle valueForKey:@"bottlename"];
-            BottleWrapper *bottle = [[self bottleCollection] bottleWithName:bName];
+            id bottle = [[self bottleCollection] bottleWithName:bName];
             NSDictionary *pkgs = [bottle installedPackages];
             NSMutableDictionary *mutPkgs = [NSMutableDictionary dictionaryWithDictionary:pkgs];
             [mutPkgs removeObjectForKey:@"com.codeweavers.c4.cxhtml"];
@@ -171,10 +171,11 @@ static dispatch_once_t _catOnceToken = 0;
 - (void)addMenuItemsFromCategories:(id)categories isBottles:(BOOL)isBottles {
     if (_catOnceToken != -1) {
         dispatch_once(&_catOnceToken, ^{
-            NSNumber *rec = [[CXSetupLib cxSetupClass] bottleCategory:@"RECOMMENDED"];
-            NSNumber *comp = [[CXSetupLib cxSetupClass] bottleCategory:@"COMPATIBLE"];
-            NSNumber *none = [[CXSetupLib cxSetupClass] bottleCategory:@"NONE"];
-            NSNumber *incomp = [[CXSetupLib cxSetupClass] bottleCategory:@"INCOMPATIBLE"];
+            Class cxSetup = [CXSetupLib cxSetupClass];
+            NSNumber *rec = [cxSetup bottleCategory:@"RECOMMENDED"];
+            NSNumber *comp = [cxSetup bottleCategory:@"COMPATIBLE"];
+            NSNumber *none = [cxSetup bottleCategory:@"NONE"];
+            NSNumber *incomp = [cxSetup bottleCategory:@"INCOMPATIBLE"];
             _orderedCategoryNumbers = [[NSArray alloc] initWithObjects:rec, comp, none, incomp, nil];
 
             NSBundle *mb = [NSBundle mainBundle];
@@ -255,7 +256,7 @@ static dispatch_once_t _catOnceToken = 0;
     NSArray *sortedKeys = [[bottles allKeys] sortedArrayUsingSelector:@selector(localizedStandardCompare:)];
 
     for (NSString *key in sortedKeys) {
-        TargetBottle *bottle = (TargetBottle *)[bottles objectForKey:key];
+        id bottle = [bottles objectForKey:key];
         NSNumber *cat = [bottle respondsToSelector:@selector(getCategory)] ? [bottle getCategory] : nil;
         if (!cat) {
             cat = [[CXSetupLib cxSetupClass] bottleCategory:@"NONE"];
@@ -293,7 +294,7 @@ static dispatch_once_t _catOnceToken = 0;
     [templates enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
         NSString *dispName = [[CXSetupLib bottleManagementClass] displayNameForTemplate:key];
         if (!dispName) dispName = key;
-        NSNumber *cat = [(TargetBottle *)obj respondsToSelector:@selector(getCategory)] ? [(TargetBottle *)obj getCategory] : nil;
+        NSNumber *cat = [obj respondsToSelector:@selector(getCategory)] ? [obj getCategory] : nil;
         if (!cat) {
             cat = [[CXSetupLib cxSetupClass] bottleCategory:@"NONE"];
         }
@@ -398,7 +399,7 @@ static dispatch_once_t _catOnceToken = 0;
 
 #pragma mark - Properties Accessors
 
-- (id)installConfiguration {
+- (InstallConfiguration *)installConfiguration {
     return self->_installConfiguration;
 }
 
@@ -460,7 +461,7 @@ static dispatch_once_t _catOnceToken = 0;
 }
 
 - (id)doneButton {
-    return objc_loadWeakRetained((id *)&self->_doneButton);
+    return [objc_loadWeakRetained((id *)&self->_doneButton) autorelease];
 }
 
 - (void)setDoneButton:(id)arg1 {
@@ -468,7 +469,7 @@ static dispatch_once_t _catOnceToken = 0;
 }
 
 - (id)nameForNewBottleTextField {
-    return objc_loadWeakRetained((id *)&self->_nameForNewBottleTextField);
+    return [objc_loadWeakRetained((id *)&self->_nameForNewBottleTextField) autorelease];
 }
 
 - (void)setNameForNewBottleTextField:(id)arg1 {
@@ -476,7 +477,7 @@ static dispatch_once_t _catOnceToken = 0;
 }
 
 - (id)bottleListPopUpButton {
-    return objc_loadWeakRetained((id *)&self->_bottleListPopUpButton);
+    return [objc_loadWeakRetained((id *)&self->_bottleListPopUpButton) autorelease];
 }
 
 - (void)setBottleListPopUpButton:(id)arg1 {
@@ -484,7 +485,7 @@ static dispatch_once_t _catOnceToken = 0;
 }
 
 - (id)makeNewBottleMenuItem {
-    return objc_loadWeakRetained((id *)&self->_makeNewBottleMenuItem);
+    return [objc_loadWeakRetained((id *)&self->_makeNewBottleMenuItem) autorelease];
 }
 
 - (void)setMakeNewBottleMenuItem:(id)arg1 {
@@ -492,7 +493,7 @@ static dispatch_once_t _catOnceToken = 0;
 }
 
 - (id)selectBottlePlaceholderMenuItem {
-    return objc_loadWeakRetained((id *)&self->_selectBottlePlaceholderMenuItem);
+    return [objc_loadWeakRetained((id *)&self->_selectBottlePlaceholderMenuItem) autorelease];
 }
 
 - (void)setSelectBottlePlaceholderMenuItem:(id)arg1 {
@@ -500,7 +501,7 @@ static dispatch_once_t _catOnceToken = 0;
 }
 
 - (id)templateTypesPopUpButton {
-    return objc_loadWeakRetained((id *)&self->_templateTypesPopUpButton);
+    return [objc_loadWeakRetained((id *)&self->_templateTypesPopUpButton) autorelease];
 }
 
 - (void)setTemplateTypesPopUpButton:(id)arg1 {

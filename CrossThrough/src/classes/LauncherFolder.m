@@ -6,29 +6,24 @@
 @implementation LauncherFolder
 
 - (id)init {
-    self = [super init];
-    if (self) {
-        // Initialized
-    }
-    return self;
+    return [self initWithName:nil];
 }
 
 - (id)initWithName:(id)arg1 {
-    self = [super init];
+    self = [super initWithName:arg1];
     if (self) {
-        // Initialized
+        self->_items = [[NSMutableArray alloc] init];
     }
     return self;
 }
 
+- (void)dealloc {
+    [self->_items release];
+    [super dealloc];
+}
+
 - (id)copyWithZone:(void *)arg1 {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   var_10 = self;
-     *   r0 = [[&var_10 super] copyWithZone:arg2];
-     *   return r0;
-     */
-    return nil;
+    return [super copyWithZone:arg1];
 }
 
 - (BOOL)isLeaf {
@@ -36,38 +31,25 @@
 }
 
 - (id)items {
-    return self->_items;
+    return [[self->_items retain] autorelease];
 }
 
 - (void)setItems:(id)arg1 {
-    return;
+    NSMutableArray *old = self->_items;
+    self->_items = [arg1 mutableCopy];
+    [old release];
 }
 
 - (void)insertObject:(id)arg1 inItemsAtIndex:(NSUInteger)arg2 {
-    return;
+    [self->_items insertObject:arg1 atIndex:arg2];
 }
 
 - (void)addLauncherItem:(id)arg1 {
-    return;
+    [self insertObject:arg1 inItemsAtIndex:[self->_items count]];
 }
 
 - (id)description {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   var_30 = self;
-     *   r0 = [[&var_30 super] description];
-     *   r21 = [r0 retain];
-     *   r0 = [self items];
-     *   r0 = [r0 retain];
-     *   r19 = r0;
-     *   [r0 count];
-     *   r20 = [[NSString stringWithFormat:@"%@ item count %lu", r3, r4] retain];
-     *   [r19 release];
-     *   [r21 release];
-     *   r0 = [r20 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return [NSString stringWithFormat:@"%@ item count %lu", [super description], (unsigned long)[[self items] count]];
 }
 
 @end

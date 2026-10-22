@@ -2,62 +2,109 @@
 #import "ShutdownController.h"
 #import "CrossThrough.h"
 #import "HopperCompat.h"
+#import "c_functions.h"
 
 @implementation ShutdownController
 
 - (id)init {
-    self = [super init];
+    self = [super initWithWindowNibName:@"ShutdownProgress"];
     if (self) {
-        // Initialized
+        dispatch_semaphore_t semaphore = dispatch_semaphore_create(1);
+        [self setQuitBottleSemaphore:semaphore];
+        [semaphore release];
+        [self setCancelingShutdown:NO];
+        [self setForcingShutdown:NO];
     }
     return self;
 }
 
 - (id)bottleCollection {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = [CXSetupLib bottleCollectionClass];
-     *   r0 = [r0 sharedCollection];
-     *   return r0;
-     */
-    return nil;
+    return [[CXSetupLib bottleCollectionClass] sharedCollection];
 }
 
 - (void)cancelShutdown:(id)arg1 {
-    return;
+    [self setCancelingShutdown:YES];
+    [self setForcingShutdown:NO];
 }
 
 - (void)forceShutdown:(id)arg1 {
-    return;
+    [self setCancelingShutdown:NO];
+    [self setForcingShutdown:YES];
 }
 
 - (void)shutdownAllBottles {
-    return;
+    _CXLog(@"Shutting down all bottles.\n");
+    for (BottleWrapper *bottle in [[self bottleCollection] bottleList]) {
+        [bottle suspend];
+    }
+    [NSThread detachNewThreadSelector:@selector(shutdownAllBottlesBackground) toTarget:self withObject:nil];
 }
 
 - (void)shutdownAllBottlesBackground {
-    return;
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+    for (BottleWrapper *bottle in [[self bottleCollection] bottleList]) {
+        // Each bottle gets 60 seconds to quit before the shutdown gives up.
+        if (dispatch_semaphore_wait([self quitBottleSemaphore], dispatch_time(DISPATCH_TIME_NOW, 60 * NSEC_PER_SEC)) != 0) {
+            if (![self forcingShutdown]) {
+                [self performSelectorOnMainThread:@selector(setCancelingShutdown:) withObject:[NSNumber numberWithBool:YES] waitUntilDone:YES];
+            }
+        }
+        if ([self cancelingShutdown] || [self forcingShutdown]) {
+            _CXLog([self forcingShutdown] ? @"Forcing shutdown.\n" : @"Canceling shutdown.\n");
+            dispatch_semaphore_signal([self quitBottleSemaphore]);
+            break;
+        }
+        void (^completion)(void) = [^{
+            dispatch_semaphore_signal([self quitBottleSemaphore]);
+        } copy];
+        [bottle performSelectorOnMainThread:@selector(quit:) withObject:completion waitUntilDone:NO];
+        [completion release];
+    }
+    if ([self forcingShutdown] && ![self cancelingShutdown]) {
+        [self killAllBottles];
+    }
+    [[(CXApplication *)NSApp CXServer] performSelectorOnMainThread:@selector(replyToApplicationShouldTerminateTrampoline:)
+                                                        withObject:[NSNumber numberWithBool:![self cancelingShutdown]]
+                                                     waitUntilDone:NO];
+    if ([self cancelingShutdown]) {
+        for (BottleWrapper *bottle in [[self bottleCollection] bottleList]) {
+            [bottle performSelectorOnMainThread:@selector(resume) withObject:nil waitUntilDone:NO];
+        }
+    }
+    [pool drain];
 }
 
 - (void)killAllBottles {
-    return;
+    for (BottleWrapper *bottle in [[self bottleCollection] bottleList]) {
+        if (dispatch_semaphore_wait([self quitBottleSemaphore], dispatch_time(DISPATCH_TIME_NOW, 60 * NSEC_PER_SEC)) != 0) {
+            [self performSelectorOnMainThread:@selector(setCancelingShutdown:) withObject:[NSNumber numberWithBool:YES] waitUntilDone:YES];
+        }
+        if ([self cancelingShutdown]) {
+            dispatch_semaphore_signal([self quitBottleSemaphore]);
+            break;
+        }
+        void (^completion)(void) = [^{
+            dispatch_semaphore_signal([self quitBottleSemaphore]);
+        } copy];
+        [bottle performSelectorOnMainThread:@selector(forceQuit:) withObject:completion waitUntilDone:NO];
+        [completion release];
+    }
 }
 
 - (void)windowDidLoad {
-    return;
+    [super windowDidLoad];
+    [[self window] recalculateKeyViewLoop];
 }
 
 - (id)quitBottleSemaphore {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_getProperty(self, _cmd, sign_extend_64(*(int32_t *)ivar_offset(_quitBottleSemaphore)), 0x1);
-     *   return r0;
-     */
-    return nil;
+    return [[self->_quitBottleSemaphore retain] autorelease];
 }
 
 - (void)setQuitBottleSemaphore:(id)arg1 {
-    return;
+    if (self->_quitBottleSemaphore != arg1) {
+        [self->_quitBottleSemaphore release];
+        self->_quitBottleSemaphore = [arg1 retain];
+    }
 }
 
 - (BOOL)cancelingShutdown {
@@ -77,42 +124,36 @@
 }
 
 - (id)bottleList {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_getProperty(self, _cmd, sign_extend_64(*(int32_t *)ivar_offset(_bottleList)), 0x1);
-     *   return r0;
-     */
-    return nil;
+    return [[self->_bottleList retain] autorelease];
 }
 
 - (void)setBottleList:(id)arg1 {
-    return;
+    if (self->_bottleList != arg1) {
+        [self->_bottleList release];
+        self->_bottleList = [arg1 retain];
+    }
 }
 
 - (id)canRunFilterPredicate {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_getProperty(self, _cmd, sign_extend_64(*(int32_t *)ivar_offset(_canRunFilterPredicate)), 0x1);
-     *   return r0;
-     */
-    return nil;
+    return [[self->_canRunFilterPredicate retain] autorelease];
 }
 
 - (void)setCanRunFilterPredicate:(id)arg1 {
-    return;
+    if (self->_canRunFilterPredicate != arg1) {
+        [self->_canRunFilterPredicate release];
+        self->_canRunFilterPredicate = [arg1 retain];
+    }
 }
 
 - (id)shutdownCallbackObject {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_getProperty(self, _cmd, sign_extend_64(*(int32_t *)ivar_offset(_shutdownCallbackObject)), 0x1);
-     *   return r0;
-     */
-    return nil;
+    return [[self->_shutdownCallbackObject retain] autorelease];
 }
 
 - (void)setShutdownCallbackObject:(id)arg1 {
-    return;
+    if (self->_shutdownCallbackObject != arg1) {
+        [self->_shutdownCallbackObject release];
+        self->_shutdownCallbackObject = [arg1 retain];
+    }
 }
 
 - (SEL)shutdownCallbackSelector {
@@ -120,7 +161,15 @@
 }
 
 - (void)setShutdownCallbackSelector:(SEL)arg1 {
-    return;
+    self->_shutdownCallbackSelector = arg1;
+}
+
+- (void)dealloc {
+    [self->_quitBottleSemaphore release];
+    [self->_bottleList release];
+    [self->_canRunFilterPredicate release];
+    [self->_shutdownCallbackObject release];
+    [super dealloc];
 }
 
 @end

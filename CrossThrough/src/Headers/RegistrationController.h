@@ -74,7 +74,7 @@
 - (void)setSerialCode:(id)arg1;
 - (id)serialCodeErrorText;
 - (void)setSerialCodeErrorText:(id)arg1;
-- (void (^)(void))completionHandler;
+- (void (^)(BOOL, NSString *, NSString *))completionHandler;
 - (void)setCompletionHandler:(id)arg1;
 
 @end

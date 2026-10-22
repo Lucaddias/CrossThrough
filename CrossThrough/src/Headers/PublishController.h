@@ -36,6 +36,7 @@
 - (void)cancelPressed:(id)arg1;
 - (BOOL)nameCollides;
 - (BOOL)canPublish;
+- (NSArray *)publishArguments;
 - (void)setSourceBottle:(id)arg1;
 - (id)bottleName;
 - (id)bounceUtil;

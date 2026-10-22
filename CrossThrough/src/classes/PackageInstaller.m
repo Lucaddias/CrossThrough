@@ -1,6 +1,5 @@
 // PackageInstaller.m — CrossThrough
 #import "PackageInstaller.h"
-#import "InstallConfiguration.h"
 #import "CrossThrough.h"
 #import "HopperCompat.h"
 
@@ -218,6 +217,7 @@ static NSByteCountFormatter *_byteCountFormatter = nil;
 }
 
 - (void)selectInstaller:(id)arg1 {
+    NSAssert([NSThread isMainThread], @"Main thread method or function called on non-main thread");
     NSOpenPanel *panel = [NSOpenPanel openPanel];
     [panel setCanChooseFiles:YES];
     [panel setCanChooseDirectories:YES];
@@ -226,19 +226,14 @@ static NSByteCountFormatter *_byteCountFormatter = nil;
     [panel setMessage:msg];
     NSString *prompt = [[NSBundle mainBundle] localizedStringForKey:@"Choose installer" value:@"" table:nil];
     [panel setPrompt:prompt];
-    [panel setAllowedFileTypes:@[@"exe", @"msi", @"bat", @"cmd", @"c4p", @"tie", @"iso", @"bin", @"cue", @"dmg"]];
+    [panel setAllowedFileTypes:@[@"exe", @"bat", @"cmd", @"com", @"dll", @"msi", @"msp", @"msu", @"zip", @"ttf", @"otf", @"ttc", @"cab", @"rar"]];
 
-    id d = [self delegate];
-    NSWindow *win = [d respondsToSelector:@selector(window)] ? [d window] : [NSApp mainWindow];
-
-    __block typeof(self) weakSelf = self;
-    [panel beginSheetModalForWindow:win completionHandler:^(NSModalResponse result) {
+    [panel beginSheetModalForWindow:[[self delegate] window] completionHandler:^(NSModalResponse result) {
         if (result == NSModalResponseOK) {
-            NSURL *url = [panel URL];
-            NSString *path = [url path];
-            [[weakSelf installConfiguration] setInstallerSource:path forUser:YES];
+            NSString *path = [[[panel URL] path] stringInFileSystemRepresentationForm];
+            [[self installConfiguration] setInstallerSource:path forUser:YES];
             if (!arg1) {
-                [weakSelf install];
+                [self install];
             }
         }
     }];
@@ -878,14 +873,14 @@ static NSByteCountFormatter *_byteCountFormatter = nil;
 }
 
 - (id)delegate {
-    return objc_loadWeakRetained((id *)&self->_delegate);
+    return [objc_loadWeakRetained((id *)&self->_delegate) autorelease];
 }
 
 - (void)setDelegate:(id)arg1 {
     objc_storeWeak((id *)&self->_delegate, arg1);
 }
 
-- (id)installConfiguration {
+- (InstallConfiguration *)installConfiguration {
     return self->_installConfiguration;
 }
 
@@ -908,7 +903,7 @@ static NSByteCountFormatter *_byteCountFormatter = nil;
 }
 
 - (id)bottle {
-    return objc_loadWeakRetained((id *)&self->_bottle);
+    return [objc_loadWeakRetained((id *)&self->_bottle) autorelease];
 }
 
 - (void)setBottle:(id)arg1 {
@@ -1063,7 +1058,7 @@ static NSByteCountFormatter *_byteCountFormatter = nil;
 }
 
 - (id)bottleCollection {
-    return objc_loadWeakRetained((id *)&self->_bottleCollection);
+    return [objc_loadWeakRetained((id *)&self->_bottleCollection) autorelease];
 }
 
 @end

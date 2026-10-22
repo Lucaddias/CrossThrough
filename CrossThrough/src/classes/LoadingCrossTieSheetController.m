@@ -6,23 +6,35 @@
 @implementation LoadingCrossTieSheetController
 
 - (id)init {
-    self = [super init];
-    if (self) {
-        // Initialized
-    }
-    return self;
+    return [super initWithWindowNibName:@"LoadingCrossTieSheet"];
 }
 
 - (void)setCrossTieDisplayName:(id)arg1 {
-    return;
+    if (self->_crossTieDisplayName != arg1) {
+        [self->_crossTieDisplayName release];
+        self->_crossTieDisplayName = [arg1 copy];
+        [self updateLoadingLabel];
+    }
 }
 
 - (void)windowDidLoad {
-    return;
+    [super windowDidLoad];
+    [self updateLoadingLabel];
+    [[self progressIndicator] startAnimation:nil];
 }
 
 - (void)updateLoadingLabel {
-    return;
+    if ([self loadingLabel] == nil || [[self crossTieDisplayName] length] == 0) {
+        return;
+    }
+    // The nib label carries a "%@" placeholder; swap it in place to keep its attributes.
+    NSMutableAttributedString *label = [[[self loadingLabel] attributedStringValue] mutableCopy];
+    NSRange placeholder = [[label string] rangeOfString:@"%@"];
+    if (placeholder.location != NSNotFound) {
+        [label replaceCharactersInRange:placeholder withString:[self crossTieDisplayName]];
+    }
+    [[self loadingLabel] setAttributedStringValue:label];
+    [label release];
 }
 
 - (id)crossTieDisplayName {
@@ -30,31 +42,26 @@
 }
 
 - (id)loadingLabel {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_loadingLabel);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return [objc_loadWeakRetained((id *)&self->_loadingLabel) autorelease];
 }
 
 - (void)setLoadingLabel:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_loadingLabel, arg1);
 }
 
 - (id)progressIndicator {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = objc_loadWeakRetained((int64_t *)&self->_progressIndicator);
-     *   r0 = [r0 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return [objc_loadWeakRetained((id *)&self->_progressIndicator) autorelease];
 }
 
 - (void)setProgressIndicator:(id)arg1 {
-    return;
+    objc_storeWeak((id *)&self->_progressIndicator, arg1);
+}
+
+- (void)dealloc {
+    [self->_crossTieDisplayName release];
+    objc_destroyWeak((id *)&self->_loadingLabel);
+    objc_destroyWeak((id *)&self->_progressIndicator);
+    [super dealloc];
 }
 
 @end

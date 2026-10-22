@@ -6,262 +6,201 @@
 @implementation IconCollectionViewController
 
 - (id)init {
-    self = [super initWithNibName:@"IconCollectionView" bundle:nil];
-    if (self) {
-        self->_launchers = [[NSArray alloc] init];
-    }
-    return self;
+    return [super initWithNibName:@"IconCollectionView" bundle:nil];
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    if (self->_collectionView) {
-        [self->_collectionView registerClass:[IconViewItem class] forItemWithIdentifier:@"IconViewItem"];
-        [self->_collectionView setDelegate:self];
-        [self->_collectionView setDataSource:(id<NSCollectionViewDataSource>)self];
-        if (self->_contextualMenu) {
-            [self->_collectionView setMenu:self->_contextualMenu];
-        }
-    }
+    NSCollectionView *collectionView = [self collectionView];
+    [collectionView registerClass:[IconViewItem class] forItemWithIdentifier:@"IconViewItem"];
+    [collectionView setDraggingSourceOperationMask:NSDragOperationEvery forLocal:YES];
+    [collectionView setDraggingSourceOperationMask:NSDragOperationCopy | NSDragOperationLink forLocal:NO];
+    [collectionView setMenu:[self contextualMenu]];
+    [collectionView setDelegate:self];
+    NSCollectionViewGridLayout *layout = (NSCollectionViewGridLayout *)[collectionView collectionViewLayout];
+    [layout setMinimumLineSpacing:10.0];
+    [layout setMinimumInteritemSpacing:10.0];
 }
 
-- (id)margins {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = [self collectionView];
-     *   r0 = [r0 retain];
-     *   r19 = r0;
-     *   r0 = [r0 collectionViewLayout];
-     *   r0 = [r0 retain];
-     *   r20 = r0;
-     *   [r0 margins];
-     *   [r20 release];
-     *   r0 = [r19 release];
-     *   return r0;
-     */
-    return nil;
+- (NSEdgeInsets)margins {
+    return [(NSCollectionViewGridLayout *)[[self collectionView] collectionViewLayout] margins];
 }
 
-- (void)setMargins:(id)arg1 {
-    return;
+- (void)setMargins:(NSEdgeInsets)arg1 {
+    [(NSCollectionViewGridLayout *)[[self collectionView] collectionViewLayout] setMargins:arg1];
 }
 
 - (id)selectedItem {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   var_20 = r22;
-     *   decomp_var_18 = r21;
-     *   r31 = r31 + 0xffffffffffffffd0;
-     *   var_10 = r20;
-     *   decomp_var_8 = r19;
-     *   saved_fp = r29;
-     *   decomp_var_m8 = r30;
-     *   r20 = self;
-     *   r0 = [self collectionView];
-     *   r0 = [r0 retain];
-     *   r21 = r0;
-     *   r19 = [[r0 selectionIndexPaths] retain];
-     *   [r21 release];
-     *   if ([r19 count] == 0x1) {
-     *   r21 = [[r19 anyObject] retain];
-     *   r0 = [r20 collectionView];
-     *   r0 = [r0 retain];
-     *   r22 = r0;
-     *   r20 = [[r0 itemAtIndexPath:r21] retain];
-     *   [r22 release];
-     *   [r21 release];
-     *   }
-     *   else {
-     *   r20 = 0x0;
-     *   }
-     *   ... (3 more lines)
-     */
-    return nil;
+    NSSet *selection = [[self collectionView] selectionIndexPaths];
+    if ([selection count] != 1) {
+        return nil;
+    }
+    return [[self collectionView] itemAtIndexPath:[selection anyObject]];
 }
 
 - (BOOL)allowsMultipleSelection {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = [self collectionView];
-     *   r0 = [r0 retain];
-     *   r19 = r0;
-     *   r20 = [r0 allowsMultipleSelection];
-     *   [r19 release];
-     *   r0 = r20;
-     *   return r0;
-     */
-    return NO;
+    return [[self collectionView] allowsMultipleSelection];
 }
 
 - (void)setAllowsMultipleSelection:(BOOL)arg1 {
-    return;
+    [[self collectionView] setAllowsMultipleSelection:arg1];
 }
 
 - (id)selectedLauncher {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = [self selectedItem];
-     *   r0 = [r0 retain];
-     *   r19 = r0;
-     *   r20 = [[r0 representedObject] retain];
-     *   [r19 release];
-     *   r0 = [r20 autorelease];
-     *   return r0;
-     */
-    return nil;
+    return [[self selectedItem] representedObject];
 }
 
 - (id)selectedLaunchers {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r31 = r31 - 0x130;
-     *   var_50 = r28;
-     *   decomp_var_48 = r27;
-     *   var_40 = r26;
-     *   decomp_var_38 = r25;
-     *   var_30 = r24;
-     *   decomp_var_28 = r23;
-     *   var_20 = r22;
-     *   decomp_var_18 = r21;
-     *   var_10 = r20;
-     *   decomp_var_8 = r19;
-     *   saved_fp = r29;
-     *   decomp_var_m8 = r30;
-     *   r19 = self;
-     *   var_58 = **___stack_chk_guard;
-     *   r0 = [self collectionView];
-     *   r0 = [r0 retain];
-     *   r20 = r0;
-     *   r21 = [[r0 selectionIndexPaths] retain];
-     *   [r20 release];
-     *   r20 = [[NSMutableArray arrayWithCapacity:[r21 count]] retain];
-     *   var_120 = q0;
-     *   var_110 = q0;
-     *   r0 = [r21 retain];
-     *   r21 = r0;
-     *   ... (33 more lines)
-     */
-    return nil;
+    NSSet *selection = [[self collectionView] selectionIndexPaths];
+    NSMutableArray *launchers = [NSMutableArray arrayWithCapacity:[selection count]];
+    for (NSIndexPath *indexPath in selection) {
+        [launchers addObject:[[[self collectionView] itemAtIndexPath:indexPath] representedObject]];
+    }
+    return launchers;
 }
 
 
 - (void)openLauncherTreeNode:(id)arg1 fromRect:(NSRect)arg2 view:(id)arg3 {
-    return;
+    LauncherTreeNode *node = arg1;
+    NSView *sourceView = arg3;
+    if (![node isOpenable]) {
+        return;
+    }
+    [node openWithErrorHandler:^(NSError *error) {
+        [error retain];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self presentError:error modalForWindow:[[self view] window] delegate:nil didPresentSelector:NULL contextInfo:NULL];
+            [error release];
+        });
+    }];
+    if (![node animateOpen]) {
+        return;
+    }
+    __block NSWindow *zoomWindow = nil;
+    [NSAnimationContext runAnimationGroup:^(NSAnimationContext *context) {
+        [context setDuration:0.5];
+        NSView *view = [self view];
+        NSRect rect;
+        NSView *rectView;
+        if (sourceView) {
+            rect = NSIsEmptyRect(arg2) ? [sourceView bounds] : arg2;
+            rectView = sourceView;
+        } else {
+            NSSize iconSize = [(NSImage *)[node icon] size];
+            NSRect visible = [view visibleRect];
+            rect = NSMakeRect(visible.origin.x + visible.size.width * 0.5 - iconSize.width * 0.5,
+                              visible.origin.y + visible.size.height * 0.5 - iconSize.height * 0.5,
+                              iconSize.width, iconSize.height);
+            rectView = view;
+        }
+        rect = [rectView convertRect:rect toView:nil];
+        if (!NSIntersectsRect(rect, [view convertRect:[view visibleRect] toView:nil])) {
+            return;
+        }
+        NSRect screenRect = [[view window] convertRectToScreen:rect];
+        zoomWindow = [[NSWindow alloc] initWithContentRect:screenRect styleMask:NSWindowStyleMaskBorderless backing:NSBackingStoreBuffered defer:NO];
+        [zoomWindow setBackgroundColor:[NSColor clearColor]];
+        [zoomWindow setOpaque:NO];
+        NSImageView *imageView = [[NSImageView alloc] initWithFrame:NSOffsetRect(screenRect, -screenRect.origin.x, -screenRect.origin.y)];
+        [imageView setImage:[node icon]];
+        [imageView setImageScaling:NSImageScaleProportionallyUpOrDown];
+        [imageView setWantsLayer:YES];
+        [zoomWindow setContentView:imageView];
+        [zoomWindow setAlphaValue:0.8];
+        [zoomWindow setReleasedWhenClosed:NO];
+        [zoomWindow setIgnoresMouseEvents:YES];
+        [zoomWindow orderFront:nil];
+        [zoomWindow setLevel:NSFloatingWindowLevel];
+        [zoomWindow display];
+        [[zoomWindow animator] setAlphaValue:0.0];
+        NSRect grown = NSInsetRect(screenRect, screenRect.size.width * -2.0, screenRect.size.height * -2.0);
+        [[zoomWindow animator] setFrame:[zoomWindow frameRectForContentRect:grown] display:NO];
+        [imageView release];
+    } completionHandler:^{
+        [zoomWindow close];
+        [zoomWindow release];
+        zoomWindow = nil;
+    }];
 }
 
 - (void)openIcon:(id)arg1 {
-    return;
+    [self openLauncherTreeNode:[self selectedLauncher] fromRect:NSZeroRect view:[[self selectedItem] view]];
 }
 
 - (void)runIconWithOptions:(id)arg1 {
-    return;
+    id launcher = [self selectedLauncher];
+    if ([launcher isKindOfClass:[LauncherAppTreeNode class]] && [launcher isOpenable]) {
+        LauncherAppTreeNode *node = launcher;
+        [BottleMenuHandler runCommandInBottle:[node bottle] withLauncher:[node launcher]];
+    }
 }
 
 - (BOOL)launcherIsHidden:(id)arg1 {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   var_20 = r22;
-     *   decomp_var_18 = r21;
-     *   r31 = r31 + 0xffffffffffffffd0;
-     *   var_10 = r20;
-     *   decomp_var_8 = r19;
-     *   saved_fp = r29;
-     *   decomp_var_m8 = r30;
-     *   r0 = [arg2 persistentID];
-     *   r0 = [r0 retain];
-     *   r19 = r0;
-     *   if (r0 != 0x0) {
-     *   r20 = [NSSet alloc];
-     *   r0 = [NSUserDefaults standardUserDefaults];
-     *   r0 = [r0 retain];
-     *   r21 = r0;
-     *   r22 = [[r0 objectForKey:@"HiddenLauncherIDs"] retain];
-     *   r20 = [r20 initWithArray:r22];
-     *   [r22 release];
-     *   [r21 release];
-     *   r21 = [r20 containsObject:r19];
-     *   [r20 release];
-     *   if ((r21 & 0x1) != 0x0) {
-     *   r20 = 0x1;
-     *   }
-     *   else {
-     *   ... (9 more lines)
-     */
-    return NO;
+    NSString *persistentID = [arg1 persistentID];
+    if (!persistentID) {
+        return NO;
+    }
+    NSSet *hidden = [[NSSet alloc] initWithArray:[[NSUserDefaults standardUserDefaults] objectForKey:@"HiddenLauncherIDs"]];
+    BOOL isHidden = [hidden containsObject:persistentID];
+    [hidden release];
+    return isHidden;
 }
 
 - (void)markLauncher:(id)arg1 asHidden:(BOOL)arg2 {
-    return;
+    if (![arg1 persistentID]) {
+        return;
+    }
+    NSMutableSet *hidden = [[NSMutableSet alloc] initWithArray:[[NSUserDefaults standardUserDefaults] objectForKey:@"HiddenLauncherIDs"]];
+    if (arg2) {
+        [hidden addObject:[arg1 persistentID]];
+    } else {
+        [hidden removeObject:[arg1 persistentID]];
+    }
+    [[NSUserDefaults standardUserDefaults] setObject:[hidden allObjects] forKey:@"HiddenLauncherIDs"];
+    [hidden release];
 }
 
 - (void)toggleApplicationIsHidden:(id)arg1 {
-    return;
+    for (id launcher in [self selectedLaunchers]) {
+        [self markLauncher:launcher asHidden:![self launcherIsHidden:launcher]];
+    }
 }
 
 - (BOOL)validateUserInterfaceItem:(id)arg1 {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   var_30 = r24;
-     *   decomp_var_28 = r23;
-     *   r31 = r31 + 0xffffffffffffffc0;
-     *   var_20 = r22;
-     *   decomp_var_18 = r21;
-     *   var_10 = r20;
-     *   decomp_var_8 = r19;
-     *   saved_fp = r29;
-     *   decomp_var_m8 = r30;
-     *   r21 = self;
-     *   r19 = [arg2 retain];
-     *   r0 = **_NSApp;
-     *   r0 = [r0 modalWindow];
-     *   r0 = [r0 retain];
-     *   if (r0 != 0x0) {
-     *   r20 = r0;
-     *   r21 = 0x0;
-     *   [r20 release];
-     *   }
-     *   else {
-     *   r0 = [r21 view];
-     *   r0 = [r0 retain];
-     *   r20 = r0;
-     *   r0 = [r0 window];
-     *   r0 = [r0 retain];
-     *   ... (48 more lines)
-     */
+    if ([NSApp modalWindow] || [[[self view] window] attachedSheet]) {
+        return NO;
+    }
+    LauncherTreeNode *launcher = [self selectedLauncher];
+    SEL action = [arg1 action];
+    if (action == @selector(openIcon:)) {
+        return [launcher isOpenable];
+    }
+    if (action == @selector(runIconWithOptions:)) {
+        return [launcher canRunCommands];
+    }
+    if (action == @selector(toggleApplicationIsHidden:)) {
+        if ([self allowsMultipleSelection]) {
+            return [[self selectedLaunchers] count] != 0;
+        }
+        return [launcher canBeFavorite];
+    }
     return NO;
 }
 
 - (BOOL)validateMenuItem:(id)arg1 {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   var_30 = r24;
-     *   decomp_var_28 = r23;
-     *   r31 = r31 + 0xffffffffffffffc0;
-     *   var_20 = r22;
-     *   decomp_var_18 = r21;
-     *   var_10 = r20;
-     *   decomp_var_8 = r19;
-     *   saved_fp = r29;
-     *   decomp_var_m8 = r30;
-     *   r20 = self;
-     *   r0 = [arg2 retain];
-     *   r19 = r0;
-     *   if ([r0 action] == @selector(toggleApplicationIsHidden:)) {
-     *   r21 = [[r20 selectedLauncher] retain];
-     *   r0 = [r20 selectedLaunchers];
-     *   r0 = [r0 retain];
-     *   r22 = r0;
-     *   if ([r0 count] <= 0x1) {
-     *   if ([r21 canBeFavorite] != 0x0) {
-     *   r23 = [r20 launcherIsHidden:r21];
-     *   [r22 release];
-     *   if ((r23 & 0x1) != 0x0) {
-     *   r0 = [NSBundle mainBundle];
-     *   r0 = [r0 retain];
-     *   r22 = r0;
-     *   ... (34 more lines)
-     */
-    return NO;
+    if ([arg1 action] == @selector(toggleApplicationIsHidden:)) {
+        LauncherTreeNode *launcher = [self selectedLauncher];
+        NSString *title;
+        if ([[self selectedLaunchers] count] > 1) {
+            title = @"Hide from 'Home'";
+        } else if ([launcher canBeFavorite] && ![self launcherIsHidden:launcher]) {
+            title = @"Hide from 'Home'";
+        } else {
+            title = @"Show in 'Home'";
+        }
+        [arg1 setTitle:[[NSBundle mainBundle] localizedStringForKey:title value:@"" table:nil]];
+    }
+    return [self validateUserInterfaceItem:arg1];
 }
 
 - (NSInteger)numberOfSectionsInCollectionView:(id)arg1 {
@@ -286,27 +225,46 @@
 }
 
 - (void)collectionView:(id)arg1 draggingSession:(id)arg2 willBeginAtPoint:(NSPoint)arg3 forItemsAtIndexPaths:(id)arg4 {
-    return;
+    for (NSIndexPath *indexPath in arg4) {
+        [[[arg1 itemAtIndexPath:indexPath] view] setHidden:NO];
+    }
 }
 
 - (void)collectionView:(id)arg1 didSelectItemsAtIndexPaths:(id)arg2 {
-    return;
+    [[self delegate] iconCollectionViewControllerSelectionChanged:self];
 }
 
 - (void)collectionView:(id)arg1 didDeselectItemsAtIndexPaths:(id)arg2 {
-    return;
+    [[self delegate] iconCollectionViewControllerSelectionChanged:self];
 }
 
 - (void)keyDown:(id)arg1 {
-    return;
+    NSEvent *event = arg1;
+    NSString *characters = [event charactersIgnoringModifiers];
+    if ([characters length] == 1) {
+        unichar c = [characters characterAtIndex:0];
+        if (c == NSCarriageReturnCharacter || c == NSEnterCharacter) {
+            [self openIcon:self];
+            return;
+        }
+    }
+    if (([event modifierFlags] & NSEventModifierFlagCommand) && [event keyCode] == 0x7d) {
+        [self openIcon:self];
+    } else {
+        [super keyDown:arg1];
+    }
 }
 
 - (void)mouseDown:(id)arg1 {
-    return;
+    if ([arg1 clickCount] >= 2) {
+        [self openIcon:self];
+    } else {
+        [super mouseDown:arg1];
+    }
 }
 
 - (id)delegate {
-    return objc_loadWeakRetained((id *)&self->_delegate);
+    return [objc_loadWeakRetained((id *)&self->_delegate) autorelease];
 }
 
 - (void)setDelegate:(id)arg1 {
@@ -321,14 +279,12 @@
     if (self->_launchers != arg1) {
         [self->_launchers release];
         self->_launchers = [arg1 copy];
-    }
-    if (self->_collectionView) {
-        [self->_collectionView reloadData];
+        [[self collectionView] reloadData];
     }
 }
 
 - (id)collectionView {
-    return objc_loadWeakRetained((id *)&self->_collectionView);
+    return [objc_loadWeakRetained((id *)&self->_collectionView) autorelease];
 }
 
 - (void)setCollectionView:(id)arg1 {
@@ -336,11 +292,19 @@
 }
 
 - (id)contextualMenu {
-    return objc_loadWeakRetained((id *)&self->_contextualMenu);
+    return [objc_loadWeakRetained((id *)&self->_contextualMenu) autorelease];
 }
 
 - (void)setContextualMenu:(id)arg1 {
     objc_storeWeak((id *)&self->_contextualMenu, arg1);
+}
+
+- (void)dealloc {
+    [self->_launchers release];
+    objc_destroyWeak((id *)&self->_delegate);
+    objc_destroyWeak((id *)&self->_collectionView);
+    objc_destroyWeak((id *)&self->_contextualMenu);
+    [super dealloc];
 }
 
 @end

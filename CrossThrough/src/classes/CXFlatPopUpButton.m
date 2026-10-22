@@ -8,7 +8,7 @@
 - (id)initWithFrame:(NSRect)arg1 {
     self = [super initWithFrame:arg1];
     if (self) {
-        // Initialized
+        [self finishInit];
     }
     return self;
 }
@@ -16,79 +16,107 @@
 - (id)initWithCoder:(id)arg1 {
     self = [super initWithCoder:arg1];
     if (self) {
-        // Initialized
+        [self finishInit];
     }
     return self;
 }
 
+- (void)dealloc {
+    [self->_normalBackgroundColor release];
+    [self->_hoverBackgroundColor release];
+    [self->_selectedBackgroundColor release];
+    [super dealloc];
+}
+
 - (void)finishInit {
-    return;
+    [self setWantsLayer:YES];
+    [[self layer] setMasksToBounds:YES];
+    [[self layer] setCornerRadius:4.0];
+    [self updateColors];
+    [self setBordered:NO];
+    [self setBezelStyle:NSBezelStyleRegularSquare];
+    NSTrackingArea *trackingArea = [[NSTrackingArea alloc] initWithRect:NSZeroRect
+                                                                options:NSTrackingMouseEnteredAndExited | NSTrackingActiveInActiveApp | NSTrackingInVisibleRect
+                                                                  owner:self
+                                                               userInfo:nil];
+    [self addTrackingArea:trackingArea];
+    [trackingArea release];
 }
 
 - (void)updateColors {
-    return;
+    [self setNormalBackgroundColor:[[NSColor secondarySelectedControlColor] colorWithAlphaComponent:0.2]];
+    [self setHoverBackgroundColor:[[NSColor secondarySelectedControlColor] colorWithAlphaComponent:0.3]];
+    [self setSelectedBackgroundColor:[[NSColor secondarySelectedControlColor] colorWithAlphaComponent:0.5]];
+    [self updateBackgroundColorForCurrentState];
 }
 
 - (void)viewDidChangeEffectiveAppearance {
-    return;
+    [super viewDidChangeEffectiveAppearance];
+    [self updateColors];
 }
 
 - (void)updateBackgroundColorForCurrentState {
-    return;
+    [[self layer] setOpacity:[self isEnabled] ? 1.0f : 0.5f];
+    NSColor *color;
+    if ([self isEnabled] && [self isHighlighted]) {
+        color = [self selectedBackgroundColor];
+    } else if ([self isEnabled] && [self hovering]) {
+        color = [self hoverBackgroundColor];
+    } else {
+        color = [self normalBackgroundColor];
+    }
+    [[self layer] setBackgroundColor:[color CGColor]];
 }
 
 - (void)setHovering:(BOOL)arg1 {
-    return;
+    if (self->_hovering != arg1) {
+        self->_hovering = arg1;
+        [self updateBackgroundColorForCurrentState];
+    }
 }
 
 - (void)highlight:(BOOL)arg1 {
-    return;
+    [super highlight:arg1];
+    [self setHighlighted:arg1];
 }
 
 - (void)setHighlighted:(BOOL)arg1 {
-    return;
+    [super setHighlighted:arg1];
+    [self updateBackgroundColorForCurrentState];
 }
 
 - (void)setEnabled:(BOOL)arg1 {
-    return;
+    [super setEnabled:arg1];
+    [self updateBackgroundColorForCurrentState];
 }
 
 - (void)updateTrackingAreas {
-    return;
+    NSPoint location = [self convertPoint:[[self window] mouseLocationOutsideOfEventStream] fromView:nil];
+    [self setHovering:[self mouse:location inRect:[self bounds]]];
+    [super updateTrackingAreas];
 }
 
 - (void)mouseEntered:(id)arg1 {
-    return;
+    [super mouseEntered:arg1];
+    [self setHovering:YES];
 }
 
 - (void)mouseExited:(id)arg1 {
-    return;
+    [super mouseExited:arg1];
+    [self setHovering:NO];
 }
 
 - (void)mouseDown:(id)arg1 {
-    return;
+    [self highlight:YES];
+    [super mouseDown:arg1];
+    [self highlight:NO];
 }
 
 - (id)addItemWithTitle:(id)arg1 toolTip:(id)arg2 {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r21 = [arg3 retain];
-     *   [self addItemWithTitle:arg2];
-     *   r0 = [self menu];
-     *   r0 = [r0 retain];
-     *   r19 = r0;
-     *   r0 = [r0 itemArray];
-     *   r0 = [r0 retain];
-     *   r20 = r0;
-     *   r22 = [[r0 lastObject] retain];
-     *   [r20 release];
-     *   [r19 release];
-     *   [r22 setToolTip:r21];
-     *   [r21 release];
-     *   r0 = [r22 autorelease];
-     *   return r0;
-     */
-    return nil;
+    [self addItemWithTitle:arg1];
+    NSMenuItem *item = [[[self menu] itemArray] lastObject];
+    [item setToolTip:arg2];
+    return item;
 }
 
 - (id)normalBackgroundColor {
@@ -96,7 +124,10 @@
 }
 
 - (void)setNormalBackgroundColor:(id)arg1 {
-    self->_normalBackgroundColor = arg1;
+    if (self->_normalBackgroundColor != arg1) {
+        [self->_normalBackgroundColor release];
+        self->_normalBackgroundColor = [arg1 retain];
+    }
 }
 
 - (id)hoverBackgroundColor {
@@ -104,7 +135,10 @@
 }
 
 - (void)setHoverBackgroundColor:(id)arg1 {
-    self->_hoverBackgroundColor = arg1;
+    if (self->_hoverBackgroundColor != arg1) {
+        [self->_hoverBackgroundColor release];
+        self->_hoverBackgroundColor = [arg1 retain];
+    }
 }
 
 - (id)selectedBackgroundColor {
@@ -112,7 +146,10 @@
 }
 
 - (void)setSelectedBackgroundColor:(id)arg1 {
-    self->_selectedBackgroundColor = arg1;
+    if (self->_selectedBackgroundColor != arg1) {
+        [self->_selectedBackgroundColor release];
+        self->_selectedBackgroundColor = [arg1 retain];
+    }
 }
 
 - (BOOL)hovering {

@@ -1,8 +1,8 @@
-# Ferramentas e módulos Perl de `SharedSupport/CrossOver`
+# Ferramentas e módulos Perl de `SharedSupport/<Produto>`
 
 Gerado por `.tools/make_index.py` a partir de [`tools.json`](tools.json). Os fatos (dependências, subs, opções, variáveis de ambiente, executáveis chamados) foram extraídos estaticamente; nenhum script foi executado.
 
-## `bin/` (`CrossOver-Hosted Application`)
+## `bin/` (`<Produto>-Hosted Application`)
 
 | Arquivo | Tipo | Linhas | Usa | Opções | Variáveis de ambiente | Chama |
 |---|---|---|---|---|---|---|
@@ -111,7 +111,7 @@ Gerado por `.tools/make_index.py` a partir de [`tools.json`](tools.json). Os fat
 - **`lib/perl/CXAssocMcap.pm`**: `create_association`, `query_association`, `delete_association`, `new`, `preinstall`, `install`, `query`, `uninstall`, `finalize`
 - **`lib/perl/CXAssocWindows.pm`**: `detect`, `id`, `preinstall`, `install`, `query`, `get_files`, `uninstall`, `removeall`, `finalize`
 - **`lib/perl/CXAssocXDG.pm`**: `Xml2MimeDB::new`, `Xml2MimeDB::encoding`, `Xml2MimeDB::recode`, `Xml2MimeDB::start_element`, `Xml2MimeDB::end_element`, `read_mime_db`, `ReadCXMimes::new`, `ReadCXMimes::encoding`, `ReadCXMimes::recode`, `ReadCXMimes::start_element`, `ReadCXMimes::end_element`, `ReadCXMimes::cdata`, `ReadCXMimes::comment`, `read_cxmimes`, `save_cxmimes`, `create_icon`, `delete_icon`, `get_icon_files`, `removeall_icon`, `create_mime`, `query_mime`, `get_mime_files`, `untag_mime`, `create_association`, `query_association`, `get_association_files`, `delete_association`, `read_defaults`, `create_default`, `query_default`, `get_default_files`, `delete_default`, `detect`, `id`, `preinstall`, `install`, `query`, `get_files`, `uninstall`, `removeall`, `finalize`
-- **`lib/perl/CXBottle.pm`**: `set_environment`, `get_managed_bottle_dir`, `get_user_bottle_dir`, `get_rw_config_filename`, `lock_and_get_rw_config`, `get_crossover_config`, `is_initialized`, `compute_new_wineprefix`, `find_bottle`, `is_wineprefix_valid`, `setup_bottle_wineprefix`, `get_bottle_lock_prefix`, `unlock_bottle`, `lock_bottle`, `read_bottle_config`, `setup_bottle_environment`, `get_bottle_mode`, `bottle_stub2managed`, `get_template_directory`, `get_bottle_tag`, `get_bottle_status`, `update_bottle`, `run_scripts`, `run_bottle_hooks`, `fix_item_ownership_permissions`, `fix_ownership_permissions`, `get_desktopdata_dir`, `removeall_desktopdata_dirs`, `count_user_bottles`
+- **`lib/perl/CXBottle.pm`**: `set_environment`, `get_managed_bottle_dir`, `get_user_bottle_dir`, `get_rw_config_filename`, `lock_and_get_rw_config`, `get_<produto>_config`, `is_initialized`, `compute_new_wineprefix`, `find_bottle`, `is_wineprefix_valid`, `setup_bottle_wineprefix`, `get_bottle_lock_prefix`, `unlock_bottle`, `lock_bottle`, `read_bottle_config`, `setup_bottle_environment`, `get_bottle_mode`, `bottle_stub2managed`, `get_template_directory`, `get_bottle_tag`, `get_bottle_status`, `update_bottle`, `run_scripts`, `run_bottle_hooks`, `fix_item_ownership_permissions`, `fix_ownership_permissions`, `get_desktopdata_dir`, `removeall_desktopdata_dirs`, `count_user_bottles`
 - **`lib/perl/CXCDE.pm`**: `new`, `save`, `is_empty`, `dump`
 - **`lib/perl/CXConfig.pm`**: `CXSection::new`, `CXSection::get`, `CXSection::get_name`, `CXSection::get_field_list`, `CXSection::get_fields`, `new`, `read`, `get_filenames`, `get_section_keys`, `get_section_names`, `get_section`, `get`
 - **`lib/perl/CXDebian.pm`**: `compute_package_name`, `new`, `add_install_path`, `add_file`, `add_tree`, `build`
@@ -126,7 +126,7 @@ Gerado por `.tools/make_index.py` a partir de [`tools.json`](tools.json). Os fat
 - **`lib/perl/CXMenuShortcut.pm`**: `detect`, `id`, `get_directories`, `is_shortcut_script`, `is_dir_in_path`, `install`, `query`, `get_files`, `uninstall`, `removeall`, `finalize`
 - **`lib/perl/CXMenuWindows.pm`**: `remove_spaces`, `detect`, `id`, `get_wine_script`, `get_command`, `delete`, `install`, `query`, `get_files`, `uninstall`, `removeall`, `finalize`
 - **`lib/perl/CXMenuXDG.pm`**: `get_root_menu`, `get_xpath`, `get_folder_by_xpath`, `get_xdg_basename`, `create_folder`, `delete_folder`, `setup_default_merge_dir`, `get_xdg_config`, `init_xml`, `new`, `detect`, `id`, `install`, `query`, `get_files`, `uninstall`, `removeall`, `gc_get_folder_status`, `gc_delete_folder`, `finalize`
-- **`lib/perl/CXMimeMcap.pm`**: `CXRWBlob::get`, `CXRWBlob::get_created_by`, `CXRWBlob::is_crossover_mimetype`, `CXRWBlob::modified`, `CXRWBlob::add`, `CXRWBlob::remove`, `CXRWBlob::remove_created_by`, `CXRWBlob::new`, `CXRWBlob::isempty`, `CXRWBlob::save`, `CXRWBlob::delete_or_save`, `read_rwmime`, `process_mime_file`, `read_mime_db`, `create_mime`, `query_mime`, `get_mime_files`, `untag_mime`, `get`, `removeall`, `finalize`
+- **`lib/perl/CXMimeMcap.pm`**: `CXRWBlob::get`, `CXRWBlob::get_created_by`, `CXRWBlob::is_<produto>_mimetype`, `CXRWBlob::modified`, `CXRWBlob::add`, `CXRWBlob::remove`, `CXRWBlob::remove_created_by`, `CXRWBlob::new`, `CXRWBlob::isempty`, `CXRWBlob::save`, `CXRWBlob::delete_or_save`, `read_rwmime`, `process_mime_file`, `read_mime_db`, `create_mime`, `query_mime`, `get_mime_files`, `untag_mime`, `get`, `removeall`, `finalize`
 - **`lib/perl/CXOpts.pm`**: `new`, `add_flags`, `add_options`, `parse`
 - **`lib/perl/CXPlist.pm`**: `get_key_by_name`, `get_key_by_value`, `get_value_by_key`, `get_value_by_name`, `add_key_with_string`, `add_key_with_child`, `add_key_with_new_tag`
 - **`lib/perl/CXRPM.pm`**: `compute_package_name`, `escape_file_path`, `new`, `get_rpm_version`, `map_directory`, `map_file`, `create_image`, `build`

@@ -18,7 +18,7 @@ A coluna "Usado em" é uma busca textual no pseudocódigo: pode faltar uso indir
 
 | Propriedade ObjC | Atributo Python | Tipo | Só leitura | GUI | Usado em |
 |---|---|---|---|---|---|
-| `bottleList` | `bottleList` | id |  | ✓ | AskUpdateBottlesOp, CXServerCrossOver, MainWindowController, PackageInstaller, ShutdownController |
+| `bottleList` | `bottleList` | id |  | ✓ | AskUpdateBottlesOp, CXServer<Produto>, MainWindowController, PackageInstaller, ShutdownController |
 | `has32BitBottle` | `has32BitBottle` | BOOL | sim |  |  |
 
 | Seletor ObjC | Função Python | Origem | GUI | Usado em |
@@ -27,9 +27,9 @@ A coluna "Usado em" é uma busca textual no pseudocódigo: pode faltar uso indir
 | `refresh` | `refresh` | namedSelector | ✓ | BottleMenuHandler, BottleNode, NewBottleController, NoBottleController, PackageInstaller, PublishController |
 | `reset` | `reset` | namedSelector | ✓ | PreferencesController |
 | `refreshDefaultBottle` | `refreshDefaultBottle` | namedSelector | ✓ | BottleMenuHandler |
-| `bottleWithName:` | `bottle_with_name` | namedSelector | ✓ | CXServerCrossOver, InstallConfiguration, LauncherApp, NewBottleController, NoBottleController, PackageInstaller … |
-| `addChangeDelegate:` | `addChangeDelegate` | namedSelector | ✓ | CXServerCrossOver |
-| `sharedCollection` | `sharedCollection` | cxobjc.method | ✓ | AskUpdateBottlesOp, BottleMenuHandler, BottleNode, CXServer, CXServerCrossOver, InstallConfiguration … |
+| `bottleWithName:` | `bottle_with_name` | namedSelector | ✓ | CXServer<Produto>, InstallConfiguration, LauncherApp, NewBottleController, NoBottleController, PackageInstaller … |
+| `addChangeDelegate:` | `addChangeDelegate` | namedSelector | ✓ | CXServer<Produto> |
+| `sharedCollection` | `sharedCollection` | cxobjc.method | ✓ | AskUpdateBottlesOp, BottleMenuHandler, BottleNode, CXServer, CXServer<Produto>, InstallConfiguration … |
 
 ## `BottleManagement` (`bottlemanagement`)
 
@@ -53,9 +53,9 @@ A coluna "Usado em" é uma busca textual no pseudocódigo: pode faltar uso indir
 
 | Propriedade ObjC | Atributo Python | Tipo | Só leitura | GUI | Usado em |
 |---|---|---|---|---|---|
-| `name` | `name` | id |  | ✓ | AddDependenciesViewController, BottleMenuHandler, BottleNode, BottleViewController, CXServer, CXServerCrossOver … |
+| `name` | `name` | id |  | ✓ | AddDependenciesViewController, BottleMenuHandler, BottleNode, BottleViewController, CXServer, CXServer<Produto> … |
 | `appid` | `appid` | id |  | ✓ | BottleMenuHandler, BottleViewController, LauncherTreeNode, PackageInstaller, PackageTreeNode, SubmitRatingController |
-| `winePrefix` | `wine_prefix` | id |  | ✓ | CXServer, CXServerCrossOver |
+| `winePrefix` | `wine_prefix` | id |  | ✓ | CXServer, CXServer<Produto> |
 | `systemDrive` | `system_drive` | id |  | ✓ | BottleMenuHandler, RunCommandController |
 | `changeableName` | `changeablename` | id |  | ✓ | BottleNode |
 | `currentDescription` | `current_description` | id |  | ✓ | BottleViewController |
@@ -72,7 +72,7 @@ A coluna "Usado em" é uma busca textual no pseudocódigo: pode faltar uso indir
 | `isHighResolutionEnabledReady` | `is_high_resolution_enabled_ready` | BOOL |  |  |  |
 | `installedPackages` | `installed_packages` | id |  | ✓ | SelectBottleSheetController |
 | `isInstalledPackagesReady` | `installed_packages_ready` | BOOL |  |  | PackageInstaller |
-| `menuChangedTime` | `menuChangedTime` | id |  |  | CXServerCrossOver |
+| `menuChangedTime` | `menuChangedTime` | id |  |  | CXServer<Produto> |
 | `isD3DMetalEnabled` | `isD3DMetalEnabled` | BOOL | sim |  |  |
 | `isDXMTEnabled` | `isDXMTEnabled` | BOOL | sim |  |  |
 | `isDXVKEnabled` | `isDXVKEnabled` | BOOL | sim |  |  |
@@ -103,12 +103,12 @@ A coluna "Usado em" é uma busca textual no pseudocódigo: pode faltar uso indir
 
 | Seletor ObjC | Função Python | Origem | GUI | Usado em |
 |---|---|---|---|---|
-| `initWithName:` | `initWithName_` | implicit | ✓ | CXServerCrossOver, LauncherApp, LauncherControlPanel, LauncherDiskFolder, LauncherFolder, LauncherIcon … |
+| `initWithName:` | `initWithName_` | implicit | ✓ | CXServer<Produto>, LauncherApp, LauncherControlPanel, LauncherDiskFolder, LauncherFolder, LauncherIcon … |
 | `addMenuObservers` | `add_menu_observers` | namedSelector |  |  |
 | `removeMenuObservers` | `remove_menu_observers` | namedSelector |  |  |
 | `unset:config:value` | `unset_config_value` | implicit |  |  |
 | `suspend` | `suspend` | implicit | ✓ | ShutdownController |
-| `resume` | `resume` | implicit | ✓ | CXServerCrossOver, DownloadProgressController, RegistrationController |
+| `resume` | `resume` | implicit | ✓ | CXServer<Produto>, DownloadProgressController, RegistrationController |
 | `removeObservers` | `remove_observers` | namedSelector |  |  |
 | `loadBasicInfo` | `load_basic_info` | namedSelector |  |  |
 | `reloadInfo` | `reload_info` | namedSelector | ✓ | PackageInstaller |
@@ -134,15 +134,15 @@ A coluna "Usado em" é uma busca textual no pseudocódigo: pode faltar uso indir
 | `loadControlPanelInfo` | `load_control_panel_info` | namedSelector | ✓ | BottleViewController |
 | `launchControlPanelApplet:` | `launch_control_panel_applet` | namedSelector | ✓ | LauncherControlPanel |
 | `loadApplicationInfo` | `load_application_info` | namedSelector | ✓ | BottleViewController, PackageInstaller |
-| `fileIsInBottle:` | `file_is_in_bottle` | namedSelector | ✓ | CXServerCrossOver |
+| `fileIsInBottle:` | `file_is_in_bottle` | namedSelector | ✓ | CXServer<Produto> |
 | `writeDescription` | `write_description` | namedSelector | ✓ | BottleViewController |
 | `delete:` | `delete` | namedSelector | ✓ | BottleMenuHandler |
 | `rename:completionHandler:` | `rename` | namedSelector | ✓ | BottleNode |
-| `addChangeDelegate:` | `add_change_delegate` | namedSelector | ✓ | CXServerCrossOver |
+| `addChangeDelegate:` | `add_change_delegate` | namedSelector | ✓ | CXServer<Produto> |
 | `removeChangeDelegate:` | `remove_change_delegate` | namedSelector |  |  |
-| `addStatusOverride:` | `add_status_override` | namedSelector | ✓ | BottleMenuHandler, CXServerCrossOver, PackageInstaller |
+| `addStatusOverride:` | `add_status_override` | namedSelector | ✓ | BottleMenuHandler, CXServer<Produto>, PackageInstaller |
 | `removeAllStatusOverrides:` | `remove_all_status_overrides` | namedSelector | ✓ | PackageInstaller |
-| `removeStatusOverride:` | `remove_status_override` | namedSelector | ✓ | BottleMenuHandler, CXServerCrossOver |
+| `removeStatusOverride:` | `remove_status_override` | namedSelector | ✓ | BottleMenuHandler, CXServer<Produto> |
 | `quit:` | `quit` | namedSelector | ✓ | BottleMenuHandler |
 | `forceQuit:` | `force_quit` | namedSelector | ✓ | BottleMenuHandler |
 | `getMissingDependenciesProfile` | `get_missing_dependencies_profile` | namedSelector | ✓ | BottleMenuHandler |
@@ -156,9 +156,9 @@ A coluna "Usado em" é uma busca textual no pseudocódigo: pode faltar uso indir
 | `dropinC4PFile:withSig:` | `dropin_C4PFile` | cxobjc.method | ✓ | PackageViewController |
 | `tasteC4PFile:` | `taste_c4p` | cxobjc.method | ✓ | PackageViewController |
 | `prepareSingleUseC4PFile:` | `prepare_temp_c4p` | cxobjc.method | ✓ | PackageViewController |
-| `getOnlineFilePath` | `getOnlineFilePath` | cxobjc.method | ✓ | CXServerCrossOver |
+| `getOnlineFilePath` | `getOnlineFilePath` | cxobjc.method | ✓ | CXServer<Produto> |
 | `updateOnlineProfilesFromURL:` | `update_online_profiles` | cxobjc.method | ✓ | MainWindowController |
-| `getMatchingProfiles:` | `get_matching_profiles` | cxobjc.method | ✓ | CXServerCrossOver, PackageViewController |
+| `getMatchingProfiles:` | `get_matching_profiles` | cxobjc.method | ✓ | CXServer<Produto>, PackageViewController |
 
 ## `CDDetector` (`cddetector`)
 
@@ -249,14 +249,14 @@ A coluna "Usado em" é uma busca textual no pseudocódigo: pode faltar uso indir
 |---|---|---|---|---|
 | `initWithDelegate:` | `initWithDelegate_` | implicit | ✓ | InstallConfiguration |
 | `init` | `init` | implicit | ✓ | BottleMenuHandler, BottleNode, BottleViewController, BuySupportNagController, CDTools, CXApplication … |
-| `setDelegate:` | `set_delegate` | namedSelector | ✓ | BottleViewController, CXApplication, CXServer, CXServerCrossOver, CXWindowController, IconCollectionViewController … |
+| `setDelegate:` | `set_delegate` | namedSelector | ✓ | BottleViewController, CXApplication, CXServer, CXServer<Produto>, CXWindowController, IconCollectionViewController … |
 | `autoFillSettings` | `auto_fill_settings` | namedSelector | ✓ | InstallConfiguration, PackageInstaller |
 | `volumeMatchesProfile:` | `volume_matches_profile` | namedSelector | ✓ | InstallConfiguration, PackageInstaller |
 | `profileLanguages` | `profileLanguages` | implicit | ✓ | InstallConfiguration, InstallOptionsSheetController |
 | `setProfile:` | `setProfile_` | implicit | ✓ | InstallConfiguration |
 | `updateProfiles` | `update_profiles` | namedSelector | ✓ | InstallConfiguration, PackageInstaller, PackageViewController |
 | `useAutorunFile:` | `use_autorun_file` | namedSelector | ✓ | InstallConfiguration, PackageInstaller |
-| `setLocale:` | `SetLocale` | namedSelector | ✓ | CXApplication, CXServerCrossOver, InstallConfiguration, PackageTreeNode |
+| `setLocale:` | `SetLocale` | namedSelector | ✓ | CXApplication, CXServer<Produto>, InstallConfiguration, PackageTreeNode |
 | `addDependencyOverrides:ofType:` | `AddDependencyOverrides` | namedSelector | ✓ | AddDependenciesViewController, InstallOptionsSheetController |
 | `removeDependencyOverrides:` | `RemoveDependencyOverrides` | namedSelector | ✓ | InstallOptionsSheetController |
 | `ClearDependencyOverrides` | `ClearDependencyOverrides` | implicit | ✓ | InstallOptionsSheetController |

@@ -245,7 +245,7 @@ static void _boolSetterMethodIMP(id self, SEL _cmd, BOOL value) {
 
 - (BOOL)bottleIsCompatibleWithPackage {
     if ([self hasPackage]) {
-        TargetBottle *tb = (TargetBottle *)[self targetBottle];
+        id tb = [self targetBottle];
         if (!tb) return YES;
         NSNumber *cat = [tb getCategory];
         NSNumber *incomp = [[CXSetupLib cxSetupClass] bottleCategory:@"INCOMPATIBLE"];
@@ -255,7 +255,7 @@ static void _boolSetterMethodIMP(id self, SEL _cmd, BOOL value) {
 }
 
 - (BOOL)creatingNewBottle {
-    return [self->_installTask GetCreateNewBottle];
+    return [[self->_installTask GetCreateNewBottle] boolValue];
 }
 
 - (void)setInstallerLocale:(NSString *)arg1 {
@@ -324,7 +324,7 @@ static void _boolSetterMethodIMP(id self, SEL _cmd, BOOL value) {
 }
 
 - (BOOL)isNewBottleNameValid:(id)arg1 {
-    return [self->_installTask isNewBottleNameValid:arg1];
+    return [[self->_installTask isNewBottleNameValid:arg1] boolValue];
 }
 
 - (void)createNewBottle:(id)arg1 template:(id)arg2 {
@@ -349,7 +349,7 @@ static void _boolSetterMethodIMP(id self, SEL _cmd, BOOL value) {
 }
 
 - (BOOL)volumeMatchesProfile:(id)arg1 {
-    return [self->_installTask volumeMatchesProfile:arg1];
+    return [[self->_installTask volumeMatchesProfile:arg1] boolValue];
 }
 
 - (id)profiles {
@@ -435,7 +435,7 @@ static void _boolSetterMethodIMP(id self, SEL _cmd, BOOL value) {
     if ([logPath length] == 0) logPath = nil;
     NSString *channels = [self->_logChannels length] > 0 ? self->_logChannels : nil;
 
-    return [(Engine *)[[CXSetupLib cxAiEngineClass] alloc] initWithInstallTask:self->_installTask
+    return [[[CXSetupLib cxAiEngineClass] alloc] initWithInstallTask:self->_installTask
                                                             logFile:logPath
                                                            channels:channels
                                                                 env:env];

@@ -127,7 +127,7 @@
 - (void)categorizedBottle:(id)arg1;
 - (void)categorizedAllBottles;
 - (void)analyzedBottle:(id)arg1;
-- (InstallTask *)installTask;
+- (id)installTask;
 - (id)delegates;
 - (void)setDelegates:(id)arg1;
 - (NSString *)environment;

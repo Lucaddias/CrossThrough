@@ -110,26 +110,24 @@
 
 - (NSInteger)compareInstallDependencySortKey:(id)arg1 {
     if (self == arg1) return NSOrderedSame;
-    InstallDependency *other = (InstallDependency *)arg1;
     NSInteger d1 = [self depth];
-    NSInteger d2 = [other depth];
+    NSInteger d2 = [(InstallDependency *)arg1 depth];
     if (d1 < d2) {
         return NSOrderedAscending;
     } else if (d1 > d2) {
         return NSOrderedDescending;
     }
-    return [self compareInstallDependencyWithinDepth:other];
+    return [self compareInstallDependencyWithinDepth:arg1];
 }
 
 - (NSInteger)compareInstallDependencyWithinDepth:(id)arg1 {
-    InstallDependency *other = (InstallDependency *)arg1;
-    NSComparisonResult res = [[self reason] compare:[other reason]];
+    NSComparisonResult res = [[self reason] compare:[arg1 reason]];
     if (res == NSOrderedSame) {
-        if ([self parent] && [other parent]) {
-            res = [[self parent] compareInstallDependencyWithinDepth:[other parent]];
+        if ([self parent] && [arg1 parent]) {
+            res = [[self parent] compareInstallDependencyWithinDepth:[arg1 parent]];
             if (res != NSOrderedSame) return res;
         }
-        return [[self name] localizedStandardCompare:[other name]];
+        return [[self name] localizedStandardCompare:[arg1 name]];
     }
     return res;
 }

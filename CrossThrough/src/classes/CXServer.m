@@ -6,6 +6,8 @@
 #import <SystemConfiguration/SystemConfiguration.h>
 #import <fcntl.h>
 
+#import "helperServer.h"
+
 static void _observeProxyChange(SCDynamicStoreRef store, CFArrayRef changedKeys, void *info) {
     if (info) {
         [(CXServer *)info setHttpProxyEnvironmentVariableFromSystemConfiguration];
@@ -15,7 +17,10 @@ static void _observeProxyChange(SCDynamicStoreRef store, CFArrayRef changedKeys,
 @implementation CXServer
 
 + (id)getCellarID {
-    return @"CrossOver";
+    // CrossThrough: identidade própria de armazenamento. As bottles passam a
+    // ficar em ~/Library/Application Support/CrossThrough/Bottles, separadas
+    // das do CrossOver (etapa 1: deixar de compartilhar os dados do app original).
+    return @"CrossThrough";
 }
 
 + (id)getAppSupportDir {
@@ -27,7 +32,7 @@ static void _observeProxyChange(SCDynamicStoreRef store, CFArrayRef changedKeys,
 + (id)getCachesDir {
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
     NSString *base = [paths objectAtIndex:0];
-    return [base stringByAppendingPathComponent:@"com.codeweavers.CrossOver"];
+    return [base stringByAppendingPathComponent:@"com.crossthrough.CrossThrough"];
 }
 
 + (id)getDefaultBottleDir {
@@ -90,11 +95,21 @@ static void _observeProxyChange(SCDynamicStoreRef store, CFArrayRef changedKeys,
 - (id)init {
     self = [super init];
     if (self) {
-        self->pendingAppLaunches = [[NSMutableArray alloc] init];
-        self->tasksInProgress = [[NSMutableDictionary alloc] init];
+        NSDictionary *defaults = [NSDictionary dictionaryWithObjectsAndKeys:
+                                  @"", @"FirstRunVersion",
+                                  [NSNumber numberWithInt:10], @"RecentItemsCount",
+                                  [CXServer getDefaultBottleDir], @"BottleDir",
+                                  [NSArray array], @"ManagedBottleDirs",
+                                  [NSArray array], @"RecentItems",
+                                  @"http://ftp.codeweavers.com/pub/crossover/tie/crossover.tie.gz", @"TieURL",
+                                  [NSNumber numberWithBool:YES], @"ShowUntestedApps",
+                                  [NSNumber numberWithBool:YES], @"InstallExeFiles",
+                                  nil];
+        [[NSUserDefaults standardUserDefaults] registerDefaults:defaults];
+        self->pendingAppLaunches = [[NSMutableArray alloc] initWithCapacity:3];
+        self->tasksInProgress = [[NSMutableDictionary alloc] initWithCapacity:3];
+        [helperServer defaultHelperServer];
         self->backgroundQueue = [[NSOperationQueue alloc] init];
-        [self->backgroundQueue setMaxConcurrentOperationCount:1];
-        self->menusEnabled = YES;
     }
     return self;
 }
@@ -167,7 +182,7 @@ static void _observeProxyChange(SCDynamicStoreRef store, CFArrayRef changedKeys,
 - (void)demoCheck {
     if ([[CXApplication sharedApplication] isDemo]) {
         DemoNagController *nag = [[DemoNagController alloc] init];
-        [nag beginWindowWithCompletionHandler:^(id res) {
+        [nag beginWindowWithCompletionHandler:^{
             [self continueFromDemoCheck];
         }];
         [nag release];
@@ -188,6 +203,8 @@ static void _observeProxyChange(SCDynamicStoreRef store, CFArrayRef changedKeys,
     self->menusEnabled = arg1;
 }
 
+// Releases everything queued behind startAppOp (main window, open-file and
+// URL requests) once the demo check has passed.
 - (void)continueFromDemoCheck {
     dispatch_async(dispatch_get_main_queue(), ^{
         [[helperServer defaultHelperServer] setIsReady];
@@ -257,7 +274,17 @@ static void _observeProxyChange(SCDynamicStoreRef store, CFArrayRef changedKeys,
 }
 
 - (void)otherWineAppWillActivate:(id)arg1 {
-    [NSApp yieldActivationToApplication:[arg1 object]];
+    if ([NSApp isActive]) {
+        int pid = [[[arg1 userInfo] objectForKeyedSubscript:@"ActivatingAppPID"] intValue];
+        NSRunningApplication *app = [NSRunningApplication runningApplicationWithProcessIdentifier:pid];
+        if (app) {
+            if (@available(macOS 14.0, *)) {
+                NSLog(@"yielding activation to %@", app);
+                [NSApp yieldActivationToApplication:app];
+                [app activateFromApplication:[NSRunningApplication currentApplication] options:0];
+            }
+        }
+    }
 }
 
 - (id)launchFeedbackDrawInfoForImageSize:(NSSize)arg1 {

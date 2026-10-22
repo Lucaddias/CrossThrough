@@ -26,31 +26,31 @@
 - (void)dealloc;
 - (void)cxtaskObserveRealTaskTermination:(id)arg1;
 - (void)setArguments:(id)arg1;
-- (void)setTerminationHandler:(id)arg1;
 - (id)forwardingTargetForSelector:(SEL)arg1;
 
-// Forwarded NSTask methods
-- (void)setLaunchPath:(NSString *)path;
-- (NSString *)launchPath;
-- (void)setCurrentDirectoryPath:(NSString *)path;
-- (NSString *)currentDirectoryPath;
-- (void)setStandardInput:(id)input;
-- (id)standardInput;
-- (void)setStandardOutput:(id)output;
-- (id)standardOutput;
-- (void)setStandardError:(id)error;
-- (id)standardError;
-- (void)setEnvironment:(NSDictionary *)env;
-- (NSDictionary *)environment;
+@end
+
+// Everything else is forwarded to the wrapped NSTask.
+@interface CXTask (NSTaskForwarding)
+@property (copy) NSString *launchPath;
+@property (copy) NSString *currentDirectoryPath;
+@property (copy) NSDictionary *environment;
+@property (retain) id standardInput;
+@property (retain) id standardOutput;
+@property (retain) id standardError;
+@property (copy) void (^terminationHandler)(NSTask *);
+@property (readonly) int processIdentifier;
+@property (readonly) int terminationStatus;
+@property (readonly) NSTaskTerminationReason terminationReason;
+@property (readonly, getter=isRunning) BOOL running;
+- (NSArray *)arguments;
 - (void)launch;
-- (void)waitUntilExit;
-- (int)terminationStatus;
-- (BOOL)isRunning;
+- (BOOL)launchAndReturnError:(NSError **)error;
 - (void)terminate;
 - (void)interrupt;
-- (id)arguments;
-- (int)processIdentifier;
-
+- (BOOL)suspend;
+- (BOOL)resume;
+- (void)waitUntilExit;
 @end
 
 #endif /* CXTask_h */

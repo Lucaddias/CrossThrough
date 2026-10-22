@@ -23,8 +23,8 @@
 // Instance Methods
 - (id)init;
 - (void)viewDidLoad;
-- (id)margins;
-- (void)setMargins:(id)arg1;
+- (NSEdgeInsets)margins;
+- (void)setMargins:(NSEdgeInsets)arg1;
 - (id)selectedItem;
 - (BOOL)allowsMultipleSelection;
 - (void)setAllowsMultipleSelection:(BOOL)arg1;

@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  Info.plist do CrossThrough.
+
+  Reconstruído, não copiado do CrossOver. Em relação ao original:
+  - identidade própria (com.crossthrough.app, nome CrossThrough);
+  - removidas as chaves do Sparkle (SUFeedURL, SUPublicDSAKeyFile): não há
+    busca de atualização pela rede;
+  - mantidos NSPrincipalClass, o nib principal, os tipos de documento e os
+    esquemas de URL, que ainda são o contrato com o backend e os helpers.
+-->
+<plist version="1.0">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>English</string>
+	<key>CFBundleExecutable</key>
+	<string>CrossThrough</string>
+	<key>CFBundleIconFile</key>
+	<string>CrossOver</string>
+	<key>CFBundleIdentifier</key>
+	<string>com.crossthrough.app</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>CrossThrough</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>26.3</string>
+	<key>CFBundleVersion</key>
+	<string>26.3.0</string>
+	<key>CFBundleGetInfoString</key>
+	<string>CrossThrough 26.3 — reconstrução em código aberto a partir da análise do CrossOver</string>
+	<key>LSMinimumSystemVersion</key>
+	<string>10.15</string>
+	<key>NSHighResolutionCapable</key>
+	<true/>
+	<key>NSRequiresAquaSystemAppearance</key>
+	<false/>
+	<key>NSAppleScriptEnabled</key>
+	<true/>
+	<key>NSPrincipalClass</key>
+	<string>CXApplication</string>
+	<key>NSMainNibFile</key>
+	<string>MainMenu</string>
+	<key>NSCameraUsageDescription</key>
+	<string>A Windows application is trying to access the camera.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>A Windows application is trying to access the microphone.</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>Bogus CrossOver Identifying URL</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.codeweavers.private-CrossOver-app-scheme</string>
+				<string>com.codeweavers.private-CrossOver-crosstie-app-scheme</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+			<key>CFBundleURLName</key>
+			<string>CrossOver CrossTie URL</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com-codeweavers-crossover-crosstie</string>
+			</array>
+		</dict>
+	</array>
+	<key>CFBundleDocumentTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>CrossOver Bottle Archive</string>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>cxarchive</string>
+			</array>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+			<key>CFBundleTypeIconFile</key>
+			<string>cxarchive</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>Windows Shortcut</string>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>lnk</string>
+			</array>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleTypeIconFile</key>
+			<string>lnkIcon</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>Microsoft Windows application</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>com.microsoft.windows-executable</string>
+			</array>
+			<key>CFBundleTypeIconFile</key>
+			<string>exeIcon</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>CrossOver Installation Profile</string>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>c4p</string>
+			</array>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleTypeIconFile</key>
+			<string>c4pIcon</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>CrossOver CrossTie File</string>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>tie</string>
+				<string>tie-CrossOver</string>
+				<string>tie-CrossOverGames</string>
+			</array>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+			<key>CFBundleTypeIconFile</key>
+			<string>tieIcon</string>
+		</dict>
+	</array>
+	<key>UTExportedTypeDeclarations</key>
+	<array>
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>com.codeweavers.crossover.log</string>
+			<key>UTTypeDescription</key>
+			<string>CrossOver log</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+				<string>public.plain-text</string>
+			</array>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>cxlog</string>
+				</array>
+			</dict>
+		</dict>
+	</array>
+</dict>
+</plist>
