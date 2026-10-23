@@ -17,13 +17,13 @@
     NSString * crossOverRoot;
     NSURL * crossOverRootURL;
     BOOL isDemo;
-    NSInteger daysLeft;
+    int daysLeft;
     NSMenuItem * registerMenuItem;
     NSString * _licenseID;
     NSDate * _licenseExpirationDate;
-    WineApplicationController * _wineController;
+    __weak id<WineApplicationController> _wineController;
     NSString * _demoString;
-    CXServer * _CXServer;
+    __weak CXServer * _CXServer;
 }
 
 // Class Methods

@@ -20,9 +20,9 @@
 - (id)initWithString:(id)arg1;
 - (id)copy;
 - (id)mutableCopy;
-- (id)copyWithZone:(void *)arg1;
-- (id)mutableCopyWithZone:(void *)arg1;
-- (id)fileSystemRepresentation;
+- (id)copyWithZone:(NSZone *)arg1;
+- (id)mutableCopyWithZone:(NSZone *)arg1;
+- (const char *)fileSystemRepresentation;
 - (id)forwardingTargetForSelector:(SEL)arg1;
 
 @end

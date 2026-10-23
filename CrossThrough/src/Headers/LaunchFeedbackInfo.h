@@ -17,15 +17,15 @@
     NSFileHandle * socketHandle;
     NSString * socketPath;
     NSImage * badgeIcon;
-    NSInteger lifeCounter;
+    int lifeCounter;
     BOOL notified;
 }
 
 // Instance Methods
 - (id)initWithIcon:(id)arg1;
 - (void)dealloc;
-- (NSInteger)lifeCounter;
-- (void)setLifeCounter:(NSInteger)arg1;
+- (int)lifeCounter;
+- (void)setLifeCounter:(int)arg1;
 - (id)socketPath;
 - (id)badgeIcon;
 - (BOOL)notified;

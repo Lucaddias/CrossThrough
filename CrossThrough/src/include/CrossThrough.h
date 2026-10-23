@@ -7,6 +7,7 @@
 #import "CrossThroughProtocols.h"
 #import "SparkleShim.h"
 #import "PythonShim.h"
+#import "PythonBridge.h"
 
 // Forward declarations
 @class AddDependenciesViewController;

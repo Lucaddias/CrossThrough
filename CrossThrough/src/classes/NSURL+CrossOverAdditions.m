@@ -1,21 +1,13 @@
 // NSURL+CrossOverAdditions.m — CrossThrough
+// Ported from -[NSURL stringWithFileSystemRepresentation] (0x100058ed0).
 #import "NSURL+CrossOverAdditions.h"
 #import "CrossThrough.h"
-#import "HopperCompat.h"
 
 @implementation NSURL (CrossOverAdditions)
 
 - (id)stringWithFileSystemRepresentation {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r19 = [objc_retainAutorelease(self) fileSystemRepresentation];
-     *   r20 = [[NSFileManager defaultManager] retain];
-     *   r19 = [[r20 stringWithFileSystemRepresentation:r19 length:strlen(r19)] retain];
-     *   [r20 release];
-     *   r0 = [r19 autorelease];
-     *   return r0;
-     */
-    return nil;
+    const char *path = [self fileSystemRepresentation];
+    return [[NSFileManager defaultManager] stringWithFileSystemRepresentation:path length:strlen(path)];
 }
 
 @end

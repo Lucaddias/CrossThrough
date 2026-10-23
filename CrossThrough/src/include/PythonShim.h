@@ -2,12 +2,14 @@
 #ifndef PythonShim_h
 #define PythonShim_h
 
-#import <Foundation/Foundation.h>
+#import <Cocoa/Cocoa.h>
+#include <wchar.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
+typedef ssize_t Py_ssize_t;
 typedef struct _object PyObject;
 typedef struct _is PyInterpreterState;
 typedef struct _ts PyThreadState;
@@ -41,7 +43,15 @@ extern void _Py_Dealloc(PyObject *);
 @class AIETask;
 @class RatingUtils;
 @class TargetBottle;
-@class WineApplicationController;
 @class SFAuthorization;
+
+// Implemented by Wine's mac driver when it runs inside the CrossOver process.
+@protocol WineApplicationController <NSObject>
+@optional
+- (BOOL)handleEvent:(NSEvent *)event;
+- (void)didSendEvent:(NSEvent *)event;
+- (NSApplicationTerminateReply)applicationShouldTerminate:(NSApplication *)sender;
+- (BOOL)applicationShouldHandleReopen:(NSApplication *)sender hasVisibleWindows:(BOOL)flag;
+@end
 
 #endif /* PythonShim_h */

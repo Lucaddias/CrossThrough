@@ -1,182 +1,133 @@
 // CXSetupLib.m — CrossThrough
+// Ported from -[CXSetupLib initialize] (0x100039c10) and the class getters
+// (0x10003a050..0x10003a110) of CrossOver 26.3 arm64.
 #import "CXSetupLib.h"
 #import "CrossThrough.h"
-#import "HopperCompat.h"
+#import "c_functions.h"
+
+// The Python classes are registered with the ObjC runtime by PyObjC once
+// libcxsetup.py has run, so they can only be resolved by name.
+static Class _BottleQuery;
+static Class _CXSetup;
+static Class _cxUtils;
+static Class _pyBottleCollection;
+static Class _pyBottleWrapper;
+static Class _AppDetector;
+static Class _BottleManagement;
+static Class _CDDetector;
+static Class _DemoUtils;
+static Class _C4Profiles;
+static Class _pyInstallTask;
+static Class _cxAiEngine;
+static Class _cxMenu;
+static Class _pyIconUtils;
+static Class _pyRatingUtils;
+static Class _pySystemInfo;
+static Class _pyWebUtils;
+
+static BOOL LoadPythonClass(Class *slot, NSString *name, NSString *logName, id sender) {
+    *slot = NSClassFromString(name);
+    if (*slot == nil) {
+        NSLog(@"Unable to load the %@ class.\n", logName);
+        [NSApp terminate:sender];
+        return NO;
+    }
+    return YES;
+}
 
 @implementation CXSetupLib
 
 + (void)initialize {
-    return;
+    if (self != [CXSetupLib class]) {
+        return;
+    }
+    _InitializePython(@"libcxsetup.py");
+    // Same order and log names as the original nested checks.
+    LoadPythonClass(&_BottleQuery, @"BottleQuery", @"BottleQuery", self) &&
+    LoadPythonClass(&_CXSetup, @"CXSetup", @"CXSetup", self) &&
+    LoadPythonClass(&_cxUtils, @"CXUtils", @"cxUtils", self) &&
+    LoadPythonClass(&_pyBottleCollection, @"BottleCollection", @"BottleCollection", self) &&
+    LoadPythonClass(&_pyBottleWrapper, @"BottleWrapper", @"BottleWrapper", self) &&
+    LoadPythonClass(&_AppDetector, @"AppDetector", @"AppDetector", self) &&
+    LoadPythonClass(&_BottleManagement, @"BottleManagement", @"BottleManagement", self) &&
+    LoadPythonClass(&_CDDetector, @"CDDetector", @"CDDetector", self) &&
+    LoadPythonClass(&_DemoUtils, @"DemoUtils", @"DemoUtils", self) &&
+    LoadPythonClass(&_C4Profiles, @"C4Profiles", @"C4Profiles", self) &&
+    LoadPythonClass(&_pyInstallTask, @"InstallTask", @"InstallTask", self) &&
+    LoadPythonClass(&_cxAiEngine, @"Engine", @"Engine", self) &&
+    LoadPythonClass(&_cxMenu, @"CXMenu", @"cxMenu", self) &&
+    LoadPythonClass(&_pyIconUtils, @"IconUtils", @"IconUtils", self) &&
+    LoadPythonClass(&_pyRatingUtils, @"RatingUtils", @"RatingUtils", self) &&
+    LoadPythonClass(&_pySystemInfo, @"SystemInfo", @"SystemInfo", self) &&
+    LoadPythonClass(&_pyWebUtils, @"WebUtils", @"pyWebUtils", self);
 }
 
 + (Class)bottleQueryClass {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = *_BottleQuery;
-     *   r0 = objc_retainAutoreleaseReturnValue(r0);
-     *   return r0;
-     */
-    return nil;
+    return _BottleQuery;
 }
 
 + (Class)bottleManagementClass {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = *_BottleManagement;
-     *   r0 = objc_retainAutoreleaseReturnValue(r0);
-     *   return r0;
-     */
-    return nil;
+    return _BottleManagement;
 }
 
 + (Class)cxSetupClass {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = *_CXSetup;
-     *   r0 = objc_retainAutoreleaseReturnValue(r0);
-     *   return r0;
-     */
-    return nil;
+    return _CXSetup;
 }
 
 + (Class)appDetectorClass {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = *_AppDetector;
-     *   r0 = objc_retainAutoreleaseReturnValue(r0);
-     *   return r0;
-     */
-    return nil;
+    return _AppDetector;
 }
 
 + (Class)cdDetectorClass {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = *_CDDetector;
-     *   r0 = objc_retainAutoreleaseReturnValue(r0);
-     *   return r0;
-     */
-    return nil;
+    return _CDDetector;
 }
 
 + (Class)demoUtilsClass {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = *_DemoUtils;
-     *   r0 = objc_retainAutoreleaseReturnValue(r0);
-     *   return r0;
-     */
-    return nil;
+    return _DemoUtils;
 }
 
 + (Class)c4ProfilesClass {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = *_C4Profiles;
-     *   r0 = objc_retainAutoreleaseReturnValue(r0);
-     *   return r0;
-     */
-    return nil;
+    return _C4Profiles;
 }
 
 + (Class)installTaskClass {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = *_pyInstallTask;
-     *   r0 = objc_retainAutoreleaseReturnValue(r0);
-     *   return r0;
-     */
-    return nil;
+    return _pyInstallTask;
 }
 
 + (Class)cxAiEngineClass {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = *_cxAiEngine;
-     *   r0 = objc_retainAutoreleaseReturnValue(r0);
-     *   return r0;
-     */
-    return nil;
+    return _cxAiEngine;
 }
 
 + (Class)cxUtilsClass {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = *_cxUtils;
-     *   r0 = objc_retainAutoreleaseReturnValue(r0);
-     *   return r0;
-     */
-    return nil;
+    return _cxUtils;
 }
 
 + (Class)cxMenuClass {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = *_cxMenu;
-     *   r0 = objc_retainAutoreleaseReturnValue(r0);
-     *   return r0;
-     */
-    return nil;
+    return _cxMenu;
 }
 
 + (Class)bottleCollectionClass {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = *_pyBottleCollection;
-     *   r0 = objc_retainAutoreleaseReturnValue(r0);
-     *   return r0;
-     */
-    return nil;
+    return _pyBottleCollection;
 }
 
 + (Class)bottleWrapperClass {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = *_pyBottleWrapper;
-     *   r0 = objc_retainAutoreleaseReturnValue(r0);
-     *   return r0;
-     */
-    return nil;
+    return _pyBottleWrapper;
 }
 
 + (Class)iconUtilsClass {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = *_pyIconUtils;
-     *   r0 = objc_retainAutoreleaseReturnValue(r0);
-     *   return r0;
-     */
-    return nil;
+    return _pyIconUtils;
 }
 
 + (Class)ratingUtilsClass {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = *_pyRatingUtils;
-     *   r0 = objc_retainAutoreleaseReturnValue(r0);
-     *   return r0;
-     */
-    return nil;
+    return _pyRatingUtils;
 }
 
 + (Class)systemInfoClass {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = *_pySystemInfo;
-     *   r0 = objc_retainAutoreleaseReturnValue(r0);
-     *   return r0;
-     */
-    return nil;
+    return _pySystemInfo;
 }
 
 + (Class)webUtilsClass {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = *_pyWebUtils;
-     *   r0 = objc_retainAutoreleaseReturnValue(r0);
-     *   return r0;
-     */
-    return nil;
+    return _pyWebUtils;
 }
 
 @end

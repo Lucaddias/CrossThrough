@@ -4,6 +4,7 @@
 
 #import <Cocoa/Cocoa.h>
 #import <WebKit/WebKit.h>
+#import <SystemConfiguration/SystemConfiguration.h>
 #import "CrossThroughProtocols.h"
 #import "SparkleShim.h"
 #import "PythonShim.h"
@@ -23,7 +24,7 @@
     DemoRegisterController * demoRegisterController;
     BOOL quitting;
     NSMutableDictionary * tasksInProgress;
-    id * systemDynamicStore;
+    SCDynamicStoreRef systemDynamicStore;
     NSOperationQueue * backgroundQueue;
     NSOperation * startAppOp;
     NSDate * lastDemoNagTime;

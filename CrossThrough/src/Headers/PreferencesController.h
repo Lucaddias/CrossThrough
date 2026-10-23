@@ -15,7 +15,7 @@
 @interface PreferencesController : CXWindowController <NSOpenSavePanelDelegate, NSObject>
 {
     id _installersCache;
-    id * _fsEventStream;
+    FSEventStreamRef _fsEventStream;
     NSTextField * _installerCacheSizeLabel;
     id _lastUpdated;
 }

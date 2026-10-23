@@ -1,567 +1,587 @@
 // CXServer.m — CrossThrough
+// Ported from CrossOver 26.3 arm64 (0x100012780..0x100016c80).
+// The NSApplication delegate base class: launch sequencing, environment for
+// the Wine tools, launching processes with Dock feedback, and recent items.
 #import "CXServer.h"
 #import "CrossThrough.h"
-#import "HopperCompat.h"
+#import "c_functions.h"
 
 @implementation CXServer
-
-+ (id)getCellarID {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   return @"CrossOver";
-     */
-    return nil;
-}
-
-+ (id)getAppSupportDir {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = NSSearchPathForDirectoriesInDomains(0xe, 0x1, 0x1);
-     *   r0 = [r0 retain];
-     *   r20 = r0;
-     *   r21 = [[r0 objectAtIndex:0x0] retain];
-     *   [r20 release];
-     *   r19 = [[self getCellarID] retain];
-     *   r20 = [[r21 stringByAppendingPathComponent:r19] retain];
-     *   [r19 release];
-     *   [r21 release];
-     *   r0 = [r20 autorelease];
-     *   return r0;
-     */
-    return nil;
-}
-
-+ (id)getCachesDir {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = NSSearchPathForDirectoriesInDomains(0xd, 0x1, 0x1);
-     *   r0 = [r0 retain];
-     *   r19 = r0;
-     *   r20 = [[r0 objectAtIndex:0x0] retain];
-     *   [r19 release];
-     *   r19 = [[r20 stringByAppendingPathComponent:@"com.codeweavers.CrossOver"] retain];
-     *   [r20 release];
-     *   r0 = [r19 autorelease];
-     *   return r0;
-     */
-    return nil;
-}
-
-+ (id)getDefaultBottleDir {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = [CXServer getAppSupportDir];
-     *   r0 = [r0 retain];
-     *   r19 = r0;
-     *   r20 = [[r0 stringByAppendingPathComponent:@"Bottles"] retain];
-     *   [r19 release];
-     *   r0 = [r20 autorelease];
-     *   return r0;
-     */
-    return nil;
-}
-
-+ (id)getBottleDir {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = [NSUserDefaults standardUserDefaults];
-     *   r0 = [r0 retain];
-     *   r19 = r0;
-     *   r20 = [[r0 stringForKey:@"BottleDir"] retain];
-     *   [r19 release];
-     *   r0 = [r20 autorelease];
-     *   return r0;
-     */
-    return nil;
-}
-
-+ (id)fileTypesForBottle:(id)arg1 {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r1 = _cmd;
-     *   r31 = r31 - 0x1b0;
-     *   var_50 = r28;
-     *   decomp_var_48 = r27;
-     *   var_40 = r26;
-     *   decomp_var_38 = r25;
-     *   var_30 = r24;
-     *   decomp_var_28 = r23;
-     *   var_20 = r22;
-     *   decomp_var_18 = r21;
-     *   var_10 = r20;
-     *   decomp_var_8 = r19;
-     *   saved_fp = r29;
-     *   decomp_var_m8 = r30;
-     *   var_60 = **___stack_chk_guard;
-     *   r21 = [arg2 retain];
-     *   r20 = [[NSMutableArray arrayWithCapacity:0x4] retain];
-     *   var_138 = r21;
-     *   r21 = [[r21 winePrefix] retain];
-     *   r23 = [[NSString stringWithFormat:@"%@/desktopdata/cxassoc/cxassoc_macosx.plist", r3] retain];
-     *   [r21 release];
-     *   r19 = [[NSFileManager defaultManager] retain];
-     *   r21 = [[r23 stringByResolvingSymlink] retain];
-     *   r24 = [[r19 attributesOfItemAtPath:r21 error:0x0] retain];
-     *   [r21 release];
-     *   ... (127 more lines)
-     */
-    return nil;
-}
 
 - (id)init {
     self = [super init];
     if (self) {
-        // Initialized
+        NSDictionary *defaults = [NSDictionary dictionaryWithObjectsAndKeys:
+            @"", @"FirstRunVersion",
+            [NSNumber numberWithInt:10], @"RecentItemsCount",
+            [CXServer getDefaultBottleDir], @"BottleDir",
+            [NSArray array], @"ManagedBottleDirs",
+            [NSArray array], @"RecentItems",
+            @"http://ftp.codeweavers.com/pub/crossover/tie/crossover.tie.gz", @"TieURL",
+            [NSNumber numberWithBool:YES], @"ShowUntestedApps",
+            [NSNumber numberWithBool:YES], @"InstallExeFiles",
+            nil];
+        [[NSUserDefaults standardUserDefaults] registerDefaults:defaults];
+        pendingAppLaunches = [[NSMutableArray alloc] initWithCapacity:3];
+        tasksInProgress = [[NSMutableDictionary alloc] initWithCapacity:3];
+        [helperServer defaultHelperServer];
+        backgroundQueue = [[NSOperationQueue alloc] init];
     }
     return self;
 }
 
 - (void)dealloc {
-    return;
+    [[[NSWorkspace sharedWorkspace] notificationCenter] removeObserver:self];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    if (systemDynamicStore != NULL) {
+        CFRunLoopSourceRef source = SCDynamicStoreCreateRunLoopSource(NULL, systemDynamicStore, 0);
+        CFRunLoopSourceInvalidate(source);
+        CFRelease(source);
+        CFRelease(systemDynamicStore);
+    }
 }
 
 - (id)demoRegisterController {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   var_10 = r20;
-     *   decomp_var_8 = r19;
-     *   r31 = r31 + 0xffffffffffffffe0;
-     *   saved_fp = r29;
-     *   decomp_var_m8 = r30;
-     *   r19 = self;
-     *   r20 = sign_extend_64(*(int32_t *)ivar_offset(demoRegisterController));
-     *   r0 = *(self + r20);
-     *   if (r0 == 0x0) {
-     *   r0 = [[DemoRegisterController alloc] init];
-     *   r8 = *(r19 + r20);
-     *   *(r19 + r20) = r0;
-     *   [r8 release];
-     *   r0 = *(r19 + r20);
-     *   }
-     *   r0 = objc_retainAutoreleaseReturnValue(r0);
-     *   return r0;
-     */
-    return nil;
+    if (demoRegisterController == nil) {
+        demoRegisterController = [[DemoRegisterController alloc] init];
+    }
+    return demoRegisterController;
 }
 
 - (id)shutdownController {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   var_10 = r20;
-     *   decomp_var_8 = r19;
-     *   r31 = r31 + 0xffffffffffffffe0;
-     *   saved_fp = r29;
-     *   decomp_var_m8 = r30;
-     *   r19 = self;
-     *   r20 = sign_extend_64(*(int32_t *)ivar_offset(shutdownController));
-     *   r0 = *(self + r20);
-     *   if (r0 == 0x0) {
-     *   r0 = [[ShutdownController alloc] init];
-     *   r8 = *(r19 + r20);
-     *   *(r19 + r20) = r0;
-     *   [r8 release];
-     *   r0 = *(r19 + r20);
-     *   }
-     *   r0 = objc_retainAutoreleaseReturnValue(r0);
-     *   return r0;
-     */
-    return nil;
+    if (shutdownController == nil) {
+        shutdownController = [[ShutdownController alloc] init];
+    }
+    return shutdownController;
 }
 
 - (void)doPeriodicDemoNagForCommand:(id)arg1 withArgs:(id)arg2 {
-    return;
+    [self setMenusEnabled:NO];
+    DemoNagController *nag = [[DemoNagController alloc] init];
+    [nag beginWindowWithCompletionHandler:^{
+        [self setMenusEnabled:YES];
+        [self forkExecCommand:arg1 withArgs:arg2];
+    }];
 }
 
 - (void)demoCheck {
-    return;
+    if ([(CXApplication *)NSApp isDemo]) {
+        DemoNagController *nag = [[DemoNagController alloc] init];
+        [nag beginWindowWithCompletionHandler:^{
+            [self continueFromDemoCheck];
+        }];
+    } else {
+        [self continueFromDemoCheck];
+    }
 }
 
 - (void)registerDemo:(id)arg1 {
-    return;
+    [[self demoRegisterController] showWindow:arg1];
 }
 
 - (BOOL)menusEnabled {
-    return self->menusEnabled;
+    return menusEnabled;
 }
 
 - (void)setMenusEnabled:(BOOL)arg1 {
-    self->menusEnabled = arg1;
+    menusEnabled = arg1;
 }
 
 - (void)continueFromDemoCheck {
-    return;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[helperServer defaultHelperServer] setIsReady];
+        [[self startAppOp] start];
+    });
+    [self updateRecentItemsMenu];
+    [self setMenusEnabled:YES];
 }
 
+// Operations that must wait until launch has finished depend on this one.
 - (id)startAppOp {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   var_10 = r20;
-     *   decomp_var_8 = r19;
-     *   r31 = r31 + 0xffffffffffffffe0;
-     *   saved_fp = r29;
-     *   decomp_var_m8 = r30;
-     *   r0 = [self retain];
-     *   r19 = r0;
-     *   objc_sync_enter(r0);
-     *   r20 = sign_extend_64(*(int32_t *)ivar_offset(startAppOp));
-     *   if (*(r19 + r20) == 0x0) {
-     *   r0 = [[NSOperation alloc] init];
-     *   r8 = *(r19 + r20);
-     *   *(r19 + r20) = r0;
-     *   [r8 release];
-     *   }
-     *   objc_sync_exit(r19);
-     *   [r19 release];
-     *   r0 = *(r19 + r20);
-     *   r0 = objc_retainAutoreleaseReturnValue(r0);
-     *   return r0;
-     */
-    return nil;
+    @synchronized (self) {
+        if (startAppOp == nil) {
+            startAppOp = [[NSOperation alloc] init];
+        }
+    }
+    return startAppOp;
 }
 
 - (void)rosettaCheck {
-    return;
+#if defined(__arm64__)
+    if (@available(macOS 11.0, *)) {
+        cpu_type_t x86 = CPU_TYPE_X86_64;
+        BOOL loadable = CFBundleIsArchitectureLoadable(x86);
+        _CXLog(@"Rosetta is %s", loadable ? "installed" : "not installed");
+        if (!loadable) {
+            RosettaInstallationController *controller = [[RosettaInstallationController alloc] init];
+            [NSApp runModalForWindow:[controller window]];
+        }
+    }
+#endif
 }
 
 - (void)applicationWillFinishLaunching:(id)arg1 {
-    return;
+    [self rosettaCheck];
+    _PFMoveToApplicationsFolderIfNecessary();
+    NSAppleEventManager *manager = [NSAppleEventManager sharedAppleEventManager];
+    [manager setEventHandler:self
+                 andSelector:@selector(handleGetURLEvent:withReplyEvent:)
+               forEventClass:kInternetEventClass
+                  andEventID:kAEGetURL];
+    [(CXApplication *)[CXApplication sharedApplication] setDaysLeft];
+    [(CXApplication *)[CXApplication sharedApplication] setIsDemo];
 }
 
 - (void)applicationDidFinishLaunching:(id)arg1 {
-    return;
+    if (!gotLaunchEvent) {
+        [self applicationOpenUntitledFile:[arg1 object]];
+    }
+    [self setMenusEnabled:NO];
+    NSString *firstRunVersion = [[NSUserDefaults standardUserDefaults] stringForKey:@"FirstRunVersion"];
+    if ([firstRunVersion caseInsensitiveCompare:@"26.3.0.39832"] != NSOrderedSame) {
+        // The original also evaluates [firstRunVersion length] here and drops
+        // the result; processFirstRun: is always told this is an upgrade.
+        [self processFirstRun:YES];
+    }
+    [self checkForHelperUpdate];
+    [self setEnvironmentVariables];
+    [self demoCheck];
+    [self registerForCooperativeActivation];
 }
 
 - (void)checkForHelperUpdate {
-    return;
 }
 
 - (void)registerForCooperativeActivation {
-    return;
+    if (@available(macOS 14.0, *)) {
+        [[NSDistributedNotificationCenter defaultCenter] addObserver:self
+                                                            selector:@selector(otherWineAppWillActivate:)
+                                                                name:@"WineAppWillActivateNotification"
+                                                              object:nil
+                                                  suspensionBehavior:NSNotificationSuspensionBehaviorDeliverImmediately];
+    }
 }
 
 - (void)otherWineAppWillActivate:(id)arg1 {
-    return;
+    if (![NSApp isActive]) {
+        return;
+    }
+    pid_t pid = [[[arg1 userInfo] objectForKeyedSubscript:@"ActivatingAppPID"] intValue];
+    NSRunningApplication *app = [NSRunningApplication runningApplicationWithProcessIdentifier:pid];
+    if (app != nil) {
+        if (@available(macOS 14.0, *)) {
+            NSLog(@"yielding activation to %@", app);
+            [NSApp yieldActivationToApplication:app];
+            [app activateFromApplication:[NSRunningApplication currentApplication] options:0];
+        }
+    }
 }
 
 - (id)launchFeedbackDrawInfoForImageSize:(NSSize)arg1 {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   {r2:r3} = arg2;
-     *   return 0x0;
-     */
     return nil;
 }
 
 - (void)drawLaunchFeedback:(id)arg1 position:(NSInteger)arg2 info:(id)arg3 {
-    return;
 }
 
 - (void)finishedLaunches {
-    return;
 }
 
 - (void)updateLaunchNotify {
-    return;
+    NSImage *icon = [self applicationIcon];
+    NSSize size = [icon size];
+    if ([pendingAppLaunches count] == 0) {
+        [launchFeedbackTimer setFireDate:[NSDate distantFuture]];
+        [self finishedLaunches];
+        return;
+    }
+    NSImage *badged = [[NSImage alloc] initWithSize:size];
+    [badged lockFocus];
+    [icon drawAtPoint:NSZeroPoint fromRect:NSMakeRect(0, 0, size.width, size.height) operation:NSCompositingOperationCopy fraction:1.0];
+    id info = [self launchFeedbackDrawInfoForImageSize:size];
+    NSMutableIndexSet *finished = [NSMutableIndexSet indexSet];
+    NSInteger position = 0;
+    for (NSUInteger i = 0; i < [pendingAppLaunches count]; i++) {
+        LaunchFeedbackInfo *launch = [pendingAppLaunches objectAtIndex:i];
+        int counter = [launch lifeCounter];
+        // 800 ticks of 0.05s: give up after 40 seconds without a notification.
+        if (![launch notified] && counter <= 800) {
+            [self drawLaunchFeedback:launch position:position info:info];
+            position++;
+        } else {
+            [finished addIndex:i];
+        }
+        [launch setLifeCounter:counter + 1];
+    }
+    [pendingAppLaunches removeObjectsAtIndexes:finished];
+    [badged unlockFocus];
+    [[NSApplication sharedApplication] setApplicationIconImage:badged];
 }
 
 - (id)startLaunchNotify:(id)arg1 {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   var_20 = r22;
-     *   decomp_var_18 = r21;
-     *   r31 = r31 + 0xffffffffffffffd0;
-     *   var_10 = r20;
-     *   decomp_var_8 = r19;
-     *   saved_fp = r29;
-     *   decomp_var_m8 = r30;
-     *   r20 = self;
-     *   r21 = [arg2 retain];
-     *   r19 = [[LaunchFeedbackInfo alloc] initWithIcon:r21];
-     *   [r21 release];
-     *   if (r19 != 0x0) {
-     *   [r20->pendingAppLaunches addObject:r19];
-     *   r22 = sign_extend_64(*(int32_t *)ivar_offset(launchFeedbackTimer));
-     *   r21 = *(r20 + r22);
-     *   if (r21 == 0x0) {
-     *   r0 = [NSTimer scheduledTimerWithTimeInterval:s0 target:r20 selector:@selector(updateLaunchNotify) userInfo:0x0 repeats:0x1];
-     *   r0 = [r0 retain];
-     *   r8 = *(r20 + r22);
-     *   *(r20 + r22) = r0;
-     *   [r8 release];
-     *   r21 = *(r20 + r22);
-     *   }
-     *   r20 = [[NSDate date] retain];
-     *   [r21 setFireDate:r20];
-     *   ... (6 more lines)
-     */
-    return nil;
+    LaunchFeedbackInfo *info = [[LaunchFeedbackInfo alloc] initWithIcon:arg1];
+    if (info != nil) {
+        [pendingAppLaunches addObject:info];
+        if (launchFeedbackTimer == nil) {
+            launchFeedbackTimer = [NSTimer scheduledTimerWithTimeInterval:0.05 target:self selector:@selector(updateLaunchNotify) userInfo:nil repeats:YES];
+        }
+        [launchFeedbackTimer setFireDate:[NSDate date]];
+    }
+    return info;
 }
 
 - (void)noteTask:(id)arg1 forCommand:(id)arg2 args:(id)arg3 {
-    return;
 }
 
 - (void)modifyEnvironmentForCommandTask:(id)arg1 {
-    return;
 }
 
 - (void)forkExecCommand:(id)arg1 {
-    return;
+    [self forkExecCommand:arg1 withArgs:[NSDictionary dictionary]];
 }
 
+// Runs a shell command line through /bin/sh -c. Recognized args: "icon"
+// (Dock launch feedback), "workdir", and anything else is kept with the task
+// record ("doc" names the document in error messages).
 - (void)forkExecCommand:(id)arg1 withArgs:(id)arg2 {
-    return;
+    NSImage *icon = [arg2 objectForKey:@"icon"];
+    NSString *workdir = [arg2 objectForKey:@"workdir"];
+    if (workdir == nil) {
+        workdir = NSHomeDirectory();
+    }
+    LaunchFeedbackInfo *feedback = icon ? [self startLaunchNotify:icon] : nil;
+
+    NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
+    CXTask *task = (CXTask *)[[CXTask alloc] init];
+    NSTask *taskView = (NSTask *)task;
+    [taskView setLaunchPath:@"/bin/sh"];
+    [task setArguments:[NSArray arrayWithObjects:@"-c", arg1, nil]];
+    [taskView setCurrentDirectoryPath:workdir];
+    [taskView setStandardInput:[NSFileHandle fileHandleWithNullDevice]];
+    [taskView setStandardOutput:[NSFileHandle fileHandleWithNullDevice]];
+    NSPipe *errorPipe = [NSPipe pipe];
+    int fd = [[errorPipe fileHandleForReading] fileDescriptor];
+    fcntl(fd, F_SETFL, fcntl(fd, F_GETFL) | O_NONBLOCK);
+    [taskView setStandardError:errorPipe];
+
+    NSMutableDictionary *environment = [[helperServer defaultHelperServer] getEnvironmentForXConnection];
+    if (feedback != nil) {
+        [environment setObject:[feedback socketPath] forKey:@"CX_LAUNCH_NOTIFY_SOCKET"];
+    }
+    [self modifyEnvironmentForCommandTask:environment];
+    [taskView setEnvironment:environment];
+
+    [center addObserver:self selector:@selector(observeTaskTermination:) name:NSTaskDidTerminateNotification object:task];
+    [taskView launch];
+    [self noteTask:task forCommand:arg1 args:arg2];
+
+    NSFileHandle *errorHandle = [errorPipe fileHandleForReading];
+    [center addObserver:self selector:@selector(observeTaskErrorOutput:) name:NSFileHandleReadToEndOfFileCompletionNotification object:errorHandle];
+    [errorHandle readToEndOfFileInBackgroundAndNotify];
+
+    NSMutableDictionary *record = [NSMutableDictionary dictionaryWithObject:task forKey:@"task"];
+    [record addEntriesFromDictionary:arg2];
+    if (feedback != nil) {
+        [record setObject:feedback forKey:@"launchFeedbackInfo"];
+    }
+    [tasksInProgress setObject:record forKey:[NSValue valueWithNonretainedObject:task]];
+    [tasksInProgress setObject:record forKey:[NSValue valueWithNonretainedObject:errorHandle]];
 }
 
 - (void)observeTaskTermination:(id)arg1 {
-    return;
+    id task = [arg1 object];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:nil object:task];
+    [tasksInProgress removeObjectForKey:[NSValue valueWithNonretainedObject:task]];
 }
 
 - (void)observeTaskErrorOutput:(id)arg1 {
-    return;
+    id handle = [arg1 object];
+    NSValue *key = [NSValue valueWithNonretainedObject:handle];
+    NSDictionary *record = [tasksInProgress objectForKey:key];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:nil object:handle];
+    NSData *data = [[arg1 userInfo] objectForKey:NSFileHandleNotificationDataItem];
+    NSString *output = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    if ([output length] != 0) {
+        NSLog(@"Task error output: %@\n", output);
+    }
+
+    NSString *message = nil;
+    NSString *information = nil;
+    NSBundle *bundle = [NSBundle mainBundle];
+    if ([output rangeOfString:@"(error 31)"].location != NSNotFound) {
+        if ([record objectForKey:@"doc"] != nil) {
+            message = [NSString stringWithFormat:[bundle localizedStringForKey:@"%1$@ was unable to open %2$@." value:@"" table:nil], @"CrossOver", [record objectForKey:@"doc"]];
+        } else {
+            message = [NSString stringWithFormat:[bundle localizedStringForKey:@"%@ was unable to open this document." value:@"" table:nil], @"CrossOver"];
+        }
+        information = [bundle localizedStringForKey:@"Possible reasons for this error are:\n\n• The application associated with this document has been deleted\n• The application associated with this document is not in the default bottle\n" value:@"" table:nil];
+    } else if ([output rangeOfString:@"No such file or directory"].location != NSNotFound) {
+        if ([record objectForKey:@"doc"] != nil) {
+            message = [NSString stringWithFormat:[bundle localizedStringForKey:@"%1$@ was unable to start %2$@." value:@"" table:nil], @"CrossOver", [record objectForKey:@"doc"]];
+        } else {
+            message = [NSString stringWithFormat:[bundle localizedStringForKey:@"%@ was unable to start this application." value:@"" table:nil], @"CrossOver"];
+        }
+        information = [bundle localizedStringForKey:@"Probably it has been uninstalled or its bottle has been deleted.\n" value:@"" table:nil];
+    }
+    if (message != nil) {
+        NSAlert *alert = [[NSAlert alloc] init];
+        [alert setMessageText:message];
+        [alert setInformativeText:information];
+        [alert addButtonWithTitle:[bundle localizedStringForKey:@"OK" value:@"" table:nil]];
+        if ([record objectForKey:@"icon"] != nil) {
+            [alert setIcon:[record objectForKey:@"icon"]];
+        }
+        [alert runModal];
+    }
+
+    LaunchFeedbackInfo *feedback = [record objectForKey:@"launchFeedbackInfo"];
+    if (feedback != nil) {
+        [feedback setLifeCounter:0x7fffffff];
+    }
+    [tasksInProgress removeObjectForKey:key];
 }
 
 - (void)runClient:(id)arg1 inBottle:(id)arg2 {
-    return;
+    NSString *bottleArg = arg2 ? [NSString stringWithFormat:@"--bottle %@", [arg2 stringQuotedForBash]] : @"--bottle default";
+    NSString *cxstart = [[[(CXApplication *)NSApp crossOverRoot] stringByAppendingPathComponent:@"bin"] stringByAppendingPathComponent:@"cxstart"];
+    NSString *command = [NSString stringWithFormat:@"%@ %@ --wait-children --enable-alt-loader macdrv --untrusted %@",
+                         [cxstart stringQuotedForBash], bottleArg, [arg1 stringQuotedForBash]];
+    NSImage *icon = [[NSWorkspace sharedWorkspace] iconForFile:arg1];
+    NSDictionary *args = [NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:icon, nil]
+                                                     forKeys:[NSArray arrayWithObjects:@"icon", nil]];
+    [self forkExecCommand:command withArgs:args];
+    [self addToRecentItems:arg1 bottle:arg2];
 }
 
 - (void)showLicense:(id)arg1 {
-    return;
+    [[NSWorkspace sharedWorkspace] openFile:[[(CXApplication *)NSApp crossOverRoot] stringByAppendingPathComponent:@"license.txt"]];
+}
+
++ (id)getCellarID {
+    return @"CrossOver";
+}
+
++ (id)getAppSupportDir {
+    NSString *base = [NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+    return [base stringByAppendingPathComponent:[self getCellarID]];
+}
+
++ (id)getCachesDir {
+    NSString *base = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+    return [base stringByAppendingPathComponent:@"com.codeweavers.CrossOver"];
+}
+
++ (id)getDefaultBottleDir {
+    return [[CXServer getAppSupportDir] stringByAppendingPathComponent:@"Bottles"];
+}
+
++ (id)getBottleDir {
+    return [[NSUserDefaults standardUserDefaults] stringForKey:@"BottleDir"];
 }
 
 - (void)setEnvValue:(id)arg1 forKey:(id)arg2 {
-    return;
+    [[CXSetupLib cxSetupClass] setEnvValue:arg1 forKey:arg2];
 }
 
 - (void)unsetEnvValueForKey:(id)arg1 {
-    return;
+    [[CXSetupLib cxSetupClass] unsetEnvValueForKey:arg1];
 }
 
 - (void)setHttpProxyEnvironmentVariableFromSystemConfiguration {
-    return;
+    NSDictionary *proxies = (__bridge_transfer NSDictionary *)SCDynamicStoreCopyProxies(systemDynamicStore);
+    NSString *proxy = nil;
+    if ([[proxies objectForKey:(__bridge NSString *)kSCPropNetProxiesHTTPEnable] boolValue]) {
+        NSString *host = [proxies objectForKey:(__bridge NSString *)kSCPropNetProxiesHTTPProxy];
+        NSNumber *port = [proxies objectForKey:(__bridge NSString *)kSCPropNetProxiesHTTPPort];
+        if ([host length] != 0) {
+            proxy = [NSString stringWithFormat:@"http://%@:%@/", host, port];
+        }
+    }
+    if (proxy != nil) {
+        [self setEnvValue:proxy forKey:@"http_proxy"];
+    } else {
+        [self unsetEnvValueForKey:@"http_proxy"];
+    }
 }
 
 - (void)beginMonitoringSystemConfigurationProxy {
-    return;
+    SCDynamicStoreContext context = { 0, (__bridge void *)self, NULL, NULL, NULL };
+    systemDynamicStore = SCDynamicStoreCreate(NULL, CFSTR("CrossOver"), (SCDynamicStoreCallBack)_observeProxyChange, &context);
+    CFStringRef proxiesKey = SCDynamicStoreKeyCreateProxies(NULL);
+    NSArray *keys = [NSArray arrayWithObject:(__bridge id)proxiesKey];
+    SCDynamicStoreSetNotificationKeys(systemDynamicStore, (__bridge CFArrayRef)keys, NULL);
+    CFRunLoopSourceRef source = SCDynamicStoreCreateRunLoopSource(NULL, systemDynamicStore, 0);
+    CFRunLoopAddSource(CFRunLoopGetCurrent(), source, kCFRunLoopCommonModes);
+    CFRelease(source);
+    [self setHttpProxyEnvironmentVariableFromSystemConfiguration];
+    CFRelease(proxiesKey);
 }
 
 - (id)managedBottlePath {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   var_20 = r22;
-     *   decomp_var_18 = r21;
-     *   r31 = r31 + 0xffffffffffffffd0;
-     *   var_10 = r20;
-     *   decomp_var_8 = r19;
-     *   saved_fp = r29;
-     *   decomp_var_m8 = r30;
-     *   r0 = [NSProcessInfo processInfo];
-     *   r0 = [r0 retain];
-     *   r19 = r0;
-     *   r0 = [r0 environment];
-     *   r0 = [r0 retain];
-     *   r21 = r0;
-     *   r20 = [[r0 objectForKey:@"CX_MANAGED_BOTTLE_PATH"] retain];
-     *   [r21 release];
-     *   [r19 release];
-     *   if (r20 == 0x0) {
-     *   r0 = [NSUserDefaults standardUserDefaults];
-     *   r0 = [r0 retain];
-     *   r20 = r0;
-     *   r19 = [[r0 objectForKey:@"ManagedBottleDirs"] retain];
-     *   [r20 release];
-     *   objc_opt_class(@class(NSArray));
-     *   if ((objc_opt_isKindOfClass() & 0x1) != 0x0) {
-     *   r20 = [[r19 componentsJoinedByString:@":"] retain];
-     *   ... (14 more lines)
-     */
+    NSString *path = [[[NSProcessInfo processInfo] environment] objectForKey:@"CX_MANAGED_BOTTLE_PATH"];
+    if (path != nil) {
+        return path;
+    }
+    id dirs = [[NSUserDefaults standardUserDefaults] objectForKey:@"ManagedBottleDirs"];
+    if ([dirs isKindOfClass:[NSArray class]]) {
+        dirs = [dirs componentsJoinedByString:@":"];
+    }
+    if ([dirs isKindOfClass:[NSString class]] && [dirs length] != 0) {
+        return dirs;
+    }
     return nil;
 }
 
 - (void)setEnvironmentVariables {
-    return;
+    NSString *home = [[[NSProcessInfo processInfo] environment] objectForKey:@"HOME"];
+    BOOL isDirectory = NO;
+    if ([home length] == 0 || ![[NSFileManager defaultManager] fileExistsAtPath:home isDirectory:&isDirectory] || !isDirectory) {
+        home = NSHomeDirectory();
+        _CXLog(@"Setting HOME to %@", home);
+        [self setEnvValue:home forKey:@"HOME"];
+    }
+    [self setEnvValue:[[CXServer getBottleDir] stringInFileSystemRepresentationForm] forKey:@"CX_BOTTLE_PATH"];
+    NSString *managed = [self managedBottlePath];
+    if (managed != nil) {
+        [self setEnvValue:managed forKey:@"CX_MANAGED_BOTTLE_PATH"];
+    }
+    [self beginMonitoringSystemConfigurationProxy];
+    [self setEnvValue:[[NSBundle mainBundle] bundlePath] forKey:@"CX_APP_BUNDLE_PATH"];
 }
 
 - (BOOL)validateMenuItem:(id)arg1 {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   var_20 = r22;
-     *   decomp_var_18 = r21;
-     *   r31 = r31 + 0xffffffffffffffd0;
-     *   var_10 = r20;
-     *   decomp_var_8 = r19;
-     *   saved_fp = r29;
-     *   decomp_var_m8 = r30;
-     *   r20 = self;
-     *   r0 = [arg2 menu];
-     *   r0 = [r0 retain];
-     *   r21 = r0;
-     *   r19 = [[r0 title] retain];
-     *   [r21 release];
-     *   if (([r20 menusEnabled] & 0x1) != 0x0) {
-     *   r20 = 0x1;
-     *   }
-     *   else {
-     *   if ([r19 compare:@"Help"] == 0x0) {
-     *   r20 = 0x1;
-     *   }
-     *   }
-     *   [r19 release];
-     *   r0 = r20;
-     *   return r0;
-     */
-    return NO;
+    NSString *title = [[arg1 menu] title];
+    if ([self menusEnabled]) {
+        return YES;
+    }
+    return [title compare:@"Help"] == NSOrderedSame;
 }
 
 - (void)runCommand:(id)arg1 {
-    return;
+    if ([NSApp respondsToSelector:@selector(activate)]) {
+        if (@available(macOS 14.0, *)) {
+            [NSApp activate];
+        }
+    } else {
+        [NSApp activateIgnoringOtherApps:YES];
+    }
+    RunCommandController *controller = [[RunCommandController alloc] init];
+    [controller showWindow:self];
+}
+
++ (id)fileTypesForBottle:(id)arg1 {
+    NSMutableArray *types = [NSMutableArray arrayWithCapacity:4];
+    NSString *plistPath = [NSString stringWithFormat:@"%@/desktopdata/cxassoc/cxassoc_macosx.plist", [arg1 winePrefix]];
+    if ([[NSFileManager defaultManager] attributesOfItemAtPath:[plistPath stringByResolvingSymlink] error:nil] == nil) {
+        return types;
+    }
+    NSData *data = [NSData dataWithContentsOfFile:plistPath];
+    if (data == nil) {
+        return types;
+    }
+    NSError *error = nil;
+    id plist = [NSPropertyListSerialization propertyListWithData:data options:0 format:NULL error:&error];
+    if (plist == nil) {
+        NSLog(@"Failed to parse cxassoc plist %@: %@\n", plistPath, error);
+        return types;
+    }
+    if (![plist isKindOfClass:[NSDictionary class]]) {
+        return types;
+    }
+    for (id key in plist) {
+        NSDictionary *entry = [plist objectForKey:key];
+        NSString *description = [entry objectForKey:@"Description"];
+        NSDictionary *associations = [entry objectForKey:@"Extension Associations/"];
+        if ([description caseInsensitiveCompare:[arg1 name]] != NSOrderedSame) {
+            continue;
+        }
+        for (NSString *association in associations) {
+            NSArray *parts = [association componentsSeparatedByString:@"/"];
+            NSString *extension = [[associations objectForKey:association] objectForKey:@"Extension"];
+            if (extension == nil) {
+                // ".ext/..." -> "ext"
+                extension = [[parts objectAtIndex:0] substringFromIndex:1];
+            }
+            [types addObject:extension];
+        }
+    }
+    return types;
 }
 
 - (BOOL)fileManager:(id)arg1 shouldProceedAfterError:(id)arg2 copyingItemAtURL:(id)arg3 toURL:(id)arg4 {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   NSLog(@"Error copying %@ to %@: %@", _cmd, arg2, r3);
-     *   return 0x0;
-     */
+    NSLog(@"Error copying %@ to %@: %@", arg3, arg4, arg2);
     return NO;
 }
 
 - (BOOL)fileManager:(id)arg1 shouldProceedAfterError:(id)arg2 linkingItemAtURL:(id)arg3 toURL:(id)arg4 {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   NSLog(@"Error linking %@ to %@: %@", _cmd, arg2, r3);
-     *   return 0x0;
-     */
+    NSLog(@"Error linking %@ to %@: %@", arg3, arg4, arg2);
     return NO;
 }
 
 - (BOOL)fileManager:(id)arg1 shouldProceedAfterError:(id)arg2 movingItemAtURL:(id)arg3 toURL:(id)arg4 {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   NSLog(@"Error moving %@ to %@: %@", _cmd, arg2, r3);
-     *   return 0x0;
-     */
+    NSLog(@"Error moving %@ to %@: %@", arg3, arg4, arg2);
     return NO;
 }
 
 - (BOOL)fileManager:(id)arg1 shouldProceedAfterError:(id)arg2 removingItemAtURL:(id)arg3 {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   NSLog(@"Error removing %@: %@", _cmd, arg2);
-     *   return 0x0;
-     */
+    NSLog(@"Error removing %@: %@", arg3, arg2);
     return NO;
 }
 
 - (void)replyToApplicationShouldTerminateTrampoline:(id)arg1 {
-    return;
+    @try {
+        [[NSApplication sharedApplication] replyToApplicationShouldTerminate:[arg1 boolValue]];
+        [[self shutdownController] close];
+        shutdownController = nil;
+    } @finally {
+        quitting = NO;
+    }
 }
 
 - (NSUInteger)applicationShouldTerminate:(id)arg1 {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   var_30 = r24;
-     *   decomp_var_28 = r23;
-     *   r31 = r31 + 0xffffffffffffffc0;
-     *   var_20 = r22;
-     *   decomp_var_18 = r21;
-     *   var_10 = r20;
-     *   decomp_var_8 = r19;
-     *   saved_fp = r29;
-     *   decomp_var_m8 = r30;
-     *   r19 = self;
-     *   r20 = **_NSApp;
-     *   r21 = [arg2 retain];
-     *   r20 = [[r20 wineController] retain];
-     *   r22 = objc_opt_respondsToSelector();
-     *   [r20 release];
-     *   if ((r22 & 0x1) != 0x0) {
-     *   r0 = **_NSApp;
-     *   r0 = [r0 wineController];
-     *   r0 = [r0 retain];
-     *   r19 = r0;
-     *   r20 = [r0 applicationShouldTerminate:r21];
-     *   [r21 release];
-     *   [r19 release];
-     *   }
-     *   else {
-     *   ... (30 more lines)
-     */
-    return 0;
+    id<WineApplicationController> wine = [(CXApplication *)NSApp wineController];
+    if ([wine respondsToSelector:@selector(applicationShouldTerminate:)]) {
+        return [wine applicationShouldTerminate:arg1];
+    }
+    [[self shutdownController] showWindow:arg1];
+    if (quitting) {
+        return NSTerminateLater;
+    }
+    quitting = YES;
+    if ([[CXSetupLib bottleCollectionClass] sharedCollection] != nil) {
+        [[self shutdownController] shutdownAllBottles];
+        return NSTerminateLater;
+    }
+    return NSTerminateNow;
 }
 
 - (id)applicationIcon {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r19 = [[NSWorkspace sharedWorkspace] retain];
-     *   r0 = [NSBundle mainBundle];
-     *   r0 = [r0 retain];
-     *   r20 = r0;
-     *   r21 = [[r0 bundlePath] retain];
-     *   r0 = [r19 iconForFile:r21];
-     *   r0 = [r0 retain];
-     *   r22 = r0;
-     *   r23 = [r0 copy];
-     *   [r22 release];
-     *   [r21 release];
-     *   [r20 release];
-     *   [r19 release];
-     *   [r23 setSize:r2];
-     *   r0 = [r23 autorelease];
-     *   return r0;
-     */
-    return nil;
+    NSImage *icon = [[[NSWorkspace sharedWorkspace] iconForFile:[[NSBundle mainBundle] bundlePath]] copy];
+    [icon setSize:NSMakeSize(128.0, 128.0)];
+    return icon;
 }
 
 - (id)startedAppGateOp {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r0 = [self startAppOp];
-     *   return r0;
-     */
-    return nil;
+    return [self startAppOp];
 }
 
 - (BOOL)application:(id)arg1 openFile:(id)arg2 {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r22 = [arg3 retain];
-     *   *(int8_t *)(int64_t *)&self->gotLaunchEvent = 0x1;
-     *   r0 = [NSAppleEventManager sharedAppleEventManager];
-     *   r0 = [r0 retain];
-     *   r20 = r0;
-     *   r19 = [[r0 currentAppleEvent] retain];
-     *   [r20 release];
-     *   r0 = [r19 paramDescriptorForKeyword:0x70726474];
-     *   r0 = [r0 retain];
-     *   r20 = r0;
-     *   r0 = [r0 descriptorForKeyword:0x42744e6d];
-     *   r0 = [r0 retain];
-     *   r23 = r0;
-     *   r24 = [[r0 stringValue] retain];
-     *   [r23 release];
-     *   var_68 = *__NSConcreteStackBlock;
-     *   var_40 = r22;
-     *   var_38 = r24;
-     *   r24 = [r24 retain];
-     *   r22 = [r22 retain];
-     *   r0 = [NSBlockOperation blockOperationWithBlock:&var_68];
-     *   r23 = [r0 retain];
-     *   r21 = [[self startedAppGateOp] retain];
-     *   [r23 addDependency:r21];
-     *   [r21 release];
-     *   ... (13 more lines)
-     */
-    return NO;
+    gotLaunchEvent = YES;
+    NSAppleEventDescriptor *event = [[NSAppleEventManager sharedAppleEventManager] currentAppleEvent];
+    // 'prdt' / 'BtNm': the bottle a helper app asked us to open the file in.
+    NSAppleEventDescriptor *properties = [event paramDescriptorForKeyword:'prdt'];
+    NSString *bottle = [[properties descriptorForKeyword:'BtNm'] stringValue];
+    NSBlockOperation *open = [NSBlockOperation blockOperationWithBlock:^{
+        [self runClient:arg2 inBottle:bottle];
+    }];
+    [open addDependency:[self startedAppGateOp]];
+    [[NSOperationQueue mainQueue] addOperation:open];
+    return YES;
 }
 
 - (BOOL)applicationOpenUntitledFile:(id)arg1 {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   *(int8_t *)(int64_t *)&self->gotLaunchEvent = 0x1;
-     *   return 0x1;
-     */
-    return NO;
+    gotLaunchEvent = YES;
+    return YES;
 }
 
 - (BOOL)applicationShouldOpenUntitledFile:(id)arg1 {
@@ -569,125 +589,190 @@
 }
 
 - (BOOL)applicationShouldHandleReopen:(id)arg1 hasVisibleWindows:(BOOL)arg2 {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   var_30 = r24;
-     *   decomp_var_28 = r23;
-     *   r31 = r31 + 0xffffffffffffffc0;
-     *   var_20 = r22;
-     *   decomp_var_18 = r21;
-     *   var_10 = r20;
-     *   decomp_var_8 = r19;
-     *   saved_fp = r29;
-     *   decomp_var_m8 = r30;
-     *   r20 = arg3;
-     *   r19 = [arg2 retain];
-     *   r21 = [[**_NSApp wineController] retain];
-     *   r22 = objc_opt_respondsToSelector();
-     *   [r21 release];
-     *   if ((r22 & 0x1) != 0x0) {
-     *   r0 = **_NSApp;
-     *   r0 = [r0 wineController];
-     *   r0 = [r0 retain];
-     *   r21 = r0;
-     *   r20 = [r0 applicationShouldHandleReopen:r19 hasVisibleWindows:r20];
-     *   [r21 release];
-     *   }
-     *   else {
-     *   r20 = 0x1;
-     *   }
-     *   ... (3 more lines)
-     */
-    return NO;
+    id<WineApplicationController> wine = [(CXApplication *)NSApp wineController];
+    if ([wine respondsToSelector:@selector(applicationShouldHandleReopen:hasVisibleWindows:)]) {
+        return [wine applicationShouldHandleReopen:arg1 hasVisibleWindows:arg2];
+    }
+    return YES;
 }
 
 - (void)openDocument:(id)arg1 {
-    return;
+    SelectBottleController *selector = [[SelectBottleController alloc] init];
+    NSOpenPanel *panel = [NSOpenPanel openPanel];
+    [panel setCanChooseFiles:YES];
+    [panel setCanChooseDirectories:NO];
+    [panel setAllowsMultipleSelection:YES];
+    NSBundle *bundle = [NSBundle mainBundle];
+    [panel setMessage:[bundle localizedStringForKey:@"If possible, the selected document will be opened in the appropriate Windows application.\nAvailable file types may vary depending on which bottle is selected below." value:@"" table:nil]];
+    [panel setPrompt:[bundle localizedStringForKey:@"Open" value:@"" table:nil]];
+    [panel setTitle:[bundle localizedStringForKey:@"Open" value:@"" table:nil]];
+    [panel setCanCreateDirectories:NO];
+    [panel setAccessoryView:[selector view]];
+    [panel setDelegate:(id<NSOpenSavePanelDelegate>)selector];
+    [panel beginWithCompletionHandler:^(NSModalResponse result) {
+        if (result != NSModalResponseOK) {
+            return;
+        }
+        NSString *bottleName = [[selector selectedBottle] name];
+        for (NSURL *url in [panel URLs]) {
+            [self runClient:[[url path] stringInFileSystemRepresentationForm] inBottle:bottleName];
+        }
+    }];
 }
 
 - (void)addToRecentItems:(id)arg1 bottle:(id)arg2 {
-    return;
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    BOOL isDirectory;
+    if (![fileManager fileExistsAtPath:arg1 isDirectory:&isDirectory] || isDirectory) {
+        return;
+    }
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSMutableArray *recent = [[defaults arrayForKey:@"RecentItems"] mutableCopy];
+    NSInteger maxCount = [defaults integerForKey:@"RecentItemsCount"];
+    NSData *bookmark = [fileManager bookmarkDataFromPath:arg1];
+    if (bookmark == nil) {
+        return;
+    }
+    NSUInteger existing = [recent indexOfObjectPassingTest:^BOOL(id item, NSUInteger idx, BOOL *stop) {
+        NSString *itemBottle = [item objectForKey:@"bottle"];
+        if ((itemBottle == nil) != (arg2 == nil)) {
+            return NO;
+        }
+        if (itemBottle != nil && ![itemBottle isEqualToString:arg2]) {
+            return NO;
+        }
+        NSString *path = [fileManager pathFromBookmarkData:[item objectForKey:@"bookmark"] stale:NULL];
+        return [fileManager isSameFile:path asFile:arg1];
+    }];
+    if (existing != NSNotFound) {
+        [recent removeObjectAtIndex:existing];
+    }
+    NSMutableDictionary *item = [NSMutableDictionary dictionary];
+    [item setObject:bookmark forKey:@"bookmark"];
+    if (arg2 != nil) {
+        [item setObject:arg2 forKey:@"bottle"];
+    }
+    [recent insertObject:item atIndex:0];
+    if ((NSInteger)[recent count] >= maxCount) {
+        [recent removeObjectsInRange:NSMakeRange(maxCount, [recent count] - maxCount)];
+    }
+    [defaults setObject:recent forKey:@"RecentItems"];
+    [self updateRecentItemsMenu];
 }
 
 - (id)makeBottleTaggedName:(id)arg1 withBottleName:(id)arg2 {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r31 = r31 - 0x40;
-     *   var_20 = r22;
-     *   decomp_var_18 = r21;
-     *   var_10 = r20;
-     *   decomp_var_8 = r19;
-     *   saved_fp = r29;
-     *   decomp_var_m8 = r30;
-     *   r20 = arg3;
-     *   r19 = [arg2 retain];
-     *   if (r20 != 0x0) {
-     *   r22 = [r20 retain];
-     *   r0 = [NSBundle mainBundle];
-     *   r0 = [r0 retain];
-     *   r20 = r0;
-     *   r21 = [[r0 localizedStringForKey:@"%1$@ (%2$@)" value:@"" table:0x0] retain];
-     *   [r20 release];
-     *   r20 = [[NSString stringWithFormat:r21] retain];
-     *   [r22 release];
-     *   [r21 release];
-     *   }
-     *   else {
-     *   r20 = [r19 retain];
-     *   }
-     *   [r19 release];
-     *   r0 = [r20 autorelease];
-     *   ... (1 more lines)
-     */
-    return nil;
+    if (arg2 == nil) {
+        return arg1;
+    }
+    NSString *format = [[NSBundle mainBundle] localizedStringForKey:@"%1$@ (%2$@)" value:@"" table:nil];
+    return [NSString stringWithFormat:format, arg1, arg2];
 }
 
 - (void)updateRecentItemsMenu {
-    return;
+    [openRecent removeAllItems];
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSArray *items = [defaults arrayForKey:@"RecentItems"];
+    NSInteger maxCount = [defaults integerForKey:@"RecentItemsCount"];
+    NSMutableArray *kept = [NSMutableArray arrayWithCapacity:[items count]];
+    NSMutableIndexSet *missing = [NSMutableIndexSet indexSet];
+
+    for (NSDictionary *item in items) {
+        NSDictionary *entry = item;
+        BOOL stale = NO;
+        NSString *path = [fileManager pathFromBookmarkData:[entry objectForKey:@"bookmark"] stale:&stale];
+        if (path != nil && stale) {
+            NSData *refreshed = [fileManager bookmarkDataFromPath:path];
+            if (refreshed != nil) {
+                NSMutableDictionary *updated = [entry mutableCopy];
+                [updated setObject:refreshed forKey:@"bookmark"];
+                entry = updated;
+            }
+        }
+        [kept addObject:entry];
+        if (path == nil) {
+            // Unresolvable items are dropped first when trimming below.
+            [missing addIndex:[kept count] - 1];
+            continue;
+        }
+        NSString *title = [self makeBottleTaggedName:[fileManager displayNameAtPath:path] withBottleName:[entry objectForKey:@"bottle"]];
+        NSMenuItem *menuItem = [[NSMenuItem alloc] initWithTitle:title action:@selector(openRecent:) keyEquivalent:@""];
+        [menuItem setTarget:self];
+        [menuItem setRepresentedObject:entry];
+        [openRecent addItem:menuItem];
+        if ([openRecent numberOfItems] >= maxCount) {
+            break;
+        }
+    }
+
+    while ((NSInteger)[kept count] >= maxCount && (NSInteger)[kept count] > 0) {
+        if ([missing count] != 0) {
+            NSUInteger last = [missing lastIndex];
+            [kept removeObjectAtIndex:last];
+            [missing removeIndex:last];
+        } else {
+            [kept removeObjectsInRange:NSMakeRange(maxCount, [kept count] - maxCount)];
+        }
+        if ((NSInteger)[kept count] <= maxCount) {
+            break;
+        }
+    }
+    [defaults setObject:kept forKey:@"RecentItems"];
+
+    NSMenuItem *clear = [[NSMenuItem alloc] initWithTitle:[[NSBundle mainBundle] localizedStringForKey:@"Clear" value:@"" table:nil]
+                                                   action:@selector(clearRecent:)
+                                            keyEquivalent:@""];
+    [clear setTarget:self];
+    if ([openRecent numberOfItems] != 0) {
+        [openRecent addItem:[NSMenuItem separatorItem]];
+    } else {
+        [clear setAction:NULL];
+    }
+    [openRecent addItem:clear];
 }
 
 - (void)openRecent:(id)arg1 {
-    return;
+    NSDictionary *item = [arg1 representedObject];
+    NSString *path = [[NSFileManager defaultManager] pathFromBookmarkData:[item objectForKey:@"bookmark"] stale:NULL];
+    if (path != nil) {
+        [self runClient:path inBottle:[item objectForKey:@"bottle"]];
+    } else {
+        NSBeep();
+        [self updateRecentItemsMenu];
+    }
 }
 
 - (void)clearRecent:(id)arg1 {
-    return;
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"RecentItems"];
+    [self updateRecentItemsMenu];
 }
 
 - (void)processFirstRun:(BOOL)arg1 {
-    return;
+    [[NSUserDefaults standardUserDefaults] setObject:@"26.3.0.39832" forKey:@"FirstRunVersion"];
 }
 
+// Returns YES when the URL was not handled here, so subclasses can take it.
 - (BOOL)handleGetURLEvent:(id)arg1 withReplyEvent:(id)arg2 {
-    /*
-     * Decompiled from CrossOver 26.3:
-     *   r3 = arg3;
-     *   r31 = r31 - 0xc0;
-     *   var_50 = r28;
-     *   decomp_var_48 = r27;
-     *   var_40 = r26;
-     *   decomp_var_38 = r25;
-     *   var_30 = r24;
-     *   decomp_var_28 = r23;
-     *   var_20 = r22;
-     *   decomp_var_18 = r21;
-     *   var_10 = r20;
-     *   decomp_var_8 = r19;
-     *   saved_fp = r29;
-     *   decomp_var_m8 = r30;
-     *   r23 = self;
-     *   *(int8_t *)(int64_t *)&self->gotLaunchEvent = 0x1;
-     *   r0 = [arg2 retain];
-     *   r22 = r0;
-     *   r0 = [r0 paramDescriptorForKeyword:0x2d2d2d2d];
-     *   r0 = [r0 retain];
-     *   r19 = r0;
-     *   r20 = [[r0 stringValue] retain];
-     *   r21 = [[r22 paramDescriptorForKeyword:0x70726474] retain];
-     *   [r22 release];
-     *   r0 = [r21 descriptorForKeyword:0x42744e6d];
-     *   ... (78 more lines)
-     */
+    gotLaunchEvent = YES;
+    NSString *urlString = [[arg1 paramDescriptorForKeyword:keyDirectObject] stringValue];
+    NSAppleEventDescriptor *properties = [arg1 paramDescriptorForKeyword:'prdt'];
+    NSString *bottle = [[properties descriptorForKeyword:'BtNm'] stringValue];
+    if ([urlString length] == 0) {
+        return NO;
+    }
+    NSURL *url = [NSURL URLWithString:urlString];
+    if ([[url scheme] caseInsensitiveCompare:@"com.codeweavers.private-CrossOver-app-scheme"] == NSOrderedSame) {
+        return YES;
+    }
+    NSString *bottleArg = bottle ? [NSString stringWithFormat:@"--bottle %@", [bottle stringQuotedForBash]] : @"--bottle default";
+    NSString *cxstart = [[[(CXApplication *)NSApp crossOverRoot] stringByAppendingPathComponent:@"bin"] stringByAppendingPathComponent:@"cxstart"];
+    NSString *command = [NSString stringWithFormat:@"%@ %@ --wait-children --enable-alt-loader macdrv -- %@",
+                         [cxstart stringQuotedForBash], bottleArg, [urlString stringQuotedForBash]];
+    NSBlockOperation *launch = [NSBlockOperation blockOperationWithBlock:^{
+        [self forkExecCommand:command];
+    }];
+    [launch addDependency:[self startedAppGateOp]];
+    [[NSOperationQueue mainQueue] addOperation:launch];
     return NO;
 }
 
