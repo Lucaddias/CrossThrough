@@ -1,5 +1,6 @@
 // PackageViewController.m — CrossThrough
 #import "PackageViewController.h"
+#import "DirectDownloads.h"
 #import "CrossThrough.h"
 #import "HopperCompat.h"
 #import "PackageTreeNode.h"
@@ -130,6 +131,7 @@
     }
 
     if (dict && [dict count] > 0) {
+        CTApplyDirectDownloads(dict);
         for (NSString *key in dict) {
             id item = dict[key];
             BOOL isCurrent = YES;

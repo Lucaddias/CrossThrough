@@ -1,5 +1,6 @@
 // InstallConfiguration.m — CrossThrough
 #import "InstallConfiguration.h"
+#import "DirectDownloads.h"
 #import "CrossThrough.h"
 #import "HopperCompat.h"
 #import "PropertyDescriptor.h"
@@ -180,6 +181,10 @@ static void _boolSetterMethodIMP(id self, SEL _cmd, BOOL value) {
 - (id)init {
     self = [super init];
     if (self) {
+        id profilesSet = [[CXSetupLib c4ProfilesClass] profilesSet];
+        if ([profilesSet respondsToSelector:@selector(contentsDict)]) {
+            CTApplyDirectDownloads([profilesSet contentsDict]);
+        }
         Class taskClass = [CXSetupLib installTaskClass];
         if (taskClass) {
             self->_installTask = [(InstallTask *)[taskClass alloc] initWithDelegate:self];
