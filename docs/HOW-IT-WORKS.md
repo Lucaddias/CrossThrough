@@ -146,21 +146,47 @@ converte em PNG. O resultado fica em cache, com a data do arquivo na chave.
 
 ## Abrir um programa
 
-`Wine.open(_:log:onExit:)` resolve o atalho no próprio Kit, sem o `start` do
-Wine. Quando o shell32 abre um `.lnk`, ele não devolve o processo, então o
-código de saída se perderia. Há três casos:
+Muitos programas não são o processo que abre. Um launcher (o `EALauncher` do
+EA app, os de muitos jogos, um `.bat` com `start`) abre o programa de verdade e
+sai na hora. Do lado do macOS não dá para saber quem abriu quem: o Wine solta
+cada processo, e o pai Unix de todos vira o launchd.
 
-- **Alvo executável:** roda `wine <alvo> <argumentos>` no diretório de trabalho
-  do atalho, e o processo acompanhado é o do programa.
-- **Alvo não executável** (um documento, por exemplo): roda
-  `wine start /wait /unix <alvo>`.
-- **Atalho do Windows Installer**, que não traz caminho: roda `wine start /unix
-  <atalho>`. Como esse processo termina na hora, o app acompanha a bottle com
-  `wineserver -w`, que só termina quando tudo nela fecha.
+Por isso quem abre é o `ctlaunch.exe`, um programa do Windows que vem no
+runtime (`runtime/helpers/ctlaunch.c`) e roda na bottle:
 
-O app mostra o programa como aberto enquanto o processo vive. Se ele fechar com
-erro em menos de 5 segundos, aparece um alerta com o log, porque isso quase
-sempre é uma falha ao iniciar.
+```
+wine ctlaunch.exe run   <id> <diretório> <aplicação> <linha de comando>
+wine ctlaunch.exe shell <id> <diretório> <arquivo> [parâmetros]
+wine ctlaunch.exe stop  <id>
+```
+
+Antes de abrir o programa, o `ctlaunch` entra num job object do Windows. Todo
+processo que nasce dele herda o job, por mais rápido que saia, e o job avisa
+cada entrada pela porta de conclusão. Um processo que pede para sair do job
+(`CREATE_BREAKAWAY_FROM_JOB`) sai, para nenhum programa falhar por isso, e é
+achado pelo PID do pai, na lista de processos do Windows (Toolhelp), uma vez
+por segundo. Os processos de fundo da bottle (o `explorer.exe` da área de
+trabalho, o `conhost.exe`, os serviços) não contam. O `ctlaunch` sai quando o
+último processo da árvore fecha, com o código de saída dele. Se nada abriu, o
+código é 127 e o motivo vai para o log.
+
+`Wine.open(_:log:onExit:)` resolve o atalho no próprio Kit:
+
+- **Alvo executável:** `run`, com a linha de argumentos do atalho exatamente
+  como ela está, no diretório de trabalho do atalho.
+- **Alvo não executável** (um `.bat`, um documento): `shell`, que abre pela
+  associação do Windows.
+- **Atalho do Windows Installer**, que não traz caminho: `shell` com o próprio
+  `.lnk`, que o msi resolve.
+
+`Wine.open(file:)` faz o mesmo para um arquivo: `.exe` e `.com` por `run`,
+`.msi` por `run` do `msiexec /i`, o resto por `shell`.
+
+O app mostra o programa como aberto enquanto o `ctlaunch` vive. Fechar pede
+`ctlaunch.exe stop <id>`, que encerra a árvore. Se o `ctlaunch` não atender em
+15 segundos, o Kit encerra só ele, para o app não ficar esperando. Se o
+programa fechar com erro em menos de 5 segundos, aparece um alerta com o log,
+porque isso quase sempre é uma falha ao iniciar.
 
 ## Instalar uma receita
 

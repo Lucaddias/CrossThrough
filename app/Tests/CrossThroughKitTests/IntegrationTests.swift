@@ -43,18 +43,32 @@ struct IntegrationTests {
         let status = await (try wine.open(program, log: log)).waitUntilExit()
         #expect(status == 7, "o código de saída do programa: \(status)")
 
-        // Um .lnk aberto como arquivo vai pelo `start`, que volta antes de o
-        // programa terminar: o Kit espera a bottle. O programa só grava o
-        // arquivo depois de uns 2 s (o ping espera 1 s entre um e outro).
+        // Um launcher: o cmd abre outro pelo `start` e sai na hora. O Kit
+        // acompanha a árvore até o último fechar (o ping espera 1 s entre um
+        // e outro) e devolve o código dele.
         let marker = bottle.driveC.appending(path: "fim.txt")
-        let slow = tmp.url.appending(path: "Lento.lnk")
+        let launcher = tmp.url.appending(path: "Lançador.lnk")
         try ShellLink.make(target: #"C:\windows\system32\cmd.exe"#,
-                           arguments: #"/c "ping -n 3 127.0.0.1 > nul & echo fim > C:\fim.txt""#).write(to: slow)
-        let untracked = try wine.open(file: slow, log: log)
-        #expect(untracked.isRunning)
-        #expect(await untracked.waitUntilExit() == 0)
+                           arguments: #"/c start "" cmd /c "ping -n 3 127.0.0.1 > nul & echo fim > C:\fim.txt & exit 4""#)
+            .write(to: launcher)
+        let tracked = try wine.open(file: launcher, log: log)
+        #expect(tracked.isRunning)
+        #expect(await tracked.waitUntilExit() == 4, "o código do último processo da árvore")
         #expect(FileManager.default.fileExists(atPath: marker.path), "voltou antes de o programa terminar")
-        #expect(!untracked.isRunning)
+        #expect(!tracked.isRunning)
+
+        // Encerrar fecha a árvore inteira, não só o processo que abriu.
+        let long = tmp.url.appending(path: "Longo.lnk")
+        try ShellLink.make(target: #"C:\windows\system32\cmd.exe"#,
+                           arguments: #"/c start "" cmd /c "ping -n 120 127.0.0.1 > nul""#).write(to: long)
+        let stopped = try wine.open(file: long, log: log)
+        try await Task.sleep(for: .seconds(4))
+        #expect(try await wine.processNames().contains("ping.exe"))
+        let asked = ContinuousClock.now
+        stopped.terminate()
+        #expect(await stopped.waitUntilExit() == 0)
+        #expect(ContinuousClock.now - asked < .seconds(15))
+        #expect(try await !wine.processNames().contains("ping.exe"), "sobrou processo da árvore")
 
         let renamed = try await store.rename(bottle, to: "Integração 2", runtime: runtime)
         #expect(try store.list().map(\.name) == ["Integração 2"])

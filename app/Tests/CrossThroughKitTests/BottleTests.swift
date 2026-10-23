@@ -87,6 +87,8 @@ struct BottleTests {
         #expect(bottle.existingUnixPath(forWindowsPath: "sem drive") == nil)
         #expect(bottle.windowsPath(forUnixPath: exe) == #"C:\Program Files\My App\Game.exe"#)
         #expect(bottle.windowsPath(forUnixPath: URL(fileURLWithPath: "/Users")) == #"Z:\Users"#)
+        #expect(bottle.windowsPath(forUnixPath: bottle.driveC) == #"C:\"#)
+        #expect(bottle.windowsPath(forUnixPath: URL(fileURLWithPath: "/")) == #"Z:\"#)
     }
 
     @Test("WINEDLLOVERRIDES: backend, os da bottle e os extras", .enabled(if: builtRuntime != nil))

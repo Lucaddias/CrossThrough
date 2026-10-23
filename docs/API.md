@@ -15,7 +15,7 @@ respeitam o cancelamento da `Task`: cancelar encerra o processo e lança
 O runtime do Wine validado. A validação confere que:
 
 - o `runtime.json` é legível;
-- `bin/wine` e `bin/wineserver` existem;
+- `bin/wine`, `bin/wineserver` e `lib/crossthrough/ctlaunch.exe` existem;
 - o caminho cabe em `maxInstallPathLength`.
 
 | Membro | O que é |
@@ -23,6 +23,7 @@ O runtime do Wine validado. A validação confere que:
 | `init(root: URL) throws` | valida e carrega o runtime de `root` |
 | `root`, `manifest` | o diretório e o `runtime.json` decodificado |
 | `wine`, `wineserver`, `binDirectory`, `winetricks` | caminhos dentro do runtime |
+| `launcher` | o `ctlaunch.exe`, que abre programas e acompanha a árvore de processos deles (roda com `wine <caminho>`) |
 | `wineDLLDirectory(_ arch: WindowsArch) -> URL` | as DLLs do Wine (`lib/wine/<arch>-windows`) |
 | `backendDLLDirectory(_ name: String, _ arch: WindowsArch) -> URL` | as DLLs do DXVK ou do DXMT |
 | `static candidates(environment:bundle:executable:) -> [URL]` | onde procurar, em ordem: `CROSSTHROUGH_RUNTIME`, `Contents/SharedSupport` do app (ou relativo ao CLI em `Contents/Helpers`), `runtime/out/` do repositório |
@@ -135,8 +136,8 @@ Liga um runtime a uma bottle.
 | `dllOverrides(extra:) -> String` | o `WINEDLLOVERRIDES`: winemenubuilder desligado, backend, bottle, extras |
 | `run(_ arguments:workingDirectory:environment:log:timeout:) async throws -> ProcessResult` | `wine <arguments>` até terminar. Ao fim do tempo, encerra a bottle |
 | `launch(_ arguments:workingDirectory:environment:log:onExit:) throws -> RunningProcess` | inicia sem esperar |
-| `open(_ program: Program, log:onExit:) throws -> RunningProcess` | abre um programa pelo alvo do atalho (veja HOW-IT-WORKS) |
-| `open(file:arguments:log:onExit:) throws -> RunningProcess` | abre um arquivo: o `.exe` direto, o `.msi` pelo `msiexec`, o resto pelo `start` |
+| `open(_ program: Program, log:onExit:) throws -> RunningProcess` | abre um programa pelo alvo do atalho e acompanha a árvore de processos dele até o último fechar (veja HOW-IT-WORKS) |
+| `open(file:arguments:log:onExit:) throws -> RunningProcess` | abre um arquivo: o `.exe` direto, o `.msi` pelo `msiexec`, o resto pelo shell do Windows; acompanha a árvore como o `open(_:)` |
 | `waitForAll(timeout:stopOnTimeout:) async throws` | `wineserver -w`: espera a bottle esvaziar |
 | `waitForPrograms(timeout:poll:) async throws -> Bool` | espera os programas fecharem, sem contar os processos de fundo |
 | `processNames() async throws -> [String]` | os processos da bottle, pelo `tasklist` do Wine |
@@ -144,7 +145,9 @@ Liga um runtime a uma bottle.
 
 `ProcessResult` tem `status`, `output` (stdout e stderr desta execução), `log`
 e `succeeded`. `RunningProcess` tem `log`, `isRunning`, `processIdentifier`,
-`terminate()` e `waitUntilExit() async -> Int32`.
+`terminate()` e `waitUntilExit() async -> Int32`. No que veio de um `open`,
+`terminate()` encerra a árvore inteira (`ctlaunch.exe stop`), e o código de
+saída é o do último processo da árvore a fechar (127 se nada abriu).
 
 ### `enum Logs`
 

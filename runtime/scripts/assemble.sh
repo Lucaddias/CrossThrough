@@ -8,6 +8,7 @@
 #   lib/wine/<arch>-{windows,unix}  Wine + winemetal (parte Unix do DXMT)
 #   lib/dxvk/<arch>-windows      DXVK, DLLs nativas para instalar por bottle
 #   lib/dxmt/<arch>-windows      DXMT (d3d11/dxgi/d3d10core/nvapi), idem
+#   lib/crossthrough/            programas Windows do CrossThrough (ctlaunch.exe)
 #   share/wine/{gecko,mono}      complementos do Wine, já descompactados
 #   share/winetricks/winetricks  instalador de dependências por bottle
 #   share/licenses/<componente>  licença de cada parte
@@ -16,6 +17,7 @@ source "$(dirname "$0")/common.sh"
 
 [ -x "$STAGE/bin/wine" ] || die "Wine não instalado em $STAGE (rode scripts/wine.sh)"
 [ -d "$WORK/dxvk/x64" ]  || die "DXVK não compilado (rode scripts/dxvk.sh)"
+[ -f "$WORK/helpers/ctlaunch.exe" ] || die "helpers não compilados (rode scripts/helpers.sh)"
 
 log "Montando $OUT"
 rm -rf "$OUT"; mkdir -p "$OUT/lib" "$OUT/share/licenses"
@@ -81,6 +83,11 @@ for f in "$OUT"/lib/dxmt/*/*.dll; do unmark_builtin "$f"; done
 mkdir -p "$OUT/lib/dxvk/x86_64-windows" "$OUT/lib/dxvk/i386-windows"
 cp "$WORK/dxvk/x64"/*.dll "$OUT/lib/dxvk/x86_64-windows/"
 cp "$WORK/dxvk/x32"/*.dll "$OUT/lib/dxvk/i386-windows/"
+
+# --- programas do CrossThrough ---------------------------------------------
+# Fora de lib/wine, que fica só com o que é do Wine.
+mkdir -p "$OUT/lib/crossthrough"
+cp "$WORK/helpers/ctlaunch.exe" "$OUT/lib/crossthrough/"
 
 # --- Gecko e Mono -----------------------------------------------------------
 mkdir -p "$OUT/share/wine/gecko" "$OUT/share/wine/mono"

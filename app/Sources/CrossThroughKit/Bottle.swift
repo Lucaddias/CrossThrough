@@ -269,7 +269,8 @@ public struct Bottle: Sendable, Hashable, Identifiable {
     public func windowsPath(forUnixPath unix: URL) -> String {
         let path = unix.standardizedFileURL.resolvingSymlinksInPath().path
         let driveCPath = driveC.resolvingSymlinksInPath().path
-        if path == driveCPath || path.hasPrefix(driveCPath + "/") {
+        if path == driveCPath { return "C:\\" } // "C:" sozinho é o diretório atual do drive, não a raiz
+        if path.hasPrefix(driveCPath + "/") {
             return "C:" + path.dropFirst(driveCPath.count).replacingOccurrences(of: "/", with: "\\")
         }
         return "Z:" + path.replacingOccurrences(of: "/", with: "\\")

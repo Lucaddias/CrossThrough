@@ -110,10 +110,12 @@ os ícones em `~/Library/Caches/CrossThrough`.
   bottle e os da chamada; o `winemenubuilder` fica desligado.
 - A saída vai para um arquivo de log, nunca para um pipe: processos que o
   programa deixa vivos (wineserver, services.exe) segurariam o pipe.
-- Um programa do Menu Iniciar roda direto pelo alvo do atalho, com os
-  argumentos dele, e o código de saída volta. Atalhos do Windows Installer
-  (sem caminho) vão pelo `start` do Wine, e aí o Kit acompanha a bottle com
-  `wineserver -w` até tudo nela fechar.
+- Programas abrem pelo `ctlaunch.exe` do runtime, que acompanha a árvore de
+  processos inteira: um launcher que abre o programa de verdade e sai (o
+  `EALauncher` do EA app) continua como aberto até o último processo fechar.
+  O atalho do Menu Iniciar é resolvido pelo Kit, e o alvo roda direto, com os
+  argumentos dele; atalhos do Windows Installer (sem caminho) e documentos vão
+  pelo shell do Windows. Fechar o programa no app fecha a árvore inteira.
 - `crossthrough.json` na raiz da bottle guarda a configuração do CrossThrough
   (versão do Windows, backend gráfico, msync, overrides, ambiente e as receitas
   instaladas). O resto da bottle é um prefixo comum do Wine.

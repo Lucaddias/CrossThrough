@@ -50,6 +50,9 @@ public struct Runtime: Sendable, Equatable {
         for tool in ["bin/wine", "bin/wineserver"] where !fm.isExecutableFile(atPath: root.appending(path: tool).path) {
             throw RuntimeError.invalid(path: root.path, reason: "\(tool) ausente")
         }
+        guard fm.fileExists(atPath: root.appending(path: Self.launcherPath).path) else {
+            throw RuntimeError.invalid(path: root.path, reason: "\(Self.launcherPath) ausente")
+        }
         let manifestURL = root.appending(path: "runtime.json")
         let manifest: RuntimeManifest
         do {
@@ -70,6 +73,10 @@ public struct Runtime: Sendable, Equatable {
     public var wineserver: URL { root.appending(path: "bin/wineserver") }
     public var binDirectory: URL { root.appending(path: "bin") }
     public var winetricks: URL { root.appending(path: "share/winetricks/winetricks") }
+    /// O programa do Windows que abre programas e acompanha a árvore de
+    /// processos deles (runtime/helpers/ctlaunch.c). Roda com `wine <caminho>`.
+    public var launcher: URL { root.appending(path: Self.launcherPath) }
+    static let launcherPath = "lib/crossthrough/ctlaunch.exe"
 
     /// DLLs PE do próprio Wine para uma arquitetura.
     public func wineDLLDirectory(_ arch: WindowsArch) -> URL {

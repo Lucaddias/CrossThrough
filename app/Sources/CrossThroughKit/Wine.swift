@@ -215,32 +215,38 @@ public struct ProcessResult: Sendable {
 }
 
 /// Um processo iniciado pelo Kit (`Wine.launch`, `Wine.open`).
-///
-/// O processo acompanhado pode ser trocado uma vez depois de começar: quem abre
-/// algo que o Wine não devolve passa a acompanhar o `wineserver -w` da bottle.
-/// Para quem usa, é um processo só, rodando do início até `didExit`.
 public final class RunningProcess: @unchecked Sendable {
     public let log: URL
     private let lock = NSLock()
-    private var process: Process
+    private let process: Process
+    /// Como encerrar, quando não basta o SIGTERM: o que o `Wine.open` abre
+    /// pelo ctlaunch.exe é uma árvore de processos do Windows.
+    private let stop: (@Sendable (RunningProcess) -> Void)?
     private var started = false
     private var stopRequested = false
     private var status: Int32?
     private var waiters: [CheckedContinuation<Int32, Never>] = []
 
-    init(process: Process, log: URL) {
+    init(process: Process, log: URL, stop: (@Sendable (RunningProcess) -> Void)? = nil) {
         self.process = process
         self.log = log
+        self.stop = stop
     }
 
     /// Já começou e ainda não terminou.
     public var isRunning: Bool { lock.withLock { started && status == nil } }
-    public var processIdentifier: Int32 { lock.withLock { process.processIdentifier } }
+    public var processIdentifier: Int32 { process.processIdentifier }
 
-    /// Encerra o processo (SIGTERM). Antes de ele começar, impede que comece.
+    /// Encerra o processo e o que ele abriu. Antes de ele começar, impede que comece.
     public func terminate() {
-        let current = lock.withLock { stopRequested = true; return process }
-        if current.isRunning { current.terminate() }
+        let wasStarted = lock.withLock { stopRequested = true; return started && status == nil }
+        guard wasStarted else { return }
+        if let stop { stop(self) } else { kill() }
+    }
+
+    /// Só o SIGTERM no processo, sem o `stop`.
+    func kill() {
+        if process.isRunning { process.terminate() }
     }
 
     func start() throws {
@@ -248,15 +254,6 @@ public final class RunningProcess: @unchecked Sendable {
             guard !stopRequested else { throw CancellationError() }
             try process.run()
             started = true
-        }
-    }
-
-    /// Passa a acompanhar `next`, que começa agora. Falha se pediram para parar.
-    func handOff(to next: Process) throws {
-        try lock.withLock {
-            guard !stopRequested, status == nil else { throw CancellationError() }
-            try next.run()
-            process = next
         }
     }
 

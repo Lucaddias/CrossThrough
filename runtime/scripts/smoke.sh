@@ -16,6 +16,9 @@
 #   9. winetricks                aplica um verbo de configuração na bottle
 #  10. d3d11test.exe x3          Direct3D 11 em wined3d, DXVK e DXMT (64-bit)
 #  11. d3d11test32.exe           o mesmo em 32-bit (WoW64), nos três backends
+#  12. ctlaunch.exe              acompanha um launcher até o último processo da
+#                                árvore fechar, devolve o código do programa e
+#                                encerra a árvore inteira pelo "stop"
 #
 # Também é a referência executável do contrato que o app segue: o ambiente de
 # execução (env_cmd), o do winetricks (winetricks_env) e a troca de backend
@@ -36,6 +39,7 @@ x86_64-w64-mingw32-gcc -O2 -o "$TB/vktest.exe" "$T/vktest.c"
 x86_64-w64-mingw32-gcc -O2 -municode -o "$TB/tlstest.exe" "$T/tlstest.c" -lwinhttp
 x86_64-w64-mingw32-gcc -O2 -o "$TB/fonttest.exe" "$T/fonttest.c" -lgdi32
 x86_64-w64-mingw32-gcc -O2 -o "$TB/htmltest.exe" "$T/htmltest.c" -lole32 -loleaut32 -luuid
+x86_64-w64-mingw32-gcc -O2 -municode -o "$TB/launchtest.exe" "$T/launchtest.c"
 i686-w64-mingw32-gcc   -O2 -o "$TB/htmltest32.exe" "$T/htmltest.c" -lole32 -loleaut32 -luuid
 # Ferramenta para conferir a janela de um programa aberto (não é um teste daqui; ver README).
 x86_64-w64-mingw32-gcc -O2 -municode -o "$TB/wininspect.exe" "$T/wininspect.c" -lcomctl32 -luser32
@@ -159,6 +163,48 @@ rm -rf "$TB/cache" "$TB/config"
 check_cmd "winetricks fontsmooth=bgr" "" "${WINETRICKS_ENV[@]}" "$RT/share/winetricks/winetricks" -q fontsmooth=bgr
 check "winetricks gravou o registro" "FontSmoothingOrientation +REG_DWORD +0x0([^0-9a-fA-F]|$)" \
   reg query 'HKCU\Control Panel\Desktop' /v FontSmoothingOrientation
+# ctlaunch: o launchtest.exe abre "cmd /c start" do filho e sai; o filho abre
+# o neto e sai em 1 s; o neto fica n segundos e sai com 5.
+CTL=$RT/lib/crossthrough/ctlaunch.exe
+LT=$(winpath "$TB/launchtest.exe")
+# check_launch <nome> <código esperado> <segundos mínimos> <argumentos do ctlaunch...>
+check_launch() {
+  local name=$1 want=$2 min=$3 rc start elapsed; shift 3
+  printf '  %-34s ' "$name"
+  env_cmd
+  rc=0; start=$(date +%s)
+  perl -e 'alarm shift; exec @ARGV or die "exec: $!\n"' 120 "${ENV_CMD[@]}" "$WINE" "$CTL" "$@" > "$TB/check.log" 2>&1 || rc=$?
+  elapsed=$(( $(date +%s) - start ))
+  [ $rc -ne 142 ] || wine_env "$RT/bin/wineserver" -k 2>/dev/null || true
+  if [ $rc -eq "$want" ] && [ $elapsed -ge "$min" ]; then
+    echo "ok   código $rc em ${elapsed} s"
+    pass=$((pass + 1))
+  else
+    echo "FALHOU (código $rc em ${elapsed} s; esperado $want, com ${min} s ou mais)"
+    sed 's/^/      | /' "$TB/check.log" | tail -15
+    failed+=("$name")
+  fi
+}
+check_launch "ctlaunch: launcher até o neto" 5 4 run lt1 "" "" "\"$LT\" launcher 4"
+check_launch "ctlaunch: código do programa" 9 0 run lt2 "" "$LT" "\"$LT\" exit 9"
+check_launch "ctlaunch: programa que não abre" 127 0 run lt3 "" 'C:\nao\existe.exe' 'existe.exe'
+# stop: a árvore de um launcher de 60 s fecha inteira logo depois do pedido.
+env_cmd
+( rc=0; perl -e 'alarm shift; exec @ARGV or die "exec: $!\n"' 120 "${ENV_CMD[@]}" "$WINE" "$CTL" \
+    run lt4 "" "" "\"$LT\" launcher 60" > "$TB/stop.log" 2>&1 || rc=$?; echo $rc > "$TB/stop.rc" ) &
+stopped_run=$!
+sleep 5
+check "ctlaunch: stop" "" "$CTL" stop lt4
+start=$(date +%s); wait $stopped_run; elapsed=$(( $(date +%s) - start ))
+left=$(wine_env "$WINE" tasklist /fo csv /nh 2>/dev/null | grep -ci launchtest || true)
+printf '  %-34s ' "ctlaunch: a árvore fechou"
+if [ "$(cat "$TB/stop.rc")" = 0 ] && [ $elapsed -le 30 ] && [ "$left" = 0 ]; then
+  echo "ok   código 0, ${elapsed} s depois do stop"
+  pass=$((pass + 1))
+else
+  echo "FALHOU (código $(cat "$TB/stop.rc"), ${elapsed} s depois do stop, $left processo(s) do teste abertos)"
+  failed+=("ctlaunch: a árvore fechou")
+fi
 for backend in wined3d dxvk dxmt; do
   use_backend $backend
   check "D3D11 64-bit / $backend" "backend: $backend" "$TB/d3d11test.exe"

@@ -108,8 +108,6 @@ Jogos que só rodam com ele ainda não rodam aqui.
 
 - Vídeo e áudio por Media Foundation/DirectShow ainda não tocam, porque o
   GStreamer não está no runtime.
-- Programas que abrem outro e saem (como o `EALauncher` do EA app) aparecem
-  como fechados no app enquanto o programa de verdade continua aberto.
 - O EA app só abre com o Wine (OpenGL). O DXMT ainda não tem swap chain entre
   processos, de que o Chromium precisa, e com o DXVK ele trava.
 

@@ -6,8 +6,8 @@
 #   ./build.sh --clean    apaga .work/ (exceto downloads) e out/ antes
 #   ./build.sh --no-test  não roda o smoke.sh no final
 #
-# Etapas (cada uma retomável): deps -> moltenvk -> wine -> dxvk -> assemble ->
-# smoke -> relocation
+# Etapas (cada uma retomável): deps -> moltenvk -> wine -> dxvk -> helpers ->
+# assemble -> smoke -> relocation
 set -euo pipefail
 HERE=$(cd "$(dirname "$0")" && pwd)
 clean=0 test=1
@@ -29,6 +29,7 @@ bash "$HERE/scripts/deps.sh"
 bash "$HERE/scripts/moltenvk.sh"
 bash "$HERE/scripts/wine.sh"
 bash "$HERE/scripts/dxvk.sh"
+bash "$HERE/scripts/helpers.sh"
 bash "$HERE/scripts/assemble.sh"
 if [ $test = 1 ]; then
   bash "$HERE/scripts/smoke.sh"

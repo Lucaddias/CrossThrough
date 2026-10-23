@@ -56,3 +56,21 @@ let builtRuntime: Runtime? = {
     }
     return nil
 }()
+
+/// Um runtime de mentira: o manifesto, o ctlaunch.exe vazio e um `bin/wine`
+/// que é o script dado (o wineserver não faz nada).
+func makeFakeRuntime(in dir: URL, wine script: String) throws -> Runtime {
+    let root = dir.appending(path: "runtime")
+    let fm = FileManager.default
+    try touch(root.appending(path: "bin/wine"), script)
+    try touch(root.appending(path: "bin/wineserver"), "#!/bin/sh\nexit 0\n")
+    for tool in ["bin/wine", "bin/wineserver"] {
+        try fm.setAttributes([.posixPermissions: 0o755], ofItemAtPath: root.appending(path: tool).path)
+    }
+    try touch(root.appending(path: "lib/crossthrough/ctlaunch.exe"))
+    try touch(root.appending(path: "runtime.json"), """
+        {"name": "CrossThroughRuntime", "built": "2026-01-01T00:00:00Z", "arch": "x86_64",
+         "minimumMacOS": "12.0", "maxInstallPathLength": 1024, "wine": "wine-11.0", "components": []}
+        """)
+    return try Runtime(root: root)
+}
